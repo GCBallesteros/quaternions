@@ -23,25 +23,25 @@
 ## Movement & Attitude Commands
 
 ### rot
-**Description**: Applies a quaternion rotation to a named point.
+Rotates the point to match the orientation implied by the passed in quaternion.
 
-**Arguments**:
+**Arguments**
 - `point_name` (string): The name of the point to rotate.
 - `q` (array): A quaternion `[x, y, z, w]` for the rotation.
 
 ### mov
-**Description**: Moves a named point to a specific latitude, longitude, and altitude.
+Moves a named point to a specific latitude, longitude, and altitude.
 
-**Arguments**:
+**Arguments**
 - `point_name` (string): The name of the point to move.
 - `lat` (number): Latitude in degrees.
 - `long` (number): Longitude in degrees.
 - `alt` (number): Altitude in kilometers.
 
 ### mov2sat
-**Description**: Moves a point to the position of a satellite at a given timestamp.
+Moves a point to the position of a satellite at a given timestamp.
 
-**Arguments**:
+**Arguments**
 - `name` (string): The name of the point to move.
 - `cosparId` (string): COSPAR ID of the satellite.
 - `timestamp` (Date): The time for which the position is computed.
@@ -49,79 +49,106 @@
 ### frame
 **Description**: Returns the local frame vectors of a point.
 
-**Arguments**:
+**Arguments**
 - `point` (string): The name of the point.
 
-### xyz2geo
-**Description**: Converts Cartesian coordinates to geographic coordinates (latitude, longitude, and altitude).
+**Returns**
+An object with keys `x`, `y` and `z` corresponding to the basis vector of the frame
+expressed in the ECEF coordinate system.
 
-**Arguments**:
+### xyz2geo
+Converts Cartesian coordinates to geographic coordinates (latitude, longitude, and altitude).
+
+**Arguments**
 - `xyz` (array): Cartesian coordinates `[x, y, z]`.
+
+
+**Notes**
+- Assumes a spherical Earth.
+
 
 ### geo2xyz
-**Description**: Converts geographic coordinates to Cartesian coordinates.
+Converts geographic coordinates to Cartesian coordinates.
 
-**Arguments**:
+**Arguments**
 - `geo` (array): Geographic coordinates `[latitude, longitude, altitude]`.
 
-### sph2xyz
-**Description**: Converts spherical coordinates to Cartesian coordinates.
+**Notes**
+- Assumes a spherical Earth.
 
-**Arguments**:
+### sph2xyz
+Converts spherical coordinates to Cartesian coordinates.
+
+**Arguments**
 - `sph` (array): Spherical coordinates `[latitude, longitude, radius]`.
 
-### xyz2sph
-**Description**: Converts Cartesian coordinates to spherical coordinates.
+**Notes**
+- Assumes a spherical Earth.
 
-**Arguments**:
+### xyz2sph
+Converts Cartesian coordinates to spherical coordinates.
+
+**Arguments**
 - `xyz` (array): Cartesian coordinates `[x, y, z]`.
+
+**Notes**
+- Assumes a spherical Earth.
 
 ## Geometry Commands
 
 ### add_point
-**Description**: Adds a new point to the scene.
+Adds a new point to the scene.
 
-**Arguments**:
+If a quaternion is provided the point will have a basis frame attached to it with
+the orientation implied by it.
+
+**Arguments**
 - `name` (string): Name of the point.
 - `coordinates` (array): Cartesian coordinates `[x, y, z]`.
 - `quaternion` (array, optional): Initial rotation as a quaternion `[x, y, z, w]`.
 
 ### create_line
-**Description**: Creates a line between two points or coordinates.
+Creates a line between two points or coordinates.
 
-**Arguments**:
+**Arguments**
 - `name` (string): Name of the line.
 - `startArg` (array or string): Starting point or coordinates.
 - `endArg` (array or string): Ending point or coordinates.
 
 ### list_points
-**Description**: Lists all points currently in the state.
-
-**Arguments**: None.
+Lists all points currently in the state.
 
 ### angle
-**Description**: Calculates the angle between two vectors.
 
-**Arguments**:
-- `vec1Arg` (array or string): First vector or point reference.
-- `vec2Arg` (array or string): Second vector or point reference.
+Calculates the angle between two vectors.
+
+Arguments  
+- `vec1Arg` (string/array)  
+  - An array of 3 elements representing the direction of the vector `[x, y, z]`, or  
+  - A string in the form `"point1->point2"`, where `point1` and `point2` are the names of existing points.  
+- `vec2Arg` (string/array)  
+  - An array of 3 elements representing the direction of the vector `[x, y, z]`, or  
+  - A string in the form `"point1->point2"`, where `point1` and `point2` are the names of existing points.  
+
+Returns the angle in degrees.
+
 
 ## Utility Commands
 
 ### deg2rad
-**Description**: Converts degrees to radians.
+Converts degrees to radians.
 
 **Arguments**:
 - `x` (number): Angle in degrees.
 
 ### rad2deg
-**Description**: Converts radians to degrees.
+Converts radians to degrees.
 
-**Arguments**:
+**Arguments**
 - `x` (number): Angle in radians.
 
 ### fetchTLE
-**Description**: Fetches the Two-Line Element (TLE) for a satellite using its COSPAR ID.
+Fetches the Two-Line Element (TLE) for a satellite using its COSPAR ID.
 
-**Arguments**:
+**Arguments**
 - `norad_id` (string): COSPAR ID of the satellite.
