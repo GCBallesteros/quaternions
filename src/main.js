@@ -8,16 +8,15 @@ import {
 } from "./components.js";
 import { makeEarth } from "./earth.js";
 import { _rot, _angle } from "./core.js";
-import { getPositionOfPoint } from "./utils.js";
+import { getPositionOfPoint, validateName } from "./utils.js";
 
-// TODO: Intercept command
-// TODO: Check all functions receive everything they need as arguments
-// TODO: Cleanup: commands.js
-// TODO: Expose more options for object creation, widths, colors ...
 // TODO: Help command
-// TODO: A delete points command
 // TODO: make all commands consistent
 // TODO: point_at command
+// TODO: Intercept command
+// TODO: Check all functions receive everything they need as arguments
+// TODO: Expose more options for object creation, widths, colors ...
+// TODO: A delete points command
 
 // Get the canvas element
 const canvas = document.getElementById("webgl-canvas");
@@ -33,23 +32,7 @@ let state = {
 
 const RADIUS_EARTH = 6371.0;
 
-function validateName(name, state) {
-  const namePattern = /^[a-zA-Z0-9_-]+$/; // Alphanumeric, underscores, and dashes
 
-  if (!namePattern.test(name)) {
-    logToOutput(
-      `Error: Name '${name}' must be alphanumeric and may contain underscores (_) or dashes (-).`,
-    );
-    return false;
-  }
-
-  if (state.points[name] || state.lines[name]) {
-    logToOutput(`Error: Name '${name}' is already in use.`);
-    return false;
-  }
-
-  return true;
-}
 
 function addFrame(point) {
   point.add(createFrame(point.position, 400));
@@ -162,9 +145,6 @@ function list_points() {
   }
 }
 
-// Function to get the position of a point, either by name or coordinates
-
-// Function to create the line geometry between two points
 
 // Function to create a line between two points and add it to the state
 function create_line(name, startArg, endArg) {

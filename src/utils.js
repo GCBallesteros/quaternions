@@ -12,3 +12,21 @@ export function getPositionOfPoint(state, pointArg) {
     return null;
   }
 }
+
+export function validateName(name, state) {
+  const namePattern = /^[a-zA-Z0-9_-]+$/; // Alphanumeric, underscores, and dashes
+
+  if (!namePattern.test(name)) {
+    logToOutput(
+      `Error: Name '${name}' must be alphanumeric and may contain underscores (_) or dashes (-).`,
+    );
+    return false;
+  }
+
+  if (state.points[name] || state.lines[name]) {
+    logToOutput(`Error: Name '${name}' is already in use.`);
+    return false;
+  }
+
+  return true;
+}
