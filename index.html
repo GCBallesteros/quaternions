@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3D Visualization with Console</title>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.156.1/examples/jsm/"
+        }
+      }
+    </script>
+
+    <!-- Load satellite.js via a regular script tag (not an ES module) -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/satellite.js/5.0.0/satellite.min.js"
+      integrity="sha512-/L/m1vniwzIFhlCFwxbVDMGj2fQMHZWrR/fGG78cqxllCOHVDJTePM3kiGc00Q5OXA5bvJ1OtfyCzlYyrEtQcw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <style>
+      body {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        font-family: monospace;
+      }
+      #canvas-container {
+        flex-grow: 1; /* Take all available space */
+        background-color: black;
+        position: relative;
+      }
+      canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      #console {
+        height: 150px;
+        background-color: #1e1e1e;
+        color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        border-top: 2px solid #333;
+      }
+      #output {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 10px;
+        box-sizing: border-box;
+        font-size: 14px;
+      }
+      #input {
+        display: flex;
+        border-top: 1px solid #333;
+      }
+      #command {
+        flex-grow: 1;
+        border: none;
+        padding: 10px;
+        font-size: 14px;
+        background-color: #1e1e1e;
+        color: #ffffff;
+        outline: none;
+      }
+      #execute {
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+      #execute:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="canvas-container">
+      <canvas id="webgl-canvas"></canvas>
+    </div>
+    <div id="console">
+      <div id="output"></div>
+      <div id="input">
+        <input type="text" id="command" placeholder="Enter a command..." />
+        <button id="execute">Execute</button>
+      </div>
+    </div>
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>
