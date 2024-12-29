@@ -219,3 +219,30 @@ Fetches the Two-Line Element (TLE) for a satellite using its COSPAR ID.
 
 **Arguments**
 - `norad_id` (string): COSPAR ID of the satellite.
+
+## Example workflow
+
+### Debugging quaternions
+
+```javascript
+// Move the default point, `sat`, to somwehere somehwhat near Helsinki
+mov("sat", [62.0, 34.0, 500.0], true);
+// Calculate ECEF coordinates of point of interest and store them
+ctx.ksCoords = geo2xyz([60.186, 24.828, 0]);
+// Add a point over the previously calculate coords
+add_point("KS", ctx.ksCoords);
+// Connect "sat" to new point
+create_line("sat2KS", "sat", "KS");
+// Rotate `sat` to some buggy quaternion
+rot("sat", [-0.6313439, -0.1346824, -0.6313439, -0.4297329]);
+// Calculate angle between z-axis of `sat` and `sat2KS`
+angle("sat2KS", frame("sat").z);
+```
+
+### Check current position of a satellite
+
+```javascript
+// Move the default point, `sat`, to the current position of the object
+// with NORAD id 60562
+mov2sat("sat", "60562");
+```

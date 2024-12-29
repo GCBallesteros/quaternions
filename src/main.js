@@ -22,6 +22,8 @@ import { logToOutput } from "./logger.js";
 // TODO: Check all functions receive everything they need as arguments
 // TODO: Expose more options for object creation, widths, colors ...
 // TODO: Fix create_line
+// TODO: Normalize quats before applying
+// TODO: Command attitude
 
 const canvas = document.getElementById("webgl-canvas");
 const commandInput = document.getElementById("command");
