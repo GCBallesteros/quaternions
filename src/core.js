@@ -12,7 +12,7 @@ import {
 export function _rot(state, point_name, q) {
   // q is xyzw
   if (!state.points || !state.points[point_name]) {
-    console.error(
+    logToOutput(
       `Point with name '${point_name}' does not exist in state.points.`,
     );
     return;
@@ -21,7 +21,7 @@ export function _rot(state, point_name, q) {
   const pointGroup = state.points[point_name];
 
   if (!pointGroup) {
-    console.error(`Point '${point_name}' does not have a geometryGroup.`);
+    logToOutput(`Point '${point_name}' does not have a geometryGroup.`);
     return;
   }
 
@@ -44,7 +44,7 @@ export function _angle(state, vec1Arg, vec2Arg) {
         const endPos = getPositionOfPoint(state, endName);
 
         if (!startPos || !endPos) {
-          console.error(`Invalid points in vector definition '${arg}'.`);
+          logToOutput(`Invalid points in vector definition '${arg}'.`);
           return null;
         }
 
@@ -56,17 +56,17 @@ export function _angle(state, vec1Arg, vec2Arg) {
         const endPos = getPositionOfPoint(state, line.end);
 
         if (!startPos || !endPos) {
-          console.error(`Invalid line '${arg}' in state.lines.`);
+          logToOutput(`Invalid line '${arg}' in state.lines.`);
           return null;
         }
 
         return endPos.clone().sub(startPos); // Compute vector
       } else {
-        console.error(`Invalid string argument '${arg}'.`);
+        logToOutput(`Invalid string argument '${arg}'.`);
         return null;
       }
     } else {
-      console.error("Argument must be an array of 3 values or a valid string.");
+      logToOutput("Argument must be an array of 3 values or a valid string.");
       return null;
     }
   }
@@ -84,7 +84,7 @@ export function _angle(state, vec1Arg, vec2Arg) {
   const magnitudeProduct = vec1.length() * vec2.length();
 
   if (magnitudeProduct === 0) {
-    console.error("Cannot calculate angle with zero-length vector.");
+    logToOutput("Cannot calculate angle with zero-length vector.");
     return null;
   }
 
