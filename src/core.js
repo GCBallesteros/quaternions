@@ -1,5 +1,13 @@
 import * as THREE from "three";
-import { getPositionOfPoint } from "./utils.js";
+import { logToOutput } from "./logger.js";
+import {
+  getPositionOfPoint,
+  validateName,
+  xyz2geo,
+  xyz2sph,
+  geo2xyz,
+  sph2xyz,
+} from "./utils.js";
 
 export function _rot(state, point_name, q) {
   // q is xyzw
@@ -88,4 +96,20 @@ export function _angle(state, vec1Arg, vec2Arg) {
   const angleRadians = Math.acos(cosineAngle);
 
   return THREE.MathUtils.radToDeg(angleRadians);
+}
+
+export function _mov(state, point_name, pos, use_geo = false) {
+  if (!state.points[point_name]) {
+    logToOutput(`Point '${point_name}' does not exist.`);
+    return;
+  }
+  let point = state.points[point_name];
+
+  let x, y, z;
+  if (!use_geo) {
+    [x, y, z] = pos;
+  } else {
+    [x, y, z] = geo2xyz(pos);
+  }
+  point.position.set(x, y, z);
 }

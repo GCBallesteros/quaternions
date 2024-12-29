@@ -7,15 +7,23 @@ import {
   createLineGeometry,
 } from "./components.js";
 import { makeEarth } from "./earth.js";
-import { _rot, _angle } from "./core.js";
-import { getPositionOfPoint, validateName } from "./utils.js";
+import { _rot, _angle, _mov } from "./core.js";
+import {
+  getPositionOfPoint,
+  validateName,
+  xyz2geo,
+  xyz2sph,
+  geo2xyz,
+  sph2xyz,
+} from "./utils.js";
+import { logToOutput } from "./logger.js";
 
 // Return value and error code like in go
 // TODO: Check all functions receive everything they need as arguments
 // TODO: Expose more options for object creation, widths, colors ...
+// TODO: Fix create_line
 
 const canvas = document.getElementById("webgl-canvas");
-const output = document.getElementById("output");
 const commandInput = document.getElementById("command");
 const executeButton = document.getElementById("execute");
 
@@ -38,10 +46,10 @@ const ctx = {};
 function executeCommand() {
   const command = commandInput.value.trim();
   if (command) {
-    logToOutput(`> ${command}\n`); // Log the entered command
+    logToOutput(`> ${command}\n`);
     try {
-      const result = eval(command); // Evaluate the command
-      Promise.resolve(result) // Handle both promises and regular values
+      const result = eval(command);
+      Promise.resolve(result)
         .then((resolvedValue) => {
           if (resolvedValue !== undefined) {
             logToOutput(`  ${resolvedValue}`);
@@ -53,21 +61,11 @@ function executeCommand() {
     } catch (error) {
       logToOutput(`Error: ${error.message}`);
     }
-    commandInput.value = ""; // Clear the input field
+    commandInput.value = "";
   }
 }
 
-function logToOutput(message) {
-  const messageElement = document.createElement("div");
-  messageElement.textContent = message;
-  output.appendChild(messageElement);
-  output.scrollTop = output.scrollHeight; // Scroll to the bottom
-}
-
-// Add event listener for the button click
 executeButton.addEventListener("click", executeCommand);
-
-// Add event listener for pressing Enter key
 commandInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     executeCommand();
@@ -82,19 +80,7 @@ function animate() {
 }
 
 function mov(point_name, pos, use_geo = false) {
-  if (!state.points[point_name]) {
-    logToOutput(`Point '${point_name}' does not exist.`);
-    return;
-  }
-  let point = state.points[point_name];
-
-  let x, y, z;
-  if (!use_geo) {
-    [x, y, z] = pos;
-  } else {
-    [x, y, z] = geo2xyz(pos);
-  }
-  point.position.set(x, y, z);
+  _mov(state, point_name, pos, use_geo);
 }
 
 mov.help = {
@@ -323,122 +309,9 @@ deg2rad.help = {
 };
 commands.deg2rad = deg2rad;
 
-/**
- * Converts Cartesian coordinates (x, y, z) to spherical coordinates.
- *
- * @param {Array<number>} point - An array of three numbers representing a point in 3D Cartesian space [x, y, z].
- * @returns {Array<number>} An array [latitude, longitude, radius], where:
- *  - latitude (degrees): Angle from the equatorial plane, ranges from -90 to 90.
- *  - longitude (degrees): Angle in the xy-plane from the positive x-axis, ranges from -180 to 180.
- *  - radius: The distance from the origin to the point.
- * @throws {Error} If the input is invalid or the radius is zero.
- */
-function xyz2sph(point) {
-  if (!Array.isArray(point) || point.length !== 3) {
-    throw new Error(
-      "Input must be an array with three numerical values [x, y, z].",
-    );
-  }
-
-  const [x, y, z] = point;
-
-  const radius = Math.sqrt(x * x + y * y + z * z);
-  if (radius === 0) {
-    throw new Error("Radius cannot be zero.");
-  }
-
-  const latitude = 90 - THREE.MathUtils.radToDeg(Math.acos(z / radius));
-  const longitude = THREE.MathUtils.radToDeg(Math.atan2(y, x));
-
-  return [latitude, longitude, radius];
-}
-
-xyz2sph.help = {
-  description: "Converts Cartesian coordinates to spherical coordinates.",
-  arguments: [
-    {
-      name: "xyz",
-      type: "array",
-      description: "Cartesian coordinates `[x, y, z]`.",
-    },
-  ],
-};
 commands.xyz2sph = xyz2sph;
-
-/**
- * Converts spherical coordinates (latitude, longitude, radius) to Cartesian coordinates (x, y, z).
- *
- * @param {Array<number>} sph - An array of three numbers [latitude, longitude, radius], where:
- *  - latitude (degrees): Angle from the equatorial plane, ranges from -90 to 90.
- *  - longitude (degrees): Angle in the xy-plane from the positive x-axis, ranges from -180 to 180.
- *  - radius: The distance from the origin.
- * @returns {Array<number>} An array [x, y, z] representing the Cartesian coordinates.
- * @throws {Error} If the input is invalid.
- */
-function sph2xyz(sph) {
-  if (!Array.isArray(sph) || sph.length !== 3) {
-    throw new Error(
-      "Input must be an array with three numerical values [latitude, longitude, radius].",
-    );
-  }
-
-  const [latitude, longitude, radius] = sph;
-
-  const latRad = THREE.MathUtils.degToRad(latitude);
-  const lonRad = THREE.MathUtils.degToRad(longitude);
-
-  const x = radius * Math.cos(latRad) * Math.cos(lonRad);
-  const y = radius * Math.cos(latRad) * Math.sin(lonRad);
-  const z = radius * Math.sin(latRad);
-
-  return [x, y, z];
-}
-
-sph2xyz.help = {
-  description: "Converts spherical coordinates to Cartesian coordinates.",
-  arguments: [
-    {
-      name: "sph",
-      type: "array",
-      description: "Spherical coordinates `[latitude, longitude, radius]`.",
-    },
-  ],
-};
 commands.sph2xyz = sph2xyz;
-
-function geo2xyz(geo) {
-  const [latitude, longitude, altitude] = geo;
-  return sph2xyz([latitude, longitude, altitude + RADIUS_EARTH]);
-}
-
-geo2xyz.help = {
-  description: "Converts geographic coordinates to Cartesian coordinates.",
-  arguments: [
-    {
-      name: "geo",
-      type: "array",
-      description: "Geographic coordinates `[latitude, longitude, altitude]`.",
-    },
-  ],
-};
 commands.geo2xyz = geo2xyz;
-
-function xyz2geo(xyz) {
-  const [latitude, longitude, radius] = xyz2sph(xyz);
-  return [latitude, longitude, radius - RADIUS_EARTH];
-}
-
-xyz2geo.help = {
-  description:
-    "Converts Cartesian coordinates to geographic coordinates (latitude, longitude, and altitude).",
-  arguments: [
-    {
-      name: "xyz",
-      type: "array",
-      description: "Cartesian coordinates `[x, y, z]`.",
-    },
-  ],
-};
 commands.xyz2geo = xyz2geo;
 
 function frame(point) {
