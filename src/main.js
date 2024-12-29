@@ -33,16 +33,6 @@ function addFrame(point) {
   point.add(createFrame(point.position, 400));
 }
 
-function updatePointPosition(point, latitude, longitude, altitude) {
-  const radius = RADIUS_EARTH + altitude;
-  const phi_ = THREE.MathUtils.degToRad(90 - latitude);
-  const theta_ = THREE.MathUtils.degToRad(longitude);
-
-  point.position.x = radius * Math.sin(phi_) * Math.cos(theta_);
-  point.position.y = radius * Math.sin(phi_) * Math.sin(theta_);
-  point.position.z = radius * Math.cos(phi_);
-}
-
 const ctx = {};
 
 function executeCommand() {
@@ -91,9 +81,20 @@ function animate() {
   renderer.render(scene, camera);
 }
 
-// TODO: should receive xyz or lat/long/alt and have a flag to decide
-function mov(point_name, lat, long, alt) {
-  updatePointPosition(state.points[point_name], lat, long, alt);
+function mov(point_name, pos, use_geo = false) {
+  if (!state.points[point_name]) {
+    logToOutput(`Point '${point_name}' does not exist.`);
+    return;
+  }
+  let point = state.points[point_name];
+
+  let x, y, z;
+  if (!use_geo) {
+    [x, y, z] = pos;
+  } else {
+    [x, y, z] = geo2xyz(pos);
+  }
+  point.position.set(x, y, z);
 }
 
 mov.help = {
@@ -105,9 +106,12 @@ mov.help = {
       type: "string",
       description: "The name of the point to move.",
     },
-    { name: "lat", type: "number", description: "Latitude in degrees." },
-    { name: "long", type: "number", description: "Longitude in degrees." },
-    { name: "alt", type: "number", description: "Altitude in kilometers." },
+    { name: "pos", type: "array", description: "Position." },
+    {
+      name: "use_geo",
+      type: "bool",
+      description: "Use geographical or cartesian coordinates.",
+    },
   ],
 };
 commands.mov = mov;
@@ -614,7 +618,7 @@ scene.add(earth_geometries.earth_frame);
 state.points["sat"] = createFloatingPoint();
 addFrame(state.points["sat"]);
 scene.add(state.points["sat"]);
-updatePointPosition(state.points.sat, 39, 0, 150);
+mov("sat", [39, 0, 150], true);
 
 animate();
 

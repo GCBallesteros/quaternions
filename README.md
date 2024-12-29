@@ -63,9 +63,8 @@ Moves a named point to a specific latitude, longitude, and altitude.
 
 **Arguments**
 - `point_name` (string): The name of the point to move.
-- `lat` (number): Latitude in degrees.
-- `long` (number): Longitude in degrees.
-- `alt` (number): Altitude in kilometers.
+- `pos` (Array): The position interpreted as geographical or cartesian coordinates. See `use_geo`.
+- `use_geo` (bool): If true assume `pos` is provided as [lat, long, alt] otherwise as [x, y, z]. Default to false.
 
 **Example**
 ```js
