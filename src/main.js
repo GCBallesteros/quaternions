@@ -10,15 +10,10 @@ import { makeEarth } from "./earth.js";
 import { _rot, _angle } from "./core.js";
 import { getPositionOfPoint, validateName } from "./utils.js";
 
-// TODO: Help command
-// TODO: make all commands consistent
-// TODO: point_at command
-// TODO: Intercept command
+// Return value and error code like in go
 // TODO: Check all functions receive everything they need as arguments
 // TODO: Expose more options for object creation, widths, colors ...
-// TODO: A delete points command
 
-// Get the canvas element
 const canvas = document.getElementById("webgl-canvas");
 const output = document.getElementById("output");
 const commandInput = document.getElementById("command");
@@ -30,9 +25,9 @@ let state = {
   tles: {},
 };
 
+const commands = {};
+
 const RADIUS_EARTH = 6371.0;
-
-
 
 function addFrame(point) {
   point.add(createFrame(point.position, 400));
@@ -101,9 +96,43 @@ function mov(point_name, lat, long, alt) {
   updatePointPosition(state.points[point_name], lat, long, alt);
 }
 
+mov.help = {
+  description:
+    "Moves a named point to a specific latitude, longitude, and altitude.",
+  arguments: [
+    {
+      name: "point_name",
+      type: "string",
+      description: "The name of the point to move.",
+    },
+    { name: "lat", type: "number", description: "Latitude in degrees." },
+    { name: "long", type: "number", description: "Longitude in degrees." },
+    { name: "alt", type: "number", description: "Altitude in kilometers." },
+  ],
+};
+commands.mov = mov;
+
 function rot(point_name, q) {
   _rot(state, point_name, q);
 }
+
+rot.help = {
+  description:
+    "Rotates a point to match the orientation implied by the quaternion.",
+  arguments: [
+    {
+      name: "point_name",
+      type: "string",
+      description: "The name of the point to rotate.",
+    },
+    {
+      name: "q",
+      type: "array",
+      description: "A quaternion `[x, y, z, w]` for the rotation.",
+    },
+  ],
+};
+commands.rot = rot;
 
 function add_point(name, coordinates, quaternion = null) {
   if (!validateName(name, state)) {
@@ -126,13 +155,31 @@ function add_point(name, coordinates, quaternion = null) {
       quaternion[1],
       quaternion[2],
       quaternion[3],
-    ); // wxyz
+    ); // xyzw
     pointGroup.setRotationFromQuaternion(q);
   }
 
   state.points[name] = pointGroup;
   scene.add(pointGroup);
 }
+
+add_point.help = {
+  description: "Adds a new point to the scene.",
+  arguments: [
+    { name: "name", type: "string", description: "Name of the point." },
+    {
+      name: "coordinates",
+      type: "array",
+      description: "Cartesian coordinates `[x, y, z]`.",
+    },
+    {
+      name: "quaternion",
+      type: "array (optional)",
+      description: "Initial rotation as a quaternion `[x, y, z, w]`.",
+    },
+  ],
+};
+commands.add_point = add_point;
 
 function list_points() {
   const pointNames = Object.keys(state.points);
@@ -145,6 +192,11 @@ function list_points() {
   }
 }
 
+list_points.help = {
+  description: "Lists all points currently in the state.",
+  arguments: [],
+};
+commands.list_points = list_points;
 
 // Function to create a line between two points and add it to the state
 function create_line(name, startArg, endArg) {
@@ -186,6 +238,24 @@ function create_line(name, startArg, endArg) {
   };
 }
 
+create_line.help = {
+  description: "Creates a line between two points or coordinates.",
+  arguments: [
+    { name: "name", type: "string", description: "Name of the line." },
+    {
+      name: "startArg",
+      type: "array or string",
+      description: "Starting point or coordinates.",
+    },
+    {
+      name: "endArg",
+      type: "array or string",
+      description: "Ending point or coordinates.",
+    },
+  ],
+};
+commands.create_line = create_line;
+
 // Update all lines in the registry before each render
 function updateAllLines() {
   for (const lineName in state.lines) {
@@ -212,13 +282,42 @@ function angle(vec1, vec2) {
   return _angle(state, vec1, vec2);
 }
 
+angle.help = {
+  description: "Calculates the angle between two vectors.",
+  arguments: [
+    {
+      name: "vec1Arg",
+      type: "string/array",
+      description: "A vector or 'point1->point2' string.",
+    },
+    {
+      name: "vec2Arg",
+      type: "string/array",
+      description: "A vector or 'point1->point2' string.",
+    },
+  ],
+};
+commands.angle = angle;
+
 function rad2deg(x) {
   return (x * 180) / Math.PI;
 }
 
+rad2deg.help = {
+  description: "Converts radians to degrees.",
+  arguments: [{ name: "x", type: "number", description: "Angle in radians." }],
+};
+commands.rad2deg = rad2deg;
+
 function deg2rad(x) {
   return (x * Math.PI) / 180;
 }
+
+deg2rad.help = {
+  description: "Converts degrees to radians.",
+  arguments: [{ name: "x", type: "number", description: "Angle in degrees." }],
+};
+commands.deg2rad = deg2rad;
 
 /**
  * Converts Cartesian coordinates (x, y, z) to spherical coordinates.
@@ -250,6 +349,18 @@ function xyz2sph(point) {
   return [latitude, longitude, radius];
 }
 
+xyz2sph.help = {
+  description: "Converts Cartesian coordinates to spherical coordinates.",
+  arguments: [
+    {
+      name: "xyz",
+      type: "array",
+      description: "Cartesian coordinates `[x, y, z]`.",
+    },
+  ],
+};
+commands.xyz2sph = xyz2sph;
+
 /**
  * Converts spherical coordinates (latitude, longitude, radius) to Cartesian coordinates (x, y, z).
  *
@@ -279,15 +390,52 @@ function sph2xyz(sph) {
   return [x, y, z];
 }
 
+sph2xyz.help = {
+  description: "Converts spherical coordinates to Cartesian coordinates.",
+  arguments: [
+    {
+      name: "sph",
+      type: "array",
+      description: "Spherical coordinates `[latitude, longitude, radius]`.",
+    },
+  ],
+};
+commands.sph2xyz = sph2xyz;
+
 function geo2xyz(geo) {
   const [latitude, longitude, altitude] = geo;
   return sph2xyz([latitude, longitude, altitude + RADIUS_EARTH]);
 }
 
+geo2xyz.help = {
+  description: "Converts geographic coordinates to Cartesian coordinates.",
+  arguments: [
+    {
+      name: "geo",
+      type: "array",
+      description: "Geographic coordinates `[latitude, longitude, altitude]`.",
+    },
+  ],
+};
+commands.geo2xyz = geo2xyz;
+
 function xyz2geo(xyz) {
   const [latitude, longitude, radius] = xyz2sph(xyz);
   return [latitude, longitude, radius - RADIUS_EARTH];
 }
+
+xyz2geo.help = {
+  description:
+    "Converts Cartesian coordinates to geographic coordinates (latitude, longitude, and altitude).",
+  arguments: [
+    {
+      name: "xyz",
+      type: "array",
+      description: "Cartesian coordinates `[x, y, z]`.",
+    },
+  ],
+};
+commands.xyz2geo = xyz2geo;
 
 function frame(point) {
   // Ensure the point exists in the state
@@ -307,6 +455,14 @@ function frame(point) {
 
   return basisVectors;
 }
+
+frame.help = {
+  description: "Returns the local frame vectors of a point.",
+  arguments: [
+    { name: "point", type: "string", description: "The name of the point." },
+  ],
+};
+commands.frame = frame;
 
 async function fetchTLE(norad_id) {
   // Check if TLE data already exists in the cache
@@ -333,19 +489,29 @@ async function fetchTLE(norad_id) {
   return data;
 }
 
+fetchTLE.help = {
+  description:
+    "Fetches the Two-Line Element (TLE) for a satellite using its COSPAR ID.",
+  arguments: [
+    {
+      name: "norad_id",
+      type: "string",
+      description: "COSPAR ID of the satellite.",
+    },
+  ],
+};
+commands.fetchTLE = fetchTLE;
+
 async function mov2sat(name, cosparId, timestamp) {
   try {
     // Step 1: Fetch the TLE data using the COSPAR ID
     const tle = await fetchTLE(cosparId);
-    console.log(tle);
 
     // Step 2: Parse the TLE data using satellite.js
     const satrec = satellite.twoline2satrec(
       tle.split("\n")[1],
       tle.split("\n")[2],
     );
-    console.log(satrec);
-    console.log(timestamp);
 
     // Step 3: Calculate the satellite's position at the given timestamp
     const positionAndVelocity = satellite.propagate(satrec, timestamp);
@@ -357,10 +523,8 @@ async function mov2sat(name, cosparId, timestamp) {
       );
       return;
     }
-    console.log(position);
 
     // Step 4: Convert the position to Earth-centered (X, Y, Z) coordinates
-    // The position comes in meters, convert to kilometers (or appropriate scale for your scene)
     const x = position.x;
     const y = position.y;
     const z = position.z;
@@ -378,6 +542,51 @@ async function mov2sat(name, cosparId, timestamp) {
       `Error fetching or processing satellite data: ${error.message}`,
     );
   }
+}
+
+mov2sat.help = {
+  description:
+    "Moves a point to the position of a satellite at a given timestamp.",
+  arguments: [
+    {
+      name: "name",
+      type: "string",
+      description: "The name of the point to move.",
+    },
+    {
+      name: "cosparId",
+      type: "string",
+      description: "COSPAR ID of the satellite.",
+    },
+    {
+      name: "timestamp",
+      type: "Date",
+      description: "The time for which the position is computed.",
+    },
+  ],
+};
+commands.mov2sat = mov2sat;
+
+function help(commandName) {
+  if (!commandName) {
+    logToOutput(
+      "For full docs visit: https://github.com/GCBallesteros/quaternions",
+    );
+    return;
+  }
+
+  const command = commands[commandName];
+  if (!command || !command.help) {
+    logToOutput(`Command '${commandName}' not found.`);
+    return;
+  }
+
+  logToOutput(`**${commandName}**`);
+  logToOutput(command.help.description);
+  logToOutput("Arguments:");
+  command.help.arguments.forEach((arg) => {
+    logToOutput(`- ${arg.name} (${arg.type}): ${arg.description}`);
+  });
 }
 
 // MAIN
