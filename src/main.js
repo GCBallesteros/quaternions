@@ -403,10 +403,7 @@ async function mov2sat(name, cosparId, timestamp) {
 
     // Step 4: Convert the position to Earth-centered (X, Y, Z) coordinates
     const gmst = satellite.gstime(timestamp);
-		const positionEcf   = satellite.eciToEcf(position, gmst)
-    const x = positionEcf.x;
-    const y = positionEcf.y;
-    const z = positionEcf.z;
+    const { x, y, z } = satellite.eciToEcf(position, gmst);
 
     // Step 5: Update the position of the referenced point in the scene
     const point = state.points[name];
