@@ -402,9 +402,11 @@ async function mov2sat(name, cosparId, timestamp) {
     }
 
     // Step 4: Convert the position to Earth-centered (X, Y, Z) coordinates
-    const x = position.x;
-    const y = position.y;
-    const z = position.z;
+    const gmst = satellite.gstime(timestamp);
+		const positionEcf   = satellite.eciToEcf(position, gmst)
+    const x = positionEcf.x;
+    const y = positionEcf.y;
+    const z = positionEcf.z;
 
     // Step 5: Update the position of the referenced point in the scene
     const point = state.points[name];
@@ -449,6 +451,10 @@ function help(commandName) {
     logToOutput(
       "For full docs visit: https://github.com/GCBallesteros/quaternions",
     );
+    logToOutput("Available commands:");
+    Object.keys(commands).forEach((cmd) => {
+      logToOutput(`- ${cmd}`);
+    });
     return;
   }
 
