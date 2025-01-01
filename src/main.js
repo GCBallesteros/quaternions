@@ -7,7 +7,13 @@ import {
   createLineGeometry,
 } from "./components.js";
 import { makeEarth } from "./earth.js";
-import { _rot, _angle, _mov, find_best_quaternion_for_desired_attitude } from "./core.js";
+import {
+  _rot,
+  _angle,
+  _mov,
+  find_best_quaternion_for_desired_attitude,
+  _findBestQuaternion,
+} from "./core.js";
 import {
   getPositionOfPoint,
   validateName,
@@ -23,7 +29,10 @@ import { logToOutput } from "./logger.js";
 // TODO: Expose more options for object creation, widths, colors ...
 // TODO: Fix create_line
 // TODO: Normalize quats before applying
-// TODO: Command attitude
+// TODO: Better names spec findBestQuaternion
+// TODO: Function to extra object from point and direction from line
+// TODO: point_at based on findBestQuaternion that includes the rotation
+// TODO: some example for findBestQuaternion
 
 const canvas = document.getElementById("webgl-canvas");
 const commandInput = document.getElementById("command");
@@ -315,6 +324,52 @@ commands.xyz2sph = xyz2sph;
 commands.sph2xyz = sph2xyz;
 commands.geo2xyz = geo2xyz;
 commands.xyz2geo = xyz2geo;
+
+function findBestQuaternion(
+  primaryBodyVector,
+  secondaryBodyVector,
+  primaryTargetVector,
+  secondaryTargetVector,
+) {
+  return _findBestQuaternion(
+    state,
+    primaryBodyVector,
+    secondaryBodyVector,
+    primaryTargetVector,
+    secondaryTargetVector,
+  );
+}
+
+findBestQuaternion.help = {
+  description:
+    "A wrapper around the `find_best_quaternion_for_desired_attitude` function that simplifies the process of aligning body vectors to target vectors by supporting flexible inputs.",
+  arguments: [
+    {
+      name: "primaryVecArg",
+      type: "array | string",
+      description:
+        "The primary body vector. Can be a 3-element array (e.g., [1, 0, 0]) or one of `x`, `y`, or `z`.",
+    },
+    {
+      name: "secondaryVecArg",
+      type: "array | string",
+      description:
+        "The secondary body vector. Can be a 3-element array (e.g., [0, 1, 0]) or one of `x`, `y`, or `z`.",
+    },
+    {
+      name: "primaryTargetArg",
+      type: "array | string",
+      description:
+        "The target vector for the primary body vector. Can be a 3-element array, a line name, or a string in the form `startPoint->endPoint`.",
+    },
+    {
+      name: "secondaryTargetArg",
+      type: "array | string",
+      description:
+        "The target vector for the secondary body vector. Can be a 3-element array, a line name, or a string in the form `startPoint->endPoint`",
+    },
+  ],
+};
 
 function frame(point) {
   // Ensure the point exists in the state

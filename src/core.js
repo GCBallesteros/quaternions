@@ -229,3 +229,105 @@ find_best_quaternion_for_desired_attitude.help = {
     },
   ],
 };
+
+export function _findBestQuaternion(
+  state,
+  primaryVecArg,
+  secondaryVecArg,
+  primaryTargetArg,
+  secondaryTargetArg,
+) {
+  // Helper function to resolve a vector from its argument
+  function resolveBodyVector(arg) {
+    if (Array.isArray(arg) && arg.length === 3) {
+      return new THREE.Vector3(arg[0], arg[1], arg[2]);
+    } else if (typeof arg === "string") {
+      switch (arg.toLowerCase()) {
+        case "x":
+          return new THREE.Vector3(1, 0, 0);
+        case "y":
+          return new THREE.Vector3(0, 1, 0);
+        case "z":
+          return new THREE.Vector3(0, 0, 1);
+        default:
+          logToOutput(`Invalid body vector argument '${arg}'.`);
+          return null;
+      }
+    } else {
+      logToOutput(
+        "Body vector must be an array of 3 values or one of 'x', 'y', 'z'.",
+      );
+      return null;
+    }
+  }
+
+  // Helper function to resolve a target vector from its argument
+  function resolveTargetVector(arg) {
+    if (Array.isArray(arg) && arg.length === 3) {
+      return new THREE.Vector3(arg[0], arg[1], arg[2]);
+    } else if (typeof arg === "string") {
+      if (arg.includes("->")) {
+        // Vector in the form "<start_point_name>-><end_point_name>"
+        const [startName, endName] = arg.split("->").map((name) => name.trim());
+        const startPos = getPositionOfPoint(state, startName);
+        const endPos = getPositionOfPoint(state, endName);
+
+        if (!startPos || !endPos) {
+          logToOutput(`Invalid points in target vector definition '${arg}'.`);
+          return null;
+        }
+
+        return endPos.clone().sub(startPos); // Compute vector
+      } else if (state.lines[arg]) {
+        // Argument is a line name
+        const line = state.lines[arg];
+        const startPos = getPositionOfPoint(state, line.start);
+        const endPos = getPositionOfPoint(state, line.end);
+
+        if (!startPos || !endPos) {
+          logToOutput(`Invalid line '${arg}' in state.lines.`);
+          return null;
+        }
+
+        return endPos.clone().sub(startPos); // Compute vector
+      } else {
+        logToOutput(`Invalid target vector argument '${arg}'.`);
+        return null;
+      }
+    } else {
+      logToOutput(
+        "Target vector must be an array of 3 values, a line name, or '<start>-><end>'.",
+      );
+      return null;
+    }
+  }
+
+  // Resolve all arguments
+  const primaryBodyVector = resolveBodyVector(primaryVecArg);
+  const secondaryBodyVector = resolveBodyVector(secondaryVecArg);
+  const primaryTargetVector = resolveTargetVector(primaryTargetArg);
+  const secondaryTargetVector = resolveTargetVector(secondaryTargetArg);
+
+  if (
+    !primaryBodyVector ||
+    !secondaryBodyVector ||
+    !primaryTargetVector ||
+    !secondaryTargetVector
+  ) {
+    logToOutput("Invalid inputs. Cannot compute quaternion.");
+    return null;
+  }
+  console.log(primaryBodyVector)
+  console.log(secondaryBodyVector)
+  console.log(primaryTargetVector)
+  console.log(secondaryTargetVector)
+
+  // Use the underlying function
+  return find_best_quaternion_for_desired_attitude(
+    primaryBodyVector.toArray(),
+    secondaryBodyVector.toArray(),
+    primaryTargetVector.toArray(),
+    secondaryTargetVector.toArray(),
+  );
+}
+

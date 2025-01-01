@@ -16,6 +16,7 @@ engineers, researchers, and enthusiasts.
   - [mov2sat](#mov2sat)
   - [frame](#frame)
   - [find_best_quaternion_for_desired_attitude](#find_best_quaternion_for_desired_attitude)
+  - [findBestQuaternion](#findBestQuaternion)
   - [xyz2geo](#xyz2geo)
   - [geo2xyz](#geo2xyz)
   - [sph2xyz](#sph2xyz)
@@ -115,6 +116,38 @@ body vector.
 -  `primary_body_vector_target` (array): The target direction for the `primary_body_vector`.
 -  `secondary_body_vector_target` (array):The target direction for the `secondary_body_vector`.
 
+
+### findBestQuaternion
+**Description**: A wrapper around the `find_best_quaternion_for_desired_attitude` function. This function simplifies the process of finding a quaternion by allowing flexible inputs for body vectors and target vectors.
+
+**Arguments**:
+- `primaryVecArg` (array or string): The primary body vector. Can be:
+  - A 3-element array representing the vector (e.g., `[1, 0, 0]`).
+  - One of the strings `"x"`, `"y"`, or `"z"` for canonical basis vectors.
+- `secondaryVecArg` (array or string): The secondary body vector. Can be:
+  - A 3-element array representing the vector.
+  - One of the strings `"x"`, `"y"`, or `"z"`.
+- `primaryTargetArg` (array or string): The target vector for the primary body vector. Can be:
+  - A 3-element array representing the target vector.
+  - A string of the form `"startPoint->endPoint"` to define a vector between two points.
+  - A string representing the name of a line in the `state.lines` object.
+- `secondaryTargetArg` (array or string): The target vector for the secondary body vector. Can be:
+  - A 3-element array representing the target vector.
+  - A string of the form `"startPoint->endPoint"` to define a vector between two points.
+  - A string representing the name of a line in the `state.lines` object.
+
+**Returns**:
+An array with 4 values corresponding to the quaternion in [x,y,z,w] order.
+
+**Example**:
+```javascript
+const quaternion = findBestQuaternion(
+  state,
+  "x",
+  [0, 1, 0],
+  "A->B",
+  [0, 0, 1],
+);
 
 
 
