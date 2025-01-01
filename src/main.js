@@ -7,7 +7,7 @@ import {
   createLineGeometry,
 } from "./components.js";
 import { makeEarth } from "./earth.js";
-import { _rot, _angle, _mov } from "./core.js";
+import { _rot, _angle, _mov, find_best_quaternion_for_desired_attitude } from "./core.js";
 import {
   getPositionOfPoint,
   validateName,

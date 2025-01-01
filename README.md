@@ -15,6 +15,7 @@ engineers, researchers, and enthusiasts.
   - [mov](#mov)
   - [mov2sat](#mov2sat)
   - [frame](#frame)
+  - [find_best_quaternion_for_desired_attitude](#find_best_quaternion_for_desired_attitude)
   - [xyz2geo](#xyz2geo)
   - [geo2xyz](#geo2xyz)
   - [sph2xyz](#sph2xyz)
@@ -101,6 +102,21 @@ expressed in the ECEF coordinate system.
 // Calculate the angle between the x-axis of the `sat` point and the nadir direction
 angle("nadir", frame("sat").x);
 ```
+
+### find_best_quaternion_for_desired_attitude
+**Description**: Returns the 3js quaternion that provided primary and secondary vectors defined on the
+body frame of the point finds the quaternion that aligns the primary body vector
+to a given target direction and minimizes the angle to the target given for the secondary
+body vector.
+
+**Arguments**
+-  `primary_body_vector` (array): A vector as defined on the body frame that we will point. It's target is always perfectly achieved.
+-  `secondary_body_vector` (array): A vector as defined on the body frame that we will make a best effort to align to `secondary_body_vector_target`.
+-  `primary_body_vector_target` (array): The target direction for the `primary_body_vector`.
+-  `secondary_body_vector_target` (array):The target direction for the `secondary_body_vector`.
+
+
+
 
 ### xyz2geo
 Converts Cartesian coordinates to geographic coordinates (latitude, longitude, and altitude).
