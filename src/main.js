@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
+import { _help } from "./help.js";
 import { createFloatingPoint } from "./components.js";
 import { makeEarth } from "./earth.js";
 import {
@@ -433,29 +434,7 @@ mov2sat.help = {
 commands.mov2sat = mov2sat;
 
 function help(commandName) {
-  if (!commandName) {
-    logToOutput(
-      "For full docs visit: https://github.com/GCBallesteros/quaternions",
-    );
-    logToOutput("Available commands:");
-    Object.keys(commands).forEach((cmd) => {
-      logToOutput(`- ${cmd}`);
-    });
-    return;
-  }
-
-  const command = commands[commandName];
-  if (!command || !command.help) {
-    logToOutput(`Command '${commandName}' not found.`);
-    return;
-  }
-
-  logToOutput(`**${commandName}**`);
-  logToOutput(command.help.description);
-  logToOutput("Arguments:");
-  command.help.arguments.forEach((arg) => {
-    logToOutput(`- ${arg.name} (${arg.type}): ${arg.description}`);
-  });
+  _help(commands, commandName);
 }
 
 // MAIN
