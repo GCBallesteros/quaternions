@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { logToOutput } from "./logger.js";
+import { createLineGeometry } from "./components.js";
 import {
   getPositionOfPoint,
   validateName,
@@ -317,10 +318,6 @@ export function _findBestQuaternion(
     logToOutput("Invalid inputs. Cannot compute quaternion.");
     return null;
   }
-  console.log(primaryBodyVector)
-  console.log(secondaryBodyVector)
-  console.log(primaryTargetVector)
-  console.log(secondaryTargetVector)
 
   // Use the underlying function
   return find_best_quaternion_for_desired_attitude(
@@ -331,3 +328,41 @@ export function _findBestQuaternion(
   );
 }
 
+export function _create_line(scene, state, name, startArg, endArg) {
+  if (!validateName(name, state)) {
+    return; // Exit if name validation fails
+  }
+
+  if (!name || typeof name !== "string") {
+    logToOutput("Invalid line name. It must be a non-empty string.");
+    return;
+  }
+
+  const startPos = getPositionOfPoint(state, startArg);
+  const endPos = getPositionOfPoint(state, endArg);
+
+  if (!startPos || !endPos) {
+    logToOutput("Invalid points passed to create_line.");
+    return;
+  }
+
+  // Create the line geometry
+  const geometry = createLineGeometry(startPos, endPos);
+
+  // Create the line material
+  const material = new THREE.LineBasicMaterial({
+    color: 0x0000ff,
+  });
+
+  // Create the line and add it to the scene
+  const line = new THREE.Line(geometry, material);
+  scene.add(line);
+
+  // Store the line in the state registry
+  state.lines[name] = {
+    line,
+    start: startArg,
+    end: endArg,
+    geometry,
+  };
+}

@@ -13,6 +13,7 @@ import {
   _mov,
   find_best_quaternion_for_desired_attitude,
   _findBestQuaternion,
+  _create_line,
 } from "./core.js";
 import {
   getPositionOfPoint,
@@ -24,15 +25,12 @@ import {
 } from "./utils.js";
 import { logToOutput } from "./logger.js";
 
-// Return value and error code like in go
 // TODO: Check all functions receive everything they need as arguments
 // TODO: Expose more options for object creation, widths, colors ...
-// TODO: Fix create_line
 // TODO: Normalize quats before applying
 // TODO: Better names spec findBestQuaternion
 // TODO: Function to extra object from point and direction from line
 // TODO: point_at based on findBestQuaternion that includes the rotation
-// TODO: some example for findBestQuaternion
 
 const canvas = document.getElementById("webgl-canvas");
 const commandInput = document.getElementById("command");
@@ -199,44 +197,8 @@ list_points.help = {
 };
 commands.list_points = list_points;
 
-// Function to create a line between two points and add it to the state
 function create_line(name, startArg, endArg) {
-  if (!validateName(name, state)) {
-    return; // Exit if name validation fails
-  }
-
-  if (!name || typeof name !== "string") {
-    console.error("Invalid line name. It must be a non-empty string.");
-    return;
-  }
-
-  const startPos = getPositionOfPoint(state, startArg);
-  const endPos = getPositionOfPoint(state, endArg);
-
-  if (!startPos || !endPos) {
-    console.error("Invalid points passed to create_line.");
-    return;
-  }
-
-  // Create the line geometry
-  const geometry = createLineGeometry(startPos, endPos);
-
-  // Create the line material
-  const material = new THREE.LineBasicMaterial({
-    color: 0x0000ff,
-  });
-
-  // Create the line and add it to the scene
-  const line = new THREE.Line(geometry, material);
-  scene.add(line);
-
-  // Store the line in the state registry
-  state.lines[name] = {
-    line,
-    start: startArg,
-    end: endArg,
-    geometry,
-  };
+  _create_line(scene, state, name, startArg, endArg);
 }
 
 create_line.help = {
