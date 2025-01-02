@@ -293,5 +293,5 @@ angle("sat2KS", frame("sat").z);
 ```javascript
 // Move the default point, `sat`, to the current position of the object
 // with NORAD id 60562
-mov2sat("sat", "60562");
+mov2sat("sat", "60562", new Date());
 ```
