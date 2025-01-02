@@ -1,11 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-import {
-  createFrame,
-  createFloatingPoint,
-  createLineGeometry,
-} from "./components.js";
+import { createFloatingPoint } from "./components.js";
 import { makeEarth } from "./earth.js";
 import {
   _rot,
@@ -14,6 +10,8 @@ import {
   find_best_quaternion_for_desired_attitude,
   _findBestQuaternion,
   _create_line,
+  _add_point,
+  addFrame,
 } from "./core.js";
 import {
   getPositionOfPoint,
@@ -45,10 +43,6 @@ let state = {
 const commands = {};
 
 const RADIUS_EARTH = 6371.0;
-
-function addFrame(point) {
-  point.add(createFrame(point.position, 400));
-}
 
 const ctx = {};
 
@@ -134,32 +128,7 @@ rot.help = {
 commands.rot = rot;
 
 function add_point(name, coordinates, quaternion = null) {
-  if (!validateName(name, state)) {
-    return;
-  }
-  if (!name || !coordinates || coordinates.length !== 3) {
-    console.error(
-      "Invalid arguments: 'name' must be a string and 'coordinates' must be an array of 3 numbers.",
-    );
-    return;
-  }
-
-  const pointGroup = createFloatingPoint();
-  pointGroup.position.set(coordinates[0], coordinates[1], coordinates[2]);
-
-  if (quaternion && quaternion.length === 4) {
-    addFrame(pointGroup);
-    const q = new THREE.Quaternion(
-      quaternion[0],
-      quaternion[1],
-      quaternion[2],
-      quaternion[3],
-    ); // xyzw
-    pointGroup.setRotationFromQuaternion(q);
-  }
-
-  state.points[name] = pointGroup;
-  scene.add(pointGroup);
+  _add_point(scene, state, name, coordinates, quaternion);
 }
 
 add_point.help = {

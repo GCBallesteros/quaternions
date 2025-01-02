@@ -1,6 +1,10 @@
 import * as THREE from "three";
 import { logToOutput } from "./logger.js";
-import { createLineGeometry } from "./components.js";
+import {
+  createLineGeometry,
+  createFrame,
+  createFloatingPoint,
+} from "./components.js";
 import {
   getPositionOfPoint,
   validateName,
@@ -365,4 +369,37 @@ export function _create_line(scene, state, name, startArg, endArg) {
     end: endArg,
     geometry,
   };
+}
+
+export function addFrame(point) {
+  point.add(createFrame(point.position, 400));
+}
+
+export function _add_point(scene, state, name, coordinates, quaternion = null) {
+  if (!validateName(name, state)) {
+    return;
+  }
+  if (!name || !coordinates || coordinates.length !== 3) {
+    logToOutput(
+      "Invalid arguments: 'name' must be a string and 'coordinates' must be an array of 3 numbers.",
+    );
+    return;
+  }
+
+  const pointGroup = createFloatingPoint();
+  pointGroup.position.set(coordinates[0], coordinates[1], coordinates[2]);
+
+  if (quaternion && quaternion.length === 4) {
+    addFrame(pointGroup);
+    const q = new THREE.Quaternion(
+      quaternion[0],
+      quaternion[1],
+      quaternion[2],
+      quaternion[3],
+    ); // xyzw
+    pointGroup.setRotationFromQuaternion(q);
+  }
+
+  state.points[name] = pointGroup;
+  scene.add(pointGroup);
 }
