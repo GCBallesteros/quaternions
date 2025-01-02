@@ -295,3 +295,13 @@ angle("sat2KS", frame("sat").z);
 // with NORAD id 60562
 mov2sat("sat", "60562", new Date());
 ```
+
+### Point nadir with y-axis pointing north
+
+```javascript
+// Point the primary direction, (z body vector) nadir and the the secondary
+// direction (y body vector) as close as possible as the z axis of the ECEF
+// system.
+ctx.nadirQuat = findBestQuaternion("z", "y", "nadir", [0,0,1]);
+rot("sat", ctx.nadirQuat);
+```
