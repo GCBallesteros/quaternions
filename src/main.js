@@ -370,6 +370,7 @@ findBestQuaternion.help = {
     },
   ],
 };
+commands.findBestQuaternion = findBestQuaternion;
 
 function frame(point) {
   // Ensure the point exists in the state
