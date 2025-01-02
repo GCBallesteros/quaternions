@@ -24,11 +24,12 @@ import {
 } from "./utils.js";
 import { logToOutput } from "./logger.js";
 
+// TODO: mov2sat and fetchTLE
+// TODO: Function to extra object from point and direction from line
 // TODO: Check all functions receive everything they need as arguments
 // TODO: Expose more options for object creation, widths, colors ...
 // TODO: Normalize quats before applying
 // TODO: Better names spec findBestQuaternion
-// TODO: Function to extra object from point and direction from line
 // TODO: point_at based on findBestQuaternion that includes the rotation
 
 const canvas = document.getElementById("webgl-canvas");
@@ -485,3 +486,4 @@ window.addEventListener("resize", () => {
 scene.onBeforeRender = updateAllLines;
 
 create_line("nadir", [0, 0, 0], "sat");
+logToOutput("For documentation visit github.com/GCBallesteros/quaternions");
