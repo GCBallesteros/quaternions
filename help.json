@@ -177,5 +177,45 @@
                 "description": "The time for which the position is computed."
             }
         ]
+    },
+    "sph2xyz": {
+        "description": "Converts spherical coordinates to Cartesian coordinates.",
+        "arguments": [
+            {
+                "name": "sph",
+                "type": "array",
+                "description": "Spherical coordinates `[latitude, longitude, radius]`."
+            }
+        ]
+    },
+    "geo2xyz": {
+        "description": "Converts geographic coordinates to Cartesian coordinates.",
+        "arguments": [
+            {
+                "name": "geo",
+                "type": "array",
+                "description": "Geographic coordinates `[latitude, longitude, altitude]`."
+            }
+        ]
+    },
+    "xyz2sph": {
+        "description": "Converts Cartesian coordinates to spherical coordinates.",
+        "arguments": [
+            {
+                "name": "xyz",
+                "type": "array",
+                "description": "Cartesian coordinates `[x, y, z]`."
+            }
+        ]
+    },
+    "xyz2geo": {
+        "description": "Converts Cartesian coordinates to geographic coordinates (latitude, longitude, and altitude).",
+        "arguments": [
+            {
+                "name": "xyz",
+                "type": "array",
+                "description": "Cartesian coordinates `[x, y, z]`."
+            }
+        ]
     }
 }

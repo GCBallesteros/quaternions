@@ -42,7 +42,6 @@ let state = {
   tles: {},
 };
 
-const commands = {};
 const RADIUS_EARTH = 6371.0;
 
 // Context object for additional state
@@ -159,11 +158,6 @@ function deg2rad(x) {
   return (x * Math.PI) / 180;
 }
 
-
-commands.xyz2sph = xyz2sph;
-commands.sph2xyz = sph2xyz;
-commands.geo2xyz = geo2xyz;
-commands.xyz2geo = xyz2geo;
 
 function findBestQuaternion(
   primaryBodyVector,

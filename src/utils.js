@@ -64,32 +64,12 @@ export function sph2xyz(sph) {
   return [x, y, z];
 }
 
-sph2xyz.help = {
-  description: "Converts spherical coordinates to Cartesian coordinates.",
-  arguments: [
-    {
-      name: "sph",
-      type: "array",
-      description: "Spherical coordinates `[latitude, longitude, radius]`.",
-    },
-  ],
-};
 
 export function geo2xyz(geo) {
   const [latitude, longitude, altitude] = geo;
   return sph2xyz([latitude, longitude, altitude + RADIUS_EARTH]);
 }
 
-geo2xyz.help = {
-  description: "Converts geographic coordinates to Cartesian coordinates.",
-  arguments: [
-    {
-      name: "geo",
-      type: "array",
-      description: "Geographic coordinates `[latitude, longitude, altitude]`.",
-    },
-  ],
-};
 
 /**
  * Converts Cartesian coordinates (x, y, z) to spherical coordinates.
@@ -121,30 +101,10 @@ export function xyz2sph(point) {
   return [latitude, longitude, radius];
 }
 
-xyz2sph.help = {
-  description: "Converts Cartesian coordinates to spherical coordinates.",
-  arguments: [
-    {
-      name: "xyz",
-      type: "array",
-      description: "Cartesian coordinates `[x, y, z]`.",
-    },
-  ],
-};
 
 export function xyz2geo(xyz) {
   const [latitude, longitude, radius] = xyz2sph(xyz);
   return [latitude, longitude, radius - RADIUS_EARTH];
 }
 
-xyz2geo.help = {
-  description:
-    "Converts Cartesian coordinates to geographic coordinates (latitude, longitude, and altitude).",
-  arguments: [
-    {
-      name: "xyz",
-      type: "array",
-      description: "Cartesian coordinates `[x, y, z]`.",
-    },
-  ],
-};
+
