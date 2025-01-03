@@ -24,7 +24,6 @@ import {
 } from "./utils.js";
 import { logToOutput } from "./logger.js";
 
-// TODO: Move helps
 // TODO: mov2sat and fetchTLE
 // TODO: Better errors
 // TODO: Function to extra object from point and direction from line
@@ -117,68 +116,17 @@ function mov(point_name, pos, use_geo = false) {
   _mov(state, point_name, pos, use_geo);
 }
 
-mov.help = {
-  description:
-    "Moves a named point to a specific latitude, longitude, and altitude.",
-  arguments: [
-    {
-      name: "point_name",
-      type: "string",
-      description: "The name of the point to move.",
-    },
-    { name: "pos", type: "array", description: "Position." },
-    {
-      name: "use_geo",
-      type: "bool",
-      description: "Use geographical or cartesian coordinates.",
-    },
-  ],
-};
-commands.mov = mov;
 
 function rot(point_name, q) {
   _rot(state, point_name, q);
 }
 
-rot.help = {
-  description:
-    "Rotates a point to match the orientation implied by the quaternion.",
-  arguments: [
-    {
-      name: "point_name",
-      type: "string",
-      description: "The name of the point to rotate.",
-    },
-    {
-      name: "q",
-      type: "array",
-      description: "A quaternion `[x, y, z, w]` for the rotation.",
-    },
-  ],
-};
-commands.rot = rot;
+
 
 function add_point(name, coordinates, quaternion = null) {
   _add_point(scene, state, name, coordinates, quaternion);
 }
 
-add_point.help = {
-  description: "Adds a new point to the scene.",
-  arguments: [
-    { name: "name", type: "string", description: "Name of the point." },
-    {
-      name: "coordinates",
-      type: "array",
-      description: "Cartesian coordinates `[x, y, z]`.",
-    },
-    {
-      name: "quaternion",
-      type: "array (optional)",
-      description: "Initial rotation as a quaternion `[x, y, z, w]`.",
-    },
-  ],
-};
-commands.add_point = add_point;
 
 function list_points() {
   const pointNames = Object.keys(state.points);
@@ -191,74 +139,26 @@ function list_points() {
   }
 }
 
-list_points.help = {
-  description: "Lists all points currently in the state.",
-  arguments: [],
-};
-commands.list_points = list_points;
 
 function create_line(name, startArg, endArg) {
   _create_line(scene, state, name, startArg, endArg);
 }
 
-create_line.help = {
-  description: "Creates a line between two points or coordinates.",
-  arguments: [
-    { name: "name", type: "string", description: "Name of the line." },
-    {
-      name: "startArg",
-      type: "array or string",
-      description: "Starting point or coordinates.",
-    },
-    {
-      name: "endArg",
-      type: "array or string",
-      description: "Ending point or coordinates.",
-    },
-  ],
-};
-commands.create_line = create_line;
 
 function angle(vec1, vec2) {
   return _angle(state, vec1, vec2);
 }
 
-angle.help = {
-  description: "Calculates the angle between two vectors.",
-  arguments: [
-    {
-      name: "vec1Arg",
-      type: "string/array",
-      description: "A vector or 'point1->point2' string.",
-    },
-    {
-      name: "vec2Arg",
-      type: "string/array",
-      description: "A vector or 'point1->point2' string.",
-    },
-  ],
-};
-commands.angle = angle;
 
 function rad2deg(x) {
   return (x * 180) / Math.PI;
 }
 
-rad2deg.help = {
-  description: "Converts radians to degrees.",
-  arguments: [{ name: "x", type: "number", description: "Angle in radians." }],
-};
-commands.rad2deg = rad2deg;
 
 function deg2rad(x) {
   return (x * Math.PI) / 180;
 }
 
-deg2rad.help = {
-  description: "Converts degrees to radians.",
-  arguments: [{ name: "x", type: "number", description: "Angle in degrees." }],
-};
-commands.deg2rad = deg2rad;
 
 commands.xyz2sph = xyz2sph;
 commands.sph2xyz = sph2xyz;
@@ -280,38 +180,6 @@ function findBestQuaternion(
   );
 }
 
-findBestQuaternion.help = {
-  description:
-    "A wrapper around the `find_best_quaternion_for_desired_attitude` function that simplifies the process of aligning body vectors to target vectors by supporting flexible inputs.",
-  arguments: [
-    {
-      name: "primaryVecArg",
-      type: "array | string",
-      description:
-        "The primary body vector. Can be a 3-element array (e.g., [1, 0, 0]) or one of `x`, `y`, or `z`.",
-    },
-    {
-      name: "secondaryVecArg",
-      type: "array | string",
-      description:
-        "The secondary body vector. Can be a 3-element array (e.g., [0, 1, 0]) or one of `x`, `y`, or `z`.",
-    },
-    {
-      name: "primaryTargetArg",
-      type: "array | string",
-      description:
-        "The target vector for the primary body vector. Can be a 3-element array, a line name, or a string in the form `startPoint->endPoint`.",
-    },
-    {
-      name: "secondaryTargetArg",
-      type: "array | string",
-      description:
-        "The target vector for the secondary body vector. Can be a 3-element array, a line name, or a string in the form `startPoint->endPoint`",
-    },
-  ],
-};
-commands.findBestQuaternion = findBestQuaternion;
-
 function frame(point) {
   // Ensure the point exists in the state
   if (!(point in state.points)) {
@@ -330,14 +198,6 @@ function frame(point) {
 
   return basisVectors;
 }
-
-frame.help = {
-  description: "Returns the local frame vectors of a point.",
-  arguments: [
-    { name: "point", type: "string", description: "The name of the point." },
-  ],
-};
-commands.frame = frame;
 
 async function fetchTLE(norad_id) {
   // Check if TLE data already exists in the cache
@@ -364,18 +224,7 @@ async function fetchTLE(norad_id) {
   return data;
 }
 
-fetchTLE.help = {
-  description:
-    "Fetches the Two-Line Element (TLE) for a satellite using its COSPAR ID.",
-  arguments: [
-    {
-      name: "norad_id",
-      type: "string",
-      description: "COSPAR ID of the satellite.",
-    },
-  ],
-};
-commands.fetchTLE = fetchTLE;
+
 
 async function mov2sat(name, cosparId, timestamp) {
   try {
@@ -418,33 +267,10 @@ async function mov2sat(name, cosparId, timestamp) {
   }
 }
 
-mov2sat.help = {
-  description:
-    "Moves a point to the position of a satellite at a given timestamp.",
-  arguments: [
-    {
-      name: "name",
-      type: "string",
-      description: "The name of the point to move.",
-    },
-    {
-      name: "cosparId",
-      type: "string",
-      description: "COSPAR ID of the satellite.",
-    },
-    {
-      name: "timestamp",
-      type: "Date",
-      description: "The time for which the position is computed.",
-    },
-  ],
-};
-commands.mov2sat = mov2sat;
 
 function help(commandName) {
-  _help(commands, commandName);
+  _help(commandName);
 }
-
 
 
 // MAIN SETUP
