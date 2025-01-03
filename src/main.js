@@ -24,7 +24,9 @@ import {
 } from "./utils.js";
 import { logToOutput } from "./logger.js";
 
+// TODO: Move helps
 // TODO: mov2sat and fetchTLE
+// TODO: Better errors
 // TODO: Function to extra object from point and direction from line
 // TODO: Check all functions receive everything they need as arguments
 // TODO: Expose more options for object creation, widths, colors ...
@@ -33,7 +35,6 @@ import { logToOutput } from "./logger.js";
 // TODO: point_at based on findBestQuaternion that includes the rotation
 
 const canvas = document.getElementById("webgl-canvas");
-const commandInput = document.getElementById("command");
 const executeButton = document.getElementById("execute");
 
 let state = {
@@ -43,46 +44,74 @@ let state = {
 };
 
 const commands = {};
-
 const RADIUS_EARTH = 6371.0;
 
+// Context object for additional state
 const ctx = {};
 
+// Initialize Monaco Editor
+require.config({
+  paths: {
+    vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min/vs",
+  },
+});
+
+let editor;
+
+require(["vs/editor/editor.main"], function () {
+  editor = monaco.editor.create(document.getElementById("monaco-editor"), {
+    value: `// Write your commands here\nconsole.log('Hello, World!');`,
+    language: "javascript",
+    theme: "vs-dark",
+  });
+});
+
+// Updated executeCommand to use Monaco's editor content
 function executeCommand() {
-  const command = commandInput.value.trim();
+  const command = editor.getValue().trim();
+  console.log(command);
   if (command) {
-    logToOutput(`> ${command}\n`);
+    // logToOutput(`> ${command}\n`);
     try {
-      const result = eval(command);
-      Promise.resolve(result)
-        .then((resolvedValue) => {
-          if (resolvedValue !== undefined) {
-            logToOutput(`  ${resolvedValue}`);
-          }
-        })
-        .catch((error) => {
-          logToOutput(`Error: ${error.message}`);
-        });
+      const result = eval(command);  // Execute the code
+      Promise.resolve(result).then((resolvedValue) => {
+        if (resolvedValue !== undefined) {
+          logToOutput(`  ${resolvedValue}`);
+        }
+      }).catch((error) => {
+        logToOutput(`Error: ${error.message}`);
+      });
     } catch (error) {
       logToOutput(`Error: ${error.message}`);
     }
-    commandInput.value = "";
   }
 }
 
+// Attach the corrected event listener
 executeButton.addEventListener("click", executeCommand);
-commandInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    executeCommand();
-    event.preventDefault(); // Prevent default behavior (e.g., form submission)
-  }
-});
 
-// Animation loop
-function animate() {
-  requestAnimationFrame(animate);
-  renderer.render(scene, camera);
+// Update all lines in the registry before each render
+function updateAllLines() {
+  for (const lineName in state.lines) {
+    const { line, start, end, geometry } = state.lines[lineName];
+
+    const startPos = getPositionOfPoint(state, start);
+    const endPos = getPositionOfPoint(state, end);
+
+    if (startPos && endPos) {
+      // Update the line geometry's positions
+      geometry.attributes.position.setXYZ(
+        0,
+        startPos.x,
+        startPos.y,
+        startPos.z,
+      );
+      geometry.attributes.position.setXYZ(1, endPos.x, endPos.y, endPos.z);
+      geometry.attributes.position.needsUpdate = true; // Ensure the update is rendered
+    }
+  }
 }
+
 
 function mov(point_name, pos, use_geo = false) {
   _mov(state, point_name, pos, use_geo);
@@ -189,28 +218,6 @@ create_line.help = {
   ],
 };
 commands.create_line = create_line;
-
-// Update all lines in the registry before each render
-function updateAllLines() {
-  for (const lineName in state.lines) {
-    const { line, start, end, geometry } = state.lines[lineName];
-
-    const startPos = getPositionOfPoint(state, start);
-    const endPos = getPositionOfPoint(state, end);
-
-    if (startPos && endPos) {
-      // Update the line geometry's positions
-      geometry.attributes.position.setXYZ(
-        0,
-        startPos.x,
-        startPos.y,
-        startPos.z,
-      );
-      geometry.attributes.position.setXYZ(1, endPos.x, endPos.y, endPos.z);
-      geometry.attributes.position.needsUpdate = true; // Ensure the update is rendered
-    }
-  }
-}
 
 function angle(vec1, vec2) {
   return _angle(state, vec1, vec2);
@@ -438,10 +445,10 @@ function help(commandName) {
   _help(commands, commandName);
 }
 
-// MAIN
-const renderer = new THREE.WebGLRenderer({
-  canvas,
-});
+
+
+// MAIN SETUP
+const renderer = new THREE.WebGLRenderer({ canvas });
 renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 
 const scene = new THREE.Scene();
@@ -449,13 +456,12 @@ const camera = new THREE.PerspectiveCamera(
   75,
   canvas.clientWidth / canvas.clientHeight,
   0.1,
-  100000,
-); // Adjusted far plane for Earth's scale
+  100000
+);
 camera.position.set(14000, 2000, 2000);
 camera.lookAt(0, 0, 0);
 camera.up.set(0, 0, 1);
 
-// Load Earth texture
 let earth_geometries = makeEarth();
 scene.add(earth_geometries.earth);
 scene.add(earth_geometries.earth_frame);
@@ -463,11 +469,18 @@ scene.add(earth_geometries.earth_frame);
 state.points["sat"] = createFloatingPoint();
 addFrame(state.points["sat"]);
 scene.add(state.points["sat"]);
-mov("sat", [39, 0, 150], true);
+_mov(state, "sat", [39, 0, 150], true);
+create_line("nadir", [0, 0, 0], "sat");
+
+function animate() {
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+}
 
 animate();
 
-// OrbitControls setup
+scene.onBeforeRender = updateAllLines;
+
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.25;
@@ -475,15 +488,8 @@ controls.enableZoom = true;
 controls.minDistance = 8000;
 controls.maxDistance = 20000;
 
-// Adjust the canvas on resize
 window.addEventListener("resize", () => {
   renderer.setSize(canvas.clientWidth, canvas.clientHeight);
   camera.aspect = canvas.clientWidth / canvas.clientHeight;
   camera.updateProjectionMatrix();
 });
-
-// Hook into the render loop
-scene.onBeforeRender = updateAllLines;
-
-create_line("nadir", [0, 0, 0], "sat");
-logToOutput("For documentation visit github.com/GCBallesteros/quaternions");

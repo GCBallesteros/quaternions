@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>3D Visualization with Console</title>
+    <title>3D Visualization with Monaco Editor</title>
     <script type="importmap">
       {
         "imports": {
@@ -13,67 +13,72 @@
       }
     </script>
 
-    <!-- Load satellite.js via a regular script tag (not an ES module) -->
+    <!-- Load satellite.js -->
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/satellite.js/5.0.0/satellite.min.js"
-      integrity="sha512-/L/m1vniwzIFhlCFwxbVDMGj2fQMHZWrR/fGG78cqxllCOHVDJTePM3kiGc00Q5OXA5bvJ1OtfyCzlYyrEtQcw=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
+
+    <!-- Load Monaco Editor -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min/vs/loader.min.js"
+    ></script>
+
     <style>
       body {
         margin: 0;
         display: flex;
-        flex-direction: column;
         height: 100vh;
         font-family: monospace;
+        overflow: hidden;
       }
+
       #canvas-container {
-        flex-grow: 1; /* Take all available space */
+        flex: 2;
         background-color: black;
         position: relative;
       }
+
       canvas {
-        display: block;
         width: 100%;
         height: 100%;
+        display: block;
       }
-      #console {
-        height: 150px;
-        background-color: #1e1e1e;
-        color: #ffffff;
+
+      #editor-container {
+        flex: 1;
         display: flex;
         flex-direction: column;
-        border-top: 2px solid #333;
+        border-left: 2px solid #333;
       }
+
+      #monaco-editor {
+        flex-grow: 4;
+        height: 100%;
+      }
+
       #output {
         flex-grow: 1;
+        height: 20%;
         overflow-y: auto;
-        padding: 10px;
-        box-sizing: border-box;
-        font-size: 14px;
-      }
-      #input {
-        display: flex;
-        border-top: 1px solid #333;
-      }
-      #command {
-        flex-grow: 1;
-        border: none;
-        padding: 10px;
-        font-size: 14px;
         background-color: #1e1e1e;
-        color: #ffffff;
-        outline: none;
+        color: white;
+        padding: 10px;
+        border-top: 2px solid #333;
+        font-size: 14px;
+        white-space: pre-wrap;
       }
+
       #execute {
         background-color: #007bff;
-        color: #ffffff;
+        color: white;
         border: none;
-        padding: 10px 20px;
+        padding: 10px;
         cursor: pointer;
-        font-size: 14px;
+        font-size: 16px;
       }
+
       #execute:hover {
         background-color: #0056b3;
       }
@@ -83,13 +88,13 @@
     <div id="canvas-container">
       <canvas id="webgl-canvas"></canvas>
     </div>
-    <div id="console">
-      <div id="output"></div>
-      <div id="input">
-        <input type="text" id="command" placeholder="Enter a command..." />
-        <button id="execute">Execute</button>
-      </div>
+
+    <div id="editor-container">
+      <div id="monaco-editor"></div>
+      <button id="execute">Execute</button>
+      <div id="output"></div> <!-- The output div added here -->
     </div>
+
     <script type="module" src="src/main.js"></script>
   </body>
 </html>
