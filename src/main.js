@@ -42,7 +42,6 @@ let state = {
   tles: {},
 };
 
-const RADIUS_EARTH = 6371.0;
 
 // Context object for additional state
 const ctx = {};
@@ -308,8 +307,18 @@ controls.enableZoom = true;
 controls.minDistance = 8000;
 controls.maxDistance = 20000;
 
-window.addEventListener("resize", () => {
-  renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-  camera.aspect = canvas.clientWidth / canvas.clientHeight;
-  camera.updateProjectionMatrix();
+function resizeCanvas() {
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    renderer.setSize(width, height, false);  // Resize the renderer without scaling the image
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+}
+
+// Automatically resize canvas when the window resizes
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas(); // Call initially to ensure it fits on load
+
+window.addEventListener('resize', () => {
+    editor.layout(); // Ensure Monaco resizes properly on window resize
 });

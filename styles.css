@@ -1,0 +1,61 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    font-family: monospace;
+    display: flex;
+    overflow: hidden;
+}
+
+#canvas-container {
+    flex: 2;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+#editor-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-left: 2px solid #333;
+    overflow: hidden;
+}
+
+#monaco-editor {
+    flex: 1;
+    overflow: hidden;
+}
+
+#output {
+    flex-basis: 20%;
+    overflow-y: auto;
+    background-color: #1e1e1e;
+    color: white;
+    padding: 10px;
+    border-top: 2px solid #333;
+    font-size: 14px;
+    white-space: pre-wrap;
+}
+
+#execute {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#execute:hover {
+    background-color: #0056b3;
+}

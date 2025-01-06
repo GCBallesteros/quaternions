@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>3D Visualization with Monaco Editor</title>
+    <link rel="stylesheet" href="styles.css">
     <script type="importmap">
       {
         "imports": {
@@ -25,64 +26,6 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min/vs/loader.min.js"
     ></script>
 
-    <style>
-      body {
-        margin: 0;
-        display: flex;
-        height: 100vh;
-        font-family: monospace;
-        overflow: hidden;
-      }
-
-      #canvas-container {
-        flex: 2;
-        background-color: black;
-        position: relative;
-      }
-
-      canvas {
-        width: 100%;
-        height: 100%;
-        display: block;
-      }
-
-      #editor-container {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        border-left: 2px solid #333;
-      }
-
-      #monaco-editor {
-        flex-grow: 4;
-        height: 100%;
-      }
-
-      #output {
-        flex-grow: 1;
-        height: 20%;
-        overflow-y: auto;
-        background-color: #1e1e1e;
-        color: white;
-        padding: 10px;
-        border-top: 2px solid #333;
-        font-size: 14px;
-        white-space: pre-wrap;
-      }
-
-      #execute {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 10px;
-        cursor: pointer;
-        font-size: 16px;
-      }
-
-      #execute:hover {
-        background-color: #0056b3;
-      }
-    </style>
   </head>
   <body>
     <div id="canvas-container">
