@@ -28,7 +28,7 @@ jobs:
         run: npm install
 
       - name: Run TypeScript type check
-        run: npx tsc --noEmit
+        run: npm tsc --noEmit
 
       - name: Build project
         run: npm run build
