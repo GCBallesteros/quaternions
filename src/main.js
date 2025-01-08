@@ -340,4 +340,4 @@ window.addEventListener('resize', () => {
     editor.layout(); // Ensure Monaco resizes properly on window resize
 });
 
-//logToOutput("Run `help()` or visit github.com/GCBallesteros/quaternions for more documentation");
+logToOutput("Run `help()` or visit github.com/GCBallesteros/quaternions for more documentation");
