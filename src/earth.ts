@@ -5,7 +5,7 @@ import earthTextureUrl from '../earth_texture.jpg';
 
 const RADIUS_EARTH = 6371.0;
 
-export function makeEarth() {
+export function makeEarth():{ earth: THREE.Mesh; earth_frame: THREE.Group } {
   const textureLoader = new THREE.TextureLoader();
   const earthTexture = textureLoader.load(
     earthTextureUrl,
