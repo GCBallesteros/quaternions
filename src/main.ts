@@ -62,8 +62,7 @@ let state = {
 // Context object for additional state
 const ctx = {};
 
-const satelliteScript = `
-// Move the default point, 'sat', to somewhere somewhat near Helsinki
+const satelliteScript = `// Move the default point, 'sat', to somewhere somewhat near Helsinki
 mov("sat", [62.0, 34.0, 500.0], true);
 // Calculate ECEF coordinates of point of interest and store them
 ctx.ksCoords = geo2xyz([60.186, 24.828, 0]);
@@ -76,6 +75,7 @@ rot("sat", [-0.6313439, -0.1346824, -0.6313439, -0.4297329]);
 // Calculate angle between z-axis of 'sat' and 'sat2KS'
 angle("sat2KS", frame("sat").z);
 `;
+
 const editor = monaco.editor.create(
   document.getElementById("monaco-editor") as HTMLElement,
   {
@@ -337,4 +337,6 @@ window.addEventListener("resize", () => {
   editor.layout(); // Ensure Monaco resizes properly on window resize
 });
 
-logToOutput("Run `help()` or visit github.com/GCBallesteros/quaternions for more documentation");
+logToOutput(
+  "Run `help()` or visit github.com/GCBallesteros/quaternions for more documentation",
+);
