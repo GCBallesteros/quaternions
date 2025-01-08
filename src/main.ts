@@ -164,7 +164,7 @@ function findBestQuaternion(
   secondaryBodyVector,
   primaryTargetVector,
   secondaryTargetVector,
-) {
+): number[] {
   return _findBestQuaternion(
     state,
     primaryBodyVector,
@@ -174,7 +174,11 @@ function findBestQuaternion(
   );
 }
 
-function frame(point) {
+function frame(point: string): {
+  x: THREE.Vector3Tuple;
+  y: THREE.Vector3Tuple;
+  z: THREE.Vector3Tuple;
+} {
   // Ensure the point exists in the state
   if (!(point in state.points)) {
     console.error("Point not available in the state.");
