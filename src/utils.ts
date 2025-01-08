@@ -3,7 +3,10 @@ import { logToOutput } from "./logger.js";
 
 const RADIUS_EARTH = 6371.0;
 
-export function getPositionOfPoint(state, pointArg) {
+export function getPositionOfPoint(
+  state,
+  pointArg: [number, number, number] | string,
+): THREE.Vector3 | undefined {
   if (Array.isArray(pointArg) && pointArg.length === 3) {
     return new THREE.Vector3(pointArg[0], pointArg[1], pointArg[2]);
   } else if (typeof pointArg === "string" && state.points[pointArg]) {
@@ -12,11 +15,11 @@ export function getPositionOfPoint(state, pointArg) {
     console.error(
       "Invalid point argument. Expected an array of 3 elements or a point name.",
     );
-    return null;
+    return undefined;
   }
 }
 
-export function validateName(name, state) {
+export function validateName(name: string, state): boolean {
   const namePattern = /^[a-zA-Z0-9_-]+$/; // Alphanumeric, underscores, and dashes
 
   if (!namePattern.test(name)) {
@@ -46,7 +49,7 @@ export function validateName(name, state) {
  * @returns {Array<number>} An array [x, y, z] representing the Cartesian coordinates.
  * @throws {Error} If the input is invalid.
  */
-export function sph2xyz(sph) {
+export function sph2xyz(sph: [number, number, number]): [number, number, number] {
   if (!Array.isArray(sph) || sph.length !== 3) {
     throw new Error(
       "Input must be an array with three numerical values [latitude, longitude, radius].",
@@ -65,7 +68,7 @@ export function sph2xyz(sph) {
   return [x, y, z];
 }
 
-export function geo2xyz(geo) {
+export function geo2xyz(geo: [number, number, number]): number[] {
   const [latitude, longitude, altitude] = geo;
   return sph2xyz([latitude, longitude, altitude + RADIUS_EARTH]);
 }
@@ -80,7 +83,9 @@ export function geo2xyz(geo) {
  *  - radius: The distance from the origin to the point.
  * @throws {Error} If the input is invalid or the radius is zero.
  */
-export function xyz2sph(point) {
+export function xyz2sph(
+  point: [number, number, number],
+): [number, number, number] {
   if (!Array.isArray(point) || point.length !== 3) {
     throw new Error(
       "Input must be an array with three numerical values [x, y, z].",
@@ -100,7 +105,9 @@ export function xyz2sph(point) {
   return [latitude, longitude, radius];
 }
 
-export function xyz2geo(xyz) {
+export function xyz2geo(
+  xyz: [number, number, number],
+): [number, number, number] {
   const [latitude, longitude, radius] = xyz2sph(xyz);
   return [latitude, longitude, radius - RADIUS_EARTH];
 }

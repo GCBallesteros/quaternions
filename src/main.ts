@@ -39,7 +39,6 @@ function keepItAlive() {
 
 keepItAlive();
 
-// TODO: Do typechecking before allowing the final deployement on action
 // TODO: Improve treeshaking situation
 // TODO: mov2sat and fetchTLE
 // TODO: Function to extra object from point and direction from line

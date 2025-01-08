@@ -16,7 +16,8 @@
     "monaco-editor": "^0.52.2",
     "satellite.js": "^5.0.0",
     "three": "^0.172.0",
-    "typescript": "^5.7.2",
+    "tsc": "^2.0.4",
+    "typescript": "^5.7.3",
     "vite": "^6.0.7"
   },
   "dependencies": {
