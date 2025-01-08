@@ -1,19 +1,5 @@
 import { logToOutput } from "./logger.js";
-
-
-let helpData = {};
-
-async function loadHelpData() {
-    try {
-        const response = await fetch("./help.json");
-        helpData = await response.json();
-    } catch (error) {
-        console.error("Error loading help data:", error);
-    }
-}
-
-
-await loadHelpData();
+import helpData from './assets/help.json';
 
 export function _help(commandName) {
   if (!commandName) {

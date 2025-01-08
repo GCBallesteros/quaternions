@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { logToOutput } from "./logger.js";
 
 const RADIUS_EARTH = 6371.0;
 

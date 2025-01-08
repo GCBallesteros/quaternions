@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "NodeNext",           // Use ESNext modules
+    "moduleResolution": "nodenext",  // Use node16 or nodenext for better module resolution
+    "outDir": "dist",              // Output bundled code into 'dist' folder
+    "strict": false,                // Enable strict mode for better type checking
+    "noImplicitAny": false,        // Allow implicit 'any' (can be true if desired)
+    "esModuleInterop": true,       // Enable esModuleInterop for compatibility
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,          // Skip type checking of declaration files (speeds up build)
+    "noUnusedLocals": false, // Make sure unused locals are not removed
+    "noUnusedParameters": false,
+
+        "resolveJsonModule": true
+  },
+  "include": ["src/**/*.ts"],  // Include all TypeScript files under src
+  "exclude": ["node_modules"]  // Exclude node_modules
+}
+
