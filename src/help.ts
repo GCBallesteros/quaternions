@@ -1,5 +1,5 @@
 import { logToOutput } from "./logger.js";
-import helpData from './assets/help.json';
+import helpData from './assets/help.json' with {type: 'json'};
 
 export function _help(commandName) {
   if (!commandName) {
