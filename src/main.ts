@@ -39,7 +39,6 @@ function keepItAlive() {
 
 keepItAlive();
 
-// TODO: Typescript migration:  undefined call? wtf it's Monaco...
 // TODO: Do typechecking before allowing the final deployement on action
 // TODO: Improve treeshaking situation
 // TODO: mov2sat and fetchTLE
