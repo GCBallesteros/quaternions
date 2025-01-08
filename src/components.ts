@@ -1,7 +1,13 @@
 import * as THREE from "three";
 
 // Object Frames
-function createArrow(direction, origin, length, color, name) {
+function createArrow(
+  direction: THREE.Vector3,
+  origin: THREE.Vector3,
+  length: number,
+  color: number,
+  name: string,
+): THREE.Group {
   const group = new THREE.Group();
   group.name = name;
   const normalizedDirection = direction.clone().normalize();
@@ -51,7 +57,10 @@ function createArrow(direction, origin, length, color, name) {
   return group;
 }
 
-export function createFrame(pos, length) {
+export function createFrame(
+  pos: { x: number; y: number; z: number },
+  length: number,
+): THREE.Group {
   const frameGroup = new THREE.Group();
   frameGroup.name = "frame";
 
@@ -85,11 +94,11 @@ export function createFrame(pos, length) {
 
 // Floating Points
 export function createFloatingPoint(
-  radius = 50,
-  widthSegments = 16,
-  heightSegments = 16,
-  color = 0xff0000,
-) {
+  radius: number = 50,
+  widthSegments: number = 16,
+  heightSegments: number = 16,
+  color: number = 0xff0000,
+): THREE.Group {
   const pointGroup = new THREE.Group();
   const geometry = new THREE.SphereGeometry(
     radius,

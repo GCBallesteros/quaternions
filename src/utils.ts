@@ -65,12 +65,10 @@ export function sph2xyz(sph) {
   return [x, y, z];
 }
 
-
 export function geo2xyz(geo) {
   const [latitude, longitude, altitude] = geo;
   return sph2xyz([latitude, longitude, altitude + RADIUS_EARTH]);
 }
-
 
 /**
  * Converts Cartesian coordinates (x, y, z) to spherical coordinates.
@@ -102,10 +100,7 @@ export function xyz2sph(point) {
   return [latitude, longitude, radius];
 }
 
-
 export function xyz2geo(xyz) {
   const [latitude, longitude, radius] = xyz2sph(xyz);
   return [latitude, longitude, radius - RADIUS_EARTH];
 }
-
-
