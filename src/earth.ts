@@ -1,13 +1,14 @@
 import * as THREE from "three";
 
 import { createFrame } from "./components.js";
+import earthTextureUrl from '../earth_texture.jpg';
 
 const RADIUS_EARTH = 6371.0;
 
-export function makeEarth() {
+export function makeEarth():{ earth: THREE.Mesh; earth_frame: THREE.Group } {
   const textureLoader = new THREE.TextureLoader();
   const earthTexture = textureLoader.load(
-    "./earth_texture.jpg",
+    earthTextureUrl,
     () => {
       console.log("Earth texture loaded");
     },

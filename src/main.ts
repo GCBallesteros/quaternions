@@ -1,4 +1,7 @@
 import * as THREE from "three";
+import * as monaco from "monaco-editor";
+import * as satellite from "satellite.js";
+
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 import { _help } from "./help.js";
@@ -24,9 +27,24 @@ import {
 } from "./utils.js";
 import { logToOutput } from "./logger.js";
 
+function keepItAlive() {
+  // This function prevents unused variable from being tree-shaken
+  console.log(find_best_quaternion_for_desired_attitude);
+  console.log(validateName);
+  console.log(xyz2sph);
+  console.log(xyz2geo);
+  console.log(geo2xyz);
+  console.log(sph2xyz);
+}
+
+keepItAlive();
+
+// TODO: Typescript migration:  undefined call? wtf it's Monaco...
+// TODO: Do typechecking before allowing the final deployement on action
+// TODO: Improve treeshaking situation
 // TODO: mov2sat and fetchTLE
-// TODO: Better errors
 // TODO: Function to extra object from point and direction from line
+// TODO: Better errors
 // TODO: Check all functions receive everything they need as arguments
 // TODO: Expose more options for object creation, widths, colors ...
 // TODO: Normalize quats before applying
@@ -42,18 +60,8 @@ let state = {
   tles: {},
 };
 
-
 // Context object for additional state
 const ctx = {};
-
-// Initialize Monaco Editor
-require.config({
-  paths: {
-    vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min/vs",
-  },
-});
-
-let editor;
 
 const satelliteScript = `
 // Move the default point, 'sat', to somewhere somewhat near Helsinki
@@ -69,16 +77,14 @@ rot("sat", [-0.6313439, -0.1346824, -0.6313439, -0.4297329]);
 // Calculate angle between z-axis of 'sat' and 'sat2KS'
 angle("sat2KS", frame("sat").z);
 `;
-//const satelliteScript = `// Visit https://github.com/GCBallesteros/quaternions?tab=readme-ov-file#example-workflow
-//// for some usage examples`
-
-require(["vs/editor/editor.main"], function () {
-  editor = monaco.editor.create(document.getElementById("monaco-editor"), {
+const editor = monaco.editor.create(
+  document.getElementById("monaco-editor") as HTMLElement,
+  {
     value: satelliteScript,
     language: "javascript",
     theme: "vs-dark",
-  });
-});
+  },
+);
 
 // Updated executeCommand to use Monaco's editor content
 function executeCommand() {
@@ -87,14 +93,16 @@ function executeCommand() {
   if (command) {
     // logToOutput(`> ${command}\n`);
     try {
-      const result = eval(command);  // Execute the code
-      Promise.resolve(result).then((resolvedValue) => {
-        if (resolvedValue !== undefined) {
-          logToOutput(`  ${resolvedValue}`);
-        }
-      }).catch((error) => {
-        logToOutput(`Error: ${error.message}`);
-      });
+      const result = eval(command); // Execute the code
+      Promise.resolve(result)
+        .then((resolvedValue) => {
+          if (resolvedValue !== undefined) {
+            logToOutput(`  ${resolvedValue}`);
+          }
+        })
+        .catch((error) => {
+          logToOutput(`Error: ${error.message}`);
+        });
     } catch (error) {
       logToOutput(`Error: ${error.message}`);
     }
@@ -126,22 +134,17 @@ function updateAllLines() {
   }
 }
 
-
 function mov(point_name, pos, use_geo = false) {
   _mov(state, point_name, pos, use_geo);
 }
-
 
 function rot(point_name, q) {
   _rot(state, point_name, q);
 }
 
-
-
 function add_point(name, coordinates, quaternion = null) {
   _add_point(scene, state, name, coordinates, quaternion);
 }
-
 
 function list_points() {
   const pointNames = Object.keys(state.points);
@@ -154,33 +157,28 @@ function list_points() {
   }
 }
 
-
 function create_line(name, startArg, endArg) {
   _create_line(scene, state, name, startArg, endArg);
 }
-
 
 function angle(vec1, vec2) {
   return _angle(state, vec1, vec2);
 }
 
-
 function rad2deg(x) {
   return (x * 180) / Math.PI;
 }
 
-
 function deg2rad(x) {
   return (x * Math.PI) / 180;
 }
-
 
 function findBestQuaternion(
   primaryBodyVector,
   secondaryBodyVector,
   primaryTargetVector,
   secondaryTargetVector,
-) {
+): number[] {
   return _findBestQuaternion(
     state,
     primaryBodyVector,
@@ -190,7 +188,11 @@ function findBestQuaternion(
   );
 }
 
-function frame(point) {
+function frame(point: string): {
+  x: THREE.Vector3Tuple;
+  y: THREE.Vector3Tuple;
+  z: THREE.Vector3Tuple;
+} {
   // Ensure the point exists in the state
   if (!(point in state.points)) {
     console.error("Point not available in the state.");
@@ -234,8 +236,6 @@ async function fetchTLE(norad_id) {
   return data;
 }
 
-
-
 async function mov2sat(name, cosparId, timestamp) {
   try {
     // Step 1: Fetch the TLE data using the COSPAR ID
@@ -251,7 +251,7 @@ async function mov2sat(name, cosparId, timestamp) {
     const positionAndVelocity = satellite.propagate(satrec, timestamp);
     const position = positionAndVelocity.position;
 
-    if (!position) {
+    if (typeof position === "boolean") {
       logToOutput(
         `No position data found for satellite ${cosparId} at the given timestamp.`,
       );
@@ -277,11 +277,9 @@ async function mov2sat(name, cosparId, timestamp) {
   }
 }
 
-
 function help(commandName) {
   _help(commandName);
 }
-
 
 // MAIN SETUP
 const renderer = new THREE.WebGLRenderer({ canvas });
@@ -292,7 +290,7 @@ const camera = new THREE.PerspectiveCamera(
   75,
   canvas.clientWidth / canvas.clientHeight,
   0.1,
-  100000
+  100000,
 );
 camera.position.set(14000, 2000, 2000);
 camera.lookAt(0, 0, 0);
@@ -325,19 +323,19 @@ controls.minDistance = 8000;
 controls.maxDistance = 20000;
 
 function resizeCanvas() {
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
-    renderer.setSize(width, height, false);  // Resize the renderer without scaling the image
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
+  renderer.setSize(width, height, false); // Resize the renderer without scaling the image
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
 }
 
 // Automatically resize canvas when the window resizes
-window.addEventListener('resize', resizeCanvas);
+window.addEventListener("resize", resizeCanvas);
 resizeCanvas(); // Call initially to ensure it fits on load
 
-window.addEventListener('resize', () => {
-    editor.layout(); // Ensure Monaco resizes properly on window resize
+window.addEventListener("resize", () => {
+  editor.layout(); // Ensure Monaco resizes properly on window resize
 });
 
 logToOutput("Run `help()` or visit github.com/GCBallesteros/quaternions for more documentation");

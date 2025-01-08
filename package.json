@@ -1,0 +1,22 @@
+{
+  "name": "quaternions",
+  "version": "1.0.0",
+  "description": "A tool for visualizing satellite positions and orientations and providing simple geometrical calculations. Its main purposes is in debugging quaternion-based codes for satellites .",
+  "main": "index.js",
+  "scripts": {
+    "build": "vite build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@types/three": "^0.172.0",
+    "monaco-editor": "^0.52.2",
+    "satellite.js": "^5.0.0",
+    "three": "^0.172.0",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.7",
+    "vite-plugin-monaco-editor": "^1.1.0"
+  }
+}
