@@ -11,8 +11,8 @@
     "skipLibCheck": true,          // Skip type checking of declaration files (speeds up build)
     "noUnusedLocals": false, // Make sure unused locals are not removed
     "noUnusedParameters": false,
-
-        "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "types": ["vite/client"]
   },
   "include": ["src/**/*.ts"],  // Include all TypeScript files under src
   "exclude": ["node_modules"]  // Exclude node_modules
