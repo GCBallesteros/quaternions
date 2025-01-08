@@ -55,9 +55,24 @@ require.config({
 
 let editor;
 
+const satelliteScript = `
+// Move the default point, 'sat', to somewhere somewhat near Helsinki
+mov("sat", [62.0, 34.0, 500.0], true);
+// Calculate ECEF coordinates of point of interest and store them
+ctx.ksCoords = geo2xyz([60.186, 24.828, 0]);
+// Add a point over the previously calculated coords
+add_point("KS", ctx.ksCoords);
+// Connect "sat" to new point
+create_line("sat2KS", "sat", "KS");
+// Rotate 'sat' to some buggy quaternion
+rot("sat", [-0.6313439, -0.1346824, -0.6313439, -0.4297329]);
+// Calculate angle between z-axis of 'sat' and 'sat2KS'
+angle("sat2KS", frame("sat").z);
+`;
+
 require(["vs/editor/editor.main"], function () {
   editor = monaco.editor.create(document.getElementById("monaco-editor"), {
-    value: `// Write your commands here\nconsole.log('Hello, World!');`,
+    value: satelliteScript,
     language: "javascript",
     theme: "vs-dark",
   });
@@ -322,3 +337,5 @@ resizeCanvas(); // Call initially to ensure it fits on load
 window.addEventListener('resize', () => {
     editor.layout(); // Ensure Monaco resizes properly on window resize
 });
+
+logToOutput("Run `help()` or visit github.com/GCBallesteros/quaternions for more documentation");
