@@ -53,8 +53,8 @@ the globally available object named `ctx`. For example, if you run
 ```javascrtipt
 ctx.foo = 42;
 ```
-and then modify the script `ctx.foo` will still be available,  not so, if you
-had use a `let` statement.
+and then modify the script `ctx.foo` will still be available;  not so if you
+had used a `let` statement.
 
 
 ## Movement & Attitude Commands
