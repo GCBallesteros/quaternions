@@ -395,7 +395,7 @@ export async function _mov2sat(
   name: string,
   cosparId: string,
   timestamp: Date,
-): void {
+): Promise<void> {
   try {
     // Step 1: Fetch the TLE data using the COSPAR ID
     const tle = await _fetchTLE(state, cosparId);
