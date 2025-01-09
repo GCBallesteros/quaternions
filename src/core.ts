@@ -118,7 +118,7 @@ export function find_best_quaternion_for_desired_attitude(
   secondary_body_vector,
   primary_body_vector_target,
   secondary_body_vector_target,
-) {
+): [number, number, number, number] {
   const primaryVector = new THREE.Vector3(
     primary_body_vector[0],
     primary_body_vector[1],
@@ -190,7 +190,7 @@ export function find_best_quaternion_for_desired_attitude(
 
   // Combine the two rotations
   const finalQuaternion = angleAxisQuaternion.multiply(primaryQuaternion);
-  const finalQuaternionAsArray = [
+  const finalQuaternionAsArray: [number, number, number,number] = [
     finalQuaternion.x,
     finalQuaternion.y,
     finalQuaternion.z,
@@ -231,11 +231,11 @@ find_best_quaternion_for_desired_attitude.help = {
 
 export function _findBestQuaternion(
   state,
-  primaryVecArg,
-  secondaryVecArg,
-  primaryTargetArg,
-  secondaryTargetArg,
-) {
+  primaryVecArg: [number, number, number] | string,
+  secondaryVecArg: [number, number, number] | string,
+  primaryTargetArg: [number, number, number] | string,
+  secondaryTargetArg: [number, number, number] | string,
+): [number, number, number, number] {
   // Helper function to resolve a vector from its argument
   function resolveBodyVector(arg) {
     if (Array.isArray(arg) && arg.length === 3) {
@@ -490,7 +490,10 @@ export function _reset(scene, state) {
   logToOutput("Scene has been reset. Only 'sat' and 'nadir' remain.");
 }
 
-export function _frame(state, point: string): {
+export function _frame(
+  state,
+  point: string,
+): {
   x: THREE.Vector3Tuple;
   y: THREE.Vector3Tuple;
   z: THREE.Vector3Tuple;
