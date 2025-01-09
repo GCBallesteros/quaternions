@@ -114,10 +114,10 @@ export function _mov(state, point_name, pos, use_geo = false) {
 }
 
 export function find_best_quaternion_for_desired_attitude(
-  primary_body_vector,
-  secondary_body_vector,
-  primary_body_vector_target,
-  secondary_body_vector_target,
+  primary_body_vector: [number, number, number],
+  secondary_body_vector: [number, number, number],
+  primary_body_vector_target: [number, number, number],
+  secondary_body_vector_target: [number, number, number],
 ): [number, number, number, number] {
   const primaryVector = new THREE.Vector3(
     primary_body_vector[0],
@@ -190,7 +190,7 @@ export function find_best_quaternion_for_desired_attitude(
 
   // Combine the two rotations
   const finalQuaternion = angleAxisQuaternion.multiply(primaryQuaternion);
-  const finalQuaternionAsArray: [number, number, number,number] = [
+  const finalQuaternionAsArray: [number, number, number, number] = [
     finalQuaternion.x,
     finalQuaternion.y,
     finalQuaternion.z,
