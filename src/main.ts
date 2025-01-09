@@ -43,10 +43,6 @@ function keepItAlive() {
 keepItAlive();
 
 // TODO: Do some more types
-// TODO: Improve treeshaking situation
-// TODO: Function to extra object from point and direction from line
-// TODO: Better errors and use a Result type
-// TODO: Check all functions receive everything they need as arguments
 // TODO: Expose more options for object creation, widths, colors ...
 // TODO: Normalize quats before applying
 // TODO: Better names spec findBestQuaternion
