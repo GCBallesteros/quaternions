@@ -200,35 +200,6 @@ export function find_best_quaternion_for_desired_attitude(
   return finalQuaternionAsArray;
 }
 
-find_best_quaternion_for_desired_attitude.help = {
-  description:
-    'Returns the 3js quaternion that aligns the primary body vector to a given target direction and minimizes the angle to the target given for the secondary body vector.',
-  arguments: [
-    {
-      name: 'primary_body_vector',
-      type: 'array',
-      description:
-        'A vector as defined on the body frame that we will point. Its target is always perfectly achieved.',
-    },
-    {
-      name: 'secondary_body_vector',
-      type: 'array',
-      description:
-        'A vector as defined on the body frame that we will make a best effort to align to `secondary_body_vector_target`.',
-    },
-    {
-      name: 'primary_body_vector_target',
-      type: 'array',
-      description: 'The target direction for the `primary_body_vector`.',
-    },
-    {
-      name: 'secondary_body_vector_target',
-      type: 'array',
-      description: 'The target direction for the `secondary_body_vector`.',
-    },
-  ],
-};
-
 export function _findBestQuaternion(
   state,
   primaryVecArg: [number, number, number] | string,
