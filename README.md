@@ -45,6 +45,17 @@ elements:
 These defaults are intended to help users quickly visualize basic satellite
 positioning and relationships without additional setup.
 
+### State between executions
+
+If you want to store state between script executions please store data within
+the globally available object named `ctx`. For example, if you run
+
+```javascrtipt
+ctx.foo = 42;
+```
+and then modify the script `ctx.foo` will still be available,  not so, if you
+had use a `let` statement.
+
 
 ## Movement & Attitude Commands
 
@@ -277,9 +288,9 @@ Fetches the Two-Line Element (TLE) for a satellite using its COSPAR ID.
 // Move the default point, `sat`, to somwehere somehwhat near Helsinki
 mov("sat", [62.0, 34.0, 500.0], true);
 // Calculate ECEF coordinates of point of interest and store them
-ctx.ksCoords = geo2xyz([60.186, 24.828, 0]);
+let ksCoords = geo2xyz([60.186, 24.828, 0]);
 // Add a point over the previously calculate coords
-add_point("KS", ctx.ksCoords);
+add_point("KS", ksCoords);
 // Connect "sat" to new point
 create_line("sat2KS", "sat", "KS");
 // Rotate `sat` to some buggy quaternion
@@ -302,6 +313,6 @@ mov2sat("sat", "60562", new Date());
 // Point the primary direction, (z body vector) nadir and the the secondary
 // direction (y body vector) as close as possible as the z axis of the ECEF
 // system.
-ctx.nadirQuat = findBestQuaternion("z", "y", "nadir", [0,0,1]);
-rot("sat", ctx.nadirQuat);
+let nadirQuat = findBestQuaternion("z", "y", "nadir", [0,0,1]);
+rot("sat", nadirQuat);
 ```

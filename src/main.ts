@@ -64,9 +64,9 @@ const ctx = {};
 const satelliteScript = `// Move the default point, 'sat', to somewhere somewhat near Helsinki
 mov("sat", [62.0, 34.0, 500.0], true);
 // Calculate ECEF coordinates of point of interest and store them
-ctx.ksCoords = geo2xyz([60.186, 24.828, 0]);
+let ksCoords = geo2xyz([60.186, 24.828, 0]);
 // Add a point over the previously calculated coords
-add_point("KS", ctx.ksCoords);
+add_point("KS", ksCoords);
 // Connect "sat" to new point
 create_line("sat2KS", "sat", "KS");
 // Rotate 'sat' to some buggy quaternion
