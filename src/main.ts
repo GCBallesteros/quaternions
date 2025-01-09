@@ -187,9 +187,9 @@ async function mov2sat(name, cosparId, timestamp) {
 
 function findBestQuaternion(
   primaryBodyVector: [number, number, number] | string,
-  secondaryBodyVector,
-  primaryTargetVector,
-  secondaryTargetVector,
+  secondaryBodyVector: [number, number, number] | string,
+  primaryTargetVector: [number, number, number] | string,
+  secondaryTargetVector: [number, number, number] | string,
 ): [number, number, number, number] {
   return _findBestQuaternion(
     state,

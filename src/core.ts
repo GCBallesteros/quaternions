@@ -8,7 +8,11 @@ import {
 import { logToOutput } from './logger.js';
 import { geo2xyz, getPositionOfPoint, validateName } from './utils.js';
 
-export function _rot(state, point_name, q) {
+export function _rot(
+  state,
+  point_name: string,
+  q: [number, number, number, number],
+): void {
   // q is xyzw
   if (!state.points || !state.points[point_name]) {
     logToOutput(
@@ -29,7 +33,11 @@ export function _rot(state, point_name, q) {
   pointGroup.setRotationFromQuaternion(quaternion);
 }
 
-export function _angle(state, vec1Arg, vec2Arg) {
+export function _angle(
+  state,
+  vec1Arg: [number, number, number] | string,
+  vec2Arg: [number, number, number] | string,
+): number | null {
   // Helper function to resolve a vector from its argument
   function resolveVector(arg) {
     if (Array.isArray(arg) && arg.length === 3) {
@@ -97,7 +105,12 @@ export function _angle(state, vec1Arg, vec2Arg) {
   return THREE.MathUtils.radToDeg(angleRadians);
 }
 
-export function _mov(state, point_name, pos, use_geo = false) {
+export function _mov(
+  state,
+  point_name: string,
+  pos: [number, number, number],
+  use_geo: boolean = false,
+): void {
   if (!state.points[point_name]) {
     logToOutput(`Point '${point_name}' does not exist.`);
     return;
@@ -297,7 +310,13 @@ export function _findBestQuaternion(
   );
 }
 
-export function _create_line(scene, state, name, startArg, endArg) {
+export function _create_line(
+  scene,
+  state,
+  name: string,
+  startArg: [number, number, number] | string,
+  endArg: [number, number, number] | string,
+): void {
   if (!validateName(name, state)) {
     return; // Exit if name validation fails
   }
@@ -369,7 +388,12 @@ export function _add_point(scene, state, name, coordinates, quaternion = null) {
   scene.add(pointGroup);
 }
 
-export async function _mov2sat(state, name, cosparId, timestamp) {
+export async function _mov2sat(
+  state,
+  name: string,
+  cosparId: string,
+  timestamp: Date,
+): void {
   try {
     // Step 1: Fetch the TLE data using the COSPAR ID
     const tle = await _fetchTLE(state, cosparId);
@@ -435,7 +459,7 @@ export async function _fetchTLE(state, norad_id) {
   return data;
 }
 
-export function _reset(scene, state) {
+export function _reset(scene, state): void {
   // Clear all points except "sat"
   for (const pointName in state.points) {
     if (pointName !== 'sat') {
