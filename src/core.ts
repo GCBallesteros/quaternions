@@ -8,6 +8,8 @@ import {
 import { logToOutput } from './logger.js';
 import { geo2xyz, getPositionOfPoint, validateName } from './utils.js';
 
+type Vector3 = [number, number, number];
+
 export function _rot(
   state,
   point_name: string,
@@ -35,8 +37,8 @@ export function _rot(
 
 export function _angle(
   state,
-  vec1Arg: [number, number, number] | string,
-  vec2Arg: [number, number, number] | string,
+  vec1Arg: Vector3 | string,
+  vec2Arg: Vector3 | string,
 ): number | null {
   // Helper function to resolve a vector from its argument
   function resolveVector(arg) {
@@ -108,7 +110,7 @@ export function _angle(
 export function _mov(
   state,
   point_name: string,
-  pos: [number, number, number],
+  pos: Vector3,
   use_geo: boolean = false,
 ): void {
   if (!state.points[point_name]) {
@@ -127,10 +129,10 @@ export function _mov(
 }
 
 export function find_best_quaternion_for_desired_attitude(
-  primary_body_vector: [number, number, number],
-  secondary_body_vector: [number, number, number],
-  primary_body_vector_target: [number, number, number],
-  secondary_body_vector_target: [number, number, number],
+  primary_body_vector: Vector3,
+  secondary_body_vector: Vector3,
+  primary_body_vector_target: Vector3,
+  secondary_body_vector_target: Vector3,
 ): [number, number, number, number] {
   const primaryVector = new THREE.Vector3(
     primary_body_vector[0],
@@ -215,10 +217,10 @@ export function find_best_quaternion_for_desired_attitude(
 
 export function _findBestQuaternion(
   state,
-  primaryVecArg: [number, number, number] | string,
-  secondaryVecArg: [number, number, number] | string,
-  primaryTargetArg: [number, number, number] | string,
-  secondaryTargetArg: [number, number, number] | string,
+  primaryVecArg: Vector3 | string,
+  secondaryVecArg: Vector3 | string,
+  primaryTargetArg: Vector3 | string,
+  secondaryTargetArg: Vector3 | string,
 ): [number, number, number, number] {
   // Helper function to resolve a vector from its argument
   function resolveBodyVector(arg) {
@@ -314,8 +316,8 @@ export function _create_line(
   scene,
   state,
   name: string,
-  startArg: [number, number, number] | string,
-  endArg: [number, number, number] | string,
+  startArg: Vector3 | string,
+  endArg: Vector3 | string,
 ): void {
   if (!validateName(name, state)) {
     return; // Exit if name validation fails
