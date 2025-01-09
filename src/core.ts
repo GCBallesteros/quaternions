@@ -1,17 +1,15 @@
+import * as satellite from "satellite.js";
 import * as THREE from "three";
+import {
+    createFloatingPoint,
+    createFrame,
+    createLineGeometry,
+} from "./components.js";
 import { logToOutput } from "./logger.js";
 import {
-  createLineGeometry,
-  createFrame,
-  createFloatingPoint,
-} from "./components.js";
-import {
-  getPositionOfPoint,
-  validateName,
-  xyz2geo,
-  xyz2sph,
-  geo2xyz,
-  sph2xyz,
+    geo2xyz,
+    getPositionOfPoint,
+    validateName,
 } from "./utils.js";
 
 export function _rot(state, point_name, q) {
@@ -402,4 +400,70 @@ export function _add_point(scene, state, name, coordinates, quaternion = null) {
 
   state.points[name] = pointGroup;
   scene.add(pointGroup);
+}
+
+export async function _mov2sat(state, name, cosparId, timestamp) {
+  try {
+    // Step 1: Fetch the TLE data using the COSPAR ID
+    const tle = await _fetchTLE(state, cosparId);
+
+    // Step 2: Parse the TLE data using satellite.js
+    const satrec = satellite.twoline2satrec(
+      tle.split("\n")[1],
+      tle.split("\n")[2],
+    );
+
+    // Step 3: Calculate the satellite's position at the given timestamp
+    const positionAndVelocity = satellite.propagate(satrec, timestamp);
+    const position = positionAndVelocity.position;
+
+    if (typeof position === "boolean") {
+      logToOutput(
+        `No position data found for satellite ${cosparId} at the given timestamp.`,
+      );
+      return;
+    }
+
+    // Step 4: Convert the position to Earth-centered (X, Y, Z) coordinates
+    const gmst = satellite.gstime(timestamp);
+    const { x, y, z } = satellite.eciToEcf(position, gmst);
+
+    // Step 5: Update the position of the referenced point in the scene
+    const point = state.points[name];
+    if (point) {
+      point.position.set(x, y, z);
+      logToOutput(`Point ${name} moved to satellite position at ${timestamp}.`);
+    } else {
+      logToOutput(`Point with name '${name}' not found.`);
+    }
+  } catch (error) {
+    logToOutput(
+      `Error fetching or processing satellite data: ${error.message}`,
+    );
+  }
+}
+
+export async function _fetchTLE(state, norad_id) {
+  // Check if TLE data already exists in the cache
+  if (state.tles[norad_id]) {
+    console.log("Using cached TLE for COSPAR ID:", norad_id);
+    return state.tles[norad_id]; // Return cached TLE
+  }
+
+  // If not cached, fetch the TLE data from Celestrak
+  const url = `https://celestrak.org/NORAD/elements/gp.php?CATNR=${encodeURIComponent(norad_id)}&FORMAT=3LE`;
+
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status} - ${response.statusText}`);
+  }
+
+  const data = await response.text();
+
+  // Cache the fetched TLE in the state variable under the COSPAR ID
+  state.tles[norad_id] = data;
+  console.log("Fetched and cached TLE for COSPAR ID:", norad_id);
+
+  return data;
 }
