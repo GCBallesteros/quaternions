@@ -61,7 +61,10 @@ let state = {
 // Context object for additional state
 const ctx = {};
 
-const satelliteScript = `// Move the default point, 'sat', to somewhere somewhat near Helsinki
+const satelliteScript = `// Reset scene so that we can hit execute repeatedly
+// on this sample script without errors
+reset();
+// Move the default point, 'sat', to somewhere somewhat near Helsinki
 mov("sat", [62.0, 34.0, 500.0], true);
 // Calculate ECEF coordinates of point of interest and store them
 let ksCoords = geo2xyz([60.186, 24.828, 0]);
@@ -279,6 +282,32 @@ function help(commandName) {
   _help(commandName);
 }
 
+function reset() {
+  // Clear all points except "sat"
+  for (const pointName in state.points) {
+    if (pointName !== "sat") {
+      const point = state.points[pointName];
+      scene.remove(point); // Remove from the scene
+      delete state.points[pointName]; // Remove from the state
+    }
+  }
+
+  // Clear all lines except "nadir"
+  for (const lineName in state.lines) {
+    if (lineName !== "nadir") {
+      const line = state.lines[lineName].line;
+      scene.remove(line); // Remove from the scene
+      delete state.lines[lineName]; // Remove from the state
+    }
+  }
+
+  // Reset the position of "sat"
+  _mov(state, "sat", [39, 0, 500], true); // Move to original position
+  rot("sat", [0, 0, 0, 1]); // Reset orientation to default quaternion
+
+  logToOutput("Scene has been reset. Only 'sat' and 'nadir' remain.");
+}
+
 // MAIN SETUP
 const renderer = new THREE.WebGLRenderer({ canvas });
 renderer.setSize(canvas.clientWidth, canvas.clientHeight);
@@ -301,7 +330,7 @@ scene.add(earth_geometries.earth_frame);
 state.points["sat"] = createFloatingPoint();
 addFrame(state.points["sat"]);
 scene.add(state.points["sat"]);
-_mov(state, "sat", [39, 0, 150], true);
+_mov(state, "sat", [39, 0, 500], true);
 create_line("nadir", [0, 0, 0], "sat");
 
 function animate() {
