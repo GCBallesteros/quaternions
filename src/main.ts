@@ -1,14 +1,15 @@
-import * as THREE from "three";
-import * as monaco from "monaco-editor";
+import * as THREE from 'three';
+import * as monaco from 'monaco-editor';
 
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-import { _help } from "./help.js";
-import { createFloatingPoint } from "./components.js";
-import { makeEarth } from "./earth.js";
+import { _help } from './help.js';
+import { createFloatingPoint } from './components.js';
+import { makeEarth } from './earth.js';
 import {
   _rot,
   _angle,
+  _frame,
   _mov,
   _mov2sat,
   _fetchTLE,
@@ -16,8 +17,9 @@ import {
   _findBestQuaternion,
   _create_line,
   _add_point,
+  _reset,
   addFrame,
-} from "./core.js";
+} from './core.js';
 import {
   getPositionOfPoint,
   validateName,
@@ -25,8 +27,8 @@ import {
   xyz2sph,
   geo2xyz,
   sph2xyz,
-} from "./utils.js";
-import { logToOutput } from "./logger.js";
+} from './utils.js';
+import { logToOutput } from './logger.js';
 
 function keepItAlive() {
   // This function prevents unused variable from being tree-shaken
@@ -40,19 +42,18 @@ function keepItAlive() {
 
 keepItAlive();
 
-// TODO: Move reset, findBestQuaternion, frame
 // TODO: Do some more types
 // TODO: Improve treeshaking situation
 // TODO: Function to extra object from point and direction from line
-// TODO: Better errors
+// TODO: Better errors and use a Result type
 // TODO: Check all functions receive everything they need as arguments
 // TODO: Expose more options for object creation, widths, colors ...
 // TODO: Normalize quats before applying
 // TODO: Better names spec findBestQuaternion
 // TODO: point_at based on findBestQuaternion that includes the rotation
 
-const canvas = document.getElementById("webgl-canvas");
-const executeButton = document.getElementById("execute");
+const canvas = document.getElementById('webgl-canvas');
+const executeButton = document.getElementById('execute');
 
 let state = {
   points: {},
@@ -81,11 +82,11 @@ angle("sat2KS", frame("sat").z);
 `;
 
 const editor = monaco.editor.create(
-  document.getElementById("monaco-editor") as HTMLElement,
+  document.getElementById('monaco-editor') as HTMLElement,
   {
     value: satelliteScript,
-    language: "javascript",
-    theme: "vs-dark",
+    language: 'javascript',
+    theme: 'vs-dark',
   },
 );
 
@@ -113,7 +114,7 @@ function executeCommand() {
 }
 
 // Attach the corrected event listener
-executeButton.addEventListener("click", executeCommand);
+executeButton.addEventListener('click', executeCommand);
 
 // Update all lines in the registry before each render
 function updateAllLines() {
@@ -153,9 +154,9 @@ function list_points() {
   const pointNames = Object.keys(state.points);
 
   if (pointNames.length === 0) {
-    logToOutput("No points currently exist in the state.");
+    logToOutput('No points currently exist in the state.');
   } else {
-    logToOutput("Existing points:");
+    logToOutput('Existing points:');
     pointNames.forEach((name) => logToOutput(`- ${name}`));
   }
 }
@@ -204,22 +205,7 @@ function frame(point: string): {
   y: THREE.Vector3Tuple;
   z: THREE.Vector3Tuple;
 } {
-  // Ensure the point exists in the state
-  if (!(point in state.points)) {
-    console.error("Point not available in the state.");
-    return null;
-  }
-
-  const pt = state.points[point];
-
-  // Apply the quaternion to the standard basis vectors and return as arrays
-  const basisVectors = {
-    x: new THREE.Vector3(1, 0, 0).applyQuaternion(pt.quaternion).toArray(),
-    y: new THREE.Vector3(0, 1, 0).applyQuaternion(pt.quaternion).toArray(),
-    z: new THREE.Vector3(0, 0, 1).applyQuaternion(pt.quaternion).toArray(),
-  };
-
-  return basisVectors;
+  return _frame(state, point);
 }
 
 function help(commandName) {
@@ -227,29 +213,7 @@ function help(commandName) {
 }
 
 function reset() {
-  // Clear all points except "sat"
-  for (const pointName in state.points) {
-    if (pointName !== "sat") {
-      const point = state.points[pointName];
-      scene.remove(point); // Remove from the scene
-      delete state.points[pointName]; // Remove from the state
-    }
-  }
-
-  // Clear all lines except "nadir"
-  for (const lineName in state.lines) {
-    if (lineName !== "nadir") {
-      const line = state.lines[lineName].line;
-      scene.remove(line); // Remove from the scene
-      delete state.lines[lineName]; // Remove from the state
-    }
-  }
-
-  // Reset the position of "sat"
-  _mov(state, "sat", [39, 0, 500], true); // Move to original position
-  rot("sat", [0, 0, 0, 1]); // Reset orientation to default quaternion
-
-  logToOutput("Scene has been reset. Only 'sat' and 'nadir' remain.");
+  _reset(scene, state);
 }
 
 // MAIN SETUP
@@ -271,11 +235,11 @@ let earth_geometries = makeEarth();
 scene.add(earth_geometries.earth);
 scene.add(earth_geometries.earth_frame);
 
-state.points["sat"] = createFloatingPoint();
-addFrame(state.points["sat"]);
-scene.add(state.points["sat"]);
-_mov(state, "sat", [39, 0, 500], true);
-create_line("nadir", [0, 0, 0], "sat");
+state.points['sat'] = createFloatingPoint();
+addFrame(state.points['sat']);
+scene.add(state.points['sat']);
+_mov(state, 'sat', [39, 0, 500], true);
+create_line('nadir', [0, 0, 0], 'sat');
 
 function animate() {
   requestAnimationFrame(animate);
@@ -302,13 +266,13 @@ function resizeCanvas() {
 }
 
 // Automatically resize canvas when the window resizes
-window.addEventListener("resize", resizeCanvas);
+window.addEventListener('resize', resizeCanvas);
 resizeCanvas(); // Call initially to ensure it fits on load
 
-window.addEventListener("resize", () => {
+window.addEventListener('resize', () => {
   editor.layout(); // Ensure Monaco resizes properly on window resize
 });
 
 logToOutput(
-  "Run `help()` or visit github.com/GCBallesteros/quaternions for more documentation",
+  'Run `help()` or visit github.com/GCBallesteros/quaternions for more documentation',
 );

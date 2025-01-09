@@ -1,16 +1,12 @@
-import * as satellite from "satellite.js";
-import * as THREE from "three";
+import * as satellite from 'satellite.js';
+import * as THREE from 'three';
 import {
-    createFloatingPoint,
-    createFrame,
-    createLineGeometry,
-} from "./components.js";
-import { logToOutput } from "./logger.js";
-import {
-    geo2xyz,
-    getPositionOfPoint,
-    validateName,
-} from "./utils.js";
+  createFloatingPoint,
+  createFrame,
+  createLineGeometry,
+} from './components.js';
+import { logToOutput } from './logger.js';
+import { geo2xyz, getPositionOfPoint, validateName } from './utils.js';
 
 export function _rot(state, point_name, q) {
   // q is xyzw
@@ -39,10 +35,10 @@ export function _angle(state, vec1Arg, vec2Arg) {
     if (Array.isArray(arg) && arg.length === 3) {
       // Literal vector
       return new THREE.Vector3(arg[0], arg[1], arg[2]);
-    } else if (typeof arg === "string") {
-      if (arg.includes("->")) {
+    } else if (typeof arg === 'string') {
+      if (arg.includes('->')) {
         // Vector in the form "<start_point_name>-><end_point_name>"
-        const [startName, endName] = arg.split("->").map((name) => name.trim());
+        const [startName, endName] = arg.split('->').map((name) => name.trim());
         const startPos = getPositionOfPoint(state, startName);
         const endPos = getPositionOfPoint(state, endName);
 
@@ -69,7 +65,7 @@ export function _angle(state, vec1Arg, vec2Arg) {
         return null;
       }
     } else {
-      logToOutput("Argument must be an array of 3 values or a valid string.");
+      logToOutput('Argument must be an array of 3 values or a valid string.');
       return null;
     }
   }
@@ -87,7 +83,7 @@ export function _angle(state, vec1Arg, vec2Arg) {
   const magnitudeProduct = vec1.length() * vec2.length();
 
   if (magnitudeProduct === 0) {
-    logToOutput("Cannot calculate angle with zero-length vector.");
+    logToOutput('Cannot calculate angle with zero-length vector.');
     return null;
   }
 
@@ -206,29 +202,29 @@ export function find_best_quaternion_for_desired_attitude(
 
 find_best_quaternion_for_desired_attitude.help = {
   description:
-    "Returns the 3js quaternion that aligns the primary body vector to a given target direction and minimizes the angle to the target given for the secondary body vector.",
+    'Returns the 3js quaternion that aligns the primary body vector to a given target direction and minimizes the angle to the target given for the secondary body vector.',
   arguments: [
     {
-      name: "primary_body_vector",
-      type: "array",
+      name: 'primary_body_vector',
+      type: 'array',
       description:
-        "A vector as defined on the body frame that we will point. Its target is always perfectly achieved.",
+        'A vector as defined on the body frame that we will point. Its target is always perfectly achieved.',
     },
     {
-      name: "secondary_body_vector",
-      type: "array",
+      name: 'secondary_body_vector',
+      type: 'array',
       description:
-        "A vector as defined on the body frame that we will make a best effort to align to `secondary_body_vector_target`.",
+        'A vector as defined on the body frame that we will make a best effort to align to `secondary_body_vector_target`.',
     },
     {
-      name: "primary_body_vector_target",
-      type: "array",
-      description: "The target direction for the `primary_body_vector`.",
+      name: 'primary_body_vector_target',
+      type: 'array',
+      description: 'The target direction for the `primary_body_vector`.',
     },
     {
-      name: "secondary_body_vector_target",
-      type: "array",
-      description: "The target direction for the `secondary_body_vector`.",
+      name: 'secondary_body_vector_target',
+      type: 'array',
+      description: 'The target direction for the `secondary_body_vector`.',
     },
   ],
 };
@@ -244,13 +240,13 @@ export function _findBestQuaternion(
   function resolveBodyVector(arg) {
     if (Array.isArray(arg) && arg.length === 3) {
       return new THREE.Vector3(arg[0], arg[1], arg[2]);
-    } else if (typeof arg === "string") {
+    } else if (typeof arg === 'string') {
       switch (arg.toLowerCase()) {
-        case "x":
+        case 'x':
           return new THREE.Vector3(1, 0, 0);
-        case "y":
+        case 'y':
           return new THREE.Vector3(0, 1, 0);
-        case "z":
+        case 'z':
           return new THREE.Vector3(0, 0, 1);
         default:
           logToOutput(`Invalid body vector argument '${arg}'.`);
@@ -268,10 +264,10 @@ export function _findBestQuaternion(
   function resolveTargetVector(arg) {
     if (Array.isArray(arg) && arg.length === 3) {
       return new THREE.Vector3(arg[0], arg[1], arg[2]);
-    } else if (typeof arg === "string") {
-      if (arg.includes("->")) {
+    } else if (typeof arg === 'string') {
+      if (arg.includes('->')) {
         // Vector in the form "<start_point_name>-><end_point_name>"
-        const [startName, endName] = arg.split("->").map((name) => name.trim());
+        const [startName, endName] = arg.split('->').map((name) => name.trim());
         const startPos = getPositionOfPoint(state, startName);
         const endPos = getPositionOfPoint(state, endName);
 
@@ -317,7 +313,7 @@ export function _findBestQuaternion(
     !primaryTargetVector ||
     !secondaryTargetVector
   ) {
-    logToOutput("Invalid inputs. Cannot compute quaternion.");
+    logToOutput('Invalid inputs. Cannot compute quaternion.');
     return null;
   }
 
@@ -335,8 +331,8 @@ export function _create_line(scene, state, name, startArg, endArg) {
     return; // Exit if name validation fails
   }
 
-  if (!name || typeof name !== "string") {
-    logToOutput("Invalid line name. It must be a non-empty string.");
+  if (!name || typeof name !== 'string') {
+    logToOutput('Invalid line name. It must be a non-empty string.');
     return;
   }
 
@@ -344,7 +340,7 @@ export function _create_line(scene, state, name, startArg, endArg) {
   const endPos = getPositionOfPoint(state, endArg);
 
   if (!startPos || !endPos) {
-    logToOutput("Invalid points passed to create_line.");
+    logToOutput('Invalid points passed to create_line.');
     return;
   }
 
@@ -409,15 +405,15 @@ export async function _mov2sat(state, name, cosparId, timestamp) {
 
     // Step 2: Parse the TLE data using satellite.js
     const satrec = satellite.twoline2satrec(
-      tle.split("\n")[1],
-      tle.split("\n")[2],
+      tle.split('\n')[1],
+      tle.split('\n')[2],
     );
 
     // Step 3: Calculate the satellite's position at the given timestamp
     const positionAndVelocity = satellite.propagate(satrec, timestamp);
     const position = positionAndVelocity.position;
 
-    if (typeof position === "boolean") {
+    if (typeof position === 'boolean') {
       logToOutput(
         `No position data found for satellite ${cosparId} at the given timestamp.`,
       );
@@ -446,7 +442,7 @@ export async function _mov2sat(state, name, cosparId, timestamp) {
 export async function _fetchTLE(state, norad_id) {
   // Check if TLE data already exists in the cache
   if (state.tles[norad_id]) {
-    console.log("Using cached TLE for COSPAR ID:", norad_id);
+    console.log('Using cached TLE for COSPAR ID:', norad_id);
     return state.tles[norad_id]; // Return cached TLE
   }
 
@@ -463,7 +459,56 @@ export async function _fetchTLE(state, norad_id) {
 
   // Cache the fetched TLE in the state variable under the COSPAR ID
   state.tles[norad_id] = data;
-  console.log("Fetched and cached TLE for COSPAR ID:", norad_id);
+  console.log('Fetched and cached TLE for COSPAR ID:', norad_id);
 
   return data;
+}
+
+export function _reset(scene, state) {
+  // Clear all points except "sat"
+  for (const pointName in state.points) {
+    if (pointName !== 'sat') {
+      const point = state.points[pointName];
+      scene.remove(point); // Remove from the scene
+      delete state.points[pointName]; // Remove from the state
+    }
+  }
+
+  // Clear all lines except "nadir"
+  for (const lineName in state.lines) {
+    if (lineName !== 'nadir') {
+      const line = state.lines[lineName].line;
+      scene.remove(line); // Remove from the scene
+      delete state.lines[lineName]; // Remove from the state
+    }
+  }
+
+  // Reset the position of "sat"
+  _mov(state, 'sat', [39, 0, 500], true); // Move to original position
+  _rot(state, 'sat', [0, 0, 0, 1]); // Reset orientation to default quaternion
+
+  logToOutput("Scene has been reset. Only 'sat' and 'nadir' remain.");
+}
+
+export function _frame(state, point: string): {
+  x: THREE.Vector3Tuple;
+  y: THREE.Vector3Tuple;
+  z: THREE.Vector3Tuple;
+} {
+  // Ensure the point exists in the state
+  if (!(point in state.points)) {
+    console.error('Point not available in the state.');
+    return null;
+  }
+
+  const pt = state.points[point];
+
+  // Apply the quaternion to the standard basis vectors and return as arrays
+  const basisVectors = {
+    x: new THREE.Vector3(1, 0, 0).applyQuaternion(pt.quaternion).toArray(),
+    y: new THREE.Vector3(0, 1, 0).applyQuaternion(pt.quaternion).toArray(),
+    z: new THREE.Vector3(0, 0, 1).applyQuaternion(pt.quaternion).toArray(),
+  };
+
+  return basisVectors;
 }
