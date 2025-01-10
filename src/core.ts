@@ -6,7 +6,9 @@ import {
   createLineGeometry,
 } from './components.js';
 import { logToOutput } from './logger.js';
-import { geo2xyz, getPositionOfPoint, validateName } from './utils.js';
+import * as utils from './utils.js';
+
+// TODO: All the resolveVector like functions can be refactored
 
 type Vector3 = [number, number, number];
 
@@ -49,8 +51,8 @@ export function _angle(
       if (arg.includes('->')) {
         // Vector in the form "<start_point_name>-><end_point_name>"
         const [startName, endName] = arg.split('->').map((name) => name.trim());
-        const startPos = getPositionOfPoint(state, startName);
-        const endPos = getPositionOfPoint(state, endName);
+        const startPos = utils.getPositionOfPoint(state, startName);
+        const endPos = utils.getPositionOfPoint(state, endName);
 
         if (!startPos || !endPos) {
           logToOutput(`Invalid points in vector definition '${arg}'.`);
@@ -61,8 +63,8 @@ export function _angle(
       } else if (state.lines[arg]) {
         // Argument is a line name
         const line = state.lines[arg];
-        const startPos = getPositionOfPoint(state, line.start);
-        const endPos = getPositionOfPoint(state, line.end);
+        const startPos = utils.getPositionOfPoint(state, line.start);
+        const endPos = utils.getPositionOfPoint(state, line.end);
 
         if (!startPos || !endPos) {
           logToOutput(`Invalid line '${arg}' in state.lines.`);
@@ -123,7 +125,7 @@ export function _mov(
   if (!use_geo) {
     [x, y, z] = pos;
   } else {
-    [x, y, z] = geo2xyz(pos);
+    [x, y, z] = utils.geo2xyz(pos);
   }
   point.position.set(x, y, z);
 }
@@ -254,8 +256,8 @@ export function _findBestQuaternion(
       if (arg.includes('->')) {
         // Vector in the form "<start_point_name>-><end_point_name>"
         const [startName, endName] = arg.split('->').map((name) => name.trim());
-        const startPos = getPositionOfPoint(state, startName);
-        const endPos = getPositionOfPoint(state, endName);
+        const startPos = utils.getPositionOfPoint(state, startName);
+        const endPos = utils.getPositionOfPoint(state, endName);
 
         if (!startPos || !endPos) {
           logToOutput(`Invalid points in target vector definition '${arg}'.`);
@@ -266,8 +268,8 @@ export function _findBestQuaternion(
       } else if (state.lines[arg]) {
         // Argument is a line name
         const line = state.lines[arg];
-        const startPos = getPositionOfPoint(state, line.start);
-        const endPos = getPositionOfPoint(state, line.end);
+        const startPos = utils.getPositionOfPoint(state, line.start);
+        const endPos = utils.getPositionOfPoint(state, line.end);
 
         if (!startPos || !endPos) {
           logToOutput(`Invalid line '${arg}' in state.lines.`);
@@ -319,7 +321,7 @@ export function _create_line(
   startArg: Vector3 | string,
   endArg: Vector3 | string,
 ): void {
-  if (!validateName(name, state)) {
+  if (!utils.validateName(name, state)) {
     return; // Exit if name validation fails
   }
 
@@ -328,8 +330,8 @@ export function _create_line(
     return;
   }
 
-  const startPos = getPositionOfPoint(state, startArg);
-  const endPos = getPositionOfPoint(state, endArg);
+  const startPos = utils.getPositionOfPoint(state, startArg);
+  const endPos = utils.getPositionOfPoint(state, endArg);
 
   if (!startPos || !endPos) {
     logToOutput('Invalid points passed to create_line.');
@@ -362,7 +364,7 @@ export function addFrame(point) {
 }
 
 export function _add_point(scene, state, name, coordinates, quaternion = null) {
-  if (!validateName(name, state)) {
+  if (!utils.validateName(name, state)) {
     return;
   }
   if (!name || !coordinates || coordinates.length !== 3) {

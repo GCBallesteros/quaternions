@@ -4,5 +4,5 @@ export function logToOutput(message) {
   const messageElement = document.createElement("div");
   messageElement.textContent = message;
   output.appendChild(messageElement);
-  output.scrollTop = output.scrollHeight; // Scroll to the bottom
+  output.scrollTop = output.scrollHeight;
 }

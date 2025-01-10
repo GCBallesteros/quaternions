@@ -15,6 +15,7 @@
     "@types/three": "^0.172.0",
     "monaco-editor": "^0.52.2",
     "satellite.js": "^5.0.0",
+    "terser": "^5.37.0",
     "three": "^0.172.0",
     "tsc": "^2.0.4",
     "typescript": "^5.7.3",

@@ -1,12 +1,11 @@
 import { logToOutput } from "./logger.js";
-import helpData from './assets/help.json' with {type: 'json'};
+import helpData from "./assets/help.json" with { type: "json" };
 
 export function _help(commandName) {
   if (!commandName) {
-    logToOutput(
-      "For full docs visit: https://github.com/GCBallesteros/quaternions"
+   logToOutput(
+      "For full docs visit: https://github.com/GCBallesteros/quaternions",
     );
-    console.log(helpData);
     logToOutput("Available commands:");
     Object.keys(helpData).forEach((cmd) => {
       logToOutput(`- ${cmd}`);

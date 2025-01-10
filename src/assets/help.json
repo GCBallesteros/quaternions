@@ -144,22 +144,22 @@
        {
           "name": "primary_body_vector",
           "type": "array",
-          "description": "A vector as defined on the body frame that we will point. Its target is always perfectly achieved.",
+          "description": "A vector as defined on the body frame that we will point. Its target is always perfectly achieved."
         },
         {
           "name": "secondary_body_vector",
           "type": "array",
-          "description":"A vector as defined on the body frame that we will make a best effort to align to `secondary_body_vector_target`.",
+          "description":"A vector as defined on the body frame that we will make a best effort to align to `secondary_body_vector_target`."
         },
         {
           "name": "primary_body_vector_target",
           "type": "array",
-          "description": "The target direction for the `primary_body_vector`.",
+          "description": "The target direction for the `primary_body_vector`."
         },
         {
           "name": "secondary_body_vector_target",
           "type": "array",
-          "description": "The target direction for the `secondary_body_vector`.",
+          "description": "The target direction for the `secondary_body_vector`."
         }
       ]
     },
