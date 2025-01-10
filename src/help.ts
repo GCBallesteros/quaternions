@@ -1,12 +1,12 @@
-import { logToOutput } from "./logger.js";
-import helpData from "./assets/help.json" with { type: "json" };
+import { logToOutput } from './logger.js';
+import helpData from './assets/help.json' with { type: 'json' };
 
-export function _help(commandName) {
+export function _help(commandName: string): void {
   if (!commandName) {
-   logToOutput(
-      "For full docs visit: https://github.com/GCBallesteros/quaternions",
+    logToOutput(
+      'For full docs visit: https://github.com/GCBallesteros/quaternions',
     );
-    logToOutput("Available commands:");
+    logToOutput('Available commands:');
     Object.keys(helpData).forEach((cmd) => {
       logToOutput(`- ${cmd}`);
     });
@@ -21,8 +21,10 @@ export function _help(commandName) {
 
   logToOutput(`**${commandName}**`);
   logToOutput(commandHelp.description);
-  logToOutput("Arguments:");
-  commandHelp.arguments.forEach((arg) => {
-    logToOutput(`- ${arg.name} (${arg.type}): ${arg.description}`);
-  });
+  logToOutput('Arguments:');
+  commandHelp.arguments.forEach(
+    (arg: { name: string; type: string; description: string }) => {
+      logToOutput(`- ${arg.name} (${arg.type}): ${arg.description}`);
+    },
+  );
 }

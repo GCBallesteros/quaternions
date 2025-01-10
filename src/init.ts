@@ -4,7 +4,11 @@ import { createFloatingPoint } from './components.js';
 import { addFrame, _mov, _create_line } from './core.js';
 import { makeEarth } from './earth.js';
 
-export function initializeCanvas() {
+export function initializeCanvas(): {
+  scene: THREE.Scene;
+  canvas: HTMLElement;
+  renderer: THREE.WebGLRenderer;
+} {
   const canvas = document.getElementById('webgl-canvas');
   const renderer = new THREE.WebGLRenderer({ canvas });
   renderer.setSize(canvas.clientWidth, canvas.clientHeight);
@@ -13,7 +17,12 @@ export function initializeCanvas() {
   return { scene, canvas, renderer };
 }
 
-export function init_scene(state, scene, canvas, renderer) {
+export function init_scene(
+  state,
+  scene: THREE.Scene,
+  canvas: HTMLElement,
+  renderer: THREE.WebGLRenderer,
+): THREE.PerspectiveCamera {
   const camera = new THREE.PerspectiveCamera(
     75,
     canvas.clientWidth / canvas.clientHeight,
