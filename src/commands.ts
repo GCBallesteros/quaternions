@@ -1,19 +1,24 @@
 import * as THREE from 'three';
 import {
-    _add_point,
-    _angle,
-    _create_line,
-    _fetchTLE,
-    _findBestQuaternion,
-    _frame,
-    _mov,
-    _mov2sat,
-    _reset,
-    _rot,
+  _add_point,
+  _angle,
+  _create_line,
+  _fetchTLE,
+  _findBestQuaternion,
+  _frame,
+  _mov,
+  _mov2sat,
+  _reset,
+  _rot,
 } from './core.js';
 import { _help } from './help.js';
 
-export function buildCommandClosures(scene, state) {
+import { CommandFunction } from './types.js';
+
+export function buildCommandClosures(
+  scene,
+  state,
+): Record<string, CommandFunction> {
   function mov(point_name, pos, use_geo = false) {
     _mov(state, point_name, pos, use_geo);
   }
