@@ -1,37 +1,17 @@
 import * as monaco from 'monaco-editor';
 
-import { initializeCanvas, init_scene } from './init.js';
+import { init_scene, initializeCanvas } from './init.js';
+import { buildExecuteCommand } from './terminal.js';
+import { getPositionOfPoint } from './utils.js';
 
-import {
-  getPositionOfPoint,
-  validateName,
-  xyz2geo,
-  xyz2sph,
-  geo2xyz,
-  sph2xyz,
-} from './utils.js';
-import { logToOutput } from './logger.js';
 import { buildCommandClosures } from './commands.js';
+import { logToOutput } from './logger.js';
 
 // TODO: Do some more types
-// TODO: HTML won't resize
-// TODO: All those js are annoying
 // TODO: Expose more options for object creation, widths, colors ...
 // TODO: Normalize quats before applying
 // TODO: Better names spec findBestQuaternion
 // TODO: point_at based on findBestQuaternion that includes the rotation
-
-function _avoidTreeShaking() {
-  console.log({
-    getPositionOfPoint,
-    validateName,
-    xyz2geo,
-    xyz2sph,
-    geo2xyz,
-    sph2xyz,
-  });
-}
-_avoidTreeShaking();
 
 let state = {
   points: {},
@@ -44,19 +24,7 @@ let camera = init_scene(state, scene, canvas, renderer);
 
 const commands = buildCommandClosures(scene, state);
 
-const mov = commands.mov;
-const rot = commands.rot;
-const add_point = commands.add_point;
-const create_line = commands.create_line;
-const angle = commands.angle;
-const rad2deg = commands.rad2deg;
-const deg2rad = commands.deg2rad;
-const fetchTLE = commands.fetchTLE;
-const mov2sat = commands.mov2sat;
-const findBestQuaternion = commands.findBestQuaternion;
-const frame = commands.frame;
-const help = commands.help;
-const reset = commands.reset;
+let executeCommand = buildExecuteCommand(commands);
 
 function list_points() {
   const pointNames = Object.keys(state.points);
@@ -72,7 +40,6 @@ function list_points() {
 // //////////
 // TERMINAL
 // //////////
-const executeButton = document.getElementById('execute');
 
 // Context object for additional state
 const ctx = {};
@@ -103,30 +70,10 @@ const editor = monaco.editor.create(
   },
 );
 
-// Updated executeCommand to use Monaco's editor content
-function executeCommand() {
-  const command = editor.getValue().trim();
-  console.log(command);
-  if (command) {
-    try {
-      const result = eval(command); // Execute the code
-      Promise.resolve(result)
-        .then((resolvedValue) => {
-          if (resolvedValue !== undefined) {
-            logToOutput(`  ${resolvedValue}`);
-          }
-        })
-        .catch((error) => {
-          logToOutput(`Error: ${error.message}`);
-        });
-    } catch (error) {
-      logToOutput(`Error: ${error.message}`);
-    }
-  }
-}
-
-// Attach the corrected event listener
-executeButton.addEventListener('click', executeCommand);
+const executeButton = document.getElementById('execute');
+executeButton.addEventListener('click', () => {
+  executeCommand(editor.getValue().trim());
+});
 
 // Update all lines in the registry before each render
 function updateAllLines() {
@@ -164,7 +111,7 @@ function resizeCanvas() {
 
 //function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
-resizeCanvas(); // Call initially to ensure it fits on load
+resizeCanvas();
 
 logToOutput(
   'Run `help()` or visit github.com/GCBallesteros/quaternions for more documentation',

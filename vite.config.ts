@@ -21,6 +21,7 @@ export default defineConfig({
       entry: 'index.html',
       formats: ['es'],
     },
+    minify: false,
     target: 'esnext',
     rollupOptions: {
       output: {
@@ -29,8 +30,8 @@ export default defineConfig({
         assetFileNames: '[name][extname]',
         manualChunks(id) {
           // Keep `main.ts` isolated in `main.js`
-          if (id.includes('src/main.ts')) {
-            return 'main'; // `main.ts` goes into `main.js`
+          if (id.includes('src/terminal.ts')) {
+            return 'terminal'; // `main.ts` goes into `main.js`
           }
 
           // All other code in `src/` goes into `app.js`
