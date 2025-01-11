@@ -37,10 +37,6 @@ function list_points() {
   }
 }
 
-// //////////
-// TERMINAL
-// //////////
-
 // Context object for additional state
 const ctx = {};
 

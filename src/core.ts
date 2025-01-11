@@ -315,7 +315,7 @@ export function _findBestQuaternion(
 }
 
 export function _create_line(
-  scene,
+  scene: THREE.Scene,
   state,
   name: string,
   startArg: Vector3 | string,
@@ -363,7 +363,13 @@ export function addFrame(point) {
   point.add(createFrame(point.position, 400));
 }
 
-export function _add_point(scene, state, name, coordinates, quaternion = null) {
+export function _add_point(
+  scene: THREE.Scene,
+  state,
+  name,
+  coordinates,
+  quaternion = null,
+) {
   if (!utils.validateName(name, state)) {
     return;
   }
@@ -463,7 +469,7 @@ export async function _fetchTLE(state, norad_id) {
   return data;
 }
 
-export function _reset(scene, state): void {
+export function _reset(scene: THREE.Scene, state): void {
   // Clear all points except "sat"
   for (const pointName in state.points) {
     if (pointName !== 'sat') {

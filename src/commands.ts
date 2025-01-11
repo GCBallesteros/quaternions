@@ -16,7 +16,7 @@ import { _help } from './help.js';
 import { CommandFunction } from './types.js';
 
 export function buildCommandClosures(
-  scene,
+  scene: THREE.Scene,
   state,
 ): Record<string, CommandFunction> {
   function mov(point_name, pos, use_geo = false) {

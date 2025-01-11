@@ -3,12 +3,12 @@ import { logToOutput } from './logger.js';
 import { CommandFunction } from './types.js';
 
 import {
-    geo2xyz,
-    getPositionOfPoint,
-    sph2xyz,
-    validateName,
-    xyz2geo,
-    xyz2sph,
+  geo2xyz,
+  getPositionOfPoint,
+  sph2xyz,
+  validateName,
+  xyz2geo,
+  xyz2sph,
 } from './utils.js';
 
 function _avoidTreeShaking() {
