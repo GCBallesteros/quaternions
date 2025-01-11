@@ -154,19 +154,17 @@ function updateAllLines() {
 scene.onBeforeRender = updateAllLines;
 
 function resizeCanvas() {
-  const width = canvas.clientWidth;
-  const height = canvas.clientHeight;
-  renderer.setSize(width, height, false); // Resize the renderer without scaling the image
+  const width = window.innerWidth * 0.66; // Assuming flex ratio
+  const height = window.innerHeight;
+  renderer.setSize(width, height, true);
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
+  editor.layout(); // Ensure Monaco resizes properly on window resize
 }
-// Automatically resize canvas when the window resizes
+
+//function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas(); // Call initially to ensure it fits on load
-
-window.addEventListener('resize', () => {
-  editor.layout(); // Ensure Monaco resizes properly on window resize
-});
 
 logToOutput(
   'Run `help()` or visit github.com/GCBallesteros/quaternions for more documentation',
