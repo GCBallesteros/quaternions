@@ -1,12 +1,10 @@
 import { defineConfig } from 'vite';
 import monacoEditorEsmPlugin from 'vite-plugin-monaco-editor-esm';
 
-// IMPORTANT: This configuration ensures that the main entry file (`main.ts`)
-// is kept separate from the rest of the application code during the build
-// process. By using separate entry points for `main.ts` and `index.html`, we
-// ensure that the `main.ts` code is bundled into its own `main.js` file,
-// preventing unintended variable renaming or conflicts. This is crucial when
-// working with user-provided scripts that rely on specific function names
+// IMPORTANT: This configuration ensures that `terminal.ts` is kept separate
+// from the rest of the application code during the build and bundling process.
+// This prevents unintended variable renaming or conflicts. This is crucial
+// when working with user-provided scripts that rely on specific function names
 // (such as DSL functions), as Vite's default bundling process may otherwise
 // rename variables (e.g., appending `$1` suffixes) to avoid name collisions.
 

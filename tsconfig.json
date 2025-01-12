@@ -4,7 +4,7 @@
     "module": "NodeNext",           // Use ESNext modules
     "moduleResolution": "nodenext",  // Use node16 or nodenext for better module resolution
     "outDir": "dist",              // Output bundled code into 'dist' folder
-    "strict": false,                // Enable strict mode for better type checking
+    "strict": true,                // Enable strict mode for better type checking
     "noImplicitAny": false,        // Allow implicit 'any' (can be true if desired)
     "esModuleInterop": true,       // Enable esModuleInterop for compatibility
     "allowSyntheticDefaultImports": true,

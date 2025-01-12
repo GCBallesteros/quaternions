@@ -9,7 +9,7 @@ export function initializeCanvas(): {
   canvas: HTMLElement;
   renderer: THREE.WebGLRenderer;
 } {
-  const canvas = document.getElementById('webgl-canvas');
+  const canvas = document.getElementById('webgl-canvas')!;
   const renderer = new THREE.WebGLRenderer({ canvas });
   renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 

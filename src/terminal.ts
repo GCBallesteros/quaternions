@@ -52,11 +52,19 @@ export function buildExecuteCommand(
               logToOutput(`  ${resolvedValue}`);
             }
           })
-          .catch((error) => {
-            logToOutput(`Error: ${error.message}`);
+          .catch((error: unknown) => {
+            if (error instanceof Error) {
+              logToOutput(`Error: ${error.message}`);
+            } else {
+              logToOutput(`Error: ${String(error)}`);
+            }
           });
-      } catch (error) {
-        logToOutput(`Error: ${error.message}`);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          logToOutput(`Error: ${error.message}`);
+        } else {
+          logToOutput(`Error: ${String(error)}`);
+        }
       }
     }
   }

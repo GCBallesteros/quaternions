@@ -60,7 +60,7 @@ export function buildCommandClosures(
     secondaryBodyVector: [number, number, number] | string,
     primaryTargetVector: [number, number, number] | string,
     secondaryTargetVector: [number, number, number] | string,
-  ): [number, number, number, number] {
+  ): [number, number, number, number] | null {
     return _findBestQuaternion(
       state,
       primaryBodyVector,
@@ -74,7 +74,7 @@ export function buildCommandClosures(
     x: THREE.Vector3Tuple;
     y: THREE.Vector3Tuple;
     z: THREE.Vector3Tuple;
-  } {
+  } | null {
     return _frame(state, point);
   }
 

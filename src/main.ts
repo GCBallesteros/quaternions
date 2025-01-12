@@ -66,7 +66,7 @@ const editor = monaco.editor.create(
   },
 );
 
-const executeButton = document.getElementById('execute');
+const executeButton = document.getElementById('execute')!;
 executeButton.addEventListener('click', () => {
   executeCommand(editor.getValue().trim());
 });

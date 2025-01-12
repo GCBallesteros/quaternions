@@ -223,7 +223,7 @@ export function _findBestQuaternion(
   secondaryVecArg: Vector3 | string,
   primaryTargetArg: Vector3 | string,
   secondaryTargetArg: Vector3 | string,
-): [number, number, number, number] {
+): [number, number, number, number] | null {
   // Helper function to resolve a vector from its argument
   function resolveBodyVector(arg) {
     if (Array.isArray(arg) && arg.length === 3) {
@@ -368,7 +368,7 @@ export function _add_point(
   state,
   name,
   coordinates,
-  quaternion = null,
+  quaternion: [number, number, number, number] | null = null,
 ) {
   if (!utils.validateName(name, state)) {
     return;
@@ -383,15 +383,19 @@ export function _add_point(
   const pointGroup = createFloatingPoint();
   pointGroup.position.set(coordinates[0], coordinates[1], coordinates[2]);
 
-  if (quaternion && quaternion.length === 4) {
-    addFrame(pointGroup);
-    const q = new THREE.Quaternion(
-      quaternion[0],
-      quaternion[1],
-      quaternion[2],
-      quaternion[3],
-    ); // xyzw
-    pointGroup.setRotationFromQuaternion(q);
+  if (quaternion !== null) {
+    if (quaternion.length === 4) {
+      addFrame(pointGroup);
+      const q = new THREE.Quaternion(
+        quaternion[0],
+        quaternion[1],
+        quaternion[2],
+        quaternion[3],
+      ); // xyzw
+      pointGroup.setRotationFromQuaternion(q);
+    } else {
+      logToOutput('Invalid quaternion in add_point');
+    }
   }
 
   state.points[name] = pointGroup;
@@ -438,13 +442,17 @@ export async function _mov2sat(
       logToOutput(`Point with name '${name}' not found.`);
     }
   } catch (error) {
-    logToOutput(
-      `Error fetching or processing satellite data: ${error.message}`,
-    );
+    if (error instanceof Error) {
+      logToOutput(
+        `Error fetching or processing satellite data: ${error.message}`,
+      );
+    } else {
+      logToOutput(`Error: ${String(error)}`);
+    }
   }
 }
 
-export async function _fetchTLE(state, norad_id) {
+export async function _fetchTLE(state, norad_id: string) {
   // Check if TLE data already exists in the cache
   if (state.tles[norad_id]) {
     console.log('Using cached TLE for COSPAR ID:', norad_id);
@@ -502,10 +510,10 @@ export function _frame(
   x: THREE.Vector3Tuple;
   y: THREE.Vector3Tuple;
   z: THREE.Vector3Tuple;
-} {
+} | null {
   // Ensure the point exists in the state
   if (!(point in state.points)) {
-    console.error('Point not available in the state.');
+    logToOutput('Point not available in the state.');
     return null;
   }
 
