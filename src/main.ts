@@ -7,13 +7,15 @@ import { getPositionOfPoint } from './utils.js';
 import { buildCommandClosures } from './commands.js';
 import { logToOutput } from './logger.js';
 
+import { State } from './types.js';
+
 // TODO: Do some more types
 // TODO: Expose more options for object creation, widths, colors ...
 // TODO: Normalize quats before applying
 // TODO: Better names spec findBestQuaternion
 // TODO: point_at based on findBestQuaternion that includes the rotation
 
-let state = {
+let state: State = {
   points: {},
   lines: {},
   tles: {},
@@ -74,7 +76,7 @@ executeButton.addEventListener('click', () => {
 // Update all lines in the registry before each render
 function updateAllLines() {
   for (const lineName in state.lines) {
-    const { _, start, end, geometry } = state.lines[lineName];
+    const { line, start, end, geometry } = state.lines[lineName];
 
     const startPos = getPositionOfPoint(state, start);
     const endPos = getPositionOfPoint(state, end);

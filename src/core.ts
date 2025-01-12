@@ -7,13 +7,14 @@ import {
 } from './components.js';
 import { logToOutput } from './logger.js';
 import * as utils from './utils.js';
+import { State } from './types.js';
 
 // TODO: All the resolveVector like functions can be refactored
 
 type Vector3 = [number, number, number];
 
 export function _rot(
-  state,
+  state: State,
   point_name: string,
   q: [number, number, number, number],
 ): void {
@@ -38,7 +39,7 @@ export function _rot(
 }
 
 export function _angle(
-  state,
+  state: State,
   vec1Arg: Vector3 | string,
   vec2Arg: Vector3 | string,
 ): number | null {
@@ -110,7 +111,7 @@ export function _angle(
 }
 
 export function _mov(
-  state,
+  state: State,
   point_name: string,
   pos: Vector3,
   use_geo: boolean = false,
@@ -218,7 +219,7 @@ export function find_best_quaternion_for_desired_attitude(
 }
 
 export function _findBestQuaternion(
-  state,
+  state: State,
   primaryVecArg: Vector3 | string,
   secondaryVecArg: Vector3 | string,
   primaryTargetArg: Vector3 | string,
@@ -316,7 +317,7 @@ export function _findBestQuaternion(
 
 export function _create_line(
   scene: THREE.Scene,
-  state,
+  state: State,
   name: string,
   startArg: Vector3 | string,
   endArg: Vector3 | string,
@@ -365,8 +366,8 @@ export function addFrame(point) {
 
 export function _add_point(
   scene: THREE.Scene,
-  state,
-  name,
+  state: State,
+  name: string,
   coordinates,
   quaternion: [number, number, number, number] | null = null,
 ) {
@@ -403,7 +404,7 @@ export function _add_point(
 }
 
 export async function _mov2sat(
-  state,
+  state: State,
   name: string,
   cosparId: string,
   timestamp: Date,
@@ -452,7 +453,7 @@ export async function _mov2sat(
   }
 }
 
-export async function _fetchTLE(state, norad_id: string) {
+export async function _fetchTLE(state: State, norad_id: string) {
   // Check if TLE data already exists in the cache
   if (state.tles[norad_id]) {
     console.log('Using cached TLE for COSPAR ID:', norad_id);
@@ -477,7 +478,7 @@ export async function _fetchTLE(state, norad_id: string) {
   return data;
 }
 
-export function _reset(scene: THREE.Scene, state): void {
+export function _reset(scene: THREE.Scene, state: State): void {
   // Clear all points except "sat"
   for (const pointName in state.points) {
     if (pointName !== 'sat') {
@@ -504,7 +505,7 @@ export function _reset(scene: THREE.Scene, state): void {
 }
 
 export function _frame(
-  state,
+  state: State,
   point: string,
 ): {
   x: THREE.Vector3Tuple;
