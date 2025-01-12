@@ -6,7 +6,6 @@ export interface Line {
   line: THREE.Line;
   start: [number, number, number] | string;
   end: [number, number, number] | string;
-  geometry: THREE.BufferGeometry;
 }
 
 export interface State {

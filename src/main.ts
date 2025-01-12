@@ -76,21 +76,21 @@ executeButton.addEventListener('click', () => {
 // Update all lines in the registry before each render
 function updateAllLines() {
   for (const lineName in state.lines) {
-    const { line, start, end, geometry } = state.lines[lineName];
+    const { line, start, end } = state.lines[lineName];
 
     const startPos = getPositionOfPoint(state, start);
     const endPos = getPositionOfPoint(state, end);
 
     if (startPos && endPos) {
       // Update the line geometry's positions
-      geometry.attributes.position.setXYZ(
+      line.geometry.attributes.position.setXYZ(
         0,
         startPos.x,
         startPos.y,
         startPos.z,
       );
-      geometry.attributes.position.setXYZ(1, endPos.x, endPos.y, endPos.z);
-      geometry.attributes.position.needsUpdate = true; // Ensure the update is rendered
+      line.geometry.attributes.position.setXYZ(1, endPos.x, endPos.y, endPos.z);
+      line.geometry.attributes.position.needsUpdate = true; // Ensure the update is rendered
     }
   }
 }

@@ -356,7 +356,6 @@ export function _create_line(
     line,
     start: startArg,
     end: endArg,
-    geometry,
   };
 }
 
