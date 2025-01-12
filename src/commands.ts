@@ -1,15 +1,15 @@
 import * as THREE from 'three';
 import {
-    _add_point,
-    _angle,
-    _create_line,
-    _fetchTLE,
-    _findBestQuaternion,
-    _frame,
-    _mov,
-    _mov2sat,
-    _reset,
-    _rot,
+  _add_point,
+  _angle,
+  _create_line,
+  _fetchTLE,
+  _findBestQuaternion,
+  _frame,
+  _mov,
+  _mov2sat,
+  _reset,
+  _rot,
 } from './core.js';
 import { _help } from './help.js';
 
@@ -19,39 +19,58 @@ export function buildCommandClosures(
   scene: THREE.Scene,
   state: State,
 ): Record<string, CommandFunction> {
-  function mov(point_name, pos, use_geo = false) {
+  function mov(
+    point_name: string,
+    pos: [number, number, number],
+    use_geo: boolean = false,
+  ): void {
     _mov(state, point_name, pos, use_geo);
   }
 
-  function rot(point_name, q) {
+  function rot(point_name: string, q: [number, number, number, number]): void {
     _rot(state, point_name, q);
   }
 
-  function add_point(name, coordinates, quaternion = null) {
+  function add_point(
+    name: string,
+    coordinates: [number, number, number],
+    quaternion = null,
+  ) {
     _add_point(scene, state, name, coordinates, quaternion);
   }
 
-  function create_line(name, startArg, endArg) {
+  function create_line(
+    name: string,
+    startArg: string | [number, number, number],
+    endArg: string | [number, number, number],
+  ) {
     _create_line(scene, state, name, startArg, endArg);
   }
 
-  function angle(vec1, vec2) {
+  function angle(
+    vec1: string | [number, number, number],
+    vec2: string | [number, number, number],
+  ) {
     return _angle(state, vec1, vec2);
   }
 
-  function rad2deg(x) {
+  function rad2deg(x: number): number {
     return (x * 180) / Math.PI;
   }
 
-  function deg2rad(x) {
+  function deg2rad(x: number): number {
     return (x * Math.PI) / 180;
   }
 
-  async function fetchTLE(norad_id) {
+  async function fetchTLE(norad_id: string): Promise<string> {
     return _fetchTLE(state, norad_id);
   }
 
-  async function mov2sat(name, cosparId, timestamp) {
+  async function mov2sat(
+    name: string,
+    cosparId: string,
+    timestamp: Date,
+  ): Promise<void> {
     _mov2sat(state, name, cosparId, timestamp);
   }
 
@@ -78,11 +97,11 @@ export function buildCommandClosures(
     return _frame(state, point);
   }
 
-  function help(commandName) {
+  function help(commandName: string): void {
     _help(commandName);
   }
 
-  function reset() {
+  function reset(): void {
     _reset(scene, state);
   }
 

@@ -9,11 +9,13 @@ import { logToOutput } from './logger.js';
 
 import { State } from './types.js';
 
+// TODO: Improve consistency on how we pass points around
 // TODO: Do some more types
 // TODO: Expose more options for object creation, widths, colors ...
 // TODO: Normalize quats before applying
 // TODO: Better names spec findBestQuaternion
 // TODO: point_at based on findBestQuaternion that includes the rotation
+// TODO: All the resolveVector like functions can be refactored
 
 let state: State = {
   points: {},
