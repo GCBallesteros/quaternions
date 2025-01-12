@@ -44,7 +44,7 @@ export function _angle(
   vec2Arg: Vector3 | string,
 ): number | null {
   // Helper function to resolve a vector from its argument
-  function resolveVector(arg) {
+  function resolveVector(arg: string | Vector3) {
     if (Array.isArray(arg) && arg.length === 3) {
       // Literal vector
       return new THREE.Vector3(arg[0], arg[1], arg[2]);
@@ -122,7 +122,7 @@ export function _mov(
   }
   let point = state.points[point_name];
 
-  let x, y, z;
+  let x: number, y: number, z: number;
   if (!use_geo) {
     [x, y, z] = pos;
   } else {
@@ -226,7 +226,7 @@ export function _findBestQuaternion(
   secondaryTargetArg: Vector3 | string,
 ): [number, number, number, number] | null {
   // Helper function to resolve a vector from its argument
-  function resolveBodyVector(arg) {
+  function resolveBodyVector(arg: string | Vector3) {
     if (Array.isArray(arg) && arg.length === 3) {
       return new THREE.Vector3(arg[0], arg[1], arg[2]);
     } else if (typeof arg === 'string') {
@@ -250,7 +250,7 @@ export function _findBestQuaternion(
   }
 
   // Helper function to resolve a target vector from its argument
-  function resolveTargetVector(arg) {
+  function resolveTargetVector(arg: string | Vector3) {
     if (Array.isArray(arg) && arg.length === 3) {
       return new THREE.Vector3(arg[0], arg[1], arg[2]);
     } else if (typeof arg === 'string') {
@@ -359,7 +359,7 @@ export function _create_line(
   };
 }
 
-export function addFrame(point) {
+export function addFrame(point: THREE.Group) {
   point.add(createFrame(point.position, 400));
 }
 
@@ -367,7 +367,7 @@ export function _add_point(
   scene: THREE.Scene,
   state: State,
   name: string,
-  coordinates,
+  coordinates: Vector3,
   quaternion: [number, number, number, number] | null = null,
 ) {
   if (!utils.validateName(name, state)) {
@@ -452,7 +452,10 @@ export async function _mov2sat(
   }
 }
 
-export async function _fetchTLE(state: State, norad_id: string) {
+export async function _fetchTLE(
+  state: State,
+  norad_id: string,
+): Promise<string> {
   // Check if TLE data already exists in the cache
   if (state.tles[norad_id]) {
     console.log('Using cached TLE for COSPAR ID:', norad_id);

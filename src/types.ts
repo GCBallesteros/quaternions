@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 
+export type Vector3 = [number, number, number]
+
 export type CommandFunction = (...args: any[]) => any;
 
 export interface Line {

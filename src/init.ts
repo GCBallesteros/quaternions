@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { createFloatingPoint } from './components.js';
-import { addFrame, _mov, _create_line } from './core.js';
+import { _create_line, _mov, addFrame } from './core.js';
 import { makeEarth } from './earth.js';
+import { State } from './types.js';
 
 export function initializeCanvas(): {
   scene: THREE.Scene;
@@ -18,7 +19,7 @@ export function initializeCanvas(): {
 }
 
 export function init_scene(
-  state,
+  state: State,
   scene: THREE.Scene,
   canvas: HTMLElement,
   renderer: THREE.WebGLRenderer,

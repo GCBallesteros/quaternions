@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
 // Object Frames
 function createArrow(
@@ -62,28 +62,28 @@ export function createFrame(
   length: number,
 ): THREE.Group {
   const frameGroup = new THREE.Group();
-  frameGroup.name = "frame";
+  frameGroup.name = 'frame';
 
   const xAxisArrow = createArrow(
     new THREE.Vector3(1, 0, 0),
     new THREE.Vector3(pos.x, pos.y, pos.z),
     length,
     0xff0000,
-    "xaxis",
+    'xaxis',
   ); // X-axis (red)
   const yAxisArrow = createArrow(
     new THREE.Vector3(0, 1, 0),
     new THREE.Vector3(pos.x, pos.y, pos.z),
     length,
     0x00ff00,
-    "yaxis",
+    'yaxis',
   ); // Y-axis (green)
   const zAxisArrow = createArrow(
     new THREE.Vector3(0, 0, 1),
     new THREE.Vector3(pos.x, pos.y, pos.z),
     length,
     0x0000ff,
-    "zaxis",
+    'zaxis',
   ); // Z-axis (blue)
 
   frameGroup.add(xAxisArrow, yAxisArrow, zAxisArrow);
@@ -113,13 +113,16 @@ export function createFloatingPoint(
   return pointGroup;
 }
 
-export function createLineGeometry(start, end) {
+export function createLineGeometry(
+  start: THREE.Vector3,
+  end: THREE.Vector3,
+): THREE.BufferGeometry {
   const geometry = new THREE.BufferGeometry();
   const vertices = new Float32Array(6); // Two 3D points, so 6 values
 
   // Set the start and end points
   vertices.set([start.x, start.y, start.z, end.x, end.y, end.z]);
 
-  geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
+  geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
   return geometry;
 }
