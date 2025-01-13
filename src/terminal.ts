@@ -39,7 +39,7 @@ export function buildExecuteCommand(
   const fetchTLE = commands.fetchTLE;
   const mov2sat = commands.mov2sat;
   const findBestQuaternion = commands.findBestQuaternion;
-  const frame = commands.frame;
+  const point = commands.point;
   const help = commands.help;
   const reset = commands.reset;
 
