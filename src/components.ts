@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { Point } from './point.js';
 
 // Object Frames
 function createArrow(
@@ -98,7 +99,7 @@ export function createFloatingPoint(
   widthSegments: number = 16,
   heightSegments: number = 16,
   color: number = 0xff0000,
-): THREE.Group {
+): Point {
   const pointGroup = new THREE.Group();
   const geometry = new THREE.SphereGeometry(
     radius,
@@ -110,7 +111,7 @@ export function createFloatingPoint(
   });
   const floatingPoint = new THREE.Mesh(geometry, material);
   pointGroup.add(floatingPoint);
-  return pointGroup;
+  return new Point(pointGroup);
 }
 
 export function createLineGeometry(

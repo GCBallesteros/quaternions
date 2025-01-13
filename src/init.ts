@@ -38,9 +38,8 @@ export function init_scene(
   scene.add(earth_geometries.earth);
   scene.add(earth_geometries.earth_frame);
 
-  state.points['sat'] = createFloatingPoint();
-  addFrame(state.points['sat']);
-  scene.add(state.points['sat']);
+  state.points['sat'] = addFrame(createFloatingPoint());
+  scene.add(state.points['sat'].geometry);
   _mov(state, 'sat', [39, 0, 500], true);
   _create_line(scene, state, 'nadir', [0, 0, 0], 'sat');
 

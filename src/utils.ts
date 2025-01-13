@@ -1,17 +1,18 @@
 import * as THREE from 'three';
 import { logToOutput } from './logger.js';
-import { Vector3 } from './types.js';
+import { Vector3, State } from './types.js';
 
 const RADIUS_EARTH = 6371.0;
 
 export function getPositionOfPoint(
-  state,
+  state: State,
   pointArg: Vector3 | string,
 ): THREE.Vector3 | undefined {
   if (Array.isArray(pointArg) && pointArg.length === 3) {
     return new THREE.Vector3(pointArg[0], pointArg[1], pointArg[2]);
   } else if (typeof pointArg === 'string' && state.points[pointArg]) {
-    return state.points[pointArg].position;
+    let pos = state.points[pointArg].position;
+    return new THREE.Vector3(pos[0], pos[1], pos[2]);
   } else {
     console.error(
       'Invalid point argument. Expected an array of 3 elements or a point name.',
@@ -20,7 +21,7 @@ export function getPositionOfPoint(
   }
 }
 
-export function validateName(name: string, state): boolean {
+export function validateName(name: string, state: State): boolean {
   const namePattern = /^[a-zA-Z0-9_-]+$/; // Alphanumeric, underscores, and dashes
 
   if (!namePattern.test(name)) {

@@ -1,8 +1,10 @@
 import * as THREE from 'three';
-import { Vector3 } from './types.js';
+//import { Vector3 } from './types.js';
+
+type Vector3 = [number, number, number];
 
 export class Point {
-  protected geometry: THREE.Group;
+  public geometry: THREE.Group;
 
   constructor(geometry: THREE.Group) {
     this.geometry = geometry;
@@ -11,6 +13,10 @@ export class Point {
   get position(): Vector3 {
     const pos = this.geometry.position.clone();
     return [pos.x, pos.y, pos.z];
+  }
+
+  set position(pos: Vector3) {
+    this.geometry.position.set(pos[0], pos[1], pos[2]);
   }
 }
 
@@ -31,16 +37,12 @@ export class OrientedPoint extends Point {
   get frame(): { x: Vector3; y: Vector3; z: Vector3 } {
     const quaternion = this.geometry.quaternion;
 
-    // Compute local coordinate frame vectors based on the quaternion
-    const x = new THREE.Vector3(1, 0, 0).applyQuaternion(quaternion);
-    const y = new THREE.Vector3(0, 1, 0).applyQuaternion(quaternion);
-    const z = new THREE.Vector3(0, 0, 1).applyQuaternion(quaternion);
-
-    return {
-      x: [x.x, x.y, x.z],
-      y: [y.x, y.y, y.z],
-      z: [z.x, z.y, z.z],
+    const basisVectors = {
+      x: new THREE.Vector3(1, 0, 0).applyQuaternion(quaternion).toArray(),
+      y: new THREE.Vector3(0, 1, 0).applyQuaternion(quaternion).toArray(),
+      z: new THREE.Vector3(0, 0, 1).applyQuaternion(quaternion).toArray(),
     };
+    return basisVectors;
   }
 
   addCamera(fov: number = 75): void {

@@ -21,7 +21,7 @@ export function buildCommandClosures(
 ): Record<string, CommandFunction> {
   function mov(
     point_name: string,
-    pos: [number, number, number],
+    pos: Vector3,
     use_geo: boolean = false,
   ): void {
     _mov(state, point_name, pos, use_geo);
@@ -31,26 +31,19 @@ export function buildCommandClosures(
     _rot(state, point_name, q);
   }
 
-  function add_point(
-    name: string,
-    coordinates: [number, number, number],
-    quaternion = null,
-  ) {
+  function add_point(name: string, coordinates: Vector3, quaternion = null) {
     _add_point(scene, state, name, coordinates, quaternion);
   }
 
   function create_line(
     name: string,
-    startArg: string | [number, number, number],
-    endArg: string | [number, number, number],
+    startArg: string | Vector3,
+    endArg: string | Vector3,
   ) {
     _create_line(scene, state, name, startArg, endArg);
   }
 
-  function angle(
-    vec1: string | [number, number, number],
-    vec2: string | [number, number, number],
-  ) {
+  function angle(vec1: string | Vector3, vec2: string | Vector3) {
     return _angle(state, vec1, vec2);
   }
 
@@ -75,10 +68,10 @@ export function buildCommandClosures(
   }
 
   function findBestQuaternion(
-    primaryBodyVector: [number, number, number] | string,
-    secondaryBodyVector: [number, number, number] | string,
-    primaryTargetVector: [number, number, number] | string,
-    secondaryTargetVector: [number, number, number] | string,
+    primaryBodyVector: Vector3 | string,
+    secondaryBodyVector: Vector3 | string,
+    primaryTargetVector: Vector3 | string,
+    secondaryTargetVector: Vector3 | string,
   ): [number, number, number, number] | null {
     return _findBestQuaternion(
       state,

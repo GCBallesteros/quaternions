@@ -6,11 +6,11 @@ import {
   createLineGeometry,
 } from './components.js';
 import { logToOutput } from './logger.js';
-import * as utils from './utils.js';
+import { OrientedPoint, Point } from './point.js';
 import { State, Vector3 } from './types.js';
+import * as utils from './utils.js';
 
 // TODO: All the resolveVector like functions can be refactored
-
 
 export function _rot(
   state: State,
@@ -25,16 +25,20 @@ export function _rot(
     return;
   }
 
-  const pointGroup = state.points[point_name];
-
-  if (!pointGroup) {
-    logToOutput(`Point '${point_name}' does not have a geometryGroup.`);
+  const pt = state.points[point_name];
+  if (!pt) {
+    logToOutput(`Point '${point_name}' does not exist.`);
     return;
   }
 
+  if (!(pt instanceof OrientedPoint)) {
+    logToOutput(`Point '${point_name}' is an instance of Point.`);
+  }
+
+
   const quaternion = new THREE.Quaternion(q[0], q[1], q[2], q[3]);
 
-  pointGroup.setRotationFromQuaternion(quaternion);
+  pt.geometry.setRotationFromQuaternion(quaternion);
 }
 
 export function _angle(
@@ -127,7 +131,7 @@ export function _mov(
   } else {
     [x, y, z] = utils.geo2xyz(pos);
   }
-  point.position.set(x, y, z);
+  point.position = [x, y, z];
 }
 
 export function find_best_quaternion_for_desired_attitude(
@@ -358,8 +362,15 @@ export function _create_line(
   };
 }
 
-export function addFrame(point: THREE.Group) {
-  point.add(createFrame(point.position, 400));
+export function addFrame(point: Point): OrientedPoint {
+  const coordinate_frame = createFrame(
+    { x: point.position[0], y: point.position[1], z: point.position[2] },
+    400,
+  );
+  let point_geo = point.geometry.clone();
+  point_geo.add(coordinate_frame);
+
+  return new OrientedPoint(point_geo);
 }
 
 export function _add_point(
@@ -379,26 +390,33 @@ export function _add_point(
     return;
   }
 
-  const pointGroup = createFloatingPoint();
-  pointGroup.position.set(coordinates[0], coordinates[1], coordinates[2]);
-
+  var new_point: Point | OrientedPoint;
   if (quaternion !== null) {
-    if (quaternion.length === 4) {
-      addFrame(pointGroup);
+    if (quaternion.length !== 4) {
+      logToOutput('Invalid quaternion in add_point');
+      return null;
+    } else {
+      let new_point_: Point = createFloatingPoint();
+      new_point = addFrame(new_point_);
       const q = new THREE.Quaternion(
         quaternion[0],
         quaternion[1],
         quaternion[2],
         quaternion[3],
       ); // xyzw
-      pointGroup.setRotationFromQuaternion(q);
-    } else {
-      logToOutput('Invalid quaternion in add_point');
+      new_point.geometry.setRotationFromQuaternion(q);
     }
+  } else {
+    new_point = createFloatingPoint();
+    new_point.geometry.position.set(
+      coordinates[0],
+      coordinates[1],
+      coordinates[2],
+    );
   }
 
-  state.points[name] = pointGroup;
-  scene.add(pointGroup);
+  state.points[name] = new_point;
+  scene.add(new_point.geometry);
 }
 
 export async function _mov2sat(
@@ -435,7 +453,7 @@ export async function _mov2sat(
     // Step 5: Update the position of the referenced point in the scene
     const point = state.points[name];
     if (point) {
-      point.position.set(x, y, z);
+      point.position = [x, y, z];
       logToOutput(`Point ${name} moved to satellite position at ${timestamp}.`);
     } else {
       logToOutput(`Point with name '${name}' not found.`);
@@ -484,7 +502,7 @@ export function _reset(scene: THREE.Scene, state: State): void {
   for (const pointName in state.points) {
     if (pointName !== 'sat') {
       const point = state.points[pointName];
-      scene.remove(point); // Remove from the scene
+      scene.remove(point.geometry); // Remove from the scene
       delete state.points[pointName]; // Remove from the state
     }
   }
@@ -521,11 +539,24 @@ export function _frame(
 
   const pt = state.points[point];
 
+  if (pt instanceof Point && !(pt instanceof OrientedPoint)) {
+    logToOutput(
+      `Point '${point}' is an instance of Point which is not orientable.`,
+    );
+    return null;
+  }
+
   // Apply the quaternion to the standard basis vectors and return as arrays
   const basisVectors = {
-    x: new THREE.Vector3(1, 0, 0).applyQuaternion(pt.quaternion).toArray(),
-    y: new THREE.Vector3(0, 1, 0).applyQuaternion(pt.quaternion).toArray(),
-    z: new THREE.Vector3(0, 0, 1).applyQuaternion(pt.quaternion).toArray(),
+    x: new THREE.Vector3(1, 0, 0)
+      .applyQuaternion(pt.geometry.quaternion)
+      .toArray(),
+    y: new THREE.Vector3(0, 1, 0)
+      .applyQuaternion(pt.geometry.quaternion)
+      .toArray(),
+    z: new THREE.Vector3(0, 0, 1)
+      .applyQuaternion(pt.geometry.quaternion)
+      .toArray(),
   };
 
   return basisVectors;

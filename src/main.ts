@@ -9,13 +9,17 @@ import { logToOutput } from './logger.js';
 
 import { State } from './types.js';
 
+// TODO: Remove frame function and define point instead. Change docs
+// TODO: Add function to camera2pointPOV
+//      - Change the renderer camera
+// TODO: Add camera2globalPOV
+// TODO: Add progressive rendering with a higher res progressive jpeg
 // TODO: Improve consistency on how we pass points around
-// TODO: Do some more types
 // TODO: Expose more options for object creation, widths, colors ...
 // TODO: Normalize quats before applying
 // TODO: Better names spec findBestQuaternion
 // TODO: point_at based on findBestQuaternion that includes the rotation
-// TODO: All the resolveVector like functions can be refactored
+// TODO: All the resolveVector like functions canCh be refactored (core.ts)
 
 let state: State = {
   points: {},
@@ -28,7 +32,7 @@ let camera = init_scene(state, scene, canvas, renderer);
 
 const commands = buildCommandClosures(scene, state);
 
-let executeCommand = buildExecuteCommand(commands);
+let executeCommand = buildExecuteCommand(commands, state);
 
 function list_points() {
   const pointNames = Object.keys(state.points);
@@ -76,7 +80,7 @@ executeButton.addEventListener('click', () => {
 });
 
 // Update all lines in the registry before each render
-function updateAllLines() {
+function updateAllLines(): void {
   for (const lineName in state.lines) {
     const { line, start, end } = state.lines[lineName];
 
@@ -100,7 +104,7 @@ function updateAllLines() {
 // FINISH PREPPING THE RENDERER AND SOME CALLBACKS
 scene.onBeforeRender = updateAllLines;
 
-function resizeCanvas() {
+function resizeCanvas(): void {
   const width = window.innerWidth * 0.66; // Assuming flex ratio
   const height = window.innerHeight;
   renderer.setSize(width, height, true);

@@ -1,14 +1,14 @@
 import { logToOutput } from './logger.js';
 
-import { CommandFunction } from './types.js';
+import { CommandFunction, State } from './types.js';
 
 import {
-  geo2xyz,
-  getPositionOfPoint,
-  sph2xyz,
-  validateName,
-  xyz2geo,
-  xyz2sph,
+    geo2xyz,
+    getPositionOfPoint,
+    sph2xyz,
+    validateName,
+    xyz2geo,
+    xyz2sph,
 } from './utils.js';
 
 function _avoidTreeShaking() {
@@ -25,6 +25,7 @@ _avoidTreeShaking();
 
 export function buildExecuteCommand(
   commands: Record<string, CommandFunction>,
+  state_: State,
 ): (command: string) => void {
   // We need to bring in all the DLS here so that the eval can see them. Same
   // for the imports from utils.js above
@@ -41,6 +42,10 @@ export function buildExecuteCommand(
   const frame = commands.frame;
   const help = commands.help;
   const reset = commands.reset;
+
+  // Make the Global state accessible so that we can manipulate it more easily
+  // with user scripts
+  const state = state_;
 
   function executeCommand(command: string): void {
     if (command) {
