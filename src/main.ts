@@ -9,7 +9,6 @@ import { logToOutput } from './logger.js';
 
 import { State } from './types.js';
 
-// TODO: Remove frame function and define point instead. Change docs
 // TODO: Add function to camera2pointPOV
 //      - Change the renderer camera
 // TODO: Add camera2globalPOV

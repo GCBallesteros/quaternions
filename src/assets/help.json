@@ -163,8 +163,8 @@
         }
       ]
     },
-    "frame": {
-        "description": "Returns the local frame vectors of a point.",
+    "point": {
+        "description": "Returns a point in the scene state",
         "arguments": [
             {
                 "name": "point",
