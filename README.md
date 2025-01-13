@@ -14,7 +14,7 @@ engineers, researchers, and enthusiasts.
   - [rot](#rot)
   - [mov](#mov)
   - [mov2sat](#mov2sat)
-  - [frame](#frame)
+  - [point](#point)
   - [find_best_quaternion_for_desired_attitude](#find_best_quaternion_for_desired_attitude)
   - [findBestQuaternion](#findBestQuaternion)
   - [xyz2geo](#xyz2geo)
