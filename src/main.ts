@@ -58,7 +58,7 @@ create_line("sat2KS", "sat", "KS");
 // Rotate 'sat' to some buggy quaternion
 rot("sat", [-0.6313439, -0.1346824, -0.6313439, -0.4297329]);
 // Calculate angle between z-axis of 'sat' and 'sat2KS'
-angle("sat2KS", frame("sat").z);
+angle("sat2KS", point("sat").frame.z);
 `;
 
 const editor = monaco.editor.create(
