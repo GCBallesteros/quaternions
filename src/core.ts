@@ -7,11 +7,10 @@ import {
 } from './components.js';
 import { logToOutput } from './logger.js';
 import * as utils from './utils.js';
-import { State } from './types.js';
+import { State, Vector3 } from './types.js';
 
 // TODO: All the resolveVector like functions can be refactored
 
-type Vector3 = [number, number, number];
 
 export function _rot(
   state: State,
@@ -510,9 +509,9 @@ export function _frame(
   state: State,
   point: string,
 ): {
-  x: THREE.Vector3Tuple;
-  y: THREE.Vector3Tuple;
-  z: THREE.Vector3Tuple;
+  x: Vector3;
+  y: Vector3;
+  z: Vector3;
 } | null {
   // Ensure the point exists in the state
   if (!(point in state.points)) {

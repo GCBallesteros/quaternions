@@ -13,7 +13,7 @@ import {
 } from './core.js';
 import { _help } from './help.js';
 
-import { CommandFunction, State } from './types.js';
+import { CommandFunction, State, Vector3 } from './types.js';
 
 export function buildCommandClosures(
   scene: THREE.Scene,
@@ -90,9 +90,9 @@ export function buildCommandClosures(
   }
 
   function frame(point: string): {
-    x: THREE.Vector3Tuple;
-    y: THREE.Vector3Tuple;
-    z: THREE.Vector3Tuple;
+    x: Vector3;
+    y: Vector3;
+    z: Vector3;
   } | null {
     return _frame(state, point);
   }

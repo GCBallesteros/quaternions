@@ -1,19 +1,20 @@
-import * as THREE from "three";
-import { logToOutput } from "./logger.js";
+import * as THREE from 'three';
+import { logToOutput } from './logger.js';
+import { Vector3 } from './types.js';
 
 const RADIUS_EARTH = 6371.0;
 
 export function getPositionOfPoint(
   state,
-  pointArg: [number, number, number] | string,
+  pointArg: Vector3 | string,
 ): THREE.Vector3 | undefined {
   if (Array.isArray(pointArg) && pointArg.length === 3) {
     return new THREE.Vector3(pointArg[0], pointArg[1], pointArg[2]);
-  } else if (typeof pointArg === "string" && state.points[pointArg]) {
+  } else if (typeof pointArg === 'string' && state.points[pointArg]) {
     return state.points[pointArg].position;
   } else {
     console.error(
-      "Invalid point argument. Expected an array of 3 elements or a point name.",
+      'Invalid point argument. Expected an array of 3 elements or a point name.',
     );
     return undefined;
   }
@@ -49,10 +50,10 @@ export function validateName(name: string, state): boolean {
  * @returns {Array<number>} An array [x, y, z] representing the Cartesian coordinates.
  * @throws {Error} If the input is invalid.
  */
-export function sph2xyz(sph: [number, number, number]): [number, number, number] {
+export function sph2xyz(sph: Vector3): Vector3 {
   if (!Array.isArray(sph) || sph.length !== 3) {
     throw new Error(
-      "Input must be an array with three numerical values [latitude, longitude, radius].",
+      'Input must be an array with three numerical values [latitude, longitude, radius].',
     );
   }
 
@@ -68,7 +69,7 @@ export function sph2xyz(sph: [number, number, number]): [number, number, number]
   return [x, y, z];
 }
 
-export function geo2xyz(geo: [number, number, number]): number[] {
+export function geo2xyz(geo: Vector3): Vector3 {
   const [latitude, longitude, altitude] = geo;
   return sph2xyz([latitude, longitude, altitude + RADIUS_EARTH]);
 }
@@ -83,12 +84,10 @@ export function geo2xyz(geo: [number, number, number]): number[] {
  *  - radius: The distance from the origin to the point.
  * @throws {Error} If the input is invalid or the radius is zero.
  */
-export function xyz2sph(
-  point: [number, number, number],
-): [number, number, number] {
+export function xyz2sph(point: Vector3): Vector3 {
   if (!Array.isArray(point) || point.length !== 3) {
     throw new Error(
-      "Input must be an array with three numerical values [x, y, z].",
+      'Input must be an array with three numerical values [x, y, z].',
     );
   }
 
@@ -96,7 +95,7 @@ export function xyz2sph(
 
   const radius = Math.sqrt(x * x + y * y + z * z);
   if (radius === 0) {
-    throw new Error("Radius cannot be zero.");
+    throw new Error('Radius cannot be zero.');
   }
 
   const latitude = 90 - THREE.MathUtils.radToDeg(Math.acos(z / radius));
@@ -105,9 +104,7 @@ export function xyz2sph(
   return [latitude, longitude, radius];
 }
 
-export function xyz2geo(
-  xyz: [number, number, number],
-): [number, number, number] {
+export function xyz2geo(xyz: Vector3): Vector3 {
   const [latitude, longitude, radius] = xyz2sph(xyz);
   return [latitude, longitude, radius - RADIUS_EARTH];
 }
