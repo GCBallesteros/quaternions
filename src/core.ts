@@ -35,7 +35,6 @@ export function _rot(
     logToOutput(`Point '${point_name}' is an instance of Point.`);
   }
 
-
   const quaternion = new THREE.Quaternion(q[0], q[1], q[2], q[3]);
 
   pt.geometry.setRotationFromQuaternion(quaternion);
@@ -521,43 +520,4 @@ export function _reset(scene: THREE.Scene, state: State): void {
   _rot(state, 'sat', [0, 0, 0, 1]); // Reset orientation to default quaternion
 
   logToOutput("Scene has been reset. Only 'sat' and 'nadir' remain.");
-}
-
-export function _frame(
-  state: State,
-  point: string,
-): {
-  x: Vector3;
-  y: Vector3;
-  z: Vector3;
-} | null {
-  // Ensure the point exists in the state
-  if (!(point in state.points)) {
-    logToOutput('Point not available in the state.');
-    return null;
-  }
-
-  const pt = state.points[point];
-
-  if (pt instanceof Point && !(pt instanceof OrientedPoint)) {
-    logToOutput(
-      `Point '${point}' is an instance of Point which is not orientable.`,
-    );
-    return null;
-  }
-
-  // Apply the quaternion to the standard basis vectors and return as arrays
-  const basisVectors = {
-    x: new THREE.Vector3(1, 0, 0)
-      .applyQuaternion(pt.geometry.quaternion)
-      .toArray(),
-    y: new THREE.Vector3(0, 1, 0)
-      .applyQuaternion(pt.geometry.quaternion)
-      .toArray(),
-    z: new THREE.Vector3(0, 0, 1)
-      .applyQuaternion(pt.geometry.quaternion)
-      .toArray(),
-  };
-
-  return basisVectors;
 }

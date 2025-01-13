@@ -5,7 +5,6 @@ import {
   _create_line,
   _fetchTLE,
   _findBestQuaternion,
-  _frame,
   _mov,
   _mov2sat,
   _reset,
@@ -13,6 +12,8 @@ import {
 } from './core.js';
 import { _help } from './help.js';
 
+import { logToOutput } from './logger.js';
+import { Point } from './point.js';
 import { CommandFunction, State, Vector3 } from './types.js';
 
 export function buildCommandClosures(
@@ -82,12 +83,13 @@ export function buildCommandClosures(
     );
   }
 
-  function frame(point: string): {
-    x: Vector3;
-    y: Vector3;
-    z: Vector3;
-  } | null {
-    return _frame(state, point);
+  function point(point: string): Point | null {
+    // Ensure the point exists in the state
+    if (!(point in state.points)) {
+      logToOutput('Point not available in the state.');
+      return null;
+    }
+    return state.points[point];
   }
 
   function help(commandName: string): void {
@@ -109,7 +111,7 @@ export function buildCommandClosures(
     fetchTLE: fetchTLE,
     mov2sat: mov2sat,
     findBestQuaternion: findBestQuaternion,
-    frame: frame,
+    point: point,
     help: help,
     reset: reset,
   };

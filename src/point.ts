@@ -45,7 +45,7 @@ export class OrientedPoint extends Point {
     return basisVectors;
   }
 
-  addCamera(fov: number = 75): void {
+  addCamera(fov: number): void {
     const hasCamera = this.geometry.children.some(
       (child) => child instanceof THREE.Camera && child.name === '_camera',
     );
@@ -68,6 +68,6 @@ export class OrientedPoint extends Point {
       console.warn('No camera named "Camera" available in this group!');
       return null;
     }
-    return camera as THREE.Camera; // Type assertion for TypeScript
+    return camera as THREE.Camera;
   }
 }
