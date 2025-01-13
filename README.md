@@ -225,8 +225,7 @@ const quaternion = findBestQuaternion(
   "A->B",
   [0, 0, 1],
 );
-
-
+```
 
 ### xyz2geo
 Converts Cartesian coordinates to geographic coordinates (latitude, longitude, and altitude).
