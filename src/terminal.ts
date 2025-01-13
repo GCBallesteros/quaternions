@@ -3,12 +3,12 @@ import { logToOutput } from './logger.js';
 import { CommandFunction, State } from './types.js';
 
 import {
-    geo2xyz,
-    getPositionOfPoint,
-    sph2xyz,
-    validateName,
-    xyz2geo,
-    xyz2sph,
+  geo2xyz,
+  getPositionOfPoint,
+  sph2xyz,
+  validateName,
+  xyz2geo,
+  xyz2sph,
 } from './utils.js';
 
 function _avoidTreeShaking() {
@@ -46,6 +46,9 @@ export function buildExecuteCommand(
   // Make the Global state accessible so that we can manipulate it more easily
   // with user scripts
   const state = state_;
+
+  // Context object for additional state
+  const ctx = {};
 
   function executeCommand(command: string): void {
     if (command) {

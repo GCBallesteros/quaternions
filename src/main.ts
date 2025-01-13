@@ -44,9 +44,6 @@ function list_points() {
   }
 }
 
-// Context object for additional state
-const ctx = {};
-
 const satelliteScript = `// Reset scene so that we can hit execute repeatedly
 // on this sample script without errors
 reset();
