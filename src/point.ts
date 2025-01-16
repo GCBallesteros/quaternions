@@ -55,17 +55,17 @@ export class OrientedPoint extends Point {
     }
 
     const camera = new THREE.PerspectiveCamera(fov, 1, 0.1, 1000);
-    camera.name = 'Camera';
+    camera.name = '_camera';
     this.geometry.add(camera);
   }
 
   get camera(): THREE.Camera | null {
     const camera = this.geometry.children.find(
-      (child) => child instanceof THREE.Camera && child.name === 'Camera',
+      (child) => child instanceof THREE.Camera && child.name === '_camera',
     );
 
     if (!camera) {
-      console.warn('No camera named "Camera" available in this group!');
+      console.warn('No camera named "_camera" available in this group!');
       return null;
     }
     return camera as THREE.Camera;

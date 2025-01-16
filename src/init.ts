@@ -43,13 +43,6 @@ export function init_scene(
   _mov(state, 'sat', [39, 0, 500], true);
   _create_line(scene, state, 'nadir', [0, 0, 0], 'sat');
 
-  function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-  }
-
-  animate();
-
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.dampingFactor = 0.25;
@@ -58,4 +51,21 @@ export function init_scene(
   controls.maxDistance = 20000;
 
   return camera;
+}
+
+export function createAnimator(
+  renderer: THREE.WebGLRenderer,
+  scene: THREE.Scene,
+  initialCamera: THREE.PerspectiveCamera,
+): (newCamera: THREE.PerspectiveCamera) => void {
+  let currentCamera = initialCamera; // Camera is now encapsulated within the closure
+
+  function animate() {
+    renderer.render(scene, currentCamera);
+  }
+  renderer.setAnimationLoop(animate);
+
+  return function switchCamera(newCamera: THREE.PerspectiveCamera) {
+    currentCamera = newCamera; // Change the camera within the closure
+  };
 }

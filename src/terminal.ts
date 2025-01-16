@@ -26,9 +26,12 @@ _avoidTreeShaking();
 export function buildExecuteCommand(
   commands: Record<string, CommandFunction>,
   state_: State,
+  switchCamera: any,
 ): (command: string) => void {
   // We need to bring in all the DLS here so that the eval can see them. Same
   // for the imports from utils.js above
+  // TODO: Augment the eval passed code with woe so that we don't have to
+  // extend this stuff any longer!
   const mov = commands.mov;
   const rot = commands.rot;
   const add_point = commands.add_point;

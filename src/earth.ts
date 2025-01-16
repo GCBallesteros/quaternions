@@ -18,7 +18,7 @@ export function makeEarth():{ earth: THREE.Mesh; earth_frame: THREE.Group } {
     },
   );
 
-  const earthGeometry = new THREE.SphereGeometry(RADIUS_EARTH, 32, 32);
+  const earthGeometry = new THREE.SphereGeometry(RADIUS_EARTH, 64, 64);
   const earthMaterial = new THREE.MeshBasicMaterial({
     map: earthTexture,
   });

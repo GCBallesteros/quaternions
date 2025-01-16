@@ -1,6 +1,6 @@
 import * as monaco from 'monaco-editor';
 
-import { init_scene, initializeCanvas } from './init.js';
+import { createAnimator, init_scene, initializeCanvas } from './init.js';
 import { buildExecuteCommand } from './terminal.js';
 import { getPositionOfPoint } from './utils.js';
 
@@ -9,9 +9,11 @@ import { logToOutput } from './logger.js';
 
 import { State } from './types.js';
 
-// TODO: Add function to camera2pointPOV
-//      - Change the renderer camera
+// TODO: Reset is not completely resetting the satellite
+// TODO: Reset is not resetting the global camera
+// TODO: Improve name of createAnimator
 // TODO: Add camera2globalPOV
+// TODO: Document new switchCamera function and global camera
 // TODO: Add progressive rendering with a higher res progressive jpeg
 // TODO: Improve consistency on how we pass points around
 // TODO: Expose more options for object creation, widths, colors ...
@@ -31,7 +33,9 @@ let camera = init_scene(state, scene, canvas, renderer);
 
 const commands = buildCommandClosures(scene, state);
 
-let executeCommand = buildExecuteCommand(commands, state);
+const switchCamera = createAnimator(renderer, scene, camera);
+
+let executeCommand = buildExecuteCommand(commands, state, switchCamera);
 
 function list_points() {
   const pointNames = Object.keys(state.points);
@@ -59,6 +63,15 @@ create_line("sat2KS", "sat", "KS");
 rot("sat", [-0.6313439, -0.1346824, -0.6313439, -0.4297329]);
 // Calculate angle between z-axis of 'sat' and 'sat2KS'
 angle("sat2KS", point("sat").frame.z);
+
+// Uncomment the code below to fix the orientation of the satellite
+// and watch the scene from its point of view.
+// // Lets calculate the correct quaternion to point at KS now
+// // let good_quat = findBestQuaternion([0,0,-1], "y", "sat->KS", [0,0,1]);
+// // rot("sat", good_quat);
+// // Add a camera wit a FOV of 50 degrees and switch to the satellite camera
+// point("sat").addCamera(50);
+// switchCamera(point("sat").camera);
 `;
 
 const editor = monaco.editor.create(
