@@ -496,9 +496,7 @@ export async function _fetchTLE(
   return data;
 }
 
-export function _cameraToSatPOV(scene: THREE.Scene, point: OrientedPoint) {
-
-}
+export function _cameraToSatPOV(scene: THREE.Scene, point: OrientedPoint) {}
 
 export function _reset(scene: THREE.Scene, state: State): void {
   // Clear all points except "sat"

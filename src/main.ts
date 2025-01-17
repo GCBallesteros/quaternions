@@ -9,9 +9,11 @@ import { log } from './logger.js';
 
 import { State } from './types.js';
 
+// TODO: Resize editor
 // TODO: Reset is not completely resetting the satellite
 // TODO: Reset is not resetting the global camera
 // TODO: Improve name of createAnimator
+// TODO: Improve how we buildExecuteCommand
 // TODO: Add camera2globalPOV
 // TODO: Document new switchCamera function and global camera
 // TODO: Add progressive rendering with a higher res progressive jpeg
@@ -19,8 +21,10 @@ import { State } from './types.js';
 // TODO: Expose more options for object creation, widths, colors ...
 // TODO: Normalize quats before applying
 // TODO: Better names spec findBestQuaternion
-// TODO: point_at based on findBestQuaternion that includes the rotation
 // TODO: All the resolveVector like functions canCh be refactored (core.ts)
+// TODO: Add Satellite class and have them fly around
+// TODO: Transition smoothly between cameras
+// TODO: Show coordinates over the Earth
 
 let state: State = {
   points: {},
@@ -67,8 +71,8 @@ angle("sat2KS", point("sat").frame.z);
 // Uncomment the code below to fix the orientation of the satellite
 // and watch the scene from its point of view.
 // // Lets calculate the correct quaternion to point at KS now
-// // let good_quat = findBestQuaternion([0,0,-1], "y", "sat->KS", [0,0,1]);
-// // rot("sat", good_quat);
+// let good_quat = findBestQuaternion([0,0,-1], "y", "sat->KS", [0,0,1]);
+// rot("sat", good_quat);
 // // Add a camera wit a FOV of 50 degrees and switch to the satellite camera
 // point("sat").addCamera(50);
 // switchCamera(point("sat").camera);
@@ -114,18 +118,43 @@ function updateAllLines(): void {
 scene.onBeforeRender = updateAllLines;
 
 function resizeCanvas(): void {
-  const width = window.innerWidth * 0.66; // Assuming flex ratio
-  const height = window.innerHeight;
-  renderer.setSize(width, height, true);
-  camera.aspect = width / height;
+  const canvasWidth = canvasContainer.clientWidth;
+  const canvasHeight = window.innerHeight;
+  renderer.setSize(canvasWidth, canvasHeight, true);
+  camera.aspect = canvasWidth / canvasHeight;
   camera.updateProjectionMatrix();
-  editor.layout(); // Ensure Monaco resizes properly on window resize
+
+  // Adjust Monaco Editor size
+  editor.layout({
+    width: editorContainer.clientWidth,
+    height: editorContainer.clientHeight,
+  });
 }
 
 //function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
 
 log(
   'Run `help()` or visit github.com/GCBallesteros/quaternions for more documentation',
 );
+
+const resizer = document.getElementById('resizer')!;
+const canvasContainer = document.getElementById('canvas-container')!;
+const editorContainer = document.getElementById('editor-container')!;
+
+resizer.addEventListener('mousedown', (event) => {
+  event.preventDefault();
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', () => {
+    document.removeEventListener('mousemove', onMouseMove);
+  });
+});
+
+function onMouseMove(event: MouseEvent) {
+  const totalWidth = window.innerWidth;
+  const leftWidth = event.clientX;
+  canvasContainer.style.width = `${leftWidth}px`;
+  editorContainer.style.width = `${totalWidth - leftWidth - resizer.clientWidth}px`;
+  resizeCanvas(); // Call your resizing logic live as you drag
+}
+resizeCanvas();
