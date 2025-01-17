@@ -12,7 +12,7 @@ import {
 } from './core.js';
 import { _help } from './help.js';
 
-import { logToOutput } from './logger.js';
+import { log } from './logger.js';
 import { Point } from './point.js';
 import { CommandFunction, State, Vector3 } from './types.js';
 
@@ -86,7 +86,7 @@ export function buildCommandClosures(
   function point(point: string): Point | null {
     // Ensure the point exists in the state
     if (!(point in state.points)) {
-      logToOutput('Point not available in the state.');
+      log('Point not available in the state.');
       return null;
     }
     return state.points[point];

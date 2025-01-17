@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { logToOutput } from './logger.js';
+import { log } from './logger.js';
 import { Vector3, State } from './types.js';
 
 const RADIUS_EARTH = 6371.0;
@@ -25,14 +25,14 @@ export function validateName(name: string, state: State): boolean {
   const namePattern = /^[a-zA-Z0-9_-]+$/; // Alphanumeric, underscores, and dashes
 
   if (!namePattern.test(name)) {
-    logToOutput(
+    log(
       `Error: Name '${name}' must be alphanumeric and may contain underscores (_) or dashes (-).`,
     );
     return false;
   }
 
   if (state.points[name] || state.lines[name]) {
-    logToOutput(`Error: Name '${name}' is already in use.`);
+    log(`Error: Name '${name}' is already in use.`);
     return false;
   }
 

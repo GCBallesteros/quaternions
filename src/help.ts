@@ -1,30 +1,28 @@
-import { logToOutput } from './logger.js';
+import { log } from './logger.js';
 import helpData from './assets/help.json' with { type: 'json' };
 
 export function _help(commandName: string): void {
   if (!commandName) {
-    logToOutput(
-      'For full docs visit: https://github.com/GCBallesteros/quaternions',
-    );
-    logToOutput('Available commands:');
+    log('For full docs visit: https://github.com/GCBallesteros/quaternions');
+    log('Available commands:');
     Object.keys(helpData).forEach((cmd) => {
-      logToOutput(`- ${cmd}`);
+      log(`- ${cmd}`);
     });
     return;
   }
 
   const commandHelp = helpData[commandName];
   if (!commandHelp) {
-    logToOutput(`Command '${commandName}' not found.`);
+    log(`Command '${commandName}' not found.`);
     return;
   }
 
-  logToOutput(`**${commandName}**`);
-  logToOutput(commandHelp.description);
-  logToOutput('Arguments:');
+  log(`**${commandName}**`);
+  log(commandHelp.description);
+  log('Arguments:');
   commandHelp.arguments.forEach(
     (arg: { name: string; type: string; description: string }) => {
-      logToOutput(`- ${arg.name} (${arg.type}): ${arg.description}`);
+      log(`- ${arg.name} (${arg.type}): ${arg.description}`);
     },
   );
 }

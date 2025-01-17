@@ -1,4 +1,4 @@
-import { logToOutput } from './logger.js';
+import { log } from './logger.js';
 
 import { CommandFunction, State } from './types.js';
 
@@ -60,21 +60,21 @@ export function buildExecuteCommand(
         Promise.resolve(result)
           .then((resolvedValue) => {
             if (resolvedValue !== undefined) {
-              logToOutput(`  ${resolvedValue}`);
+              log(`  ${resolvedValue}`);
             }
           })
           .catch((error: unknown) => {
             if (error instanceof Error) {
-              logToOutput(`Error: ${error.message}`);
+              log(`Error: ${error.message}`);
             } else {
-              logToOutput(`Error: ${String(error)}`);
+              log(`Error: ${String(error)}`);
             }
           });
       } catch (error: unknown) {
         if (error instanceof Error) {
-          logToOutput(`Error: ${error.message}`);
+          log(`Error: ${error.message}`);
         } else {
-          logToOutput(`Error: ${String(error)}`);
+          log(`Error: ${String(error)}`);
         }
       }
     }

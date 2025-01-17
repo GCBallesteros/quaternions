@@ -5,7 +5,7 @@ import {
   createFrame,
   createLineGeometry,
 } from './components.js';
-import { logToOutput } from './logger.js';
+import { log } from './logger.js';
 import { OrientedPoint, Point } from './point.js';
 import { State, Vector3 } from './types.js';
 import * as utils from './utils.js';
@@ -19,7 +19,7 @@ export function _rot(
 ): void {
   // q is xyzw
   if (!state.points || !state.points[point_name]) {
-    logToOutput(
+    log(
       `Point with name '${point_name}' does not exist in state.points.`,
     );
     return;
@@ -27,12 +27,12 @@ export function _rot(
 
   const pt = state.points[point_name];
   if (!pt) {
-    logToOutput(`Point '${point_name}' does not exist.`);
+    log(`Point '${point_name}' does not exist.`);
     return;
   }
 
   if (!(pt instanceof OrientedPoint)) {
-    logToOutput(`Point '${point_name}' is an instance of Point.`);
+    log(`Point '${point_name}' is an instance of Point.`);
   }
 
   const quaternion = new THREE.Quaternion(q[0], q[1], q[2], q[3]);
@@ -58,7 +58,7 @@ export function _angle(
         const endPos = utils.getPositionOfPoint(state, endName);
 
         if (!startPos || !endPos) {
-          logToOutput(`Invalid points in vector definition '${arg}'.`);
+          log(`Invalid points in vector definition '${arg}'.`);
           return null;
         }
 
@@ -70,17 +70,17 @@ export function _angle(
         const endPos = utils.getPositionOfPoint(state, line.end);
 
         if (!startPos || !endPos) {
-          logToOutput(`Invalid line '${arg}' in state.lines.`);
+          log(`Invalid line '${arg}' in state.lines.`);
           return null;
         }
 
         return endPos.clone().sub(startPos); // Compute vector
       } else {
-        logToOutput(`Invalid string argument '${arg}'.`);
+        log(`Invalid string argument '${arg}'.`);
         return null;
       }
     } else {
-      logToOutput('Argument must be an array of 3 values or a valid string.');
+      log('Argument must be an array of 3 values or a valid string.');
       return null;
     }
   }
@@ -98,7 +98,7 @@ export function _angle(
   const magnitudeProduct = vec1.length() * vec2.length();
 
   if (magnitudeProduct === 0) {
-    logToOutput('Cannot calculate angle with zero-length vector.');
+    log('Cannot calculate angle with zero-length vector.');
     return null;
   }
 
@@ -119,7 +119,7 @@ export function _mov(
   use_geo: boolean = false,
 ): void {
   if (!state.points[point_name]) {
-    logToOutput(`Point '${point_name}' does not exist.`);
+    log(`Point '${point_name}' does not exist.`);
     return;
   }
   let point = state.points[point_name];
@@ -240,11 +240,11 @@ export function _findBestQuaternion(
         case 'z':
           return new THREE.Vector3(0, 0, 1);
         default:
-          logToOutput(`Invalid body vector argument '${arg}'.`);
+          log(`Invalid body vector argument '${arg}'.`);
           return null;
       }
     } else {
-      logToOutput(
+      log(
         "Body vector must be an array of 3 values or one of 'x', 'y', 'z'.",
       );
       return null;
@@ -263,7 +263,7 @@ export function _findBestQuaternion(
         const endPos = utils.getPositionOfPoint(state, endName);
 
         if (!startPos || !endPos) {
-          logToOutput(`Invalid points in target vector definition '${arg}'.`);
+          log(`Invalid points in target vector definition '${arg}'.`);
           return null;
         }
 
@@ -275,17 +275,17 @@ export function _findBestQuaternion(
         const endPos = utils.getPositionOfPoint(state, line.end);
 
         if (!startPos || !endPos) {
-          logToOutput(`Invalid line '${arg}' in state.lines.`);
+          log(`Invalid line '${arg}' in state.lines.`);
           return null;
         }
 
         return endPos.clone().sub(startPos); // Compute vector
       } else {
-        logToOutput(`Invalid target vector argument '${arg}'.`);
+        log(`Invalid target vector argument '${arg}'.`);
         return null;
       }
     } else {
-      logToOutput(
+      log(
         "Target vector must be an array of 3 values, a line name, or '<start>-><end>'.",
       );
       return null;
@@ -304,7 +304,7 @@ export function _findBestQuaternion(
     !primaryTargetVector ||
     !secondaryTargetVector
   ) {
-    logToOutput('Invalid inputs. Cannot compute quaternion.');
+    log('Invalid inputs. Cannot compute quaternion.');
     return null;
   }
 
@@ -329,7 +329,7 @@ export function _create_line(
   }
 
   if (!name || typeof name !== 'string') {
-    logToOutput('Invalid line name. It must be a non-empty string.');
+    log('Invalid line name. It must be a non-empty string.');
     return;
   }
 
@@ -337,7 +337,7 @@ export function _create_line(
   const endPos = utils.getPositionOfPoint(state, endArg);
 
   if (!startPos || !endPos) {
-    logToOutput('Invalid points passed to create_line.');
+    log('Invalid points passed to create_line.');
     return;
   }
 
@@ -383,7 +383,7 @@ export function _add_point(
     return;
   }
   if (!name || !coordinates || coordinates.length !== 3) {
-    logToOutput(
+    log(
       "Invalid arguments: 'name' must be a string and 'coordinates' must be an array of 3 numbers.",
     );
     return;
@@ -392,7 +392,7 @@ export function _add_point(
   var new_point: Point | OrientedPoint;
   if (quaternion !== null) {
     if (quaternion.length !== 4) {
-      logToOutput('Invalid quaternion in add_point');
+      log('Invalid quaternion in add_point');
       return null;
     } else {
       let new_point_: Point = createFloatingPoint();
@@ -439,7 +439,7 @@ export async function _mov2sat(
     const position = positionAndVelocity.position;
 
     if (typeof position === 'boolean') {
-      logToOutput(
+      log(
         `No position data found for satellite ${cosparId} at the given timestamp.`,
       );
       return;
@@ -453,17 +453,17 @@ export async function _mov2sat(
     const point = state.points[name];
     if (point) {
       point.position = [x, y, z];
-      logToOutput(`Point ${name} moved to satellite position at ${timestamp}.`);
+      log(`Point ${name} moved to satellite position at ${timestamp}.`);
     } else {
-      logToOutput(`Point with name '${name}' not found.`);
+      log(`Point with name '${name}' not found.`);
     }
   } catch (error) {
     if (error instanceof Error) {
-      logToOutput(
+      log(
         `Error fetching or processing satellite data: ${error.message}`,
       );
     } else {
-      logToOutput(`Error: ${String(error)}`);
+      log(`Error: ${String(error)}`);
     }
   }
 }
@@ -523,5 +523,5 @@ export function _reset(scene: THREE.Scene, state: State): void {
   _mov(state, 'sat', [39, 0, 500], true); // Move to original position
   _rot(state, 'sat', [0, 0, 0, 1]); // Reset orientation to default quaternion
 
-  logToOutput("Scene has been reset. Only 'sat' and 'nadir' remain.");
+  log("Scene has been reset. Only 'sat' and 'nadir' remain.");
 }

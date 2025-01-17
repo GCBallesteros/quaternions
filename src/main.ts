@@ -5,7 +5,7 @@ import { buildExecuteCommand } from './terminal.js';
 import { getPositionOfPoint } from './utils.js';
 
 import { buildCommandClosures } from './commands.js';
-import { logToOutput } from './logger.js';
+import { log } from './logger.js';
 
 import { State } from './types.js';
 
@@ -41,10 +41,10 @@ function list_points() {
   const pointNames = Object.keys(state.points);
 
   if (pointNames.length === 0) {
-    logToOutput('No points currently exist in the state.');
+    log('No points currently exist in the state.');
   } else {
-    logToOutput('Existing points:');
-    pointNames.forEach((name) => logToOutput(`- ${name}`));
+    log('Existing points:');
+    pointNames.forEach((name) => log(`- ${name}`));
   }
 }
 
@@ -126,6 +126,6 @@ function resizeCanvas(): void {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-logToOutput(
+log(
   'Run `help()` or visit github.com/GCBallesteros/quaternions for more documentation',
 );
