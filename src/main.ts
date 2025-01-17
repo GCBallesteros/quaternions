@@ -84,6 +84,7 @@ const editor = monaco.editor.create(
     value: satelliteScript,
     language: 'javascript',
     theme: 'vs-dark',
+    minimap: { enabled: false },
   },
 );
 
