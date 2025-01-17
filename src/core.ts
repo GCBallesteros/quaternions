@@ -5,6 +5,7 @@ import {
   createFrame,
   createLineGeometry,
 } from './components.js';
+import { addInitGeometries } from './init.js';
 import { log } from './logger.js';
 import { OrientedPoint, Point } from './point.js';
 import { State, Vector3 } from './types.js';
@@ -19,9 +20,7 @@ export function _rot(
 ): void {
   // q is xyzw
   if (!state.points || !state.points[point_name]) {
-    log(
-      `Point with name '${point_name}' does not exist in state.points.`,
-    );
+    log(`Point with name '${point_name}' does not exist in state.points.`);
     return;
   }
 
@@ -244,9 +243,7 @@ export function _findBestQuaternion(
           return null;
       }
     } else {
-      log(
-        "Body vector must be an array of 3 values or one of 'x', 'y', 'z'.",
-      );
+      log("Body vector must be an array of 3 values or one of 'x', 'y', 'z'.");
       return null;
     }
   }
@@ -459,9 +456,7 @@ export async function _mov2sat(
     }
   } catch (error) {
     if (error instanceof Error) {
-      log(
-        `Error fetching or processing satellite data: ${error.message}`,
-      );
+      log(`Error fetching or processing satellite data: ${error.message}`);
     } else {
       log(`Error: ${String(error)}`);
     }
@@ -501,25 +496,19 @@ export function _cameraToSatPOV(scene: THREE.Scene, point: OrientedPoint) {}
 export function _reset(scene: THREE.Scene, state: State): void {
   // Clear all points except "sat"
   for (const pointName in state.points) {
-    if (pointName !== 'sat') {
-      const point = state.points[pointName];
-      scene.remove(point.geometry); // Remove from the scene
-      delete state.points[pointName]; // Remove from the state
-    }
+    const point = state.points[pointName];
+    scene.remove(point.geometry); // Remove from the scene
+    delete state.points[pointName]; // Remove from the state
   }
 
   // Clear all lines except "nadir"
   for (const lineName in state.lines) {
-    if (lineName !== 'nadir') {
-      const line = state.lines[lineName].line;
-      scene.remove(line); // Remove from the scene
-      delete state.lines[lineName]; // Remove from the state
-    }
+    const line = state.lines[lineName].line;
+    scene.remove(line); // Remove from the scene
+    delete state.lines[lineName]; // Remove from the state
   }
 
-  // Reset the position of "sat"
-  _mov(state, 'sat', [39, 0, 500], true); // Move to original position
-  _rot(state, 'sat', [0, 0, 0, 1]); // Reset orientation to default quaternion
+  addInitGeometries(state, scene);
 
   log("Scene has been reset. Only 'sat' and 'nadir' remain.");
 }

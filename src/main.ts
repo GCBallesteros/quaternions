@@ -9,8 +9,8 @@ import { log } from './logger.js';
 
 import { State } from './types.js';
 
-// TODO: Resize editor
-// TODO: Reset is not completely resetting the satellite
+// TODO: is addCamera doing the right thing I want it to point at +Z
+//       add a quat wrt satellite
 // TODO: Reset is not resetting the global camera
 // TODO: Improve name of createAnimator
 // TODO: Improve how we buildExecuteCommand
