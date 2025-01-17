@@ -25,12 +25,12 @@ export function addInitGeometries(state: State, scene: THREE.Scene): void {
   _create_line(scene, state, 'nadir', [0, 0, 0], 'sat');
 }
 
-export function init_scene(
+export function initScene(
   state: State,
   scene: THREE.Scene,
   canvas: HTMLElement,
   renderer: THREE.WebGLRenderer,
-): THREE.PerspectiveCamera {
+): void {
   const camera = new THREE.PerspectiveCamera(
     75,
     canvas.clientWidth / canvas.clientHeight,
@@ -40,6 +40,8 @@ export function init_scene(
   camera.position.set(14000, 2000, 2000);
   camera.lookAt(0, 0, 0);
   camera.up.set(0, 0, 1);
+
+  state.cameras._main = camera;
 
   let earth_geometries = makeEarth();
   scene.add(earth_geometries.earth);
@@ -53,8 +55,6 @@ export function init_scene(
   controls.enableZoom = true;
   controls.minDistance = 8000;
   controls.maxDistance = 20000;
-
-  return camera;
 }
 
 export function createAnimator(

@@ -1,6 +1,6 @@
 import * as monaco from 'monaco-editor';
 
-import { createAnimator, init_scene, initializeCanvas } from './init.js';
+import { createAnimator, initScene, initializeCanvas } from './init.js';
 import { buildExecuteCommand } from './terminal.js';
 import { getPositionOfPoint } from './utils.js';
 
@@ -30,10 +30,12 @@ let state: State = {
   points: {},
   lines: {},
   tles: {},
+  cameras: {},
 };
 
 const { scene, canvas, renderer } = initializeCanvas();
-let camera = init_scene(state, scene, canvas, renderer);
+initScene(state, scene, canvas, renderer);
+let camera = state.cameras.main;
 
 const commands = buildCommandClosures(scene, state);
 

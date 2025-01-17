@@ -15,4 +15,5 @@ export interface State {
   points: Record<string, Point | OrientedPoint>;
   lines: Record<string, Line>;
   tles: Record<string, string>;
+  cameras: Record<string, THREE.PerspectiveCamera>;
 }
