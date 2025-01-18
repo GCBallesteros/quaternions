@@ -9,11 +9,12 @@ import { log } from './logger.js';
 
 import { State } from './types.js';
 
+// TODO: Reset is not resetting the global camera
 // TODO: is addCamera doing the right thing I want it to point at +Z
 //       add a quat wrt satellite
-// TODO: Reset is not resetting the global camera
 // TODO: Improve name of createAnimator
 // TODO: Improve how we buildExecuteCommand
+// TODO: Nice documentation
 // TODO: Add camera2globalPOV
 // TODO: Document new switchCamera function and global camera
 // TODO: Add progressive rendering with a higher res progressive jpeg
@@ -35,7 +36,7 @@ let state: State = {
 
 const { scene, canvas, renderer } = initializeCanvas();
 initScene(state, scene, canvas, renderer);
-let camera = state.cameras.main;
+let camera = state.cameras._main;
 
 const commands = buildCommandClosures(scene, state);
 

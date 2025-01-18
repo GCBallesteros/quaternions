@@ -491,23 +491,20 @@ export async function _fetchTLE(
   return data;
 }
 
-export function _cameraToSatPOV(scene: THREE.Scene, point: OrientedPoint) {}
-
 export function _reset(scene: THREE.Scene, state: State): void {
-  // Clear all points except "sat"
   for (const pointName in state.points) {
     const point = state.points[pointName];
     scene.remove(point.geometry); // Remove from the scene
     delete state.points[pointName]; // Remove from the state
   }
 
-  // Clear all lines except "nadir"
   for (const lineName in state.lines) {
     const line = state.lines[lineName].line;
     scene.remove(line); // Remove from the scene
     delete state.lines[lineName]; // Remove from the state
   }
 
+  // TODO: We need to get the switchCamera function here
   addInitGeometries(state, scene);
 
   log("Scene has been reset. Only 'sat' and 'nadir' remain.");
