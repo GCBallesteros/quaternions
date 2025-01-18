@@ -491,7 +491,11 @@ export async function _fetchTLE(
   return data;
 }
 
-export function _reset(scene: THREE.Scene, state: State): void {
+export function _reset(
+  scene: THREE.Scene,
+  state: State,
+  switchCamera: (newCamera: THREE.PerspectiveCamera) => void,
+): void {
   for (const pointName in state.points) {
     const point = state.points[pointName];
     scene.remove(point.geometry); // Remove from the scene
@@ -504,8 +508,8 @@ export function _reset(scene: THREE.Scene, state: State): void {
     delete state.lines[lineName]; // Remove from the state
   }
 
-  // TODO: We need to get the switchCamera function here
   addInitGeometries(state, scene);
+  switchCamera(state.cameras._main);
 
   log("Scene has been reset. Only 'sat' and 'nadir' remain.");
 }

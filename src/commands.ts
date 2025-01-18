@@ -19,6 +19,7 @@ import { CommandFunction, State, Vector3 } from './types.js';
 export function buildCommandClosures(
   scene: THREE.Scene,
   state: State,
+  switchCamera: (newCamera: THREE.PerspectiveCamera) => void,
 ): Record<string, CommandFunction> {
   function mov(
     point_name: string,
@@ -97,7 +98,7 @@ export function buildCommandClosures(
   }
 
   function reset(): void {
-    _reset(scene, state);
+    _reset(scene, state, switchCamera);
   }
 
   return {
