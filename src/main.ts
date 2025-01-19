@@ -54,27 +54,43 @@ function list_points() {
 const satelliteScript = `// Reset scene so that we can hit execute repeatedly
 // on this sample script without errors
 reset();
+
+// Simulation params
+const target_coords_ecef = geo2xyz([60.186, 24.828, 0]);
+const satellite_location_geo = [62.0, 34.0, 500.0];
+// quaternions are in xyzw order
+const satellite_bad_quat = [
+    -0.6313439,
+    -0.1346824,
+    -0.6313439,
+    -0.4297329
+];
+
 // Move the default point, 'sat', to somewhere somewhat near Helsinki
-mov("sat", [62.0, 34.0, 500.0], true);
-// Calculate ECEF coordinates of point of interest and store them
-let ksCoords = geo2xyz([60.186, 24.828, 0]);
+mov("sat", satellite_location_geo, true);
 // Add a point over the previously calculated coords
-add_point("KS", ksCoords);
+add_point("KS", target_coords_ecef);
 // Connect "sat" to new point
 create_line("sat2KS", "sat", "KS");
-// Rotate 'sat' to some buggy quaternion
-rot("sat", [-0.6313439, -0.1346824, -0.6313439, -0.4297329]);
+// Rotate 'sat' to buggy quaternion
+rot("sat", satellite_bad_quat);
 // Calculate angle between z-axis of 'sat' and 'sat2KS'
 angle("sat2KS", point("sat").frame.z);
 
 // Uncomment the code below to fix the orientation of the satellite
 // and watch the scene from its point of view.
-// // Lets calculate the correct quaternion to point at KS now
-// let good_quat = findBestQuaternion([0,0,-1], "y", "sat->KS", [0,0,1]);
-// rot("sat", good_quat);
+
 // // Add a camera wit a FOV of 50 degrees and switch to the satellite camera
 // point("sat").addCamera(50);
 // switchCamera(point("sat").camera);
+// // Point camera at the target
+// let good_quat = findBestQuaternion(
+//     point("sat").cameraBodyDirection,
+//     "y",
+//     "sat->KS",
+//     [0,0,1]
+// );
+// rot("sat", good_quat);
 `;
 
 const editor = monaco.editor.create(
