@@ -12,7 +12,6 @@ import { State } from './types.js';
 // TODO: Improve name of createAnimator
 // TODO: Improve how we buildExecuteCommand
 // TODO: Nice documentation
-// TODO: Add camera2globalPOV
 // TODO: Document new switchCamera function and global camera
 // TODO: Add progressive rendering with a higher res progressive jpeg
 // TODO: Improve consistency on how we pass points around

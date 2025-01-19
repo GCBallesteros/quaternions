@@ -469,7 +469,7 @@ export async function _fetchTLE(
 ): Promise<string> {
   // Check if TLE data already exists in the cache
   if (state.tles[norad_id]) {
-    console.log('Using cached TLE for COSPAR ID:', norad_id);
+    log(`Using cached TLE for COSPAR ID:, ${norad_id}`);
     return state.tles[norad_id]; // Return cached TLE
   }
 
@@ -486,7 +486,7 @@ export async function _fetchTLE(
 
   // Cache the fetched TLE in the state variable under the COSPAR ID
   state.tles[norad_id] = data;
-  console.log('Fetched and cached TLE for COSPAR ID:', norad_id);
+  log(`Fetched and cached TLE for COSPAR ID: ${norad_id}`
 
   return data;
 }
