@@ -1,20 +1,20 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
-import { createFrame } from "./components.js";
 import earthTextureUrl from '../earth_texture.jpg';
+import { createFrame } from './components.js';
 
 const RADIUS_EARTH = 6371.0;
 
-export function makeEarth():{ earth: THREE.Mesh; earth_frame: THREE.Group } {
+export function makeEarth(): { earth: THREE.Mesh; earth_frame: THREE.Group } {
   const textureLoader = new THREE.TextureLoader();
   const earthTexture = textureLoader.load(
     earthTextureUrl,
     () => {
-      console.log("Earth texture loaded");
+      console.log('Earth texture loaded');
     },
     undefined,
     (error) => {
-      console.error("Error loading texture:", error);
+      console.error('Error loading texture:', error);
     },
   );
 
