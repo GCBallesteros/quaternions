@@ -25,38 +25,25 @@ _avoidTreeShaking();
 
 export function buildExecuteCommand(
   commands: Record<string, CommandFunction>,
-  state_: State,
+  state: State,
   switchCamera: any,
 ): (command: string) => void {
-  // We need to bring in all the DLS here so that the eval can see them. Same
-  // for the imports from utils.js above
-  // TODO: Augment the eval passed code with woe so that we don't have to
-  // extend this stuff any longer!
-  const mov = commands.mov;
-  const rot = commands.rot;
-  const add_point = commands.add_point;
-  const create_line = commands.create_line;
-  const angle = commands.angle;
-  const rad2deg = commands.rad2deg;
-  const deg2rad = commands.deg2rad;
-  const fetchTLE = commands.fetchTLE;
-  const mov2sat = commands.mov2sat;
-  const findBestQuaternion = commands.findBestQuaternion;
-  const point = commands.point;
-  const help = commands.help;
-  const reset = commands.reset;
-
-  // Make the Global state accessible so that we can manipulate it more easily
-  // with user scripts
-  const state = state_;
+  // NOTE: state or switchCamera are not used but are required there so that
+  // they are available in the eval context
 
   // Context object for additional state
   const ctx = {};
 
+  // Dynamically build the available commands as variables
+  const commandDeclarations = Object.entries(commands)
+    .map(([key, _]) => `const ${key} = commands["${key}"];`)
+    .join('\n');
+
   function executeCommand(command: string): void {
     if (command) {
       try {
-        const result = eval(command); // Execute the code
+        const codeToExecute = `${commandDeclarations}\n${command}`;
+        const result = eval(codeToExecute);
         Promise.resolve(result)
           .then((resolvedValue) => {
             if (resolvedValue !== undefined) {
