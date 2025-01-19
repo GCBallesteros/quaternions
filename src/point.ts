@@ -21,12 +21,16 @@ export class Point {
 }
 
 export class OrientedPoint extends Point {
-  constructor(geometry: THREE.Group, camera?: THREE.PerspectiveCamera) {
+  public camera_orientation: [number, number, number, number] | undefined;
+  constructor(
+    geometry: THREE.Group,
+    camera_orientation?: [number, number, number, number],
+  ) {
     super(geometry);
 
-    if (camera !== undefined) {
-      camera.name = '_camera';
-      this.geometry.add(camera);
+    if (camera_orientation !== undefined) {
+      this.camera_orientation = camera_orientation;
+      this.addCamera(10, camera_orientation);
     }
   }
 
@@ -45,7 +49,10 @@ export class OrientedPoint extends Point {
     return basisVectors;
   }
 
-  addCamera(fov: number): void {
+  addCamera(
+    fov: number,
+    camera_orientation: [number, number, number, number] = [0, 0, 0, 1],
+  ): void {
     const hasCamera = this.geometry.children.some(
       (child) => child instanceof THREE.Camera && child.name === '_camera',
     );
@@ -54,6 +61,13 @@ export class OrientedPoint extends Point {
       throw new Error('A camera named "_camera" already exists in this group!');
     }
 
+    let camera_orientation_in_body_frame = new THREE.Quaternion(
+      camera_orientation[0],
+      camera_orientation[1],
+      camera_orientation[2],
+      camera_orientation[3],
+    );
+
     const camera = new THREE.PerspectiveCamera(fov, 1, 400, 1000);
     camera.name = '_camera';
     let camera_to_z_quaternion = new THREE.Quaternion();
@@ -61,7 +75,9 @@ export class OrientedPoint extends Point {
       new THREE.Vector3(1, 0, 0),
       Math.PI,
     );
-    camera.setRotationFromQuaternion(camera_to_z_quaternion);
+    camera.setRotationFromQuaternion(
+      camera_orientation_in_body_frame.multiply(camera_to_z_quaternion),
+    );
     this.geometry.add(camera);
   }
 
@@ -75,5 +91,19 @@ export class OrientedPoint extends Point {
       return null;
     }
     return camera as THREE.Camera;
+  }
+
+  get cameraBodyDirection(): Vector3 | null {
+    let camera_quat_body = this.camera?.quaternion;
+    const camera_default_dir = new THREE.Vector3(0, 0, -1);
+
+    if (!camera_quat_body) {
+      console.warn('No camera named "_camera" available in this group!');
+      return null;
+    }
+
+    const camera_dir = camera_default_dir.applyQuaternion(camera_quat_body);
+
+    return [camera_dir.x, camera_dir.y, camera_dir.z];
   }
 }
