@@ -54,8 +54,14 @@ export class OrientedPoint extends Point {
       throw new Error('A camera named "_camera" already exists in this group!');
     }
 
-    const camera = new THREE.PerspectiveCamera(fov, 1, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(fov, 1, 400, 1000);
     camera.name = '_camera';
+    let camera_to_z_quaternion = new THREE.Quaternion();
+    camera_to_z_quaternion.setFromAxisAngle(
+      new THREE.Vector3(1, 0, 0),
+      Math.PI,
+    );
+    camera.setRotationFromQuaternion(camera_to_z_quaternion);
     this.geometry.add(camera);
   }
 

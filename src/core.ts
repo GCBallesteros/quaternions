@@ -361,7 +361,7 @@ export function _create_line(
 export function addFrame(point: Point): OrientedPoint {
   const coordinate_frame = createFrame(
     { x: point.position[0], y: point.position[1], z: point.position[2] },
-    400,
+    350,
   );
   let point_geo = point.geometry.clone();
   point_geo.add(coordinate_frame);
