@@ -33,7 +33,7 @@ let state: State = {
 
 const { scene, canvas, renderer } = initializeCanvas();
 initScene(state, scene, canvas, renderer);
-let camera = state.cameras._main;
+let camera = state.cameras.main;
 const switchCamera = createAnimator(renderer, scene, camera);
 
 const commands = buildCommandClosures(scene, state, switchCamera);

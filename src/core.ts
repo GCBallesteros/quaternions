@@ -509,7 +509,7 @@ export function _reset(
   }
 
   addInitGeometries(state, scene);
-  switchCamera(state.cameras._main);
+  switchCamera(state.cameras.main);
 
   log("Scene has been reset. Only 'sat' and 'nadir' remain.");
 }

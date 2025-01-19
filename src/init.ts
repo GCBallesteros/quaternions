@@ -41,7 +41,7 @@ export function initScene(
   camera.lookAt(0, 0, 0);
   camera.up.set(0, 0, 1);
 
-  state.cameras._main = camera;
+  state.cameras.main = camera;
 
   let earth_geometries = makeEarth();
   scene.add(earth_geometries.earth);
