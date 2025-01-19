@@ -486,7 +486,7 @@ export async function _fetchTLE(
 
   // Cache the fetched TLE in the state variable under the COSPAR ID
   state.tles[norad_id] = data;
-  log(`Fetched and cached TLE for COSPAR ID: ${norad_id}`
+  log(`Fetched and cached TLE for COSPAR ID: ${norad_id}`);
 
   return data;
 }
