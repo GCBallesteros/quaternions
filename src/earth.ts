@@ -3,11 +3,19 @@ import * as THREE from 'three';
 import { createFrame } from './components.js';
 
 const lowResEarthTextureUrl =
-  'https://whatoneaerth.s3.eu-west-1.amazonaws.com/earth_texture_LR.jpg';
+  import.meta.env.VITE_LOCAL_DEV === 'true'
+    ? new URL('../earth_texture_LR.jpg', import.meta.url).href // Local asset for dev
+    : 'https://whatoneaerth.s3.eu-west-1.amazonaws.com/earth_texture_LR.jpg'; // S3 URL for production
+
 const midResEarthTextureUrl =
-  'https://whatoneaerth.s3.eu-west-1.amazonaws.com/earth_texture_MR.jpg';
+  import.meta.env.VITE_LOCAL_DEV === 'true'
+    ? new URL('../earth_texture_MR.jpg', import.meta.url).href // Local asset for dev
+    : 'https://whatoneaerth.s3.eu-west-1.amazonaws.com/earth_texture_MR.jpg'; // S3 URL for production
+
 const highResEarthTextureUrl =
-  'https://whatoneaerth.s3.eu-west-1.amazonaws.com/earth_texture_HR.jpg';
+  import.meta.env.VITE_LOCAL_DEV === 'true'
+    ? new URL('../earth_texture_HR.jpg', import.meta.url).href // Local asset for dev
+    : 'https://whatoneaerth.s3.eu-west-1.amazonaws.com/earth_texture_HR.jpg'; // S3 URL for production
 
 const RADIUS_EARTH = 6371.0;
 
