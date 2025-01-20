@@ -9,10 +9,10 @@ import { log } from './logger.js';
 
 import { State } from './types.js';
 
-// TODO: Improve name of createAnimator
-// TODO: Improve how we buildExecuteCommand
 // TODO: Nice documentation
 // TODO: Document new switchCamera function and global camera
+// TODO: Improve name of createAnimator
+// TODO: Improve how we buildExecuteCommand
 // TODO: Add progressive rendering with a higher res progressive jpeg
 // TODO: Improve consistency on how we pass points around
 // TODO: Expose more options for object creation, widths, colors ...
