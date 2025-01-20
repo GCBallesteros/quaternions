@@ -2,20 +2,12 @@ import * as THREE from 'three';
 
 import { createFrame } from './components.js';
 
-const lowResEarthTextureUrl =
-  import.meta.env.VITE_LOCAL_DEV === 'true'
-    ? new URL('../earth_texture_LR.jpg', import.meta.url).href // Local asset for dev
-    : 'https://whatoneaerth.s3.eu-west-1.amazonaws.com/earth_texture_LR.jpg'; // S3 URL for production
-
-const midResEarthTextureUrl =
-  import.meta.env.VITE_LOCAL_DEV === 'true'
-    ? new URL('../earth_texture_MR.jpg', import.meta.url).href // Local asset for dev
-    : 'https://whatoneaerth.s3.eu-west-1.amazonaws.com/earth_texture_MR.jpg'; // S3 URL for production
-
-const highResEarthTextureUrl =
-  import.meta.env.VITE_LOCAL_DEV === 'true'
-    ? new URL('../earth_texture_HR.jpg', import.meta.url).href // Local asset for dev
-    : 'https://whatoneaerth.s3.eu-west-1.amazonaws.com/earth_texture_HR.jpg'; // S3 URL for production
+const textureLevels = ['LR', 'MR', 'HR'].map(
+  (resolution) =>
+    import.meta.env.VITE_LOCAL_DEV === 'true'
+      ? `/earth_texture_${resolution}.jpg` // Use root path for public assets in dev
+      : `https://whatoneaerth.s3.eu-west-1.amazonaws.com/earth_texture_${resolution}.jpg`, // S3 URL for production
+);
 
 const RADIUS_EARTH = 6371.0;
 
@@ -25,12 +17,6 @@ export function makeEarth(): { earth: THREE.Mesh; earth_frame: THREE.Group } {
   const earth = new THREE.Mesh(earthGeometry, earthMaterial);
 
   const textureLoader = new THREE.TextureLoader();
-
-  const textureLevels = [
-    lowResEarthTextureUrl,
-    midResEarthTextureUrl,
-    highResEarthTextureUrl,
-  ];
 
   let currentLevel = 0;
 
