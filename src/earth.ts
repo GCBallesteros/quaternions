@@ -30,10 +30,10 @@ export function makeEarth(): { earth: THREE.Mesh; earth_frame: THREE.Group } {
         earth.material.map = texture;
         earth.material.needsUpdate = true;
         console.log(`Texture level ${currentLevel + 1} loaded`);
+        if (currentLevel !== 0) {
+          setTimeout(loadNextTexture, 2000);
+        }
         currentLevel++;
-
-        // Load the next level after a delay to avoid blocking
-        setTimeout(loadNextTexture, 2000); // Adjust delay as needed
       },
       undefined,
       (error) => {
