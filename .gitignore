@@ -2,6 +2,7 @@ node_modules/
 dist/
 .vitepress/dist
 .vitepress/cache
+.env.local
 documentation/
 public/earth_texture_LR.jpg
 public/earth_texture_MR.jpg
