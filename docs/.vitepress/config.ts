@@ -19,8 +19,8 @@ export default defineConfig({
         text: 'Example Workflows',
         collapsed: true,
         items: [
-          { text: 'Overview', link: '/guide1' },
-          { text: 'Guide 1', link: '/guide1' },
+          { text: 'Overview', link: '/workflows/overview' },
+          { text: 'Debugging quaternions', link: '/workflows/debugging-quaternions' },
           { text: 'Guide 2', link: '/guide2' },
           { text: 'Guide 3', link: '/guide3' },
         ],
