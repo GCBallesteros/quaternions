@@ -108,7 +108,7 @@ positioning and relationships without additional setup.
 If you want to store state between script executions please store data within
 the globally available object named `ctx`. For example, if you run
 
-```javascrtipt
+```javascript
 ctx.foo = 42;
 ```
 and then modify the script `ctx.foo` will still be available;  not so if you
