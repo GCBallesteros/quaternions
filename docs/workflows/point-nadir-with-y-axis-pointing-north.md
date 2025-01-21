@@ -9,7 +9,7 @@ attitude, improving its positioning and ensuring proper orientation.
 
 For a detailed breakdown of the basic quaternion debugging process, you can
 refer to the workflow at
-[quaternion-debugging](./workflows/quaternion-debugging).
+[Debugging Quaternions](./workflows/debugging-quaternions).
 
 
 ## 1. Set up the simulation
