@@ -20,14 +20,27 @@ export default defineConfig({
         collapsed: true,
         items: [
           { text: 'Overview', link: '/workflows/overview' },
-          { text: 'Debugging quaternions', link: '/workflows/debugging-quaternions' },
-          { text: 'Finding a satellites position', link: '/workflows/check-current-position-of-a-satellite' },
-          { text: 'Guide 3', link: '/guide3' },
+          {
+            text: 'Debugging quaternions',
+            link: '/workflows/debugging-quaternions',
+          },
+          {
+            text: 'Finding a satellites position',
+            link: '/workflows/check-current-position-of-a-satellite',
+          },
+          {
+            text: 'Optimal satellite orientation',
+            link: '/workflows/point-nadir-with-y-axis-pointing-north',
+          },
         ],
       },
       {
         text: 'Command Description',
-        link: '/api',
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/dsl/overview' },
+          { text: 'All commands', link: '/dsl/api' },
+        ],
       },
       {
         text: 'About',

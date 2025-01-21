@@ -31,10 +31,10 @@ more](/getting-started).
 ## Example Workflows
 
 See real examples of how **What on Earth** can be used to solve typical tasks
-and problems. [Explore workflows](/example-workflows).
+and problems. [Explore workflows](/workflows/overview).
 
 ## DSL Documentation
 
 Dive into the scripting capabilities provided by the app’s DSL. [Read the
-documentation](/dsl-documentation).
+documentation](/dsl/overview).
 
