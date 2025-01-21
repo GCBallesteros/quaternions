@@ -9,7 +9,9 @@ import { log } from './logger.js';
 
 import { State } from './types.js';
 
-// TODO: Nice documentation
+// TODO: Nice documentation (continue) add references to commands on workflows
+// TODO: Change link on the logs
+// TODO: Say something about log
 // TODO: Document new switchCamera function and global camera
 // TODO: Improve name of createAnimator
 // TODO: Improve how we buildExecuteCommand

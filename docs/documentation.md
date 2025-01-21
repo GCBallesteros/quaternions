@@ -1,10 +1,10 @@
 # What on Earth?
 
-What on Earth is a versatile tool for exploring quaternions, geometry, and
-satellite perspectives—all from the comfort of your browser. Deployed as a web
-application, it allows you to perform complex geometric calculations, visualize
-scenes from a satellite’s viewpoint, and optimize quaternions under various
-constraints.
+**What on Earth?** is a versatile tool for exploring quaternions, geometry, and
+satellite perspectives—all from the comfort of your browser. It provides an
+interactive 3D environemtn  to perform complex geometric calculations,
+visualize scenes from a satellite’s viewpoint, and optimize quaternions under
+various constraints.
 
 ## Key Features
 
