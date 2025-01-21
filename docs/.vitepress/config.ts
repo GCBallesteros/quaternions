@@ -21,7 +21,7 @@ export default defineConfig({
         items: [
           { text: 'Overview', link: '/workflows/overview' },
           { text: 'Debugging quaternions', link: '/workflows/debugging-quaternions' },
-          { text: 'Guide 2', link: '/guide2' },
+          { text: 'Finding a satellites position', link: '/workflows/check-current-position-of-a-satellite' },
           { text: 'Guide 3', link: '/guide3' },
         ],
       },
