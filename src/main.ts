@@ -13,12 +13,12 @@ import { State } from './types.js';
 // TODO: Document new switchCamera function and global camera
 // TODO: Improve name of createAnimator
 // TODO: Improve how we buildExecuteCommand
-// TODO: Add progressive rendering with a higher res progressive jpeg
+// TODO: Better names spec findBestQuaternion
 // TODO: Improve consistency on how we pass points around
 // TODO: Expose more options for object creation, widths, colors ...
 // TODO: Normalize quats before applying
-// TODO: Better names spec findBestQuaternion
 // TODO: All the resolveVector like functions canCh be refactored (core.ts)
+// TODO: Add setSimTime and add Moon object
 // TODO: Add Satellite class and have them fly around
 // TODO: Transition smoothly between cameras
 // TODO: Show coordinates over the Earth
