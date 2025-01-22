@@ -1,0 +1,75 @@
+# Point Classes
+
+## `Point` and `OrientedPoint`
+
+The `Point` and `OrientedPoint` classes represent points in 3D space,
+implemented using the `three.js` library.
+
+- **`Point`** is the base class representing a point with a position in 3D
+space.  
+
+- **`OrientedPoint`** extends `Point` and adds orientation information using
+quaternions. It can also have a camera attached for scene rendering and
+perspective control.
+
+Points can be retrieved from the scene via the `point` function (see below).
+These classes are seldomly interacted with directly except through the latter
+function. When we do retrieve them, it is mostly to use the getter methods. For
+example, when we want the basis vector for the reference frame of an
+`OrientedPoint`.
+
+---
+
+### Class: `Point`
+
+The `Point` class provides basic functionality for positioning a point in 3D
+space using a `THREE.Group` object.
+
+#### Properties
+
+- **`geometry`** (`THREE.Group`)  
+  The underlying Three.js object that stores the point's position and transformations.
+
+- **`position`** (`Vector3`)  
+  - **Getter:** Returns the current position as a tuple `[x, y, z]`.  
+  - **Setter:** Sets the point's position in 3D space.
+
+---
+
+### Class: `OrientedPoint` (Subclass of `Point`)
+
+The `OrientedPoint` class extends `Point` and introduces orientation in 3D
+space using quaternions. It also supports adding a camera to the point.
+
+#### Constructor
+
+```typescript
+constructor(geometry: THREE.Group, camera?: THREE.PerspectiveCamera)
+```
+
+- geometry: A THREE.Group object representing the point in 3D space.
+- camera (optional): A THREE.PerspectiveCamera to be attached to the point.
+
+If a camera is provided, it is added to the point's THREE.Group and named
+"_camera" for identification.
+
+#### Properties
+
+- frame ({ x: Vector3, y: Vector3, z: Vector3 })
+
+Returns the local coordinate frame vectors (x, y, z) of the point. Each vector
+is represented as a tuple [x, y, z].
+
+- camera (THREE.Camera | null)
+
+Getter: Returns the first attached camera named "Camera" in the point's group
+or null if no such camera exists.
+
+#### Methods
+
+addCamera(fov: number): void
+
+Adds a THREE.PerspectiveCamera with the specified field of view (FOV) to the
+point's group.
+
+Throws an error if a camera with the name "Camera" already exists.

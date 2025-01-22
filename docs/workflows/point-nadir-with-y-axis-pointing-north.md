@@ -76,3 +76,19 @@ Quaternions](/workflows/debugging-quaternions) workflow.
 2. **OrientedPonts** may have a _camera_ that by default is pointed in the
 direction of the z-axis of the body frame. We can access the pointing direction
 (if a camera has been added to the point) via the `cameraBodyDirection`
+
+
+## 3. Visualizing the Results
+
+By running the above code, you can adjust the satellite's orientation, so its
+local axes match the desired directions. The findBestQuaternion function
+returns a quaternion that rotates the satellite to the correct orientation,
+aligning both its primary and secondary body vectors to the target directions.
+
+Once the quaternion is applied, the satellite's rotation is corrected, and the
+angle between the satellite's z-axis and the line from sat to KS will be
+minimized.
+
+With this method, you can easily correct the orientation of a satellite based
+on its primary and secondary body vectors and their target directions, ensuring
+accurate visualization and analysis in your 3D environment.
