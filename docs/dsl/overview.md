@@ -42,6 +42,18 @@ orientation and transformations.
 the center of the Earth. This line is helpful for visualizing the satellite's
 position relative to the Earth's surface.
 
+### Supplying vectors and positions by name or value
+
+Most places that expect a point can either take the name of one that has
+been previously defined or a `[number, number, number]`. Similarly there
+is special rules for arguments that expect a vector. Most of the time one of the
+following 3 will be valid:
+
+1. A 3-element array representing the target vector.
+2. A string of the form "startPoint->endPoint" to define a vector between two points.
+3. The name of a previously created line. It's direction will be used as input.
+
+
 ### Accessing and Modifying State
 
 The entire state of the scene is accessible through the built-in `state`
@@ -53,7 +65,7 @@ transformations.
 
 ## DSL Overview
 
-### 1. [**Point Types**](#points)  
+### 1. [**Point Types**](/dsl/points)  
 
 Learn about the `Point` and `OrientedPoint` classes, which are the building
 blocks for representing objects in 3D space. The `OrientedPoint` extends
@@ -68,7 +80,7 @@ center). This section also explains the `ctx` object for persistent state
 storage and the `state` variable, which holds the current scene's entire
 configuration.
 
-### 3. [**Movement & Attitude Commands**](#movement-and-attitude-commands)  
+### 3. [**Movement & Attitude Commands**](/dsl/movement-and-attitude)  
 
 Discover commands to manipulate points' positions and orientations, such as
 `mov`, `rot`, and `mov2sat`. Tools for quaternion-based attitude adjustment are

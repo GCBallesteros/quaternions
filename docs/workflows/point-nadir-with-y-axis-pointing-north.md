@@ -51,7 +51,7 @@ function.
 ## 2. Correcting the Satellite's Orientation
 
 In this example, we will correct the orientation of the satellite using
-findBestQuaternion. We aim to point the satellite's local z-axis to the nadir
+`findBestQuaternion`. We aim to point the satellite's local z-axis to the nadir
 direction and align the secondary vector (in this case, the y-axis) as closely
 as possible to the z-axis of the Earth-Centered, Earth-Fixed (ECEF) system.
 
@@ -81,7 +81,7 @@ direction of the z-axis of the body frame. We can access the pointing direction
 ## 3. Visualizing the Results
 
 By running the above code, you can adjust the satellite's orientation, so its
-local axes match the desired directions. The findBestQuaternion function
+local axes match the desired directions. The `findBestQuaternion` function
 returns a quaternion that rotates the satellite to the correct orientation,
 aligning both its primary and secondary body vectors to the target directions.
 

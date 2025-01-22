@@ -39,6 +39,8 @@ export default defineConfig({
         collapsed: true,
         items: [
           { text: 'Overview', link: '/dsl/overview' },
+          { text: 'Point Classes', link: '/dsl/points' },
+          { text: 'Movement & Attitude', link: '/dsl/movement-and-attitude' },
           { text: 'All commands', link: '/dsl/api' },
         ],
       },
