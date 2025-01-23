@@ -1,3 +1,4 @@
+# AI! This page references commands that have been described in the different files within the docs/dsl folder. Please add links to them here so that the reader can go to the source of truth
 # Debugging Quaternions and Using `findBestQuaternion`
 
 This workflow extends the **Quaternion Debugging** workflow by introducing the
