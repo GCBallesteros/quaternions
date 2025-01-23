@@ -1,3 +1,4 @@
+# AI! Repeat what we just did for debbuging quaternions here
 # Check Current Position of a Satellite
 
 This workflow demonstrates how to move a point in the visualizer to the current
