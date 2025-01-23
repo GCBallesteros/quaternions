@@ -9,10 +9,13 @@ import { log } from './logger.js';
 
 import { State } from './types.js';
 
-// TODO: Nice documentation (continue) add references to commands on workflows
+// DOCUMENTATION EFFORTS
+// TODO: Review documentation
 // TODO: Change link on the logs
 // TODO: Say something about log
 // TODO: Document new switchCamera function and global camera
+
+// REFACTORING
 // TODO: Improve name of createAnimator
 // TODO: Improve how we buildExecuteCommand
 // TODO: Better names spec findBestQuaternion
@@ -20,10 +23,14 @@ import { State } from './types.js';
 // TODO: Expose more options for object creation, widths, colors ...
 // TODO: Normalize quats before applying
 // TODO: All the resolveVector like functions canCh be refactored (core.ts)
+
+// EXTRA FEATURES
 // TODO: Add setSimTime and add Moon object
 // TODO: Add Satellite class and have them fly around
 // TODO: Transition smoothly between cameras
 // TODO: Show coordinates over the Earth
+// TODO: Buttont to bring back global camera
+// TODO: Plots and tobs
 
 let state: State = {
   points: {},
@@ -152,7 +159,7 @@ function resizeCanvas(): void {
 window.addEventListener('resize', resizeCanvas);
 
 log(
-  'Run `help()` or visit github.com/GCBallesteros/quaternions for more documentation',
+  'Visit github.com/GCBallesteros/quaternions/documentation for the full documentation',
 );
 
 const resizer = document.getElementById('resizer')!;
