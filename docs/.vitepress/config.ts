@@ -44,7 +44,7 @@ export default defineConfig({
           { text: 'Movement & Attitude', link: '/dsl/movement-and-attitude' },
           { text: 'Geometry Commands', link: '/dsl/geometry-commands' },
           { text: 'Utility', link: '/dsl/utility'},
-          { text: 'All commands', link: '/dsl/api' },
+          { text: 'Camera Work', link: '/dsl/cameras'}
         ],
       },
       {
