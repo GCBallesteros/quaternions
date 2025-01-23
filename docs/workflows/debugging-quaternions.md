@@ -1,5 +1,4 @@
 # Debugging Quaternions
-# AI! The explanations below reference a few of the commands. Since we have documentation for those in the different files under the /docs/dsl folder it would be nice if the mentions in this page referenced them
 
 This workflow demonstrates how to debug quaternion orientations by moving a
 satellite, adding points of interest, and calculating angles to verify the
@@ -35,7 +34,7 @@ starting point.
 
 ## 1. Position the Satellite
 
-Move the default point (`sat`) near Helsinki using the `mov` command. The
+Move the default point (`sat`) near Helsinki using the [`mov`](/dsl/movement-and-attitude/#mov) command. The
 latitude is 62°, the longitude is 34°, and the altitude is 500 km. The `true`
 parameter specifies that the provided coordinates are geographic (latitude,
 longitude, altitude) instead of Earth-Centered, Earth-Fixed (ECEF) coordinates
@@ -50,8 +49,8 @@ mov("sat", satellitePosition, true);
 ## 2. Define a Point of Interest
 
 Convert the geographic coordinates (60.186°N, 24.828°E, 0 m altitude) to ECEF
-coordinates using `geo2xyz`. Add a point (`KS`) at the calculated location.
-When a point is added using the `add_point` function, it is registered with the
+coordinates using [`geo2xyz`](/dsl/geometry-commands/#geo2xyz). Add a point (`KS`) at the calculated location.
+When a point is added using the [`add_point`](/dsl/geometry-commands/#add_point) function, it is registered with the
 provided name (in this case, `KS`), so it can be referred to later.
 
 ```javascript
@@ -62,7 +61,7 @@ add_point("KS", pointOfInterestCoords);
 ## 3. Connect the Satellite and Point
 
 Create a line (`sat2KS`) between the satellite and the point of interest to
-visualize their connection. The `create_line` function can take either:
+visualize their connection. The [`create_line`](/dsl/geometry-commands/#create_line) function can take either:
 - The names of registered points (e.g., `"sat"` and `"KS"`)
 - Raw ECEF coordinates (tuples of three numbers)
 
@@ -75,9 +74,9 @@ create_line("sat2KS", "sat", "KS");
 ## 4. Rotate the Satellite and Analyze Orientation
 
 1. Apply a quaternion rotation (`rotationQuaternion`) to simulate an incorrect
-satellite orientation using the `rot` function.
+satellite orientation using the [`rot`](/dsl/movement-and-attitude/#rot) function.
 2. Calculate the angle between the satellite's z-axis and the line `sat2KS`.
-The `point` function retrieves the **OrientedPoint** registered as `sat`. This
+The [`point`](/dsl/points/#point) function retrieves the **OrientedPoint** registered as `sat`. This
 object provides access to the `frame` property, which describes the local axes
 of the satellite.
 
