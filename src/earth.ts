@@ -8,6 +8,8 @@ const textureLevels = ['LR', 'MR', 'HR'].map((resolution) =>
     : `https://whatoneaerth.s3.eu-west-1.amazonaws.com/earth_texture_${resolution}.jpg`,
 );
 
+// AI! I have uploaded a file named earth_normals.jpg to the AWS bucket. It has the normals to improve the lightning of the Earth I would like to bring it in after I'm done with all the textures and include it into the model.
+
 const RADIUS_EARTH = 6371.0;
 
 export function makeEarth(): { earth: THREE.Mesh; earth_frame: THREE.Group } {
