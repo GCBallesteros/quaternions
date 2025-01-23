@@ -83,8 +83,7 @@ satellite orientation using the [`rot`](/dsl/movement-and-attitude/#rot) functio
 The [`point`](/dsl/points/#point) function retrieves the **OrientedPoint** registered as `sat`. This
 object provides access to the `frame` property, which describes the local axes
 of the satellite.
-# AI! Add the reference to log here
-3. Log it to the integrated consolo using the log function.
+3. Log it to the integrated console using the [`log`](/dsl/utility/#log) function.
 
 ```javascript
 let rotationQuaternion = [-0.6313439, -0.1346824, -0.6313439, -0.4297329];
