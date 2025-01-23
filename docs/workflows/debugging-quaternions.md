@@ -1,4 +1,5 @@
 # Debugging Quaternions
+# AI! The explanations below reference a few of the commands. Since we have documentation for those in the different files under the /docs/dsl folder it would be nice if the mentions in this page referenced them
 
 This workflow demonstrates how to debug quaternion orientations by moving a
 satellite, adding points of interest, and calculating angles to verify the
