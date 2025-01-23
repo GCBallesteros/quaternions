@@ -21,7 +21,11 @@ create_line("sat2KS", "sat", "KS");
 let rotationQuaternion = [-0.6313439, -0.1346824, -0.6313439, -0.4297329];
 rot("sat", rotationQuaternion);
 
-angle("sat2KS", point("sat").frame.z);
+let angle_between_pointing_and_target = angle(
+     "sat2KS", point("sat").frame.z
+);
+# AI! Below also explain the use of the log function and add a reference to it. Note that you will have to add the log function to the utility.md file. It just takes an object and prints it.
+log(angle_between_pointing_and_target);
 ```
 
 Let’s break that down with additional details about what happens under the hood.
