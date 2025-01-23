@@ -12,6 +12,7 @@ import { State } from './types.js';
 // DOCUMENTATION EFFORTS
 // TODO: Review documentation
 // TODO: Add images to documentation
+// TODO: Add pretty star backdrop
 
 // REFACTORING
 // TODO: Improve name of createAnimator

@@ -25,11 +25,8 @@ you think it's better, for example you can move the `sat` point to wherever it
 was one hour ago
 
 ```javascript
-// Get the current date and time
 let currentDate = new Date();
-
-// Subtract one hour from the current date
-let previousHour = new Date(currentDate.getTime() - (60 * 60 * 1000));  // Subtracting 1 hour
+let previousHour = new Date(currentDate.getTime() - (60 * 60 * 1000));
 
 mov2sat("sat", "60562", previousHour);
 ```

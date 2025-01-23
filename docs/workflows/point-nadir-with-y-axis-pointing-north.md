@@ -56,11 +56,11 @@ direction and align the secondary vector (in this case, the y-axis) as closely
 as possible to the z-axis of the Earth-Centered, Earth-Fixed (ECEF) system.
 
 ```javascript
-[`point`](/dsl/points/#point)("sat").addCamera(50);           // Add a "camera" to the satellite in the default orientation
+point("sat").addCamera(50);  // Add a "camera" to the satellite in the default orientation
 let good_quat = [`findBestQuaternion`](/dsl/movement-and-attitude/#findbestquaternion)(
     point("sat").cameraBodyDirection, // The satellite's body z-axis (camera direction)
     "y",                              // The secondary body vector (y-axis)
-    "sat->KS",                        // The vector from the satellite to the target point "KS"
+    "sat->KS",                        // The vector from sat to the target point "KS"
     [0, 0, 1]                         // The target for the secondary vector (aligning y-axis to Earth's z-axis)
 );
 rot("sat", good_quat);

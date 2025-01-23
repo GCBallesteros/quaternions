@@ -2,7 +2,8 @@
 
 ## add_point
 
-Adds a new point to the scene. If a quaternion is provided, the point will have a basis frame attached to it with the orientation implied by the quaternion.
+Adds a new point to the scene. If a quaternion is provided, the point will have
+a basis frame attached to it with the orientation implied by the quaternion.
 
 | Parameter     | Type     | Description                                          |
 |--------------|----------|------------------------------------------------------|
