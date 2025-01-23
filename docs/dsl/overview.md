@@ -83,7 +83,12 @@ also introduced.
 Explore tools for creating and managing points, lines, and angles in the scene.
 Examples include `add_point`, `create_line`, and `angle`.
 
-### 5. [**Utility Commands**](/dsl/utility)  
+### 5. [**Camera Commands**](/dsl/cameras)
+
+Learn how to manage multiple cameras in the scene, switch between different views,
+and work with cameras attached to points.
+
+### 6. [**Utility Commands**](/dsl/utility)  
 
 Access helpful mathematical and satellite-related utilities, including
 coordinate conversions (`geo2xyz`, `xyz2geo`) and fetching Two-Line Elements
