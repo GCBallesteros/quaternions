@@ -25,9 +25,40 @@ built-in editor using a custom API or DSL, enabling:
 
 ## Getting Started
 
-# AI! Instead of referencing a section of the docs just do the getting started here. You can use the first workflow as an example. For that you will move it from where it currently resides on the file: debugging-quaternions.md and make some version here. Then lets add a reference to the other workflows as we do below or the DSL docs.
-Get up and running quickly with a step-by-step guide. [Learn
-more](/getting-started).
+Let's walk through a practical example of using **What on Earth?** to debug quaternion orientations. This workflow will show you how to:
+- Position a satellite
+- Create reference points
+- Analyze orientations
+- Calculate angles between vectors
+
+Here's a complete example you can copy/paste into the integrated editor:
+
+```javascript
+// Move the default point, `sat`, near Helsinki
+mov("sat", [62.0, 34.0, 500.0], true);
+
+// Add a point of interest (Kumpula Space Centre)
+let ksCoords = geo2xyz([60.186, 24.828, 0]);
+add_point("KS", ksCoords);
+
+// Create a line between satellite and point
+create_line("sat2KS", "sat", "KS");
+
+// Apply a test quaternion rotation
+rot("sat", [-0.6313439, -0.1346824, -0.6313439, -0.4297329]);
+
+// Calculate angle between satellite's z-axis and the line
+angle("sat2KS", point("sat").frame.z);
+```
+
+This script demonstrates several key features:
+1. Using geographic coordinates with `mov`
+2. Converting between coordinate systems with `geo2xyz`
+3. Creating points and lines
+4. Applying quaternion rotations
+5. Analyzing angles between vectors
+
+For more examples and detailed workflows, check out our [workflow guides](/workflows/overview).
 
 ## Example Workflows
 
