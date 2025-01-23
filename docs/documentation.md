@@ -25,6 +25,7 @@ built-in editor using a custom API or DSL, enabling:
 
 ## Getting Started
 
+# AI! Instead of referencing a section of the docs just do the getting started here. You can use the first workflow as an example. For that you will move it from where it currently resides on the file: debugging-quaternions.md and make some version here. Then lets add a reference to the other workflows as we do below or the DSL docs.
 Get up and running quickly with a step-by-step guide. [Learn
 more](/getting-started).
 
