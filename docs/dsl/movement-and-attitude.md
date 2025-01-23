@@ -1,4 +1,3 @@
-#AI
 # Movement & Attitude Commands
 
 ## `rot`
