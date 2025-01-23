@@ -1,11 +1,10 @@
-# AI! Add links on the references to functions we have documented in the /dsl folder that are used here.
 # Check Current Position of a Satellite
 
 This workflow demonstrates how to move a point in the visualizer to the current
-position of a satellite by fetching it's TLE. The satellite's are identified by
+position of a satellite by fetching its TLE. The satellites are identified by
 their [NORAD Catalog
 Number](https://en.wikipedia.org/wiki/Satellite_Catalog_Number). To do this, we
-will use the `mov2sat` function, which fetches the satellite's position at a
+will use the [`mov2sat`](/dsl/movement-and-attitude/#mov2sat) function, which fetches the satellite's position at a
 given timestamp.
 
 Here is the code that you can run directly on the integrated editor.
@@ -15,9 +14,9 @@ mov2sat("sat", "60562", new Date());
 ```
 
 :::tip
-If you were following along with the previous workflow you migth want to start
-your script with `reset()` which will return the state of the scene to the
-default one.  Having it up there is particularly useful when you are iterating
+If you were following along with the previous workflow you might want to start
+your script with [`reset()`](/dsl/overview/#app-state-is-maintained-across-script-executions) which will return the state of the scene to the
+default one. Having it up there is particularly useful when you are iterating
 over your script.
 :::
 
