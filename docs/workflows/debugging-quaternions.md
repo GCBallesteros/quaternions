@@ -25,7 +25,6 @@ let angle_between_pointing_and_target = angle(
      "sat2KS", point("sat").frame.z
 );
 
-// Use the [`log`](/dsl/utility/#log) function to display the calculated angle in the integrated console
 log(angle_between_pointing_and_target);
 ```
 
@@ -84,12 +83,18 @@ satellite orientation using the [`rot`](/dsl/movement-and-attitude/#rot) functio
 The [`point`](/dsl/points/#point) function retrieves the **OrientedPoint** registered as `sat`. This
 object provides access to the `frame` property, which describes the local axes
 of the satellite.
+# AI! Add the reference to log here
+3. Log it to the integrated consolo using the log function.
 
 ```javascript
 let rotationQuaternion = [-0.6313439, -0.1346824, -0.6313439, -0.4297329];
 rot("sat", rotationQuaternion);
 
-angle("sat2KS", point("sat").frame.z);
+let angle_between_pointing_and_target = angle(
+     "sat2KS", point("sat").frame.z
+);
+
+log(angle_between_pointing_and_target);
 ```
 
 Alternatively, we could have defined the first argument of angle using the
