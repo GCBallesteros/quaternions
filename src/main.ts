@@ -11,8 +11,6 @@ import { State } from './types.js';
 
 // DOCUMENTATION EFFORTS
 // TODO: Review documentation
-// TODO: Say something about log
-// TODO: Document new switchCamera function and global camera
 
 // REFACTORING
 // TODO: Improve name of createAnimator
