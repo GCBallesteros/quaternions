@@ -34,16 +34,12 @@ Lists all points currently in the state. Takes no arguments.
 
 ## angle
 
-# AI! Instead of trying to describe in detail the form that the inputs can take you might
-# just reference the description for it done on `overview.md`. There is an example of
-# what I want in  the docs for findBestQuaternion
-
 Calculates the angle between two vectors.
 
 | Parameter  | Type            | Description                           |
 |-----------|-----------------|---------------------------------------|
-| `vec1Arg` | `array\|string` | First vector. Can be:<br>- Array `[x, y, z]`<br>- String `"point1->point2"`<br>- Name of existing line |
-| `vec2Arg` | `array\|string` | Second vector. Can be:<br>- Array `[x, y, z]`<br>- String `"point1->point2"`<br>- Name of existing line |
+| `vec1Arg` | `array\|string` | First vector. See valid input options [here](/dsl/overview/#supplying-vectors-and-positions-by-name-or-value) |
+| `vec2Arg` | `array\|string` | Second vector. See valid input options [here](/dsl/overview/#supplying-vectors-and-positions-by-name-or-value) |
 
 Returns the angle in degrees.
 
