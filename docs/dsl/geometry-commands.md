@@ -34,6 +34,10 @@ Lists all points currently in the state. Takes no arguments.
 
 ## angle
 
+# AI! Instead of trying to describe in detail the form that the inputs can take you might
+# just reference the description for it done on `overview.md`. There is an example of
+# what I want in  the docs for findBestQuaternion
+
 Calculates the angle between two vectors.
 
 | Parameter  | Type            | Description                           |
