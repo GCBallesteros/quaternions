@@ -17,6 +17,7 @@ const RADIUS_EARTH = 6371.0;
 export function makeEarth(): { earth: THREE.Mesh; earth_frame: THREE.Group } {
   const earthGeometry = new THREE.SphereGeometry(RADIUS_EARTH, 64, 64);
   const earthMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
+  //const earthMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
   const earth = new THREE.Mesh(earthGeometry, earthMaterial);
 
   const textureLoader = new THREE.TextureLoader();
@@ -51,6 +52,9 @@ export function makeEarth(): { earth: THREE.Mesh; earth_frame: THREE.Group } {
         console.log(`Texture level ${currentLevel + 1} loaded`);
         if (currentLevel !== 0) {
           setTimeout(loadNextTexture, 2000);
+        } else {
+          setTimeout(loadNextTexture, 10);
+
         }
         currentLevel++;
       },

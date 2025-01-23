@@ -11,6 +11,7 @@ import { State } from './types.js';
 
 // DOCUMENTATION EFFORTS
 // TODO: Review documentation
+// TODO: Add images to documentation
 
 // REFACTORING
 // TODO: Improve name of createAnimator

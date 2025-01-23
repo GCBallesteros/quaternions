@@ -43,6 +43,8 @@ export function initScene(
 
   state.cameras.main = camera;
 
+  const ambientLight = new THREE.AmbientLight(0xffffff, 1.0); 
+  scene.add(ambientLight);
   let earth_geometries = makeEarth();
   scene.add(earth_geometries.earth);
   scene.add(earth_geometries.earth_frame);
