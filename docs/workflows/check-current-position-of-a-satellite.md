@@ -1,4 +1,4 @@
-# AI! Repeat what we just did for debbuging quaternions here
+# AI! Add links on the references to functions we have documented in the /dsl folder that are used here.
 # Check Current Position of a Satellite
 
 This workflow demonstrates how to move a point in the visualizer to the current
