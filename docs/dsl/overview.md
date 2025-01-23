@@ -72,6 +72,7 @@ blocks for representing objects in 3D space. The `OrientedPoint` extends
 `Point` to include orientation, enabling operations like attitude control and
 visualization.
 
+# AI? I had this placeholder before for the state and defaults which is pretty much explained above. Should we keep this as a separate file or is it better to have here on the overview.
 ### 2. [**State and Defaults**](#state-and-defaults)  
 
 Understand the default scene elements, such as the `sat` point (representing a
@@ -86,11 +87,13 @@ Discover commands to manipulate points' positions and orientations, such as
 `mov`, `rot`, and `mov2sat`. Tools for quaternion-based attitude adjustment are
 also introduced.
 
-### 4. [**Geometry Commands**](#geometry-commands)  
+### 4. [**Geometry Commands**](/dsl/geometry-commands)  
 
 Explore tools for creating and managing points, lines, and angles in the scene.
 Examples include `add_point`, `create_line`, and `angle`.
 
+# AI! Here we can now use the link to the utility files markdown file we just
+# created.
 ### 5. [**Utility Commands**](#utility-commands)  
 
 Access helpful mathematical and satellite-related utilities, including
