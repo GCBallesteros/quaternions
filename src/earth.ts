@@ -8,13 +8,15 @@ const textureLevels = ['LR', 'MR', 'HR'].map((resolution) =>
     : `https://whatoneaerth.s3.eu-west-1.amazonaws.com/earth_texture_${resolution}.jpg`,
 );
 
-// AI! I have uploaded a file named earth_normals.jpg to the AWS bucket. It has the normals to improve the lightning of the Earth I would like to bring it in after I'm done with all the textures and include it into the model.
+const normalMapUrl = import.meta.env.VITE_LOCAL_DEV === 'true'
+  ? '/earth_normals.jpg'
+  : 'https://whatoneaerth.s3.eu-west-1.amazonaws.com/earth_normals.jpg';
 
 const RADIUS_EARTH = 6371.0;
 
 export function makeEarth(): { earth: THREE.Mesh; earth_frame: THREE.Group } {
   const earthGeometry = new THREE.SphereGeometry(RADIUS_EARTH, 64, 64);
-  const earthMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  const earthMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
   const earth = new THREE.Mesh(earthGeometry, earthMaterial);
 
   const textureLoader = new THREE.TextureLoader();
@@ -22,7 +24,23 @@ export function makeEarth(): { earth: THREE.Mesh; earth_frame: THREE.Group } {
   let currentLevel = 0;
 
   const loadNextTexture = () => {
-    if (currentLevel >= textureLevels.length) return;
+    if (currentLevel >= textureLevels.length) {
+      // After all textures are loaded, load the normal map
+      textureLoader.load(
+        normalMapUrl,
+        (normalMap) => {
+          earth.material.normalMap = normalMap;
+          earth.material.normalScale.set(1, 1);
+          earth.material.needsUpdate = true;
+          console.log('Normal map loaded');
+        },
+        undefined,
+        (error) => {
+          console.error('Error loading normal map:', error);
+        },
+      );
+      return;
+    }
 
     const textureUrl = textureLevels[currentLevel];
     textureLoader.load(
