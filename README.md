@@ -1,4 +1,3 @@
-# AI!
 # 🛰️ Quaternion Visualizer 🛰️
 
 A tool for visualizing satellite positions and orientations and providing
