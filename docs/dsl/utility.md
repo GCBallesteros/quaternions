@@ -1,6 +1,21 @@
- # Utility Commands
+# Utility Commands
 
- ## deg2rad
+## log
+
+Prints a message to the integrated console.
+
+| Parameter | Type     | Description                           |
+|-----------|----------|---------------------------------------|
+| `message` | `any`    | The message or value to be displayed  |
+
+**Example**:
+```js
+log("Hello World");
+log(42);
+log([1, 2, 3]);
+```
+
+## deg2rad
 
  Converts degrees to radians.
 

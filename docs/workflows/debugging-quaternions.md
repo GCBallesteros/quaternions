@@ -24,7 +24,8 @@ rot("sat", rotationQuaternion);
 let angle_between_pointing_and_target = angle(
      "sat2KS", point("sat").frame.z
 );
-# AI! Below also explain the use of the log function and add a reference to it. Note that you will have to add the log function to the utility.md file. It just takes an object and prints it.
+
+// Use the [`log`](/dsl/utility/#log) function to display the calculated angle in the integrated console
 log(angle_between_pointing_and_target);
 ```
 
