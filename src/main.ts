@@ -11,7 +11,6 @@ import { State } from './types.js';
 
 // DOCUMENTATION EFFORTS
 // TODO: Review documentation
-// TODO: Change link on the logs
 // TODO: Say something about log
 // TODO: Document new switchCamera function and global camera
 
@@ -83,7 +82,10 @@ create_line("sat2KS", "sat", "KS");
 // Rotate 'sat' to buggy quaternion
 rot("sat", satellite_bad_quat);
 // Calculate angle between z-axis of 'sat' and 'sat2KS'
-angle("sat2KS", point("sat").frame.z);
+let angle_between_pointing_and_target = angle(
+     "sat2KS", point("sat").frame.z
+);
+log(angle_between_pointing_and_target);
 
 // Uncomment the code below to fix the orientation of the satellite
 // and watch the scene from its point of view.
