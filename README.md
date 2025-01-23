@@ -1,5 +1,8 @@
 # 🛰️ Quaternion Visualizer 🛰️
 
+# AI! Create a utility.md files to add to the DSL documentation. Once you are done report
+# if within the docs folder we have left anything out that was on the README.md
+
 A tool for visualizing satellite positions and orientations and providing
 simple geometrical calculations. Its main purposes is in debugging
 quaternion-based codes for satellites .
