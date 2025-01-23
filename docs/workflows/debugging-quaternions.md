@@ -92,6 +92,3 @@ special notation `point_name_start->point_name_end`, which in this case
 would've resulted on `sat->ks`. Like this we would have defined the vector for
 the angle calculation without having to explicitly create a line. We did the
 latter so that an actual line would be drawn on the scene.
-
-
-

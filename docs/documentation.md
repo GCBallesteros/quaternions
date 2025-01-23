@@ -37,7 +37,7 @@ Here's a complete example you can copy/paste into the integrated editor:
 // Move the default point, `sat`, near Helsinki
 mov("sat", [62.0, 34.0, 500.0], true);
 
-// Add a point of interest (Kumpula Space Centre)
+// Kuva Space HQ
 let ksCoords = geo2xyz([60.186, 24.828, 0]);
 add_point("KS", ksCoords);
 
@@ -51,19 +51,7 @@ rot("sat", [-0.6313439, -0.1346824, -0.6313439, -0.4297329]);
 angle("sat2KS", point("sat").frame.z);
 ```
 
-This script demonstrates several key features:
-1. Using geographic coordinates with `mov`
-2. Converting between coordinate systems with `geo2xyz`
-3. Creating points and lines
-4. Applying quaternion rotations
-5. Analyzing angles between vectors
-
-For more examples and detailed workflows, check out our [workflow guides](/workflows/overview).
-
-## Example Workflows
-
-See real examples of how **What on Earth** can be used to solve typical tasks
-and problems. [Explore workflows](/workflows/overview).
+Full details on how this example works can be found the [debugging quaternions workflow example](/workflows/debugging-quaternions). For more examples and detailed workflows, check out our [workflow guides](/workflows/overview).
 
 ## DSL Documentation
 
