@@ -1,16 +1,22 @@
 # Check Current Position of a Satellite
 
-This workflow demonstrates how to move a point in the visualizer to the current
-position of a satellite by fetching its TLE. The satellites are identified by
-their [NORAD Catalog
-Number](https://en.wikipedia.org/wiki/Satellite_Catalog_Number). To do this, we
-will use the [`mov2sat`](/dsl/movement-and-attitude/#mov2sat) function, which fetches the satellite's position at a
-given timestamp.
+This workflow demonstrates how to move a point in the visualizer to a
+satellite's position at a specific time. The satellites are identified by their
+[NORAD Catalog Number](https://en.wikipedia.org/wiki/Satellite_Catalog_Number).
 
-Here is the code that you can run directly on the integrated editor.
+We'll use two main functions:
+
+- [`setTime`](/dsl/movement-and-attitude/#settime) to set the simulation time
+- [`mov2sat`](/dsl/movement-and-attitude/#mov2sat) to position the satellite
+based on its TLE at that time
+
+Here is the code that you can run directly in the integrated editor:
 
 ```javascript
-mov2sat("sat", "60562", new Date());
+// Set simulation to current time and move satellite
+let now = new Date();
+setTime(now);
+mov2sat("sat", "60562", now);
 ```
 
 :::tip
@@ -20,23 +26,28 @@ default one. Having it up there is particularly useful when you are iterating
 over your script.
 :::
 
-Finally remember that this just javascript so you can calculate that Date however
-you think it's better, for example you can move the `sat` point to wherever it
-was one hour ago
+Since this is just JavaScript, you can calculate dates however you prefer. For example, to see where the satellite was one hour ago:
 
 ```javascript
 let currentDate = new Date();
 let previousHour = new Date(currentDate.getTime() - (60 * 60 * 1000));
 
+setTime(previousHour);
 mov2sat("sat", "60562", previousHour);
 ```
 
-or to an arbitrary date:
+Or to check its position at a specific date and time:
 
 ```javascript
 let specificDate = new Date('2025-01-01T15:25:00Z');
+setTime(specificDate);
 mov2sat("sat", "60562", specificDate);
 ```
+
+The `setTime` function updates time-dependent elements in the scene, specifically
+the Sun's position relative to Earth to match the illumination conditions at that
+time. Note that `setTime` does not move the satellite - you need to use `mov2sat`
+to position the satellite at the desired time.
 
 ::: warning
 You will be fetching the most recent TLE from
