@@ -23,7 +23,7 @@ import { State } from './types.js';
 // TODO: All the resolveVector like functions canCh be refactored (core.ts)
 
 // EXTRA FEATURES
-// TODO: Add setSimTime and add Moon object
+// TODO: Add Moon object
 // TODO: Add Satellite class and have them fly around
 // TODO: Transition smoothly between cameras
 // TODO: Show coordinates over the Earth
