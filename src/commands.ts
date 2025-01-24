@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {
-  _add_point,
+  _addPoint as _addPoint,
   _angle,
   _create_line,
   _fetchTLE,
@@ -34,8 +34,8 @@ export function buildCommandClosures(
     _rot(state, point_name, q);
   }
 
-  function add_point(name: string, coordinates: Vector3, quaternion = null) {
-    _add_point(scene, state, name, coordinates, quaternion);
+  function addPoint(name: string, coordinates: Vector3, quaternion = null) {
+    _addPoint(scene, state, name, coordinates, quaternion);
   }
 
   function create_line(
@@ -113,7 +113,7 @@ export function buildCommandClosures(
   return {
     mov: mov,
     rot: rot,
-    add_point: add_point,
+    addPoint: addPoint,
     create_line: create_line,
     angle: angle,
     rad2deg: rad2deg,

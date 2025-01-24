@@ -36,7 +36,7 @@ const satellite_bad_quat = [
 // Move the default point, 'sat', to somewhere somewhat near Helsinki
 mov("sat", satellite_location_geo, true);
 // Add a point over the previously calculated coords
-add_point("KS", target_coords_ecef);
+addPoint("KS", target_coords_ecef);
 // Connect "sat" to new point
 create_line("sat2KS", "sat", "KS");
 // Rotate 'sat' to buggy quaternion

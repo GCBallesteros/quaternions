@@ -321,7 +321,7 @@ export function addFrame(point: Point): OrientedPoint {
   return new OrientedPoint(point_geo);
 }
 
-export function _add_point(
+export function _addPoint(
   scene: THREE.Scene,
   state: State,
   name: string,
@@ -341,7 +341,7 @@ export function _add_point(
   var new_point: Point | OrientedPoint;
   if (quaternion !== null) {
     if (quaternion.length !== 4) {
-      log('Invalid quaternion in add_point');
+      log('Invalid quaternion in addPoint');
       return null;
     } else {
       let new_point_: Point = createFloatingPoint();

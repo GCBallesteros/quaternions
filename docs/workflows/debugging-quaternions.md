@@ -14,7 +14,7 @@ let satellitePosition = [62.0, 34.0, 500.0];
 mov("sat", satellitePosition, true);
 
 let pointOfInterestCoords = geo2xyz([60.186, 24.828, 0]);
-add_point("KS", pointOfInterestCoords);
+addPoint("KS", pointOfInterestCoords);
 
 create_line("sat2KS", "sat", "KS");
 
@@ -55,12 +55,12 @@ mov("sat", satellitePosition, true);
 Convert the geographic coordinates (60.186°N, 24.828°E, 0 m altitude) to ECEF
 coordinates using [`geo2xyz`](/dsl/geometry-commands/#geo2xyz). Add a point
 (`KS`) at the calculated location. When a point is added using the
-[`add_point`](/dsl/geometry-commands/#add_point) function, it is registered
+[`addPoint`](/dsl/geometry-commands/#addPoint) function, it is registered
 with the provided name (in this case, `KS`), so it can be referred to later.
 
 ```javascript
 let pointOfInterestCoords = geo2xyz([60.186, 24.828, 0]);
-add_point("KS", pointOfInterestCoords);
+addPoint("KS", pointOfInterestCoords);
 ```
 
 ## 3. Connect the Satellite and Point

@@ -34,7 +34,7 @@
             }
         ]
     },
-    "add_point": {
+    "addPoint": {
         "description": "Adds a new point to the scene.",
         "arguments": [
             {

@@ -1,6 +1,6 @@
 # Geometry Commands
 
-## add_point
+## addPoint
 
 Adds a new point to the scene. If a quaternion is provided, the point will have
 a basis frame attached to it with the orientation implied by the quaternion.
@@ -16,7 +16,7 @@ a basis frame attached to it with the orientation implied by the quaternion.
 ```js
 // Add a point named `point`` at NULL Island with the same orientation of the
 // global ECEF frame.
-add_point("point1", [6371, 0, 0], [0, 0, 0, 1]);
+addPoint("point1", [6371, 0, 0], [0, 0, 0, 1]);
 ```
 
 ## create_line

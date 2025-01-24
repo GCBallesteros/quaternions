@@ -42,7 +42,7 @@ mov("sat", [62.0, 34.0, 500.0], true);
 
 // Kuva Space HQ
 let ksCoords = geo2xyz([60.186, 24.828, 0]);
-add_point("KS", ksCoords);
+addPoint("KS", ksCoords);
 
 // Create a line between satellite and point
 create_line("sat2KS", "sat", "KS");
