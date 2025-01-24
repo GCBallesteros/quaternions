@@ -29,9 +29,18 @@ Creates a line between two points or coordinates.
 | `startArg`| `array\|string` | Starting point or coordinates         |
 | `endArg`  | `array\|string` | Ending point or coordinates          |
 
-## list_points
+## listPoints
 
-Lists all points currently in the state. Takes no arguments.
+Lists all points currently present in the scene. 
+Takes no arguments.
+
+**Example**
+```js
+listPoints();
+// Output:
+// - sat
+// - KS
+```
 
 ## angle
 
@@ -46,7 +55,8 @@ Returns the angle in degrees.
 
 ## xyz2geo
 
-Converts Cartesian coordinates to geographic coordinates (latitude, longitude, and altitude).
+Converts Cartesian coordinates to geographic coordinates (latitude, longitude,
+and altitude).
 
 | Parameter | Type    | Description                     |
 |-----------|---------|----------------------------------|

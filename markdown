@@ -23,6 +23,19 @@ Fetches the Two-Line Element (TLE) for a satellite using its COSPAR ID.
 | Parameter   | Type     | Description                    |
 |-------------|----------|--------------------------------|
 | `norad_id`  | `string` | COSPAR ID of the satellite     |
+
+## listPoints
+
+Returns an array of strings containing the names of all points currently present in the scene state.
+
+**Returns**: `string[]` - Array of point names
+
+**Example**:
+```js
+const points = listPoints();
+// points might contain: ["sat", "KS"]
+log(points);
+```
 # Camera Commands
 
 The app provides functionality to manage multiple cameras in the scene, including switching between them and attaching cameras to points.

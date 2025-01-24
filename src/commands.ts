@@ -101,15 +101,8 @@ export function buildCommandClosures(
     _reset(scene, state, switchCamera);
   }
 
-  function listPoints(): void {
-    const pointNames = Object.keys(state.points);
-
-    if (pointNames.length === 0) {
-      log('No points currently exist in the state.');
-    } else {
-      log('Existing points:');
-      pointNames.forEach((name) => log(`- ${name}`));
-    }
+  function listPoints(): string[] {
+    return Object.keys(state.points);
   }
 
   return {
