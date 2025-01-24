@@ -27,11 +27,10 @@ export function addInitGeometries(state: State, scene: THREE.Scene): void {
 }
 
 export function initScene(
-  state: State,
   scene: THREE.Scene,
   canvas: HTMLElement,
   renderer: THREE.WebGLRenderer,
-): void {
+): State {
   const camera = new THREE.PerspectiveCamera(
     75,
     canvas.clientWidth / canvas.clientHeight,
@@ -42,15 +41,22 @@ export function initScene(
   camera.lookAt(0, 0, 0);
   camera.up.set(0, 0, 1);
 
-  state.cameras.main = camera;
-
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.2); 
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
   scene.add(ambientLight);
 
   const sunLight = new THREE.DirectionalLight(0xffffff, 7.0);
   scene.add(sunLight);
-  
-  updateSunLight(sunLight, new Date());
+
+  let state: State = {
+    points: {},
+    lines: {},
+    lights: { ambient: ambientLight, sun: sunLight },
+    tles: {},
+    currentTime: new Date(),
+    cameras: { main: camera },
+  };
+
+  updateSunLight(state.lights.sun, new Date());
 
   let earth_geometries = makeEarth();
   scene.add(earth_geometries.earth);
@@ -64,6 +70,8 @@ export function initScene(
   controls.enableZoom = true;
   controls.minDistance = 8000;
   controls.maxDistance = 20000;
+
+  return state;
 }
 
 export function createAnimator(

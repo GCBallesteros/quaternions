@@ -39,3 +39,17 @@ function will perform a request to Celestrak.
  | Parameter   | Type     | Description                    |
  |-------------|----------|--------------------------------|
  | `norad_id`  | `string` | COSPAR ID of the satellite     |
+
+ ## setTime
+
+ Sets the current simulation time. This affects time-dependent calculations like
+satellite positions.
+
+ | Parameter   | Type     | Description                          |
+ |-------------|----------|--------------------------------------|
+ | `newTime`   | `Date`   | The new simulation time to set       |
+
+ **Example**:
+ ```js
+ setTime(new Date('2024-01-24T12:00:00Z'))
+ ```

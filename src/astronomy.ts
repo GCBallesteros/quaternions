@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 
-// Constants from astral-ts
 // Obliquity of the ecliptic (Earth's axial tilt) for J2000.0 epoch
 const OBLIQUITY = 23.43929111; // degrees
 const EPOCH = 2451545.0; // J2000 (2000 January 1.5)
@@ -29,10 +28,12 @@ function sunEquationOfCenter(t: number): number {
   const sinm = Math.sin(mrad);
   const sin2m = Math.sin(mrad + mrad);
   const sin3m = Math.sin(mrad + mrad + mrad);
-  
-  return sinm * (1.914602 - t * (0.004817 + 0.000014 * t)) +
-         sin2m * (0.019993 - 0.000101 * t) +
-         sin3m * 0.000289;
+
+  return (
+    sinm * (1.914602 - t * (0.004817 + 0.000014 * t)) +
+    sin2m * (0.019993 - 0.000101 * t) +
+    sin3m * 0.000289
+  );
 }
 
 function sunTrueLong(t: number): number {
@@ -62,7 +63,7 @@ export function dateToJulian(date: Date): number {
 
   let y = year;
   let m = month;
-  
+
   // Adjust for January/February
   if (m <= 2) {
     y -= 1;
@@ -72,10 +73,13 @@ export function dateToJulian(date: Date): number {
   const a = Math.floor(y / 100);
   const b = 2 - a + Math.floor(a / 4);
 
-  const jd = Math.floor(365.25 * (y + 4716)) +
-            Math.floor(30.6001 * (m + 1)) +
-            day + b - 1524.5 +
-            (hour + minute / 60 + second / 3600) / 24;
+  const jd =
+    Math.floor(365.25 * (y + 4716)) +
+    Math.floor(30.6001 * (m + 1)) +
+    day +
+    b -
+    1524.5 +
+    (hour + minute / 60 + second / 3600) / 24;
 
   return jd;
 }
@@ -110,20 +114,26 @@ export function getSunPosition(jd: number): [number, number, number] {
  * @param jd - Julian Date for the calculation
  * @returns Position vector in ECEF coordinates [x, y, z]
  */
-function eci2ecef(eci: [number, number, number], jd: number): [number, number, number] {
+function eci2ecef(
+  eci: [number, number, number],
+  jd: number,
+): [number, number, number] {
   // Calculate GMST (Greenwich Mean Sidereal Time) in radians
-  const T = (jd - 2451545.0) / 36525.0;  // Julian centuries since J2000
-  const gmst = (280.46061837 + 360.98564736629 * (jd - 2451545.0) +
-                T * T * (0.000387933 - T / 38710000.0)) % 360;
-  
+  const T = (jd - 2451545.0) / 36525.0; // Julian centuries since J2000
+  const gmst =
+    (280.46061837 +
+      360.98564736629 * (jd - 2451545.0) +
+      T * T * (0.000387933 - T / 38710000.0)) %
+    360;
+
   const theta = toRad(gmst);
   const [x, y, z] = eci;
-  
+
   // Rotate around Z axis by GMST angle
   const xEcef = x * Math.cos(theta) + y * Math.sin(theta);
   const yEcef = -x * Math.sin(theta) + y * Math.cos(theta);
   const zEcef = z;
-  
+
   return [xEcef, yEcef, zEcef];
 }
 
@@ -132,13 +142,16 @@ function eci2ecef(eci: [number, number, number], jd: number): [number, number, n
  * @param light - THREE.DirectionalLight to update
  * @param date - Date for the Sun position calculation
  */
-export function updateSunLight(light: THREE.DirectionalLight, date: Date): void {
+export function updateSunLight(
+  light: THREE.DirectionalLight,
+  date: Date,
+): void {
   const jd = dateToJulian(date);
   const eciPos = getSunPosition(jd);
   const [x, y, z] = eci2ecef(eciPos, jd);
-  
+
   // Normalize the position for directional light
-  const length = Math.sqrt(x*x + y*y + z*z);
+  const length = Math.sqrt(x * x + y * y + z * z);
   console.log('Sun ECEF position (km):', x, y, z);
-  light.position.set(x/length, y/length, z/length);
+  light.position.set(x / length, y / length, z / length);
 }

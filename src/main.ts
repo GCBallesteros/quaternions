@@ -30,15 +30,8 @@ import { State } from './types.js';
 // TODO: Buttont to bring back global camera
 // TODO: Plots and tobs
 
-let state: State = {
-  points: {},
-  lines: {},
-  tles: {},
-  cameras: {},
-};
-
 const { scene, canvas, renderer } = initializeCanvas();
-initScene(state, scene, canvas, renderer);
+let state = initScene(scene, canvas, renderer);
 let camera = state.cameras.main;
 const switchCamera = createAnimator(renderer, scene, camera);
 

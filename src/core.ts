@@ -10,6 +10,7 @@ import { log } from './logger.js';
 import { OrientedPoint, Point } from './point.js';
 import { State, Vector3 } from './types.js';
 import * as utils from './utils.js';
+import { updateSunLight } from './astronomy.js';
 
 // TODO: All the resolveVector like functions can be refactored
 
@@ -489,6 +490,12 @@ export async function _fetchTLE(
   log(`Fetched and cached TLE for COSPAR ID: ${norad_id}`);
 
   return data;
+}
+
+export function _setTime(state: State, newTime: Date): void {
+  state.currentTime = newTime;
+  updateSunLight(state.lights.sun, newTime);
+  log(`Simulation time set to: ${newTime.toISOString()}`);
 }
 
 export function _reset(

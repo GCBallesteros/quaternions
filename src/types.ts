@@ -11,10 +11,14 @@ export interface Line {
   end: Vector3 | string;
 }
 
-// AI! I want to add the current time within the simulation to the State. Then I will need you to create a function named setTime that modifies the state of the function. This should be added to core.ts and commands.ts following the current pattern.
 export interface State {
   points: Record<string, Point | OrientedPoint>;
   lines: Record<string, Line>;
+  lights: {
+    ambient: THREE.AmbientLight;
+    sun: THREE.DirectionalLight;
+  };
+  currentTime: Date;
   tles: Record<string, string>;
   cameras: Record<string, THREE.PerspectiveCamera>;
 }

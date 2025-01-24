@@ -9,6 +9,7 @@ import {
   _mov2sat,
   _reset,
   _rot,
+  _setTime,
 } from './core.js';
 import { _help } from './help.js';
 
@@ -101,6 +102,10 @@ export function buildCommandClosures(
     _reset(scene, state, switchCamera);
   }
 
+  function setTime(newTime: Date): void {
+    _setTime(state, newTime);
+  }
+
   function listPoints(): string[] {
     return Object.keys(state.points);
   }
@@ -119,6 +124,7 @@ export function buildCommandClosures(
     point: point,
     help: help,
     reset: reset,
+    setTime: setTime,
     listPoints: listPoints,
   };
 }

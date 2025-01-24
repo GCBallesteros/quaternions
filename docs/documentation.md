@@ -21,6 +21,7 @@ built-in editor using a custom API or DSL, enabling:
   - Adding new points or objects to the scene.
   - Performing calculations on-the-fly.
   - Automating workflows for repeated tasks.
+  - Time-based simulations with adjustable simulation time
   - ... much more coming soon.
 
 ## Getting Started
