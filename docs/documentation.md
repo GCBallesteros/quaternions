@@ -6,6 +6,8 @@ perspectives—all from the comfort of your browser. It provides an interactive
 from a satellite’s viewpoint, and optimize quaternions under various
 constraints.
 
+ ![User Interface](/assets/main_ui.png)                                                     
+
 ## Key Features
 
 - **Geometric Calculations**: Compute angles, distances, and other geometrical
