@@ -46,6 +46,7 @@ const commands = buildCommandClosures(scene, state, switchCamera);
 
 let executeCommand = buildExecuteCommand(commands, state, switchCamera);
 
+// AI! Renamve this function to listPoints and move it to the commands.ts file. Also search the docs/ folder for documentation that might need to be updated with the new name
 function list_points() {
   const pointNames = Object.keys(state.points);
 
