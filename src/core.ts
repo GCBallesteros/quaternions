@@ -40,54 +40,70 @@ export function _rot(
   pt.geometry.setRotationFromQuaternion(quaternion);
 }
 
+// Helper function to resolve a vector from various input formats
+function resolveVector(
+  state: State,
+  arg: string | Vector3,
+  allowBodyVectors: boolean = false,
+): THREE.Vector3 | null {
+  if (Array.isArray(arg) && arg.length === 3) {
+    return new THREE.Vector3(arg[0], arg[1], arg[2]);
+  } else if (typeof arg === 'string') {
+    if (allowBodyVectors) {
+      switch (arg.toLowerCase()) {
+        case 'x':
+          return new THREE.Vector3(1, 0, 0);
+        case 'y':
+          return new THREE.Vector3(0, 1, 0);
+        case 'z':
+          return new THREE.Vector3(0, 0, 1);
+      }
+    }
+
+    if (arg.includes('->')) {
+      const [startName, endName] = arg.split('->').map((name) => name.trim());
+      const startPos = utils.getPositionOfPoint(state, startName);
+      const endPos = utils.getPositionOfPoint(state, endName);
+
+      if (!startPos || !endPos) {
+        log(`Invalid points in vector definition '${arg}'.`);
+        return null;
+      }
+
+      return endPos.clone().sub(startPos);
+    } else if (state.lines[arg]) {
+      const line = state.lines[arg];
+      const startPos = utils.getPositionOfPoint(state, line.start);
+      const endPos = utils.getPositionOfPoint(state, line.end);
+
+      if (!startPos || !endPos) {
+        log(`Invalid line '${arg}' in state.lines.`);
+        return null;
+      }
+
+      return endPos.clone().sub(startPos);
+    }
+
+    log(`Invalid string argument '${arg}'.`);
+    return null;
+  }
+
+  log(
+    allowBodyVectors
+      ? "Vector must be an array of 3 values or one of 'x', 'y', 'z'."
+      : 'Vector must be an array of 3 values, a line name, or "<start>-><end>".',
+  );
+  return null;
+}
+
 export function _angle(
   state: State,
   vec1Arg: Vector3 | string,
   vec2Arg: Vector3 | string,
 ): number | null {
-  // Helper function to resolve a vector from its argument
-  function resolveVector(arg: string | Vector3) {
-    if (Array.isArray(arg) && arg.length === 3) {
-      // Literal vector
-      return new THREE.Vector3(arg[0], arg[1], arg[2]);
-    } else if (typeof arg === 'string') {
-      if (arg.includes('->')) {
-        // Vector in the form "<start_point_name>-><end_point_name>"
-        const [startName, endName] = arg.split('->').map((name) => name.trim());
-        const startPos = utils.getPositionOfPoint(state, startName);
-        const endPos = utils.getPositionOfPoint(state, endName);
-
-        if (!startPos || !endPos) {
-          log(`Invalid points in vector definition '${arg}'.`);
-          return null;
-        }
-
-        return endPos.clone().sub(startPos); // Compute vector
-      } else if (state.lines[arg]) {
-        // Argument is a line name
-        const line = state.lines[arg];
-        const startPos = utils.getPositionOfPoint(state, line.start);
-        const endPos = utils.getPositionOfPoint(state, line.end);
-
-        if (!startPos || !endPos) {
-          log(`Invalid line '${arg}' in state.lines.`);
-          return null;
-        }
-
-        return endPos.clone().sub(startPos); // Compute vector
-      } else {
-        log(`Invalid string argument '${arg}'.`);
-        return null;
-      }
-    } else {
-      log('Argument must be an array of 3 values or a valid string.');
-      return null;
-    }
-  }
-
   // Resolve both vectors
-  const vec1 = resolveVector(vec1Arg);
-  const vec2 = resolveVector(vec2Arg);
+  const vec1 = resolveVector(state, vec1Arg);
+  const vec2 = resolveVector(state, vec2Arg);
 
   if (!vec1 || !vec2) {
     return null; // If either vector is invalid, return null
@@ -227,74 +243,11 @@ export function _findBestQuaternion(
   primaryTargetArg: Vector3 | string,
   secondaryTargetArg: Vector3 | string,
 ): [number, number, number, number] | null {
-  // Helper function to resolve a vector from its argument
-  function resolveBodyVector(arg: string | Vector3) {
-    if (Array.isArray(arg) && arg.length === 3) {
-      return new THREE.Vector3(arg[0], arg[1], arg[2]);
-    } else if (typeof arg === 'string') {
-      switch (arg.toLowerCase()) {
-        case 'x':
-          return new THREE.Vector3(1, 0, 0);
-        case 'y':
-          return new THREE.Vector3(0, 1, 0);
-        case 'z':
-          return new THREE.Vector3(0, 0, 1);
-        default:
-          log(`Invalid body vector argument '${arg}'.`);
-          return null;
-      }
-    } else {
-      log("Body vector must be an array of 3 values or one of 'x', 'y', 'z'.");
-      return null;
-    }
-  }
-
-  // Helper function to resolve a target vector from its argument
-  function resolveTargetVector(arg: string | Vector3) {
-    if (Array.isArray(arg) && arg.length === 3) {
-      return new THREE.Vector3(arg[0], arg[1], arg[2]);
-    } else if (typeof arg === 'string') {
-      if (arg.includes('->')) {
-        // Vector in the form "<start_point_name>-><end_point_name>"
-        const [startName, endName] = arg.split('->').map((name) => name.trim());
-        const startPos = utils.getPositionOfPoint(state, startName);
-        const endPos = utils.getPositionOfPoint(state, endName);
-
-        if (!startPos || !endPos) {
-          log(`Invalid points in target vector definition '${arg}'.`);
-          return null;
-        }
-
-        return endPos.clone().sub(startPos); // Compute vector
-      } else if (state.lines[arg]) {
-        // Argument is a line name
-        const line = state.lines[arg];
-        const startPos = utils.getPositionOfPoint(state, line.start);
-        const endPos = utils.getPositionOfPoint(state, line.end);
-
-        if (!startPos || !endPos) {
-          log(`Invalid line '${arg}' in state.lines.`);
-          return null;
-        }
-
-        return endPos.clone().sub(startPos); // Compute vector
-      } else {
-        log(`Invalid target vector argument '${arg}'.`);
-        return null;
-      }
-    } else {
-      log(
-        "Target vector must be an array of 3 values, a line name, or '<start>-><end>'.",
-      );
-      return null;
-    }
-  }
-
   // Resolve all arguments
-  const primaryBodyVector = resolveBodyVector(primaryVecArg);
-  const secondaryBodyVector = resolveBodyVector(secondaryVecArg);
-  const primaryTargetVector = resolveTargetVector(primaryTargetArg);
-  const secondaryTargetVector = resolveTargetVector(secondaryTargetArg);
+  const primaryBodyVector = resolveVector(state, primaryVecArg, true);
+  const secondaryBodyVector = resolveVector(state, secondaryVecArg, true);
+  const primaryTargetVector = resolveVector(state, primaryTargetArg, false);
+  const secondaryTargetVector = resolveVector(state, secondaryTargetArg, false);
 
   if (
     !primaryBodyVector ||
