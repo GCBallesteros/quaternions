@@ -21,7 +21,6 @@ export function makeEarth(): { earth: THREE.Mesh; earth_frame: THREE.Group } {
     roughness: 0.8,    // Higher roughness reduces glossiness
     metalness: 0.1     // Low metalness for a more matte look
   });
-  //const earthMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
   const earth = new THREE.Mesh(earthGeometry, earthMaterial);
 
   const textureLoader = new THREE.TextureLoader();

@@ -38,11 +38,11 @@ starting point.
 
 ## 1. Position the Satellite
 
-Move the default point (`sat`) near Helsinki using the [`mov`](/dsl/movement-and-attitude/#mov) command. The
-latitude is 62°, the longitude is 34°, and the altitude is 500 km. The `true`
-parameter specifies that the provided coordinates are geographic (latitude,
-longitude, altitude) instead of Earth-Centered, Earth-Fixed (ECEF) coordinates
-provided in xyz form.
+Move the default point (`sat`) near Helsinki using the
+[`mov`](/dsl/movement-and-attitude/#mov) command. The latitude is 62°, the
+longitude is 34°, and the altitude is 500 km. The `true` parameter specifies
+that the provided coordinates are geographic (latitude, longitude, altitude)
+instead of Earth-Centered, Earth-Fixed (ECEF) coordinates provided in xyz form.
 
 ```javascript
 let satellitePosition = [62.0, 34.0, 500.0];
@@ -53,9 +53,10 @@ mov("sat", satellitePosition, true);
 ## 2. Define a Point of Interest
 
 Convert the geographic coordinates (60.186°N, 24.828°E, 0 m altitude) to ECEF
-coordinates using [`geo2xyz`](/dsl/geometry-commands/#geo2xyz). Add a point (`KS`) at the calculated location.
-When a point is added using the [`add_point`](/dsl/geometry-commands/#add_point) function, it is registered with the
-provided name (in this case, `KS`), so it can be referred to later.
+coordinates using [`geo2xyz`](/dsl/geometry-commands/#geo2xyz). Add a point
+(`KS`) at the calculated location. When a point is added using the
+[`add_point`](/dsl/geometry-commands/#add_point) function, it is registered
+with the provided name (in this case, `KS`), so it can be referred to later.
 
 ```javascript
 let pointOfInterestCoords = geo2xyz([60.186, 24.828, 0]);

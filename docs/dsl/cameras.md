@@ -1,7 +1,7 @@
 # Camera Commands
 
-The app provides functionality to manage multiple cameras in the scene, including switching
-between them and attaching cameras to points.
+The app provides functionality to manage multiple cameras in the scene,
+including switching between them and attaching cameras to points.
 
 ## switchCamera
 

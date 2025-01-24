@@ -1,10 +1,10 @@
 # What on Earth?
 
-**What on Earth?** is a versatile tool for exploring quaternions, geometry, and
-satellite perspectives—all from the comfort of your browser. It provides an
-interactive 3D environemtn  to perform complex geometric calculations,
-visualize scenes from a satellite’s viewpoint, and optimize quaternions under
-various constraints.
+**What on Earth?** is a tool for exploring quaternions, geometry, and satellite
+perspectives—all from the comfort of your browser. It provides an interactive
+3D environemtn  to perform complex geometric calculations, visualize scenes
+from a satellite’s viewpoint, and optimize quaternions under various
+constraints.
 
 ## Key Features
 
@@ -25,7 +25,9 @@ built-in editor using a custom API or DSL, enabling:
 
 ## Getting Started
 
-Let's walk through a practical example of using **What on Earth?** to debug quaternion orientations. This workflow will show you how to:
+Let's walk through a practical example of using **What on Earth?** to debug
+quaternion orientations. This workflow will show you how to:
+
 - Position a satellite
 - Create reference points
 - Analyze orientations
@@ -51,7 +53,9 @@ rot("sat", [-0.6313439, -0.1346824, -0.6313439, -0.4297329]);
 angle("sat2KS", point("sat").frame.z);
 ```
 
-Full details on how this example works can be found the [debugging quaternions workflow example](/workflows/debugging-quaternions). For more examples and detailed workflows, check out our [workflow guides](/workflows/overview).
+Full details on how this example works can be found the [debugging quaternions
+workflow example](/workflows/debugging-quaternions). For more examples and
+detailed workflows, check out our [workflow guides](/workflows/overview).
 
 ## DSL Documentation
 

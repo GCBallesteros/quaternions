@@ -1,8 +1,11 @@
 # Workflows Overview
 
-This section introduces a few common workflows that demonstrate the features of **What on Earth?**. These examples show how to work with satellite visualization, quaternion adjustments, and basic geometrical calculations.
+This section introduces a few common workflows that demonstrate the features of
+**What on Earth?**. These examples show how to work with satellite
+visualization, quaternion adjustments, and basic geometrical calculations.
 
-The workflows are designed to help you get started with typical tasks and explore how the application can be applied to real-world scenarios.
+The workflows are designed to help you get started with typical tasks and
+explore how the application can be applied to real-world scenarios.
 
 ## Available Workflows
 
