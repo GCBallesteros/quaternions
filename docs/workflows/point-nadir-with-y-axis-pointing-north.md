@@ -23,7 +23,7 @@ the satellite's position and orientation.
 [`reset()`](/dsl/overview/#app-state-is-maintained-across-script-executions);
 
 // Simulation params
-const target_coords_ecef = [`geo2xyz`](/dsl/geometry-commands/#geo2xyz)([60.186, 24.828, 0]);
+const target_coords_ecef = geo2xyz([60.186, 24.828, 0]);
 const satellite_location_geo = [62.0, 34.0, 500.0];
 // quaternions are in xyzw order
 const satellite_bad_quat = [
@@ -34,15 +34,15 @@ const satellite_bad_quat = [
 ];
 
 // Move the default point, 'sat', to somewhere somewhat near Helsinki
-[`mov`](/dsl/movement-and-attitude/#mov)("sat", satellite_location_geo, true);
+mov("sat", satellite_location_geo, true);
 // Add a point over the previously calculated coords
-[`add_point`](/dsl/geometry-commands/#add_point)("KS", target_coords_ecef);
+add_point("KS", target_coords_ecef);
 // Connect "sat" to new point
-[`create_line`](/dsl/geometry-commands/#create_line)("sat2KS", "sat", "KS");
+create_line("sat2KS", "sat", "KS");
 // Rotate 'sat' to buggy quaternion
-[`rot`](/dsl/movement-and-attitude/#rot)("sat", satellite_bad_quat);
+rot("sat", satellite_bad_quat);
 // Calculate angle between z-axis of 'sat' and 'sat2KS'
-[`angle`](/dsl/geometry-commands/#angle)("sat2KS", [`point`](/dsl/points/#point)("sat").frame.z);
+angle("sat2KS", [`point`](/dsl/points/#point)("sat").frame.z);
 ```
 
 Lets now  fix the satellite's orientation using the `findBestQuaternion`
@@ -51,13 +51,13 @@ function.
 ## 2. Correcting the Satellite's Orientation
 
 In this example, we will correct the orientation of the satellite using
-`findBestQuaternion`. We aim to point the satellite's local z-axis to the nadir
+[`findBestQuaternion`](/dsl/movement-and-attitude/#findbestquaternion). We aim to point the satellite's local z-axis to the nadir
 direction and align the secondary vector (in this case, the y-axis) as closely
 as possible to the z-axis of the Earth-Centered, Earth-Fixed (ECEF) system.
 
 ```javascript
 point("sat").addCamera(50);  // Add a "camera" to the satellite in the default orientation
-let good_quat = [`findBestQuaternion`](/dsl/movement-and-attitude/#findbestquaternion)(
+let good_quat = findBestQuaternion(
     point("sat").cameraBodyDirection, // The satellite's body z-axis (camera direction)
     "y",                              // The secondary body vector (y-axis)
     "sat->KS",                        // The vector from sat to the target point "KS"
@@ -73,7 +73,7 @@ A few things to note here are:
 `point1->point2` we described for the angle function in the [Debugging
 Quaternions](/workflows/debugging-quaternions) workflow.
 
-2. **OrientedPonts** may have a _camera_ that by default is pointed in the
+2. **OrientedPoints** may have a _camera_ that by default is pointed in the
 direction of the z-axis of the body frame. We can access the pointing direction
 (if a camera has been added to the point) via the `cameraBodyDirection`
 
