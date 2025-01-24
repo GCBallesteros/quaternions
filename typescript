@@ -1,0 +1,56 @@
+// Astronomical constants
+const EPOCH = 2444238.5; // 1980 January 0.0
+
+// Constants defining the Sun's apparent orbit
+const ELONGE = 278.833540;  // Ecliptic longitude of the Sun at epoch 1980.0
+const ELONGP = 282.596403;  // Ecliptic longitude of the Sun at perigee
+const ECCENT = 0.016718;    // Eccentricity of Earth's orbit
+const SUNSMAX = 1.495985e8; // Semi-major axis of Earth's orbit, km
+const PI = Math.PI;
+
+function toRad(deg: number): number {
+  return deg * (PI / 180.0);
+}
+
+function toDeg(rad: number): number {
+  return rad * (180.0 / PI);
+}
+
+function fixAngle(angle: number): number {
+  return angle - 360.0 * (Math.floor(angle / 360.0));
+}
+
+/**
+ * Calculate the position of the Sun in ECI coordinates
+ * @param jd - Julian Date for the calculation
+ * @returns Position vector [x, y, z] in kilometers
+ */
+export function getSunPosition(jd: number): [number, number, number] {
+  // Time in centuries from epoch
+  const t = (jd - EPOCH) / 36525;
+
+  // Sun's mean anomaly
+  const m = fixAngle(358.475833 + 35999.0498*t);
+
+  // Sun's mean longitude
+  const l = fixAngle(ELONGE + 0.9856474*t);
+
+  // Equation of center
+  const eqCenter = (1.919460 - 0.004789*t - 0.000014*t*t) * Math.sin(toRad(m)) +
+                  (0.020094 - 0.000100*t) * Math.sin(toRad(2*m)) +
+                  0.000293 * Math.sin(toRad(3*m));
+
+  // Sun's true longitude
+  const sunLong = l + eqCenter;
+
+  // Sun's radius vector (distance) in km
+  const v = m + eqCenter;
+  const r = SUNSMAX * (1 - ECCENT * ECCENT) / (1 + ECCENT * Math.cos(toRad(v)));
+
+  // Convert ecliptic coordinates to ECI
+  const x = r * Math.cos(toRad(sunLong));
+  const y = r * Math.sin(toRad(sunLong));
+  const z = 0; // Sun stays in ecliptic plane
+
+  return [x, y, z];
+}

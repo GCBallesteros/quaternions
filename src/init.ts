@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { updateSunLight } from './astronomy.js';
 import { createFloatingPoint } from './components.js';
 import { _create_line, _mov, addFrame } from './core.js';
 import { makeEarth } from './earth.js';
@@ -43,8 +44,14 @@ export function initScene(
 
   state.cameras.main = camera;
 
-  const ambientLight = new THREE.AmbientLight(0xffffff, 1.0); 
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.2); 
   scene.add(ambientLight);
+
+  const sunLight = new THREE.DirectionalLight(0xffffff, 9.0);
+  scene.add(sunLight);
+  
+  updateSunLight(sunLight, new Date());
+
   let earth_geometries = makeEarth();
   scene.add(earth_geometries.earth);
   scene.add(earth_geometries.earth_frame);
@@ -64,7 +71,7 @@ export function createAnimator(
   scene: THREE.Scene,
   initialCamera: THREE.PerspectiveCamera,
 ): (newCamera: THREE.PerspectiveCamera) => void {
-  let currentCamera = initialCamera; // Camera is now encapsulated within the closure
+  let currentCamera = initialCamera;
 
   function animate() {
     renderer.render(scene, currentCamera);

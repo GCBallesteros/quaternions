@@ -10,14 +10,13 @@ import { log } from './logger.js';
 import { State } from './types.js';
 
 // DOCUMENTATION EFFORTS
-// TODO: Review documentation
 // TODO: Add images to documentation
 // TODO: Add pretty star backdrop
 
 // REFACTORING
 // TODO: Improve name of createAnimator
 // TODO: Improve how we buildExecuteCommand
-// TODO: Better names spec findBestQuaternion
+// TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
 // TODO: Improve consistency on how we pass points around
 // TODO: Expose more options for object creation, widths, colors ...
 // TODO: Normalize quats before applying
