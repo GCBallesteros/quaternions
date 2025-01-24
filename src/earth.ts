@@ -14,10 +14,13 @@ const normalMapUrl = import.meta.env.VITE_LOCAL_DEV === 'true'
 
 const RADIUS_EARTH = 6371.0;
 
-// AI! I don't quite like my phongmaterial is there something I can use here with a bit less gloss?
 export function makeEarth(): { earth: THREE.Mesh; earth_frame: THREE.Group } {
   const earthGeometry = new THREE.SphereGeometry(RADIUS_EARTH, 64, 64);
-  const earthMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
+  const earthMaterial = new THREE.MeshStandardMaterial({ 
+    color: 0xffffff,
+    roughness: 0.8,    // Higher roughness reduces glossiness
+    metalness: 0.1     // Low metalness for a more matte look
+  });
   //const earthMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
   const earth = new THREE.Mesh(earthGeometry, earthMaterial);
 
