@@ -12,8 +12,6 @@ import { State, Vector3 } from './types.js';
 import * as utils from './utils.js';
 import { updateSunLight } from './astronomy.js';
 
-// TODO: All the resolveVector like functions can be refactored
-
 export function _rot(
   state: State,
   point_name: string,

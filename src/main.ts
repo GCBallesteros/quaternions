@@ -7,8 +7,6 @@ import { getPositionOfPoint } from './utils.js';
 import { buildCommandClosures } from './commands.js';
 import { log } from './logger.js';
 
-import { State } from './types.js';
-
 // DOCUMENTATION EFFORTS
 // TODO: Add images to documentation
 // TODO: Add pretty star backdrop
@@ -20,7 +18,6 @@ import { State } from './types.js';
 // TODO: Improve consistency on how we pass points around
 // TODO: Expose more options for object creation, widths, colors ...
 // TODO: Normalize quats before applying
-// TODO: All the resolveVector like functions canCh be refactored (core.ts)
 
 // EXTRA FEATURES
 // TODO: Add Moon object
