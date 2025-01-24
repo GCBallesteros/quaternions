@@ -8,18 +8,19 @@ const textureLevels = ['LR', 'MR', 'HR'].map((resolution) =>
     : `https://whatoneaerth.s3.eu-west-1.amazonaws.com/earth_texture_${resolution}.jpg`,
 );
 
-const normalMapUrl = import.meta.env.VITE_LOCAL_DEV === 'true'
-  ? '/earth_normals.jpg'
-  : 'https://whatoneaerth.s3.eu-west-1.amazonaws.com/earth_normals.jpg';
+const normalMapUrl =
+  import.meta.env.VITE_LOCAL_DEV === 'true'
+    ? '/earth_normals.jpg'
+    : 'https://whatoneaerth.s3.eu-west-1.amazonaws.com/earth_normals.jpg';
 
 const RADIUS_EARTH = 6371.0;
 
 export function makeEarth(): { earth: THREE.Mesh; earth_frame: THREE.Group } {
   const earthGeometry = new THREE.SphereGeometry(RADIUS_EARTH, 64, 64);
-  const earthMaterial = new THREE.MeshStandardMaterial({ 
+  const earthMaterial = new THREE.MeshStandardMaterial({
     color: 0xffffff,
-    roughness: 0.8,    // Higher roughness reduces glossiness
-    metalness: 0.1     // Low metalness for a more matte look
+    roughness: 0.8, // Higher roughness reduces glossiness
+    metalness: 0.1, // Low metalness for a more matte look
   });
   const earth = new THREE.Mesh(earthGeometry, earthMaterial);
 
@@ -57,7 +58,6 @@ export function makeEarth(): { earth: THREE.Mesh; earth_frame: THREE.Group } {
           setTimeout(loadNextTexture, 2000);
         } else {
           setTimeout(loadNextTexture, 10);
-
         }
         currentLevel++;
       },
