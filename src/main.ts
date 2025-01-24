@@ -139,7 +139,7 @@ function resizeCanvas(): void {
 window.addEventListener('resize', resizeCanvas);
 
 log(
-  'Visit github.com/GCBallesteros/quaternions/documentation for the full documentation',
+  'Visit quaternions.maxwellrules.com/documentation for the full documentation',
 );
 
 const resizer = document.getElementById('resizer')!;
