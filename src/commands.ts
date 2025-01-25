@@ -14,6 +14,14 @@ import {
 
 import { Point } from './point.js';
 import { CommandFunction, State, Vector3 } from './types.js';
+import {
+  geo2xyz,
+  getPositionOfPoint,
+  sph2xyz,
+  validateName,
+  xyz2geo,
+  xyz2sph,
+} from './utils.js';
 
 export function buildCommandClosures(
   scene: THREE.Scene,
@@ -169,5 +177,12 @@ export function buildCommandClosures(
     reset: reset,
     setTime: setTime,
     listPoints: listPoints,
+    // Add utility functions to commands
+    geo2xyz: geo2xyz,
+    getPositionOfPoint: getPositionOfPoint,
+    sph2xyz: sph2xyz,
+    validateName: validateName,
+    xyz2geo: xyz2geo,
+    xyz2sph: xyz2sph,
   };
 }

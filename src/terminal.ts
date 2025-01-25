@@ -1,28 +1,5 @@
 import { log } from './logger.js';
-
 import { CommandFunction, State } from './types.js';
-
-// AI! I'm only importing this functions here so that they are available on the execution environment of the eval used by users. Lets move this imports to commands.ts and extend the dictionary there with this function. We then here cleanup
-import {
-  geo2xyz,
-  getPositionOfPoint,
-  sph2xyz,
-  validateName,
-  xyz2geo,
-  xyz2sph,
-} from './utils.js';
-
-function _avoidTreeShaking() {
-  console.log({
-    getPositionOfPoint,
-    validateName,
-    xyz2geo,
-    xyz2sph,
-    geo2xyz,
-    sph2xyz,
-  });
-}
-_avoidTreeShaking();
 
 export function buildExecuteCommand(
   commands: Record<string, CommandFunction>,
