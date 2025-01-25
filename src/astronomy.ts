@@ -152,6 +152,5 @@ export function updateSunLight(
 
   // Normalize the position for directional light
   const length = Math.sqrt(x * x + y * y + z * z);
-  console.log('Sun ECEF position (km):', x, y, z);
   light.position.set(x / length, y / length, z / length);
 }

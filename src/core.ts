@@ -402,7 +402,9 @@ export async function _mov2sat(
   const position = positionAndVelocity.position;
 
   if (typeof position === 'boolean') {
-    return Err(`No position data found for satellite ${cosparId} at the given timestamp`);
+    return Err(
+      `No position data found for satellite ${cosparId} at the given timestamp`,
+    );
   }
 
   // Step 4: Convert the position to Earth-centered (X, Y, Z) coordinates
@@ -436,7 +438,9 @@ export async function _fetchTLE(
     const response = await fetch(url);
 
     if (!response.ok) {
-      return Err(`Failed to fetch TLE: ${response.status} - ${response.statusText}`);
+      return Err(
+        `Failed to fetch TLE: ${response.status} - ${response.statusText}`,
+      );
     }
 
     const data = await response.text();
@@ -447,7 +451,9 @@ export async function _fetchTLE(
 
     return Ok(data);
   } catch (error) {
-    return Err(`Error fetching TLE: ${error instanceof Error ? error.message : String(error)}`);
+    return Err(
+      `Error fetching TLE: ${error instanceof Error ? error.message : String(error)}`,
+    );
   }
 }
 
