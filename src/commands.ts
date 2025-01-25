@@ -92,7 +92,12 @@ export function buildCommandClosures(
     cosparId: string,
     timestamp: Date,
   ): Promise<void> {
-    _mov2sat(state, name, cosparId, timestamp);
+    const result = await _mov2sat(state, name, cosparId, timestamp);
+    if (result.ok) {
+      return;
+    } else {
+      throw new Error(result.val);
+    }
   }
 
   function findBestQuaternion(

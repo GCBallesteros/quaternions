@@ -378,47 +378,45 @@ export async function _mov2sat(
   name: string,
   cosparId: string,
   timestamp: Date,
-): Promise<void> {
-  try {
-    // Step 1: Fetch the TLE data using the COSPAR ID
-    const tle = await _fetchTLE(state, cosparId);
-
-    // Step 2: Parse the TLE data using satellite.js
-    const satrec = satellite.twoline2satrec(
-      tle.split('\n')[1],
-      tle.split('\n')[2],
-    );
-
-    // Step 3: Calculate the satellite's position at the given timestamp
-    const positionAndVelocity = satellite.propagate(satrec, timestamp);
-    const position = positionAndVelocity.position;
-
-    if (typeof position === 'boolean') {
-      log(
-        `No position data found for satellite ${cosparId} at the given timestamp.`,
-      );
-      return;
-    }
-
-    // Step 4: Convert the position to Earth-centered (X, Y, Z) coordinates
-    const gmst = satellite.gstime(timestamp);
-    const { x, y, z } = satellite.eciToEcf(position, gmst);
-
-    // Step 5: Update the position of the referenced point in the scene
-    const point = state.points[name];
-    if (point) {
-      point.position = [x, y, z];
-      log(`Point ${name} moved to satellite position at ${timestamp}.`);
-    } else {
-      log(`Point with name '${name}' not found.`);
-    }
-  } catch (error) {
-    if (error instanceof Error) {
-      log(`Error fetching or processing satellite data: ${error.message}`);
-    } else {
-      log(`Error: ${String(error)}`);
-    }
+): Promise<Result<null, string>> {
+  // Step 1: Fetch the TLE data using the COSPAR ID
+  const tleResult = await _fetchTLE(state, cosparId);
+  if (!tleResult.ok) {
+    return Err(tleResult.val);
   }
+  const tle = tleResult.val;
+
+  // Step 2: Parse the TLE data using satellite.js
+  const satrec = satellite.twoline2satrec(
+    tle.split('\n')[1],
+    tle.split('\n')[2],
+  );
+
+  if (!satrec) {
+    return Err('Failed to parse TLE data');
+  }
+
+  // Step 3: Calculate the satellite's position at the given timestamp
+  const positionAndVelocity = satellite.propagate(satrec, timestamp);
+  const position = positionAndVelocity.position;
+
+  if (typeof position === 'boolean') {
+    return Err(`No position data found for satellite ${cosparId} at the given timestamp`);
+  }
+
+  // Step 4: Convert the position to Earth-centered (X, Y, Z) coordinates
+  const gmst = satellite.gstime(timestamp);
+  const { x, y, z } = satellite.eciToEcf(position, gmst);
+
+  // Step 5: Update the position of the referenced point in the scene
+  const point = state.points[name];
+  if (!point) {
+    return Err(`Point with name '${name}' not found`);
+  }
+
+  point.position = [x, y, z];
+  log(`Point ${name} moved to satellite position at ${timestamp}`);
+  return Ok(null);
 }
 
 export async function _fetchTLE(
