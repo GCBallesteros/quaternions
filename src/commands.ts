@@ -110,14 +110,19 @@ export function buildCommandClosures(
     secondaryBodyVector: Vector3 | string,
     primaryTargetVector: Vector3 | string,
     secondaryTargetVector: Vector3 | string,
-  ): [number, number, number, number] | null {
-    return _findBestQuaternion(
+  ): [number, number, number, number] {
+    const result = _findBestQuaternion(
       state,
       primaryBodyVector,
       secondaryBodyVector,
       primaryTargetVector,
       secondaryTargetVector,
     );
+    if (result.ok) {
+      return result.val;
+    } else {
+      throw new Error(result.val);
+    }
   }
 
   function point(point: string): Point | null {

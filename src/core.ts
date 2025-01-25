@@ -241,7 +241,7 @@ export function _findBestQuaternion(
   secondaryVecArg: Vector3 | string,
   primaryTargetArg: Vector3 | string,
   secondaryTargetArg: Vector3 | string,
-): [number, number, number, number] | null {
+): Result<[number, number, number, number], string> {
   // Resolve all arguments
   const primaryBodyVector = resolveVector(state, primaryVecArg, true);
   const secondaryBodyVector = resolveVector(state, secondaryVecArg, true);
@@ -254,17 +254,18 @@ export function _findBestQuaternion(
     !primaryTargetVector ||
     !secondaryTargetVector
   ) {
-    log('Invalid inputs. Cannot compute quaternion.');
-    return null;
+    return Err('Invalid vectors provided. Cannot compute quaternion');
   }
 
   // Use the underlying function
-  return find_best_quaternion_for_desired_attitude(
+  const result = find_best_quaternion_for_desired_attitude(
     primaryBodyVector.toArray(),
     secondaryBodyVector.toArray(),
     primaryTargetVector.toArray(),
     secondaryTargetVector.toArray(),
   );
+
+  return Ok(result);
 }
 
 export function _createLine(
