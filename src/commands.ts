@@ -57,8 +57,13 @@ export function buildCommandClosures(
     name: string,
     startArg: string | Vector3,
     endArg: string | Vector3,
-  ) {
-    _create_line(scene, state, name, startArg, endArg);
+  ): void {
+    const result = _create_line(scene, state, name, startArg, endArg);
+    if (result.ok) {
+      return;
+    } else {
+      throw new Error(result.val);
+    }
   }
 
   function angle(vec1: string | Vector3, vec2: string | Vector3): number {

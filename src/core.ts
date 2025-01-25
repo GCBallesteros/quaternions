@@ -273,22 +273,20 @@ export function _create_line(
   name: string,
   startArg: Vector3 | string,
   endArg: Vector3 | string,
-): void {
+): Result<null, string> {
   if (!utils.validateName(name, state)) {
-    return; // Exit if name validation fails
+    return Err('Invalid line name or name already exists');
   }
 
   if (!name || typeof name !== 'string') {
-    log('Invalid line name. It must be a non-empty string.');
-    return;
+    return Err('Invalid line name. It must be a non-empty string');
   }
 
   const startPos = utils.getPositionOfPoint(state, startArg);
   const endPos = utils.getPositionOfPoint(state, endArg);
 
   if (!startPos || !endPos) {
-    log('Invalid points passed to create_line.');
-    return;
+    return Err('Invalid points provided for line creation');
   }
 
   // Create the line geometry
@@ -309,6 +307,8 @@ export function _create_line(
     start: startArg,
     end: endArg,
   };
+
+  return Ok(null);
 }
 
 export function addFrame(point: Point): OrientedPoint {
