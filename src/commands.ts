@@ -31,7 +31,12 @@ export function buildCommandClosures(
   }
 
   function rot(point_name: string, q: [number, number, number, number]): void {
-    _rot(state, point_name, q);
+    const result = _rot(state, point_name, q);
+    if (result.ok) {
+      return;
+    } else {
+      throw new Error(result.val);
+    }
   }
 
   function addPoint(name: string, coordinates: Vector3, quaternion = null) {

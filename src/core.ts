@@ -1,4 +1,5 @@
 import * as satellite from 'satellite.js';
+import { Ok, Err, Result } from 'ts-results';
 import * as THREE from 'three';
 import {
   createFloatingPoint,
@@ -16,26 +17,22 @@ export function _rot(
   state: State,
   point_name: string,
   q: [number, number, number, number],
-): void {
+): Result<null, string> {
   // q is xyzw
-  if (!state.points || !state.points[point_name]) {
-    log(`Point with name '${point_name}' does not exist in state.points.`);
-    return;
-  }
-
   const pt = state.points[point_name];
+
   if (!pt) {
-    log(`Point '${point_name}' does not exist.`);
-    return;
+    return Err(`Point '${point_name}' does not exist.`);
   }
 
   if (!(pt instanceof OrientedPoint)) {
-    log(`Point '${point_name}' is an instance of Point.`);
+    return Err(`Only instances of OrientedPoint can be rotated`);
   }
 
   const quaternion = new THREE.Quaternion(q[0], q[1], q[2], q[3]);
-
   pt.geometry.setRotationFromQuaternion(quaternion);
+
+  return Ok(null);
 }
 
 // Helper function to resolve a vector from various input formats
