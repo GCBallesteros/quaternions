@@ -347,6 +347,11 @@ export function _addPoint(
     }
 
     let new_point_: Point = createFloatingPoint();
+    new_point_.geometry.position.set(
+      coordinates[0],
+      coordinates[1],
+      coordinates[2],
+    );
     new_point = addFrame(new_point_);
     const q = new THREE.Quaternion(
       quaternion[0],
