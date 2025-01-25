@@ -125,12 +125,15 @@ export function buildCommandClosures(
     }
   }
 
-  function point(point: string): Point | null {
-    // Ensure the point exists in the state
-    if (!(point in state.points)) {
-      log('Point not available in the state.');
-      return null;
+  function point(point: string): Point {
+    if (!point || typeof point !== 'string') {
+      throw new Error('Point name must be a non-empty string');
     }
+    
+    if (!(point in state.points)) {
+      throw new Error(`Point '${point}' not found`);
+    }
+    
     return state.points[point];
   }
 
