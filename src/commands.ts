@@ -44,8 +44,13 @@ export function buildCommandClosures(
     }
   }
 
-  function addPoint(name: string, coordinates: Vector3, quaternion = null) {
-    _addPoint(scene, state, name, coordinates, quaternion);
+  function addPoint(name: string, coordinates: Vector3, quaternion = null): void {
+    const result = _addPoint(scene, state, name, coordinates, quaternion);
+    if (result.ok) {
+      return;
+    } else {
+      throw new Error(result.val);
+    }
   }
 
   function create_line(

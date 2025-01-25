@@ -329,33 +329,32 @@ export function _addPoint(
   name: string,
   coordinates: Vector3,
   quaternion: [number, number, number, number] | null = null,
-) {
+): Result<null, string> {
   if (!utils.validateName(name, state)) {
-    return;
+    return Err('Invalid point name or name already exists');
   }
+
   if (!name || !coordinates || coordinates.length !== 3) {
-    log(
-      "Invalid arguments: 'name' must be a string and 'coordinates' must be an array of 3 numbers.",
+    return Err(
+      "'name' must be a string and 'coordinates' must be an array of 3 numbers",
     );
-    return;
   }
 
   var new_point: Point | OrientedPoint;
   if (quaternion !== null) {
     if (quaternion.length !== 4) {
-      log('Invalid quaternion in addPoint');
-      return null;
-    } else {
-      let new_point_: Point = createFloatingPoint();
-      new_point = addFrame(new_point_);
-      const q = new THREE.Quaternion(
-        quaternion[0],
-        quaternion[1],
-        quaternion[2],
-        quaternion[3],
-      ); // xyzw
-      new_point.geometry.setRotationFromQuaternion(q);
+      return Err('Invalid quaternion: must have exactly 4 components');
     }
+
+    let new_point_: Point = createFloatingPoint();
+    new_point = addFrame(new_point_);
+    const q = new THREE.Quaternion(
+      quaternion[0],
+      quaternion[1],
+      quaternion[2],
+      quaternion[3],
+    ); // xyzw
+    new_point.geometry.setRotationFromQuaternion(q);
   } else {
     new_point = createFloatingPoint();
     new_point.geometry.position.set(
@@ -367,6 +366,7 @@ export function _addPoint(
 
   state.points[name] = new_point;
   scene.add(new_point.geometry);
+  return Ok(null);
 }
 
 export async function _mov2sat(
