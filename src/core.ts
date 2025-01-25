@@ -95,13 +95,13 @@ export function _angle(
   state: State,
   vec1Arg: Vector3 | string,
   vec2Arg: Vector3 | string,
-): number | null {
+): Result<number, string> {
   // Resolve both vectors
   const vec1 = resolveVector(state, vec1Arg);
   const vec2 = resolveVector(state, vec2Arg);
 
   if (!vec1 || !vec2) {
-    return null; // If either vector is invalid, return null
+    return Err('Invalid vectors provided');
   }
 
   // Calculate the angle
@@ -109,8 +109,7 @@ export function _angle(
   const magnitudeProduct = vec1.length() * vec2.length();
 
   if (magnitudeProduct === 0) {
-    log('Cannot calculate angle with zero-length vector.');
-    return null;
+    return Err('Cannot calculate angle with zero-length vector');
   }
 
   const cosineAngle = THREE.MathUtils.clamp(
@@ -120,7 +119,7 @@ export function _angle(
   ); // Clamp to avoid numerical errors
   const angleRadians = Math.acos(cosineAngle);
 
-  return THREE.MathUtils.radToDeg(angleRadians);
+  return Ok(THREE.MathUtils.radToDeg(angleRadians));
 }
 
 export function _mov(

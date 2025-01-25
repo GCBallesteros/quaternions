@@ -61,8 +61,13 @@ export function buildCommandClosures(
     _create_line(scene, state, name, startArg, endArg);
   }
 
-  function angle(vec1: string | Vector3, vec2: string | Vector3) {
-    return _angle(state, vec1, vec2);
+  function angle(vec1: string | Vector3, vec2: string | Vector3): number {
+    const result = _angle(state, vec1, vec2);
+    if (result.ok) {
+      return result.val;
+    } else {
+      throw new Error(result.val);
+    }
   }
 
   function rad2deg(x: number): number {
