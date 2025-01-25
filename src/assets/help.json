@@ -58,7 +58,7 @@
         "description": "Lists all points currently in the state.",
         "arguments": []
     },
-    "create_line": {
+    "createLine": {
         "description": "Creates a line between two points or coordinates.",
         "arguments": [
             {

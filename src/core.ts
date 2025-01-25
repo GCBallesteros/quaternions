@@ -267,7 +267,7 @@ export function _findBestQuaternion(
   );
 }
 
-export function _create_line(
+export function _createLine(
   scene: THREE.Scene,
   state: State,
   name: string,

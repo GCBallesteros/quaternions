@@ -56,7 +56,7 @@ mov("sat", satellite_location_geo, true);
 // Add a point over the previously calculated coords
 addPoint("KS", target_coords_ecef);
 // Connect "sat" to new point
-create_line("sat2KS", "sat", "KS");
+createLine("sat2KS", "sat", "KS");
 // Rotate 'sat' to buggy quaternion
 rot("sat", satellite_bad_quat);
 // Calculate angle between z-axis of 'sat' and 'sat2KS'

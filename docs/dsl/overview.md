@@ -81,7 +81,7 @@ also introduced.
 ### 4. [**Geometry Commands**](/dsl/geometry-commands)  
 
 Explore tools for creating and managing points, lines, and angles in the scene.
-Examples include `addPoint`, `create_line`, and `angle`.
+Examples include `addPoint`, `createLine`, and `angle`.
 
 ### 5. [**Camera Commands**](/dsl/cameras)
 

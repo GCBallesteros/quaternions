@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { updateSunLight } from './astronomy.js';
 import { createFloatingPoint } from './components.js';
-import { _create_line, _mov, addFrame } from './core.js';
+import { _createLine, _mov, addFrame } from './core.js';
 import { makeEarth } from './earth.js';
 import { State } from './types.js';
 
@@ -23,7 +23,7 @@ export function addInitGeometries(state: State, scene: THREE.Scene): void {
   state.points['sat'] = addFrame(createFloatingPoint());
   scene.add(state.points['sat'].geometry);
   _mov(state, 'sat', [39, 0, 500], true);
-  _create_line(scene, state, 'nadir', [0, 0, 0], 'sat');
+  _createLine(scene, state, 'nadir', [0, 0, 0], 'sat');
 }
 
 export function initScene(

@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {
   _addPoint as _addPoint,
   _angle,
-  _create_line,
+  _createLine,
   _fetchTLE,
   _findBestQuaternion,
   _mov,
@@ -53,12 +53,12 @@ export function buildCommandClosures(
     }
   }
 
-  function create_line(
+  function createLine(
     name: string,
     startArg: string | Vector3,
     endArg: string | Vector3,
   ): void {
-    const result = _create_line(scene, state, name, startArg, endArg);
+    const result = _createLine(scene, state, name, startArg, endArg);
     if (result.ok) {
       return;
     } else {
@@ -149,7 +149,7 @@ export function buildCommandClosures(
     mov: mov,
     rot: rot,
     addPoint: addPoint,
-    create_line: create_line,
+    createLine: createLine,
     angle: angle,
     rad2deg: rad2deg,
     deg2rad: deg2rad,

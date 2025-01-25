@@ -19,7 +19,7 @@ a basis frame attached to it with the orientation implied by the quaternion.
 addPoint("point1", [6371, 0, 0], [0, 0, 0, 1]);
 ```
 
-## create_line
+## createLine
 
 Creates a line between two points or coordinates.
 

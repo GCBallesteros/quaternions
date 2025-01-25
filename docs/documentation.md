@@ -47,7 +47,7 @@ let ksCoords = geo2xyz([60.186, 24.828, 0]);
 addPoint("KS", ksCoords);
 
 // Create a line between satellite and point
-create_line("sat2KS", "sat", "KS");
+createLine("sat2KS", "sat", "KS");
 
 // Apply a test quaternion rotation
 rot("sat", [-0.6313439, -0.1346824, -0.6313439, -0.4297329]);

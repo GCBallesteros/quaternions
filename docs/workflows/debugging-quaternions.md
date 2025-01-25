@@ -16,7 +16,7 @@ mov("sat", satellitePosition, true);
 let pointOfInterestCoords = geo2xyz([60.186, 24.828, 0]);
 addPoint("KS", pointOfInterestCoords);
 
-create_line("sat2KS", "sat", "KS");
+createLine("sat2KS", "sat", "KS");
 
 let rotationQuaternion = [-0.6313439, -0.1346824, -0.6313439, -0.4297329];
 rot("sat", rotationQuaternion);
@@ -66,14 +66,14 @@ addPoint("KS", pointOfInterestCoords);
 ## 3. Connect the Satellite and Point
 
 Create a line (`sat2KS`) between the satellite and the point of interest to
-visualize their connection. The [`create_line`](/dsl/geometry-commands/#create_line) function can take either:
+visualize their connection. The [`createLine`](/dsl/geometry-commands/#createLine) function can take either:
 - The names of registered points (e.g., `"sat"` and `"KS"`)
 - Raw ECEF coordinates (tuples of three numbers)
 
 Here, we use the registered points for simplicity and clarity.
 
 ```javascript
-create_line("sat2KS", "sat", "KS");
+createLine("sat2KS", "sat", "KS");
 ```
 
 ## 4. Rotate the Satellite and Analyze Orientation
