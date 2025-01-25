@@ -424,29 +424,32 @@ export async function _mov2sat(
 export async function _fetchTLE(
   state: State,
   norad_id: string,
-): Promise<string> {
+): Promise<Result<string, string>> {
   // Check if TLE data already exists in the cache
   if (state.tles[norad_id]) {
-    log(`Using cached TLE for COSPAR ID:, ${norad_id}`);
-    return state.tles[norad_id]; // Return cached TLE
+    log(`Using cached TLE for COSPAR ID: ${norad_id}`);
+    return Ok(state.tles[norad_id]);
   }
 
-  // If not cached, fetch the TLE data from Celestrak
-  const url = `https://celestrak.org/NORAD/elements/gp.php?CATNR=${encodeURIComponent(norad_id)}&FORMAT=3LE`;
+  try {
+    // If not cached, fetch the TLE data from Celestrak
+    const url = `https://celestrak.org/NORAD/elements/gp.php?CATNR=${encodeURIComponent(norad_id)}&FORMAT=3LE`;
+    const response = await fetch(url);
 
-  const response = await fetch(url);
+    if (!response.ok) {
+      return Err(`Failed to fetch TLE: ${response.status} - ${response.statusText}`);
+    }
 
-  if (!response.ok) {
-    throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    const data = await response.text();
+
+    // Cache the fetched TLE in the state variable under the COSPAR ID
+    state.tles[norad_id] = data;
+    log(`Fetched and cached TLE for COSPAR ID: ${norad_id}`);
+
+    return Ok(data);
+  } catch (error) {
+    return Err(`Error fetching TLE: ${error instanceof Error ? error.message : String(error)}`);
   }
-
-  const data = await response.text();
-
-  // Cache the fetched TLE in the state variable under the COSPAR ID
-  state.tles[norad_id] = data;
-  log(`Fetched and cached TLE for COSPAR ID: ${norad_id}`);
-
-  return data;
 }
 
 export function _setTime(state: State, newTime: Date): void {

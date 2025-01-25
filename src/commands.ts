@@ -79,7 +79,12 @@ export function buildCommandClosures(
   }
 
   async function fetchTLE(norad_id: string): Promise<string> {
-    return _fetchTLE(state, norad_id);
+    const result = await _fetchTLE(state, norad_id);
+    if (result.ok) {
+      return result.val;
+    } else {
+      throw new Error(result.val);
+    }
   }
 
   async function mov2sat(
