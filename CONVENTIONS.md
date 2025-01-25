@@ -68,3 +68,4 @@ A 3D visualization tool for satellite positioning and orientation, featuring:
    - Provide clear error messages
    - Handle errors gracefully
    - Log useful feedback to users
+   - Make use of the Result type where appropriate to handle errors in favour of using exceptions
