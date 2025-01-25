@@ -35,24 +35,22 @@ export function _rot(
   return Ok(null);
 }
 
-// Helper function to resolve a vector from various input formats
-// AI! Use the Result type for resolveVector and modify other places where resolveVector is used apprpriately
 function resolveVector(
   state: State,
   arg: string | Vector3,
   allowBodyVectors: boolean = false,
-): THREE.Vector3 | null {
+): Result<THREE.Vector3, string> {
   if (Array.isArray(arg) && arg.length === 3) {
-    return new THREE.Vector3(arg[0], arg[1], arg[2]);
+    return Ok(new THREE.Vector3(arg[0], arg[1], arg[2]));
   } else if (typeof arg === 'string') {
     if (allowBodyVectors) {
       switch (arg.toLowerCase()) {
         case 'x':
-          return new THREE.Vector3(1, 0, 0);
+          return Ok(new THREE.Vector3(1, 0, 0));
         case 'y':
-          return new THREE.Vector3(0, 1, 0);
+          return Ok(new THREE.Vector3(0, 1, 0));
         case 'z':
-          return new THREE.Vector3(0, 0, 1);
+          return Ok(new THREE.Vector3(0, 0, 1));
       }
     }
 
@@ -62,34 +60,30 @@ function resolveVector(
       const endPos = utils.getPositionOfPoint(state, endName);
 
       if (!startPos || !endPos) {
-        log(`Invalid points in vector definition '${arg}'.`);
-        return null;
+        return Err(`Invalid points in vector definition '${arg}'`);
       }
 
-      return endPos.clone().sub(startPos);
+      return Ok(endPos.clone().sub(startPos));
     } else if (state.lines[arg]) {
       const line = state.lines[arg];
       const startPos = utils.getPositionOfPoint(state, line.start);
       const endPos = utils.getPositionOfPoint(state, line.end);
 
       if (!startPos || !endPos) {
-        log(`Invalid line '${arg}' in state.lines.`);
-        return null;
+        return Err(`Invalid line '${arg}' in state.lines`);
       }
 
-      return endPos.clone().sub(startPos);
+      return Ok(endPos.clone().sub(startPos));
     }
 
-    log(`Invalid string argument '${arg}'.`);
-    return null;
+    return Err(`Invalid string argument '${arg}'`);
   }
 
-  log(
+  return Err(
     allowBodyVectors
-      ? "Vector must be an array of 3 values or one of 'x', 'y', 'z'."
-      : 'Vector must be an array of 3 values, a line name, or "<start>-><end>".',
+      ? "Vector must be an array of 3 values or one of 'x', 'y', 'z'"
+      : 'Vector must be an array of 3 values, a line name, or "<start>-><end>"',
   );
-  return null;
 }
 
 export function _angle(
@@ -98,12 +92,14 @@ export function _angle(
   vec2Arg: Vector3 | string,
 ): Result<number, string> {
   // Resolve both vectors
-  const vec1 = resolveVector(state, vec1Arg);
-  const vec2 = resolveVector(state, vec2Arg);
+  const vec1Result = resolveVector(state, vec1Arg);
+  const vec2Result = resolveVector(state, vec2Arg);
 
-  if (!vec1 || !vec2) {
-    return Err('Invalid vectors provided');
-  }
+  if (!vec1Result.ok) return Err(vec1Result.val);
+  if (!vec2Result.ok) return Err(vec2Result.val);
+
+  const vec1 = vec1Result.val;
+  const vec2 = vec2Result.val;
 
   // Calculate the angle
   const dotProduct = vec1.dot(vec2);
@@ -227,19 +223,20 @@ export function _findBestQuaternion(
   secondaryTargetArg: Vector3 | string,
 ): Result<[number, number, number, number], string> {
   // Resolve all arguments
-  const primaryBodyVector = resolveVector(state, primaryVecArg, true);
-  const secondaryBodyVector = resolveVector(state, secondaryVecArg, true);
-  const primaryTargetVector = resolveVector(state, primaryTargetArg, false);
-  const secondaryTargetVector = resolveVector(state, secondaryTargetArg, false);
+  const primaryBodyVectorResult = resolveVector(state, primaryVecArg, true);
+  const secondaryBodyVectorResult = resolveVector(state, secondaryVecArg, true);
+  const primaryTargetVectorResult = resolveVector(state, primaryTargetArg, false);
+  const secondaryTargetVectorResult = resolveVector(state, secondaryTargetArg, false);
 
-  if (
-    !primaryBodyVector ||
-    !secondaryBodyVector ||
-    !primaryTargetVector ||
-    !secondaryTargetVector
-  ) {
-    return Err('Invalid vectors provided. Cannot compute quaternion');
-  }
+  if (!primaryBodyVectorResult.ok) return Err(primaryBodyVectorResult.val);
+  if (!secondaryBodyVectorResult.ok) return Err(secondaryBodyVectorResult.val);
+  if (!primaryTargetVectorResult.ok) return Err(primaryTargetVectorResult.val);
+  if (!secondaryTargetVectorResult.ok) return Err(secondaryTargetVectorResult.val);
+
+  const primaryBodyVector = primaryBodyVectorResult.val;
+  const secondaryBodyVector = secondaryBodyVectorResult.val;
+  const primaryTargetVector = primaryTargetVectorResult.val;
+  const secondaryTargetVector = secondaryTargetVectorResult.val;
 
   // Use the underlying function
   const result = find_best_quaternion_for_desired_attitude(
