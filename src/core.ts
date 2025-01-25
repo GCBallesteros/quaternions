@@ -36,6 +36,7 @@ export function _rot(
 }
 
 // Helper function to resolve a vector from various input formats
+// AI! Use the Result type for resolveVector and modify other places where resolveVector is used apprpriately
 function resolveVector(
   state: State,
   arg: string | Vector3,
