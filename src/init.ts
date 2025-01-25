@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { updateSunLight } from './astronomy.js';
+import { updateSunLight } from './astronomy/astronomy.js';
 import { createFloatingPoint } from './components.js';
 import { _createLine, _mov, addFrame } from './core.js';
 import { makeEarth } from './earth.js';
