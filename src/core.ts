@@ -11,7 +11,7 @@ import { log } from './logger.js';
 import { OrientedPoint, Point } from './point.js';
 import { State, Vector3 } from './types.js';
 import * as utils from './utils.js';
-import { updateSunLight } from './astronomy/astronomy.js';
+import { updateSunLight } from './astronomy/sun.js';
 
 export function _rot(
   state: State,
