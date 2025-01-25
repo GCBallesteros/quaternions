@@ -11,9 +11,7 @@ import {
   _rot,
   _setTime,
 } from './core.js';
-import { _help } from './help.js';
 
-import { log } from './logger.js';
 import { Point } from './point.js';
 import { CommandFunction, State, Vector3 } from './types.js';
 
@@ -44,7 +42,11 @@ export function buildCommandClosures(
     }
   }
 
-  function addPoint(name: string, coordinates: Vector3, quaternion = null): void {
+  function addPoint(
+    name: string,
+    coordinates: Vector3,
+    quaternion = null,
+  ): void {
     const result = _addPoint(scene, state, name, coordinates, quaternion);
     if (result.ok) {
       return;
@@ -129,16 +131,12 @@ export function buildCommandClosures(
     if (!point || typeof point !== 'string') {
       throw new Error('Point name must be a non-empty string');
     }
-    
+
     if (!(point in state.points)) {
       throw new Error(`Point '${point}' not found`);
     }
-    
-    return state.points[point];
-  }
 
-  function help(commandName: string): void {
-    _help(commandName);
+    return state.points[point];
   }
 
   function reset(): void {
@@ -165,7 +163,6 @@ export function buildCommandClosures(
     mov2sat: mov2sat,
     findBestQuaternion: findBestQuaternion,
     point: point,
-    help: help,
     reset: reset,
     setTime: setTime,
     listPoints: listPoints,
