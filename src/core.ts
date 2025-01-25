@@ -451,10 +451,14 @@ export async function _fetchTLE(
   }
 }
 
-export function _setTime(state: State, newTime: Date): void {
+export function _setTime(state: State, newTime: Date): Result<null, string> {
+  if (!(newTime instanceof Date)) {
+    return Err('Invalid time: must be a Date object');
+  }
   state.currentTime = newTime;
   updateSunLight(state.lights.sun, newTime);
   log(`Simulation time set to: ${newTime.toISOString()}`);
+  return Ok(null);
 }
 
 export function _reset(
@@ -464,14 +468,14 @@ export function _reset(
 ): void {
   for (const pointName in state.points) {
     const point = state.points[pointName];
-    scene.remove(point.geometry); // Remove from the scene
-    delete state.points[pointName]; // Remove from the state
+    scene.remove(point.geometry);
+    delete state.points[pointName];
   }
 
   for (const lineName in state.lines) {
     const line = state.lines[lineName].line;
-    scene.remove(line); // Remove from the scene
-    delete state.lines[lineName]; // Remove from the state
+    scene.remove(line);
+    delete state.lines[lineName];
   }
 
   addInitGeometries(state, scene);

@@ -144,7 +144,10 @@ export function buildCommandClosures(
   }
 
   function setTime(newTime: Date): void {
-    _setTime(state, newTime);
+    const result = _setTime(state, newTime);
+    if (!result.ok) {
+      throw new Error(result.val);
+    }
   }
 
   function listPoints(): string[] {
