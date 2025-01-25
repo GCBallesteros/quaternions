@@ -27,7 +27,12 @@ export function buildCommandClosures(
     pos: Vector3,
     use_geo: boolean = false,
   ): void {
-    _mov(state, point_name, pos, use_geo);
+    const result = _mov(state, point_name, pos, use_geo);
+    if (result.ok) {
+      return;
+    } else {
+      throw new Error(result.val);
+    }
   }
 
   function rot(point_name: string, q: [number, number, number, number]): void {

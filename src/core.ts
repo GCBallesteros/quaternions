@@ -128,12 +128,15 @@ export function _mov(
   point_name: string,
   pos: Vector3,
   use_geo: boolean = false,
-): void {
+): Result<null, string> {
   if (!state.points[point_name]) {
-    log(`Point '${point_name}' does not exist.`);
-    return;
+    return Err(`Point '${point_name}' does not exist.`);
   }
   let point = state.points[point_name];
+
+  if (pos.length !== 3) {
+    return Err('Position vector must have exactly 3 components');
+  }
 
   let x: number, y: number, z: number;
   if (!use_geo) {
@@ -142,6 +145,8 @@ export function _mov(
     [x, y, z] = utils.geo2xyz(pos);
   }
   point.position = [x, y, z];
+
+  return Ok(null);
 }
 
 export function find_best_quaternion_for_desired_attitude(
