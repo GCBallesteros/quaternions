@@ -5,7 +5,7 @@ const OBLIQUITY = 23.43929111; // degrees
 const EPOCH = 2451545.0; // J2000 (2000 January 1.5)
 const PI = Math.PI;
 
-function toRad(deg: number): number {
+export function toRad(deg: number): number {
   return deg * (PI / 180.0);
 }
 

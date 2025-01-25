@@ -21,6 +21,8 @@ import { log } from './logger.js';
 
 // EXTRA FEATURES
 // TODO: Add Moon object
+// TODO: Add Moon point for findBestQuaternion
+// TODO: validateName should make sure we don't use Sun or Moon
 // TODO: Add Satellite class and have them fly around
 // TODO: Transition smoothly between cameras
 // TODO: Show coordinates over the Earth
