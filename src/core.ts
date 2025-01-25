@@ -154,30 +154,12 @@ export function find_best_quaternion_for_desired_attitude(
   primary_body_vector_target: Vector3,
   secondary_body_vector_target: Vector3,
 ): [number, number, number, number] {
-  // AI! Can we cleanup the next 4 assignments. I'm thinking a map over the input vectors and a list destructring
-  const primaryVector = new THREE.Vector3(
-    primary_body_vector[0],
-    primary_body_vector[1],
-    primary_body_vector[2],
-  ).normalize();
-
-  const primaryTargetVector = new THREE.Vector3(
-    primary_body_vector_target[0],
-    primary_body_vector_target[1],
-    primary_body_vector_target[2],
-  ).normalize();
-
-  const secondaryVector = new THREE.Vector3(
-    secondary_body_vector[0],
-    secondary_body_vector[1],
-    secondary_body_vector[2],
-  ).normalize();
-
-  const secondaryTargetVector = new THREE.Vector3(
-    secondary_body_vector_target[0],
-    secondary_body_vector_target[1],
-    secondary_body_vector_target[2],
-  ).normalize();
+  const [primaryVector, primaryTargetVector, secondaryVector, secondaryTargetVector] = [
+    primary_body_vector,
+    primary_body_vector_target,
+    secondary_body_vector,
+    secondary_body_vector_target,
+  ].map(vec => new THREE.Vector3(...vec).normalize());
 
   const primaryQuaternion = new THREE.Quaternion().setFromUnitVectors(
     primaryVector,
