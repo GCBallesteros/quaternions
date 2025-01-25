@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>3D Visualization with Monaco Editor</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
     <script type="importmap">
       {
         "imports": {
@@ -26,13 +26,16 @@
   <body>
     <div id="canvas-container">
       <canvas id="webgl-canvas"></canvas>
+      <div id="time-controls">
+        <button id="time-toggle">Start</button>
+      </div>
     </div>
 
     <div id="resizer"></div>
     <div id="editor-container">
       <div id="monaco-editor"></div>
       <button id="execute">Execute</button>
-      <div id="output"></div> <!-- The output div added here -->
+      <div id="output"></div>
     </div>
 
     <script type="module" src="/src/main.ts"></script>

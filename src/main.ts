@@ -135,7 +135,23 @@ function resizeCanvas(): void {
   });
 }
 
-//function resizeCanvas() {
+let isTimeRunning = false;
+const timeToggleButton = document.getElementById(
+  'time-toggle',
+) as HTMLButtonElement;
+
+timeToggleButton.addEventListener('click', () => {
+  isTimeRunning = !isTimeRunning;
+  timeToggleButton.textContent = isTimeRunning ? 'Stop' : 'Start';
+  timeToggleButton.classList.toggle('paused', !isTimeRunning);
+
+  if (isTimeRunning) {
+    console.log('Time is running');
+  } else {
+    console.log('Time is not running');
+  }
+});
+
 window.addEventListener('resize', resizeCanvas);
 
 log(
