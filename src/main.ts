@@ -2,26 +2,32 @@ import * as monaco from 'monaco-editor';
 
 import { createAnimator, initScene, initializeCanvas } from './init.js';
 import { buildExecuteCommand } from './terminal.js';
+import { updateTimeDisplay } from './ui.js';
 import { getPositionOfPoint } from './utils.js';
 
 import { buildCommandClosures } from './commands.js';
 import { log } from './logger.js';
 
+// CURRENT
+// TODO: Understand new code and refactor as necessary
+// TODO: Add Moon object
+// TODO: Add Moon point for findBestQuaternion
+// TODO: Add sun switch
+
 // DOCUMENTATION EFFORTS
 // TODO: Add images to documentation
 // TODO: Add pretty star backdrop
+// TODO: Add diagram to findBestQuaternion documentation
+// TODO: What's on a TLE docs
 
 // REFACTORING
 // TODO: Improve name of createAnimator
-// TODO: Improve how we buildExecuteCommand
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
 // TODO: Improve consistency on how we pass points around
 // TODO: Expose more options for object creation, widths, colors ...
 // TODO: Normalize quats before applying
 
 // EXTRA FEATURES
-// TODO: Add Moon object
-// TODO: Add Moon point for findBestQuaternion
 // TODO: validateName should make sure we don't use Sun or Moon
 // TODO: Add Satellite class and have them fly around
 // TODO: Transition smoothly between cameras
@@ -82,6 +88,31 @@ log(angle_between_pointing_and_target);
 // );
 // rot("sat", good_quat);
 `;
+
+// Setup tab switching
+const tabButtons = document.querySelectorAll('.tab-button');
+const tabContents = document.querySelectorAll('.tab-content');
+
+tabButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    const tabName = button.getAttribute('data-tab');
+
+    // Update active states
+    tabButtons.forEach((btn) => btn.classList.remove('active'));
+    tabContents.forEach((content) => content.classList.remove('active'));
+
+    button.classList.add('active');
+    document.getElementById(`${tabName}-container`)?.classList.add('active');
+
+    // Trigger Monaco editor resize if editor tab is activated
+    if (tabName === 'editor') {
+      editor.layout();
+    }
+  });
+});
+
+// Initialize time display
+updateTimeDisplay(state);
 
 const editor = monaco.editor.create(
   document.getElementById('monaco-editor') as HTMLElement,
@@ -159,8 +190,12 @@ resizer.addEventListener('mousedown', (event) => {
 function onMouseMove(event: MouseEvent) {
   const totalWidth = window.innerWidth;
   const leftWidth = event.clientX;
+  const rightWidth = totalWidth - leftWidth - resizer.clientWidth;
   canvasContainer.style.width = `${leftWidth}px`;
-  editorContainer.style.width = `${totalWidth - leftWidth - resizer.clientWidth}px`;
+  const rightPanel = document.getElementById('right-panel');
+  if (rightPanel) {
+    rightPanel.style.width = `${rightWidth}px`;
+  }
   resizeCanvas(); // Call your resizing logic live as you drag
 }
 resizeCanvas();

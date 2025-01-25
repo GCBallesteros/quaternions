@@ -29,10 +29,22 @@
     </div>
 
     <div id="resizer"></div>
-    <div id="editor-container">
-      <div id="monaco-editor"></div>
-      <button id="execute">Execute</button>
-      <div id="output"></div> <!-- The output div added here -->
+    <div id="right-panel">
+      <div class="tabs">
+        <button class="tab-button active" data-tab="editor">Editor</button>
+        <button class="tab-button" data-tab="settings">Settings</button>
+      </div>
+      <div id="editor-container" class="tab-content active">
+        <div id="monaco-editor"></div>
+        <button id="execute">Execute</button>
+        <div id="output"></div>
+      </div>
+      <div id="settings-container" class="tab-content">
+        <div class="settings-group">
+          <h3>Simulation Time</h3>
+          <div id="current-time"></div>
+        </div>
+      </div>
     </div>
 
     <script type="module" src="/src/main.ts"></script>

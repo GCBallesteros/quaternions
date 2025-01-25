@@ -1,4 +1,4 @@
-import { toRad, dateToJulian } from './sun';
+import { toRad, dateToJulian } from './sun.js';
 
 // Synodic month (new Moon to new Moon)
 const SYNODIC_MONTH = 29.53058868;

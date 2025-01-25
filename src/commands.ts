@@ -1,26 +1,27 @@
 import * as THREE from 'three';
 import {
-  _addPoint as _addPoint,
-  _angle,
-  _createLine,
-  _fetchTLE,
-  _findBestQuaternion,
-  _mov,
-  _mov2sat,
-  _reset,
-  _rot,
-  _setTime,
+    _addPoint,
+    _angle,
+    _createLine,
+    _fetchTLE,
+    _findBestQuaternion,
+    _mov,
+    _mov2sat,
+    _reset,
+    _rot,
+    _setTime,
 } from './core.js';
+import { updateTimeDisplay } from './ui.js';
 
 import { Point } from './point.js';
 import { CommandFunction, State, Vector3 } from './types.js';
 import {
-  geo2xyz,
-  getPositionOfPoint,
-  sph2xyz,
-  validateName,
-  xyz2geo,
-  xyz2sph,
+    geo2xyz,
+    getPositionOfPoint,
+    sph2xyz,
+    validateName,
+    xyz2geo,
+    xyz2sph,
 } from './utils.js';
 
 export function buildCommandClosures(
@@ -156,6 +157,7 @@ export function buildCommandClosures(
     if (!result.ok) {
       throw new Error(result.val);
     }
+    updateTimeDisplay(state);
   }
 
   function listPoints(): string[] {

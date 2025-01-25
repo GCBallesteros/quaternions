@@ -442,6 +442,7 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
   if (!(newTime instanceof Date)) {
     return Err('Invalid time: must be a Date object');
   }
+  
   state.currentTime = newTime;
   updateSunLight(state.lights.sun, newTime);
   log(`Simulation time set to: ${newTime.toISOString()}`);
