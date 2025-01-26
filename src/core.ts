@@ -61,23 +61,23 @@ function resolveVector(
       const endPos = utils.getPositionOfPoint(state, endName);
 
       if (!startPos || !endPos) {
-        const startPos = startName === 'Moon' 
-          ? state.bodies.moon.position 
-          : utils.getPositionOfPoint(state, startName);
-        const endPos = endName === 'Moon'
-          ? state.bodies.moon.position
-          : utils.getPositionOfPoint(state, endName);
+        const startPos =
+          startName === 'Moon'
+            ? state.bodies.moon.position
+            : utils.getPositionOfPoint(state, startName);
+        const endPos =
+          endName === 'Moon'
+            ? state.bodies.moon.position
+            : utils.getPositionOfPoint(state, endName);
 
         if (!startPos || !endPos) {
           return Err(`Invalid points in vector definition '${arg}'`);
         }
 
-        return Ok(endPos instanceof THREE.Vector3 
-          ? endPos.clone().sub(startPos instanceof THREE.Vector3 ? startPos : new THREE.Vector3(...startPos))
-          : new THREE.Vector3(...endPos).sub(startPos instanceof THREE.Vector3 ? startPos : new THREE.Vector3(...startPos)));
+        return Ok(endPos.clone().sub(startPos));
+      } else {
+        return Err(`Invalid points in vector definition '${arg}'`);
       }
-
-      return Ok(endPos.clone().sub(startPos));
     } else if (state.lines[arg]) {
       const line = state.lines[arg];
       const startPos = utils.getPositionOfPoint(state, line.start);
@@ -165,12 +165,17 @@ export function find_best_quaternion_for_desired_attitude(
   primary_body_vector_target: Vector3,
   secondary_body_vector_target: Vector3,
 ): [number, number, number, number] {
-  const [primaryVector, primaryTargetVector, secondaryVector, secondaryTargetVector] = [
+  const [
+    primaryVector,
+    primaryTargetVector,
+    secondaryVector,
+    secondaryTargetVector,
+  ] = [
     primary_body_vector,
     primary_body_vector_target,
     secondary_body_vector,
     secondary_body_vector_target,
-  ].map(vec => new THREE.Vector3(...vec).normalize());
+  ].map((vec) => new THREE.Vector3(...vec).normalize());
 
   const primaryQuaternion = new THREE.Quaternion().setFromUnitVectors(
     primaryVector,
@@ -239,13 +244,22 @@ export function _findBestQuaternion(
   // Resolve all arguments
   const primaryBodyVectorResult = resolveVector(state, primaryVecArg, true);
   const secondaryBodyVectorResult = resolveVector(state, secondaryVecArg, true);
-  const primaryTargetVectorResult = resolveVector(state, primaryTargetArg, false);
-  const secondaryTargetVectorResult = resolveVector(state, secondaryTargetArg, false);
+  const primaryTargetVectorResult = resolveVector(
+    state,
+    primaryTargetArg,
+    false,
+  );
+  const secondaryTargetVectorResult = resolveVector(
+    state,
+    secondaryTargetArg,
+    false,
+  );
 
   if (!primaryBodyVectorResult.ok) return Err(primaryBodyVectorResult.val);
   if (!secondaryBodyVectorResult.ok) return Err(secondaryBodyVectorResult.val);
   if (!primaryTargetVectorResult.ok) return Err(primaryTargetVectorResult.val);
-  if (!secondaryTargetVectorResult.ok) return Err(secondaryTargetVectorResult.val);
+  if (!secondaryTargetVectorResult.ok)
+    return Err(secondaryTargetVectorResult.val);
 
   const primaryBodyVector = primaryBodyVectorResult.val;
   const secondaryBodyVector = secondaryBodyVectorResult.val;
@@ -456,14 +470,14 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
   if (!(newTime instanceof Date)) {
     return Err('Invalid time: must be a Date object');
   }
-  
+
   state.currentTime = newTime;
-  
+
   // Update celestial bodies positions
   updateSunLight(state.lights.sun, newTime);
   const moonPos = getMoonPosition(newTime);
   state.bodies.moon.position.set(...moonPos.position);
-  
+
   log(`Simulation time set to: ${newTime.toISOString()}`);
   return Ok(null);
 }
