@@ -44,6 +44,10 @@ function resolveVector(
   if (Array.isArray(arg) && arg.length === 3) {
     return Ok(new THREE.Vector3(arg[0], arg[1], arg[2]));
   } else if (typeof arg === 'string') {
+    if (arg === 'Moon') {
+      return Ok(new THREE.Vector3().copy(state.bodies.moon.position));
+    }
+
     if (allowBodyVectors) {
       switch (arg.toLowerCase()) {
         case 'x':

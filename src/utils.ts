@@ -23,11 +23,17 @@ export function getPositionOfPoint(
 
 export function validateName(name: string, state: State): boolean {
   const namePattern = /^[a-zA-Z0-9_-]+$/; // Alphanumeric, underscores, and dashes
+  const reservedNames = ['Moon', 'Sun'];
 
   if (!namePattern.test(name)) {
     log(
       `Error: Name '${name}' must be alphanumeric and may contain underscores (_) or dashes (-).`,
     );
+    return false;
+  }
+
+  if (reservedNames.includes(name)) {
+    log(`Error: Name '${name}' is reserved for celestial bodies.`);
     return false;
   }
 
