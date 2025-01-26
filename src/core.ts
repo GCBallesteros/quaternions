@@ -44,6 +44,7 @@ function resolveVector(
   if (Array.isArray(arg) && arg.length === 3) {
     return Ok(new THREE.Vector3(arg[0], arg[1], arg[2]));
   } else if (typeof arg === 'string') {
+    // AI! This actually not quite correct. I want to be able to use the Moon as another point within the -> style syntax
     if (arg === 'Moon') {
       return Ok(new THREE.Vector3().copy(state.bodies.moon.position));
     }
