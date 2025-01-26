@@ -21,4 +21,5 @@ export interface State {
   currentTime: Date;
   tles: Record<string, string>;
   cameras: Record<string, THREE.PerspectiveCamera>;
+  bodies: { moon: THREE.Mesh };
 }

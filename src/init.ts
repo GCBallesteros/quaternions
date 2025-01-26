@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { updateSunLight } from './astronomy/sun.js';
+import { getMoonPosition } from './astronomy/moon.js';
+import { makeMoon } from './moon.js';
 import { createFloatingPoint } from './components.js';
 import { _createLine, _mov, addFrame } from './core.js';
 import { makeEarth } from './earth.js';
@@ -47,6 +49,10 @@ export function initScene(
   const sunLight = new THREE.DirectionalLight(0xffffff, 7.0);
   scene.add(sunLight);
 
+  // Initialize Moon
+  const moon = makeMoon();
+  scene.add(moon);
+
   let state: State = {
     points: {},
     lines: {},
@@ -54,14 +60,19 @@ export function initScene(
     tles: {},
     currentTime: new Date(),
     cameras: { main: camera },
+    bodies: { moon },
   };
 
-  updateSunLight(state.lights.sun, new Date());
+  const moonPos = getMoonPosition(state.currentTime);
+  state.bodies.moon.position.set(...moonPos.position);
+
+  updateSunLight(state.lights.sun, state.currentTime);
 
   let earth_geometries = makeEarth();
   scene.add(earth_geometries.earth);
   scene.add(earth_geometries.earth_frame);
 
+  // Add initial geometries
   addInitGeometries(state, scene);
 
   const controls = new OrbitControls(camera, renderer.domElement);

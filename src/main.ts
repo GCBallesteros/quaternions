@@ -1,5 +1,3 @@
-import * as monaco from 'monaco-editor';
-
 import { createAnimator, initScene, initializeCanvas } from './init.js';
 import { buildExecuteCommand } from './terminal.js';
 import { updateTimeDisplay, setupUI } from './ui.js';
@@ -10,6 +8,7 @@ import { log } from './logger.js';
 
 // CURRENT
 // TODO: Understand new code and refactor as necessary
+// TODO: Add the camera or bring it from the state same for renderer
 // TODO: Add Moon object
 // TODO: Add Moon point for findBestQuaternion
 
