@@ -44,11 +44,6 @@ function resolveVector(
   if (Array.isArray(arg) && arg.length === 3) {
     return Ok(new THREE.Vector3(arg[0], arg[1], arg[2]));
   } else if (typeof arg === 'string') {
-    // AI! This actually not quite correct. I want to be able to use the Moon as another point within the -> style syntax
-    if (arg === 'Moon') {
-      return Ok(new THREE.Vector3().copy(state.bodies.moon.position));
-    }
-
     if (allowBodyVectors) {
       switch (arg.toLowerCase()) {
         case 'x':
@@ -66,7 +61,20 @@ function resolveVector(
       const endPos = utils.getPositionOfPoint(state, endName);
 
       if (!startPos || !endPos) {
-        return Err(`Invalid points in vector definition '${arg}'`);
+        const startPos = startName === 'Moon' 
+          ? state.bodies.moon.position 
+          : utils.getPositionOfPoint(state, startName);
+        const endPos = endName === 'Moon'
+          ? state.bodies.moon.position
+          : utils.getPositionOfPoint(state, endName);
+
+        if (!startPos || !endPos) {
+          return Err(`Invalid points in vector definition '${arg}'`);
+        }
+
+        return Ok(endPos instanceof THREE.Vector3 
+          ? endPos.clone().sub(startPos instanceof THREE.Vector3 ? startPos : new THREE.Vector3(...startPos))
+          : new THREE.Vector3(...endPos).sub(startPos instanceof THREE.Vector3 ? startPos : new THREE.Vector3(...startPos)));
       }
 
       return Ok(endPos.clone().sub(startPos));
