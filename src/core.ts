@@ -12,6 +12,7 @@ import { OrientedPoint, Point } from './point.js';
 import { State, Vector3 } from './types.js';
 import * as utils from './utils.js';
 import { updateSunLight } from './astronomy/sun.js';
+import { getMoonPosition } from './astronomy/moon.js';
 
 export function _rot(
   state: State,
@@ -444,7 +445,12 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
   }
   
   state.currentTime = newTime;
+  
+  // Update celestial bodies positions
   updateSunLight(state.lights.sun, newTime);
+  const moonPos = getMoonPosition(newTime);
+  state.bodies.moon.position.set(...moonPos.position);
+  
   log(`Simulation time set to: ${newTime.toISOString()}`);
   return Ok(null);
 }
