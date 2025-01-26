@@ -68,7 +68,7 @@ export class OrientedPoint extends Point {
       camera_orientation[3],
     );
 
-    const camera = new THREE.PerspectiveCamera(fov, 1, 400, 1000);
+    const camera = new THREE.PerspectiveCamera(fov, 1, 400, 400000);
     camera.name = '_camera';
     let camera_to_z_quaternion = new THREE.Quaternion();
     camera_to_z_quaternion.setFromAxisAngle(
