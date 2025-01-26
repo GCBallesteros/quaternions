@@ -7,10 +7,7 @@ import { buildCommandClosures } from './commands.js';
 import { log } from './logger.js';
 
 // CURRENT
-// TODO: Understand new code and refactor as necessary
 // TODO: Add the camera or bring it from the state same for renderer
-// TODO: Add Moon object
-// TODO: Add Moon point for findBestQuaternion
 
 // DOCUMENTATION EFFORTS
 // TODO: Add images to documentation
