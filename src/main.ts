@@ -71,4 +71,4 @@ log(
   'Visit quaternions.maxwellrules.com/documentation for the full documentation',
 );
 
-setupUI(state, executeCommand, renderer, camera);
+setupUI(state, executeCommand, renderer);

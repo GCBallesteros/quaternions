@@ -1,6 +1,6 @@
-import { WebGLRenderer, PerspectiveCamera } from 'three';
-import { State } from './types.js';
 import * as monaco from 'monaco-editor';
+import { WebGLRenderer } from 'three';
+import { State } from './types.js';
 
 // Update current time display
 export function updateTimeDisplay(state: State) {
@@ -14,7 +14,6 @@ export function setupUI(
   state: State,
   executeCommand: (command: string) => void,
   renderer: WebGLRenderer,
-  camera: PerspectiveCamera,
 ): void {
   // Setup tab switching
   const tabButtons = document.querySelectorAll('.tab-button');
@@ -70,8 +69,8 @@ export function setupUI(
     const canvasWidth = canvasContainer.clientWidth;
     const canvasHeight = window.innerHeight;
     renderer.setSize(canvasWidth, canvasHeight, true);
-    camera.aspect = canvasWidth / canvasHeight;
-    camera.updateProjectionMatrix();
+    state.cameras.main.aspect = canvasWidth / canvasHeight;
+    state.cameras.main.updateProjectionMatrix();
 
     // Adjust Monaco Editor size
     editor.layout({
