@@ -114,6 +114,12 @@ tabButtons.forEach((button) => {
 // Initialize time display
 updateTimeDisplay(state);
 
+// Setup sun light toggle
+const sunToggle = document.getElementById('sun-toggle') as HTMLInputElement;
+sunToggle.addEventListener('change', () => {
+  state.lights.sun.visible = sunToggle.checked;
+});
+
 const editor = monaco.editor.create(
   document.getElementById('monaco-editor') as HTMLElement,
   {

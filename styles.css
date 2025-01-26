@@ -94,6 +94,54 @@ html {
   color: #007bff;
 }
 
+/* Switch/Toggle styles */
+.switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: relative;
+  width: 60px;
+  height: 30px;
+  background-color: #333;
+  border-radius: 15px;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  border-radius: 50%;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #007bff;
+}
+
+input:checked + .slider:before {
+  transform: translateX(30px);
+}
+
+.switch-label {
+  margin-left: 10px;
+  color: #fff;
+}
+
 #resizer {
   width: 5px;
   cursor: col-resize;
