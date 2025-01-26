@@ -6,13 +6,13 @@ import { getPositionOfPoint } from './utils.js';
 import { buildCommandClosures } from './commands.js';
 import { log } from './logger.js';
 
-// CURRENT
-// TODO: Add the camera or bring it from the state same for renderer
 
 // DOCUMENTATION EFFORTS
-// TODO: Add images to documentation
-// TODO: Add pretty star backdrop
+// TODO: Add documentation for the main UI
 // TODO: Add diagram to findBestQuaternion documentation
+// TODO: Add explanation about the existence of the Moon
+// TODO: Add way to set time from UI
+// TODO: Add images to documentation
 // TODO: What's on a TLE docs
 
 // REFACTORING
@@ -23,11 +23,13 @@ import { log } from './logger.js';
 // TODO: Normalize quats before applying
 
 // EXTRA FEATURES
-// TODO: validateName should make sure we don't use Sun or Moon
 // TODO: Add Satellite class and have them fly around
 // TODO: Transition smoothly between cameras
 // TODO: Show coordinates over the Earth
 // TODO: Buttont to bring back global camera
+// TODO: Improve logs, use mono font and printing objects is terrible
+// TODO: Button for documentation
+// TODO: Button for github
 // TODO: Plots and tobs
 
 const { scene, canvas, renderer } = initializeCanvas();
