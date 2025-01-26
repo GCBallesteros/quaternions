@@ -1,6 +1,12 @@
 import * as THREE from 'three';
 
-const MOON_RADIUS = 1737.1; // Moon's radius in kilometers
+const MOON_RADIUS = 1737.1;
+
+const MOON_ROTATION = {
+  x: Math.PI / 2,
+  y: Math.PI / 4,
+  z: 0,
+};
 
 export function makeMoon(): THREE.Mesh {
   const moonGeometry = new THREE.SphereGeometry(MOON_RADIUS, 64, 64);
@@ -17,5 +23,8 @@ export function makeMoon(): THREE.Mesh {
     metalness: 0.1,
   });
 
-  return new THREE.Mesh(moonGeometry, moonMaterial);
+  const moon = new THREE.Mesh(moonGeometry, moonMaterial);
+  moon.rotation.set(MOON_ROTATION.x, MOON_ROTATION.y, MOON_ROTATION.z);
+
+  return moon;
 }
