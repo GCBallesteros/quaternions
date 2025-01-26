@@ -3,11 +3,15 @@ import * as THREE from 'three';
 const MOON_RADIUS = 1737.1; // Moon's radius in kilometers
 
 export function makeMoon(): THREE.Mesh {
-  const moonGeometry = new THREE.SphereGeometry(MOON_RADIUS, 32, 32);
+  const moonGeometry = new THREE.SphereGeometry(MOON_RADIUS, 64, 64);
+  const textureLoader = new THREE.TextureLoader();
+  const moonTexture = textureLoader.load('/moon.jpg');
+  
   const moonMaterial = new THREE.MeshStandardMaterial({
-    color: 0xaaaaaa,
+    map: moonTexture,
     roughness: 0.8,
     metalness: 0.1,
   });
+  
   return new THREE.Mesh(moonGeometry, moonMaterial);
 }
