@@ -57,26 +57,19 @@ function resolveVector(
 
     if (arg.includes('->')) {
       const [startName, endName] = arg.split('->').map((name) => name.trim());
-      const startPos = utils.getPositionOfPoint(state, startName);
-      const endPos = utils.getPositionOfPoint(state, endName);
+      const startPos =
+        startName === 'Moon'
+          ? state.bodies.moon.position
+          : utils.getPositionOfPoint(state, startName);
+      const endPos =
+        endName === 'Moon'
+          ? state.bodies.moon.position
+          : utils.getPositionOfPoint(state, endName);
 
       if (!startPos || !endPos) {
-        const startPos =
-          startName === 'Moon'
-            ? state.bodies.moon.position
-            : utils.getPositionOfPoint(state, startName);
-        const endPos =
-          endName === 'Moon'
-            ? state.bodies.moon.position
-            : utils.getPositionOfPoint(state, endName);
-
-        if (!startPos || !endPos) {
-          return Err(`Invalid points in vector definition '${arg}'`);
-        }
-
-        return Ok(endPos.clone().sub(startPos));
-      } else {
         return Err(`Invalid points in vector definition '${arg}'`);
+      } else {
+        return Ok(endPos.clone().sub(startPos));
       }
     } else if (state.lines[arg]) {
       const line = state.lines[arg];
