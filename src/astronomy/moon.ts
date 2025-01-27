@@ -1,4 +1,4 @@
-import { toRad, dateToJulian } from './sun.js';
+import { toRad, dateToJulian, eci2ecef } from './sun.js';
 
 // Synodic month (new Moon to new Moon)
 const SYNODIC_MONTH = 29.53058868;
@@ -93,10 +93,12 @@ export function getMoonPosition(date: Date): {
   const moonDistance = (MOON_SEMI_MAJOR_AXIS * (1 - MOON_ECCENTRICITY * MOON_ECCENTRICITY)) /
     (1 + MOON_ECCENTRICITY * Math.cos(toRad(MmP + mEc)));
 
-  // Convert to rectangular coordinates
-  const xPos = moonDistance * Math.cos(toRad(moonLong)) * Math.cos(toRad(moonLat));
-  const yPos = moonDistance * Math.sin(toRad(moonLong)) * Math.cos(toRad(moonLat));
-  const zPos = moonDistance * Math.sin(toRad(moonLat));
+  // Convert to rectangular ECI coordinates
+  const xECI = moonDistance * Math.cos(toRad(moonLong)) * Math.cos(toRad(moonLat));
+  const yECI = moonDistance * Math.sin(toRad(moonLong)) * Math.cos(toRad(moonLat));
+  const zECI = moonDistance * Math.sin(toRad(moonLat));
+
+  const position = eci2ecef([xECI, yECI, zECI], jd);
 
   // Calculate Moon's angular diameter
   const moonDFrac = moonDistance / MOON_SEMI_MAJOR_AXIS;
@@ -106,8 +108,9 @@ export function getMoonPosition(date: Date): {
   const moonAge = lPP - L;
   const phase = (1 - Math.cos(toRad(moonAge))) / 2;
 
+  console.log(position);
   return {
-    position: [xPos, yPos, zPos],
+    position,
     phase: phase,
     age: (SYNODIC_MONTH * fixangle(moonAge)) / 360.0,
     distance: moonDistance,

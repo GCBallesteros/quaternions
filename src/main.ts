@@ -28,9 +28,7 @@ import { log } from './logger.js';
 // TODO: Show coordinates over the Earth
 // TODO: Buttont to bring back global camera
 // TODO: Improve logs, use mono font and printing objects is terrible
-// TODO: Button for documentation
-// TODO: Button for github
-// TODO: Plots and tobs
+// TODO: Plots and tabs
 
 const { scene, canvas, renderer } = initializeCanvas();
 let state = initScene(scene, canvas, renderer);

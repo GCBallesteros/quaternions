@@ -114,7 +114,7 @@ export function getSunPosition(jd: number): [number, number, number] {
  * @param jd - Julian Date for the calculation
  * @returns Position vector in ECEF coordinates [x, y, z]
  */
-function eci2ecef(
+export function eci2ecef(
   eci: [number, number, number],
   jd: number,
 ): [number, number, number] {
