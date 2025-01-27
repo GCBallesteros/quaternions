@@ -1,0 +1,54 @@
+#canvas-container {
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  z-index: 0;
+}
+
+#right-panel {
+  display: flex;
+  flex-direction: column;
+  border-left: none;
+  overflow: visible;
+  position: relative;
+  z-index: 2;
+}
+
+#resizer {
+  width: 5px;
+  cursor: col-resize;
+  background-color: #333;
+  z-index: 1;
+  position: relative;
+}
+
+#editor-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#settings-container {
+  padding: 20px;
+  color: white;
+  background: #1e1e1e;
+}
+
+#monaco-editor {
+  flex: 1;
+  overflow: hidden;
+}
+
+#output {
+  flex-basis: 20%;
+  overflow-y: auto;
+  background-color: #1e1e1e;
+  color: white;
+  padding: 10px;
+  border-top: 2px solid #333;
+  font-size: 14px;
+  white-space: pre-wrap;
+}

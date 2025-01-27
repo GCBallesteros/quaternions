@@ -1,108 +1,3 @@
-export function createRangeInput(
-  label: string,
-  id: string,
-  min: string,
-  max: string,
-  step: string,
-  value: string,
-  onChange: (value: number) => void
-): HTMLDivElement {
-  const container = document.createElement('div');
-  container.className = 'range-control';
-
-  const labelElement = document.createElement('label');
-  labelElement.htmlFor = id;
-  labelElement.textContent = label;
-  container.appendChild(labelElement);
-
-  const input = document.createElement('input');
-  input.type = 'range';
-  input.id = id;
-  input.min = min;
-  input.max = max;
-  input.step = step;
-  input.value = value;
-  
-  input.addEventListener('input', () => {
-    onChange(parseFloat(input.value));
-  });
-  
-  container.appendChild(input);
-  
-  return container;
-}
-body,
-html {
-  margin: 0;
-  padding: 0;
-  height: 100vh;
-  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
-  width: 100vw;
-  display: grid;
-  grid-template-columns: 2fr 5px 1fr;
-  grid-template-rows: 100%;
-  overflow: hidden;
-}
-
-canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-#canvas-container {
-  background-color: black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  position: relative;
-  z-index: 0;
-}
-
-#right-panel {
-  display: flex;
-  flex-direction: column;
-  border-left: none;
-  overflow: visible;
-  position: relative;
-  z-index: 2;
-}
-
-#resizer {
-  width: 5px;
-  cursor: col-resize;
-  background-color: #333;
-  z-index: 1;
-  position: relative;
-}
-
-#editor-container {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-#settings-container {
-  padding: 20px;
-  color: white;
-  background: #1e1e1e;
-}
-
-#monaco-editor {
-  flex: 1;
-  overflow: hidden;
-}
-
-#output {
-  flex-basis: 20%;
-  overflow-y: auto;
-  background-color: #1e1e1e;
-  color: white;
-  padding: 10px;
-  border-top: 2px solid #333;
-  font-size: 14px;
-  white-space: pre-wrap;
-}
 /* Tabs */
 .tabs {
   display: flex;
@@ -172,7 +67,7 @@ canvas {
   gap: 5px;
 }
 
-.time-input input[type="number"] {
+.time-input input[type='number'] {
   width: 50px;
   padding: 5px;
   background: #333;
@@ -181,7 +76,7 @@ canvas {
   border-radius: 3px;
 }
 
-.time-input input[type="date"] {
+.time-input input[type='date'] {
   padding: 5px;
   background: #333;
   border: 1px solid #555;
@@ -262,7 +157,7 @@ input:checked + .slider:before {
   color: #fff;
 }
 
-.range-control input[type="range"] {
+.range-control input[type='range'] {
   width: 100%;
   height: 4px;
   background: #333;
@@ -270,7 +165,7 @@ input:checked + .slider:before {
   -webkit-appearance: none;
 }
 
-.range-control input[type="range"]::-webkit-slider-thumb {
+.range-control input[type='range']::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 16px;
   height: 16px;
@@ -279,7 +174,7 @@ input:checked + .slider:before {
   cursor: pointer;
 }
 
-.range-control input[type="range"]::-moz-range-thumb {
+.range-control input[type='range']::-moz-range-thumb {
   width: 16px;
   height: 16px;
   background: #007bff;
