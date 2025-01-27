@@ -9,9 +9,7 @@ import { log } from './logger.js';
 
 // DOCUMENTATION EFFORTS
 // TODO: Add diagram to findBestQuaternion documentation
-// TODO: Add explanation about the existence of the Moon
 // TODO: Add way to set time from UI
-// TODO: Add images to documentation
 // TODO: Add Sun pointing mode
 // TODO: Maybe an enum for findBestQuaternion
 

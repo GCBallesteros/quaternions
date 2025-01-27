@@ -49,6 +49,12 @@ mov2sat("sat", "60562", new Date());
 
 ## `findBestQuaternion`
 
+Computes the optimal quaternion to align two pairs of vectors. The primary
+vector (defined in the body frame) will be exactly aligned with its target,
+while the secondary vector (also in body frame) will be aligned as closely as
+possible with its target while maintaining the primary alignment. Target
+vectors are defined in the Earth-Centered Earth-Fixed (ECEF) frame of the
+simulation.
 
 | Parameter           | Type           | Description                                                                 |
 |---------------------|----------------|-----------------------------------------------------------------------------|
