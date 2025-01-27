@@ -54,8 +54,8 @@ mov2sat("sat", "60562", new Date());
 |---------------------|----------------|-----------------------------------------------------------------------------|
 | `primaryVecArg`     | `array\|string` | Primary body vector as a 3-element array or string (`"x"`, `"y"`, or `"z"`).|
 | `secondaryVecArg`   | `array\|string` | Secondary body vector as a 3-element array or string (`"x"`, `"y"`, or `"z"`).|
-| `primaryTargetArg`  | `array\|string` | Target vector for the primary vector. See valid input options [here](/dsl/overview/#supplying-vectors-and-positions-by-name-or-value)|
-| `secondaryTargetArg`| `array\|string` | Target vector for the secondary vector. See valid input options [here](/dsl/overview/#supplying-vectors-and-positions-by-name-or-value)|
+| `primaryTargetArg`  | `array\|string` | Target vector for the primary vector. Can use "Moon" in vector definitions (e.g., "sat->Moon"). See valid input options [here](/dsl/overview/#supplying-vectors-and-positions-by-name-or-value)|
+| `secondaryTargetArg`| `array\|string` | Target vector for the secondary vector. Can use "Moon" in vector definitions (e.g., "sat->Moon"). See valid input options [here](/dsl/overview/#supplying-vectors-and-positions-by-name-or-value)|
 
 **Returns**: An array `[x, y, z, w]` corresponding to the quaternion.
 
