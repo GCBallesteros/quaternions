@@ -6,7 +6,6 @@ perspectives—all from the comfort of your browser. It provides an interactive
 from a satellite’s viewpoint, and optimize quaternions under various
 constraints.
 
- ![User Interface](/assets/main_ui.png)                                                     
 
 ## Key Features
 
@@ -26,7 +25,36 @@ built-in editor using a custom API or DSL, enabling:
   - Time-based simulations with adjustable simulation time
   - ... much more coming soon.
 
+
+
 ## Getting Started
+
+### User Interface                                  
+
+
+![User Interface](/assets/main_ui.png)                                                     
+
+The application interface is divided into the following areas:
+
+1. **Simulation View** (Left): The main 3D visualization area showing the
+  Earth globe, satellite points, and other geometric elements. You can rotate
+and zoom the view using your mouse.
+
+2. **Code Editor** (Right): A full-featured code editor where you can write
+  and edit your script using the application's DSL. The editor includes
+syntax highlighting and auto-completion features.
+
+3. **Execute Button**: Located below the editor, this button runs your current
+  script and update the simulation accordingly.                                           
+
+4. **Settings Tabs**: On the left edge of the editor panel, vertical tabs
+  provide access to additional features:
+
+  - **Editor**: The main coding interface
+  - **Settings**: Configuration options for the simulation, including time
+  controls and visualization settings
+
+### Example workflow
 
 Let's walk through a practical example of using **What on Earth?** to debug
 quaternion orientations. This workflow will show you how to:

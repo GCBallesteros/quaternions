@@ -8,17 +8,17 @@ import { log } from './logger.js';
 
 
 // DOCUMENTATION EFFORTS
-// TODO: Add documentation for the main UI
 // TODO: Add diagram to findBestQuaternion documentation
 // TODO: Add explanation about the existence of the Moon
 // TODO: Add way to set time from UI
 // TODO: Add images to documentation
-// TODO: What's on a TLE docs
+// TODO: Add Sun pointing mode
+// TODO: Maybe an enum for findBestQuaternion
 
 // REFACTORING
 // TODO: Improve name of createAnimator
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
-// TODO: Improve consistency on how we pass points around
+// TODO: Improve consistency on how we pass points around internally
 // TODO: Expose more options for object creation, widths, colors ...
 // TODO: Normalize quats before applying
 
@@ -27,7 +27,7 @@ import { log } from './logger.js';
 // TODO: Transition smoothly between cameras
 // TODO: Show coordinates over the Earth
 // TODO: Buttont to bring back global camera
-// TODO: Improve logs, use mono font and printing objects is terrible
+// TODO: Printing objects is terrible
 // TODO: Plots and tabs
 
 const { scene, canvas, renderer } = initializeCanvas();
