@@ -2,6 +2,7 @@ import * as monaco from 'monaco-editor';
 import { WebGLRenderer } from 'three';
 import { State } from './types.js';
 import { createTimeInput } from './components/timeInput.js';
+import { createRangeInput } from './components/rangeInput.js';
 
 // Update current time display
 export function updateTimeDisplay(state: State) {
@@ -44,6 +45,23 @@ export function setupUI(
   sunToggle.addEventListener('change', () => {
     state.lights.sun.visible = sunToggle.checked;
   });
+
+  // Setup ambient light intensity control
+  const rangeInput = createRangeInput(
+    'Ambient Light',
+    'ambient-intensity',
+    '0',
+    '1',
+    '0.05',
+    '0.2',
+    (value: number) => {
+      state.lights.ambient.intensity = value;
+    }
+  );
+  const lightingGroup = document.querySelector('.settings-group:nth-child(2)');
+  if (lightingGroup) {
+    lightingGroup.appendChild(rangeInput);
+  }
 
   // Setup time input
   const timeGroup = document.querySelector('.settings-group')!;

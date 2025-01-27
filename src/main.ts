@@ -9,7 +9,6 @@ import { log } from './logger.js';
 
 // DOCUMENTATION EFFORTS
 // TODO: Add diagram to findBestQuaternion documentation
-// TODO: Add way to set time from UI
 // TODO: Add Sun pointing mode
 // TODO: Maybe an enum for findBestQuaternion
 
