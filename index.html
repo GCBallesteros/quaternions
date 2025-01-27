@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>3D Visualization with Monaco Editor</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
     <script type="importmap">
       {
         "imports": {
@@ -26,6 +26,18 @@
   <body>
     <div id="canvas-container">
       <canvas id="webgl-canvas"></canvas>
+      <div id="top-links">
+        <a
+          href="https://quaternions.maxwellrules.com/documentation"
+          target="_blank"
+          >Documentation</a
+        >
+        <a
+          href="https://github.com/GCBallesteros/quaternions"
+          target="_blank"
+          >GitHub</a
+        >
+      </div>
     </div>
 
     <div id="resizer"></div>
@@ -47,7 +59,7 @@
         <div class="settings-group">
           <h3>Lighting</h3>
           <label class="switch">
-            <input type="checkbox" id="sun-toggle" checked>
+            <input type="checkbox" id="sun-toggle" checked />
             <span class="slider round"></span>
             <span class="switch-label">Sun Light</span>
           </label>
