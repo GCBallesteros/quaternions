@@ -383,11 +383,19 @@ export async function _mov2sat(
   timestamp: Date,
 ): Promise<Result<null, string>> {
   // Step 1: Fetch the TLE data using the COSPAR ID
-  const tleResult = await _fetchTLE(state, cosparId);
-  if (!tleResult.ok) {
-    return Err(tleResult.val);
+  // Check if TLE data already exists in the cache
+  let tle: string;
+  if (state.tles[cosparId]) {
+    log(`Using cached TLE for COSPAR ID: ${cosparId}`);
+    tle = state.tles[cosparId];
+  } else {
+    const tleResult = await _fetchTLE(cosparId);
+    if (!tleResult.ok) {
+      return Err(tleResult.val);
+    } else {
+      tle = tleResult.val;
+    }
   }
-  const tle = tleResult.val;
 
   // Step 2: Parse the TLE data using satellite.js
   const satrec = satellite.twoline2satrec(
@@ -425,17 +433,9 @@ export async function _mov2sat(
 }
 
 export async function _fetchTLE(
-  state: State,
   norad_id: string,
 ): Promise<Result<string, string>> {
-  // Check if TLE data already exists in the cache
-  if (state.tles[norad_id]) {
-    log(`Using cached TLE for COSPAR ID: ${norad_id}`);
-    return Ok(state.tles[norad_id]);
-  }
-
   try {
-    // If not cached, fetch the TLE data from Celestrak
     const url = `https://celestrak.org/NORAD/elements/gp.php?CATNR=${encodeURIComponent(norad_id)}&FORMAT=3LE`;
     const response = await fetch(url);
 
@@ -446,10 +446,6 @@ export async function _fetchTLE(
     }
 
     const data = await response.text();
-
-    // Cache the fetched TLE in the state variable under the COSPAR ID
-    state.tles[norad_id] = data;
-    log(`Fetched and cached TLE for COSPAR ID: ${norad_id}`);
 
     return Ok(data);
   } catch (error) {

@@ -1,27 +1,28 @@
 import * as THREE from 'three';
 import {
-    _addPoint,
-    _angle,
-    _createLine,
-    _fetchTLE,
-    _findBestQuaternion,
-    _mov,
-    _mov2sat,
-    _reset,
-    _rot,
-    _setTime,
+  _addPoint,
+  _angle,
+  _createLine,
+  _fetchTLE,
+  _findBestQuaternion,
+  _mov,
+  _mov2sat,
+  _reset,
+  _rot,
+  _setTime,
 } from './core.js';
+import { log } from './logger.js';
 import { updateTimeDisplay } from './ui.js';
 
 import { Point } from './point.js';
 import { CommandFunction, State, Vector3 } from './types.js';
 import {
-    geo2xyz,
-    getPositionOfPoint,
-    sph2xyz,
-    validateName,
-    xyz2geo,
-    xyz2sph,
+  geo2xyz,
+  getPositionOfPoint,
+  sph2xyz,
+  validateName,
+  xyz2geo,
+  xyz2sph,
 } from './utils.js';
 
 export function buildCommandClosures(
@@ -95,8 +96,17 @@ export function buildCommandClosures(
   }
 
   async function fetchTLE(norad_id: string): Promise<string> {
-    const result = await _fetchTLE(state, norad_id);
+    // Check if TLE data already exists in the cache
+    if (state.tles[norad_id]) {
+      log(`Using cached TLE for COSPAR ID: ${norad_id}`);
+      return state.tles[norad_id];
+    }
+
+    const result = await _fetchTLE(norad_id);
     if (result.ok) {
+      // Cache the fetched TLE in the state variable under the COSPAR ID
+      state.tles[norad_id] = result.val;
+      log(`Fetched and cached TLE for COSPAR ID: ${norad_id}`);
       return result.val;
     } else {
       throw new Error(result.val);
