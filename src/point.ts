@@ -1,9 +1,8 @@
-import * as THREE from 'three';
 import * as satellite from 'satellite.js';
-//import { Vector3 } from './types.js';
-
-type Vector3 = [number, number, number];
-type State = any; // This is temporary, should be imported from types.js
+import * as THREE from 'three';
+import { _fetchTLE } from './core.js';
+import { log } from './logger.js';
+import { Vector3 } from './types.js';
 
 export class Point {
   public geometry: THREE.Group;
@@ -107,5 +106,56 @@ export class OrientedPoint extends Point {
     const camera_dir = camera_default_dir.applyQuaternion(camera_quat_body);
 
     return [camera_dir.x, camera_dir.y, camera_dir.z];
+  }
+}
+
+export class Satellite extends OrientedPoint {
+  private tle: string;
+
+  constructor(
+    geometry: THREE.Group,
+    tle: string,
+    camera_orientation?: [number, number, number, number],
+  ) {
+    super(geometry, camera_orientation);
+    this.tle = tle;
+  }
+
+  static async fromNoradId(
+    geometry: THREE.Group,
+    noradId: string,
+    camera_orientation?: [number, number, number, number],
+  ): Promise<Satellite> {
+    const result = await _fetchTLE(noradId);
+    let tle: string;
+    if (result.ok) {
+      log(`Fetched and cached TLE for COSPAR ID: ${noradId}`);
+      tle = result.val;
+    } else {
+      throw new Error(result.val);
+    }
+    return new Satellite(geometry, tle, camera_orientation);
+  }
+
+  updatePosition(timestamp: Date): void {
+    const tleLines = this.tle.split('\n');
+    const satrec = satellite.twoline2satrec(tleLines[1], tleLines[2]);
+
+    if (!satrec) {
+      throw new Error('Failed to parse TLE data');
+    }
+
+    const positionAndVelocity = satellite.propagate(satrec, timestamp);
+    const position = positionAndVelocity.position;
+
+    if (typeof position === 'boolean') {
+      throw new Error('Failed to calculate satellite position');
+    }
+
+    // Convert ECI to ECEF coordinates
+    const gmst = satellite.gstime(timestamp);
+    const position_ = satellite.eciToEcf(position, gmst);
+
+    this.position = [position_.x, position_.y, position_.z];
   }
 }
