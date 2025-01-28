@@ -501,7 +501,13 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
   const moonPos = getMoonPosition(newTime);
   state.bodies.moon.position.set(...moonPos.position);
 
-  log(`Simulation time set to: ${newTime.toISOString()}`);
+  // Update orbiting satellites
+  for (const point_name in state.points) {
+    let sat = state.points[point_name];
+    if (sat instanceof Satellite) {
+      sat.updatePosition(state.currentTime);
+    }
+  }
   return Ok(null);
 }
 

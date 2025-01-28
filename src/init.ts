@@ -3,11 +3,11 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { getMoonPosition } from './astronomy/moon.js';
 import { updateSunLight } from './astronomy/sun.js';
 import { createFloatingPoint } from './components.js';
-import { _createLine, _mov, addFrame } from './core.js';
+import { _createLine, _mov, _setTime, addFrame } from './core.js';
 import { makeEarth } from './earth.js';
 import { makeMoon } from './moon.js';
-import { Satellite } from './point.js';
 import { State } from './types.js';
+import { updateTimeDisplay } from './ui.js';
 
 export function initializeCanvas(): {
   scene: THREE.Scene;
@@ -94,14 +94,19 @@ export function createAnimator(
 ): (newCamera: THREE.PerspectiveCamera) => void {
   let currentCamera = initialCamera;
 
+  const clock = new THREE.Clock();
   function animate() {
+    const elapsed = clock.getDelta();
+    const speedup = 100;
+    const simulatedTime = new Date(
+      state.currentTime.getTime() + elapsed * speedup * 1000,
+    );
+
+    // TODO: We need to be able to toggle the simulation somehow
+    _setTime(state, simulatedTime);
+    updateTimeDisplay(state);
+
     renderer.render(scene, currentCamera);
-    for (const point_name in state.points) {
-      let sat = state.points[point_name];
-      if (sat instanceof Satellite) {
-        sat.updatePosition(new Date());
-      }
-    }
   }
   renderer.setAnimationLoop(animate);
 

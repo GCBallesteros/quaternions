@@ -108,7 +108,6 @@ export function getMoonPosition(date: Date): {
   const moonAge = lPP - L;
   const phase = (1 - Math.cos(toRad(moonAge))) / 2;
 
-  console.log(position);
   return {
     position,
     phase: phase,

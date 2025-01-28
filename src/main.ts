@@ -11,6 +11,8 @@ import { log } from './logger.js';
 // TODO: Add diagram to findBestQuaternion documentation
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
 // TODO: Add Satellite class and have them fly around. Make a workflow for it
+// TODO: Satellites should have an orientation mode
+// TODO: Document Satellites
 // TODO: Add Sun pointing mode
 
 // REFACTORING
@@ -20,6 +22,7 @@ import { log } from './logger.js';
 // TODO: Normalize quats before applying
 
 // EXTRA FEATURES
+// TODO: Add Objects side tab. First thing is Moon. Should display position, phase angle and moon fraction
 // TODO: Transition smoothly between cameras
 // TODO: Show coordinates over the Earth
 // TODO: Buttont to bring back global camera
