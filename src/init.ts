@@ -1,11 +1,12 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { updateSunLight } from './astronomy/sun.js';
 import { getMoonPosition } from './astronomy/moon.js';
-import { makeMoon } from './moon.js';
+import { updateSunLight } from './astronomy/sun.js';
 import { createFloatingPoint } from './components.js';
 import { _createLine, _mov, addFrame } from './core.js';
 import { makeEarth } from './earth.js';
+import { makeMoon } from './moon.js';
+import { Satellite } from './point.js';
 import { State } from './types.js';
 
 export function initializeCanvas(): {
@@ -88,12 +89,18 @@ export function initScene(
 export function createAnimator(
   renderer: THREE.WebGLRenderer,
   scene: THREE.Scene,
+  state: State,
   initialCamera: THREE.PerspectiveCamera,
 ): (newCamera: THREE.PerspectiveCamera) => void {
   let currentCamera = initialCamera;
 
   function animate() {
     renderer.render(scene, currentCamera);
+    for (const point_name in state.points) {
+      if (state.points[point_name] instanceof Satellite) {
+        console.log(2);
+      }
+    }
   }
   renderer.setAnimationLoop(animate);
 
