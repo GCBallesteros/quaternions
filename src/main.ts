@@ -10,7 +10,7 @@ import { log } from './logger.js';
 // DOCUMENTATION EFFORTS
 // TODO: Add diagram to findBestQuaternion documentation
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
-// TODO: Add Satellite class and have them fly around
+// TODO: Add Satellite class and have them fly around. Make a workflow for it
 // TODO: Add Sun pointing mode
 
 // REFACTORING

@@ -1,6 +1,8 @@
 import * as satellite from 'satellite.js';
-import { Ok, Err, Result } from 'ts-results';
 import * as THREE from 'three';
+import { Err, Ok, Result } from 'ts-results';
+import { getMoonPosition } from './astronomy/moon.js';
+import { updateSunLight } from './astronomy/sun.js';
 import {
   createFloatingPoint,
   createFrame,
@@ -8,11 +10,9 @@ import {
 } from './components.js';
 import { addInitGeometries } from './init.js';
 import { log } from './logger.js';
-import { OrientedPoint, Point } from './point.js';
-import { State, Vector3 } from './types.js';
+import { OrientedPoint, Point, Satellite } from './point.js';
+import { State, TleSource, Vector3 } from './types.js';
 import * as utils from './utils.js';
-import { updateSunLight } from './astronomy/sun.js';
-import { getMoonPosition } from './astronomy/moon.js';
 
 export function _rot(
   state: State,
@@ -355,24 +355,58 @@ export function _addPoint(
       coordinates[2],
     );
     new_point = addFrame(new_point_);
-    const q = new THREE.Quaternion(
-      quaternion[0],
-      quaternion[1],
-      quaternion[2],
-      quaternion[3],
-    ); // xyzw
+    const q = new THREE.Quaternion(...quaternion); // xyzw
     new_point.geometry.setRotationFromQuaternion(q);
   } else {
     new_point = createFloatingPoint();
-    new_point.geometry.position.set(
-      coordinates[0],
-      coordinates[1],
-      coordinates[2],
-    );
+    new_point.geometry.position.set(...coordinates);
   }
 
   state.points[name] = new_point;
   scene.add(new_point.geometry);
+  return Ok(null);
+}
+
+export async function _addSatellite(
+  scene: THREE.Scene,
+  state: State,
+  name: string,
+  tleSource: TleSource,
+  quaternion: [number, number, number, number],
+): Promise<Result<null, string>> {
+  // Satellites don't get passed coordinates because their location is determined
+  // by their TLE and the simulation time
+  if (!utils.validateName(name, state)) {
+    return Err('Invalid point name or name already exists');
+  }
+
+  let new_point_: Point = createFloatingPoint();
+  const coordinate_frame = createFrame(
+    {
+      x: new_point_.position[0],
+      y: new_point_.position[1],
+      z: new_point_.position[2],
+    },
+    350,
+  );
+  let point_geo = new_point_.geometry.clone();
+  point_geo.add(coordinate_frame);
+
+  let newSatellite: Satellite;
+  switch (tleSource.type) {
+    case 'tle':
+      newSatellite = new Satellite(point_geo, tleSource.tle);
+      break;
+
+    case 'noradId':
+      newSatellite = await Satellite.fromNoradId(point_geo, tleSource.noradId);
+      break;
+  }
+  const q = new THREE.Quaternion(...quaternion); // xyzw
+  newSatellite.geometry.setRotationFromQuaternion(q);
+
+  state.points[name] = newSatellite;
+  scene.add(newSatellite.geometry);
   return Ok(null);
 }
 

@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import {
   _addPoint,
+  _addSatellite,
   _angle,
   _createLine,
   _fetchTLE,
@@ -12,10 +13,9 @@ import {
   _setTime,
 } from './core.js';
 import { log } from './logger.js';
-import { updateTimeDisplay } from './ui.js';
-
 import { Point } from './point.js';
-import { CommandFunction, State, Vector3 } from './types.js';
+import { CommandFunction, State, TleSource, Vector3 } from './types.js';
+import { updateTimeDisplay } from './ui.js';
 import {
   geo2xyz,
   getPositionOfPoint,
@@ -58,6 +58,25 @@ export function buildCommandClosures(
     quaternion = null,
   ): void {
     const result = _addPoint(scene, state, name, coordinates, quaternion);
+    if (result.ok) {
+      return;
+    } else {
+      throw new Error(result.val);
+    }
+  }
+
+  async function addSatellite(
+    name: string,
+    tleSource: TleSource,
+    quaternion: [number, number, number, number],
+  ): Promise<void> {
+    const result = await _addSatellite(
+      scene,
+      state,
+      name,
+      tleSource,
+      quaternion,
+    );
     if (result.ok) {
       return;
     } else {
@@ -178,6 +197,7 @@ export function buildCommandClosures(
     mov: mov,
     rot: rot,
     addPoint: addPoint,
+    addSatellite: addSatellite,
     createLine: createLine,
     angle: angle,
     rad2deg: rad2deg,

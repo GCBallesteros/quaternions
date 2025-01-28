@@ -5,6 +5,10 @@ export type Vector3 = [number, number, number];
 
 export type CommandFunction = (...args: any[]) => any;
 
+export type TleSource =
+  | { type: 'tle'; tle: string }
+  | { type: 'noradId'; noradId: string };
+
 export interface Line {
   line: THREE.Line;
   start: Vector3 | string;

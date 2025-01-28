@@ -22,7 +22,7 @@ export class Point {
 }
 
 export class OrientedPoint extends Point {
-  public camera_orientation: [number, number, number, number] | undefined;
+  public camera_orientation?: [number, number, number, number] ;
   constructor(
     geometry: THREE.Group,
     camera_orientation?: [number, number, number, number],
