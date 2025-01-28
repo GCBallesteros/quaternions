@@ -97,8 +97,9 @@ export function createAnimator(
   function animate() {
     renderer.render(scene, currentCamera);
     for (const point_name in state.points) {
-      if (state.points[point_name] instanceof Satellite) {
-        console.log(2);
+      let sat = state.points[point_name];
+      if (sat instanceof Satellite) {
+        sat.updatePosition(new Date());
       }
     }
   }
