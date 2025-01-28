@@ -31,6 +31,71 @@ export function createRangeInput(
   
   return container;
 }
+
+export class Satellite extends OrientedPoint {
+  private tle: string | null = null;
+  private noradId: string;
+  private state: State;
+
+  constructor(
+    geometry: THREE.Group,
+    noradId: string,
+    state: State,
+    camera_orientation?: [number, number, number, number],
+  ) {
+    super(geometry, camera_orientation);
+    this.noradId = noradId;
+    this.state = state;
+  }
+
+  async updatePosition(timestamp: Date): Promise<void> {
+    // First, ensure we have TLE data
+    if (!this.tle) {
+      // Check cache first
+      if (this.state.tles[this.noradId]) {
+        this.tle = this.state.tles[this.noradId];
+      } else {
+        // Fetch and cache TLE
+        try {
+          const url = `https://celestrak.org/NORAD/elements/gp.php?CATNR=${encodeURIComponent(this.noradId)}&FORMAT=3LE`;
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch TLE: ${response.status}`);
+          }
+          this.tle = await response.text();
+          // Cache the TLE
+          this.state.tles[this.noradId] = this.tle;
+        } catch (error) {
+          throw new Error(`Error fetching TLE: ${error}`);
+        }
+      }
+    }
+
+    // Parse TLE and calculate position
+    const tleLines = this.tle.split('\n');
+    const satrec = satellite.twoline2satrec(tleLines[1], tleLines[2]);
+    
+    if (!satrec) {
+      throw new Error('Failed to parse TLE data');
+    }
+
+    const positionAndVelocity = satellite.propagate(satrec, timestamp);
+    if (!positionAndVelocity.position) {
+      throw new Error('Failed to calculate satellite position');
+    }
+
+    // Convert ECI to ECEF coordinates
+    const gmst = satellite.gstime(timestamp);
+    const position = satellite.eciToEcf(positionAndVelocity.position, gmst);
+    
+    // Update position
+    this.position = [position.x, position.y, position.z];
+  }
+
+  get noradID(): string {
+    return this.noradId;
+  }
+}
 body,
 html {
   margin: 0;

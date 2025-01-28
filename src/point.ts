@@ -1,7 +1,9 @@
 import * as THREE from 'three';
+import * as satellite from 'satellite.js';
 //import { Vector3 } from './types.js';
 
 type Vector3 = [number, number, number];
+type State = any; // This is temporary, should be imported from types.js
 
 export class Point {
   public geometry: THREE.Group;

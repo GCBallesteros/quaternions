@@ -78,6 +78,41 @@ point's group.
  Throws an error if a camera with the name "Camera" already exists. |
 
 
+## Class: `Satellite` (Subclass of `OrientedPoint`)
+
+The `Satellite` class extends `OrientedPoint` to represent satellites in orbit. It adds TLE (Two-Line Element) data management and position updating capabilities based on time.
+
+### Constructor
+
+```typescript
+constructor(geometry: THREE.Group, noradId: string, state: State, camera_orientation?: [number, number, number, number])
+```
+
+| Parameter           | Type                              | Description                                                    |
+|--------------------|-----------------------------------|----------------------------------------------------------------|
+| `geometry`         | `THREE.Group`                     | A THREE.Group object representing the satellite in 3D space    |
+| `noradId`          | `string`                         | The NORAD ID for the satellite                                |
+| `state`            | `State`                          | The application state object for caching TLE data             |
+| `camera_orientation`| `[number, number, number, number]`| (Optional) Initial camera orientation quaternion              |
+
+### Methods
+
+#### `updatePosition`
+
+Updates the satellite's position based on its TLE data for a given timestamp.
+
+| Parameter   | Type     | Returns  | Description                                     |
+|------------|----------|----------|-------------------------------------------------|
+| `timestamp`| `Date`   | `Promise<void>` | The time for which to calculate the position |
+
+Throws an error if TLE data cannot be fetched or parsed, or if position calculation fails.
+
+### Properties
+
+| Property   | Type     | Description                                     |
+|------------|----------|-------------------------------------------------|
+| `noradID`  | `string` | **Getter:** Returns the satellite's NORAD ID    |
+
 ## point
 
 Returns a point in the scene state.
@@ -90,7 +125,7 @@ Returns a point in the scene state.
 
 #### Returns
 
-A `Point` or `OrientedPoint` (see above).
+A `Point`, `OrientedPoint`, or `Satellite` instance.
 
 #### Example
 
