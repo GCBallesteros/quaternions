@@ -8,9 +8,12 @@ import {
   _findBestQuaternion,
   _mov,
   _mov2sat,
+  _pauseSimTime,
   _reset,
+  _resumeSimTime,
   _rot,
   _setTime,
+  _toggleSimTime,
 } from './core.js';
 import { log } from './logger.js';
 import { Point } from './point.js';
@@ -181,6 +184,27 @@ export function buildCommandClosures(
     _reset(scene, state, switchCamera);
   }
 
+  function resumeSimTime(): void {
+    const result = _resumeSimTime(state);
+    if (!result.ok) {
+      throw new Error(result.val);
+    }
+  }
+
+  function pauseSimTime(): void {
+    const result = _pauseSimTime(state);
+    if (!result.ok) {
+      throw new Error(result.val);
+    }
+  }
+
+  function toggleSimTime(): void {
+    const result = _toggleSimTime(state);
+    if (!result.ok) {
+      throw new Error(result.val);
+    }
+  }
+
   function setTime(newTime: Date): void {
     const result = _setTime(state, newTime);
     if (!result.ok) {
@@ -209,6 +233,9 @@ export function buildCommandClosures(
     reset: reset,
     setTime: setTime,
     listPoints: listPoints,
+    resumeSimTime: resumeSimTime,
+    pauseSimTime: pauseSimTime,
+    toggleSimTime: toggleSimTime,
     // Add utility functions to commands
     geo2xyz: geo2xyz,
     getPositionOfPoint: getPositionOfPoint,

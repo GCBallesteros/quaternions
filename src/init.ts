@@ -60,6 +60,7 @@ export function initScene(
     lights: { ambient: ambientLight, sun: sunLight },
     tles: {},
     currentTime: new Date(),
+    isTimeFlowing: true,
     cameras: { main: camera },
     bodies: { moon },
   };
@@ -97,13 +98,13 @@ export function createAnimator(
   const clock = new THREE.Clock();
   function animate() {
     const elapsed = clock.getDelta();
-    const speedup = 100;
-    const simulatedTime = new Date(
-      state.currentTime.getTime() + elapsed * speedup * 1000,
-    );
-
-    // TODO: We need to be able to toggle the simulation somehow
-    _setTime(state, simulatedTime);
+    const speedup = 400;
+    if (state.isTimeFlowing) {
+      const simulatedTime = new Date(
+        state.currentTime.getTime() + elapsed * speedup * 1000,
+      );
+      _setTime(state, simulatedTime);
+    }
     updateTimeDisplay(state);
 
     renderer.render(scene, currentCamera);

@@ -23,6 +23,7 @@ export interface State {
     sun: THREE.DirectionalLight;
   };
   currentTime: Date;
+  isTimeFlowing: boolean;
   tles: Record<string, string>;
   cameras: Record<string, THREE.PerspectiveCamera>;
   bodies: { moon: THREE.Mesh };

@@ -7,13 +7,15 @@ import { buildCommandClosures } from './commands.js';
 import { log } from './logger.js';
 
 
-// DOCUMENTATION EFFORTS
-// TODO: Add diagram to findBestQuaternion documentation
+// Before share
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
-// TODO: Add Satellite class and have them fly around. Make a workflow for it
+// TODO: Make a workflow for it
 // TODO: Satellites should have an orientation mode
 // TODO: Document Satellites
 // TODO: Add Sun pointing mode
+// TODO: Add Objects side tab. First thing is Moon. Should display position, phase angle and moon fraction
+// TODO: Plus bottom div
+// TODO: Fix the funky scroll bars on the editor
 
 // REFACTORING
 // TODO: Improve name of createAnimator
@@ -22,7 +24,7 @@ import { log } from './logger.js';
 // TODO: Normalize quats before applying
 
 // EXTRA FEATURES
-// TODO: Add Objects side tab. First thing is Moon. Should display position, phase angle and moon fraction
+// TODO: Add diagram to findBestQuaternion documentation
 // TODO: Transition smoothly between cameras
 // TODO: Show coordinates over the Earth
 // TODO: Buttont to bring back global camera

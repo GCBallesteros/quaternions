@@ -511,6 +511,21 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
   return Ok(null);
 }
 
+export function _resumeSimTime(state: State): Result<null, string> {
+  state.isTimeFlowing = true;
+  return Ok(null);
+}
+
+export function _pauseSimTime(state: State): Result<null, string> {
+  state.isTimeFlowing = false;
+  return Ok(null);
+}
+
+export function _toggleSimTime(state: State): Result<null, string> {
+  state.isTimeFlowing = !state.isTimeFlowing;
+  return Ok(null);
+}
+
 export function _reset(
   scene: THREE.Scene,
   state: State,
