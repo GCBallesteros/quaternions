@@ -1,16 +1,35 @@
-import { _toggleSimTime } from '../core';
-import { State } from '../types';
+import { _toggleSimTime } from '../core.js';
+import { State } from '../types.js';
+
+function formatSpeed(timeSpeedMultiplier: number): string {
+  const absSpeed = Math.abs(timeSpeedMultiplier);
+  let speedText = '';
+  if (absSpeed === 0) {
+    speedText = 'Paused';
+  } else if (absSpeed < 1) {
+    speedText = `${absSpeed.toFixed(2)}x`;
+  } else if (absSpeed < 10) {
+    speedText = `${absSpeed.toFixed(1)}x`;
+  } else {
+    speedText = `${Math.round(absSpeed)}x`;
+  }
+
+  return speedText;
+}
 
 export function setupTimeControls(state: State) {
-  const timeToggle = document.getElementById('time-toggle') as HTMLButtonElement;
+  const timeToggle = document.getElementById(
+    'time-toggle',
+  ) as HTMLButtonElement;
   const timeSlider = document.getElementById('time-speed') as HTMLInputElement;
-  
+
   timeToggle.addEventListener('click', () => {
     const result = _toggleSimTime(state);
     if (result.ok) {
       timeToggle.classList.toggle('playing');
-      timeToggle.setAttribute('aria-label', 
-        state.isTimeFlowing ? 'Pause simulation' : 'Play simulation'
+      timeToggle.setAttribute(
+        'aria-label',
+        state.isTimeFlowing ? 'Pause simulation' : 'Play simulation',
       );
     }
   });
@@ -27,21 +46,11 @@ export function setupTimeControls(state: State) {
       const logSpeed = Math.exp(Math.log(1000) * (magnitude / 1000));
       state.timeSpeedMultiplier = sign * logSpeed;
     }
-    
+
     // Update speed display
     const speedDisplay = document.getElementById('time-speed-display');
     if (speedDisplay) {
-      const absSpeed = Math.abs(state.timeSpeedMultiplier);
-      let speedText = '';
-      if (absSpeed === 0) {
-        speedText = 'Paused';
-      } else if (absSpeed < 1) {
-        speedText = `${absSpeed.toFixed(2)}x`;
-      } else if (absSpeed < 10) {
-        speedText = `${absSpeed.toFixed(1)}x`;
-      } else {
-        speedText = `${Math.round(absSpeed)}x`;
-      }
+      const speedText = formatSpeed(state.timeSpeedMultiplier);
       speedDisplay.textContent = speedText;
     }
   });
@@ -55,17 +64,8 @@ export function setupTimeControls(state: State) {
   // Set initial speed display
   const speedDisplay = document.getElementById('time-speed-display');
   if (speedDisplay) {
-    const absSpeed = Math.abs(state.timeSpeedMultiplier);
-    let speedText = '';
-    if (absSpeed === 0) {
-      speedText = 'Paused';
-    } else if (absSpeed < 1) {
-      speedText = `${absSpeed.toFixed(2)}x`;
-    } else if (absSpeed < 10) {
-      speedText = `${absSpeed.toFixed(1)}x`;
-    } else {
-      speedText = `${Math.round(absSpeed)}x`;
-    }
+    const speedText = formatSpeed(state.timeSpeedMultiplier);
+    speedDisplay.textContent = speedText;
     speedDisplay.textContent = speedText;
   }
 }
