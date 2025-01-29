@@ -20,21 +20,27 @@ export function buildExecuteCommand(
   function executeCommand(command: string): void {
     if (command) {
       try {
-        const codeToExecute = `${commandDeclarations}\n${command}`;
+        const codeToExecute = `(async () => {
+          ${commandDeclarations}
+          return await (async () => { ${command} })();
+        })()`;
+        
         const result = eval(codeToExecute);
-        Promise.resolve(result)
-          .then((resolvedValue) => {
-            if (resolvedValue !== undefined) {
-              log(`  ${resolvedValue}`);
-            }
-          })
-          .catch((error: unknown) => {
-            if (error instanceof Error) {
-              log(`Error: ${error.message}`);
-            } else {
-              log(`Error: ${String(error)}`);
-            }
-          });
+        if (result instanceof Promise) {
+          result
+            .then((resolvedValue) => {
+              if (resolvedValue !== undefined) {
+                log(`  ${resolvedValue}`);
+              }
+            })
+            .catch((error: unknown) => {
+              if (error instanceof Error) {
+                log(`Error: ${error.message}`);
+              } else {
+                log(`Error: ${String(error)}`);
+              }
+            });
+        }
       } catch (error: unknown) {
         if (error instanceof Error) {
           log(`Error: ${error.message}`);

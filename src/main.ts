@@ -6,7 +6,6 @@ import { getPositionOfPoint } from './utils.js';
 import { buildCommandClosures } from './commands.js';
 import { log } from './logger.js';
 
-
 // Before share
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
 // TODO: Make a workflow for Satellite. For example a constantly running nadir pointing sat
@@ -17,6 +16,9 @@ import { log } from './logger.js';
 // TODO: Plus bottom div
 // TODO: Make a Moon workflow
 // TODO: Switch camera to null destroys everything
+// TODO: Docs explain the awaitable functions mainly mov2sat and addSatellite with norad id
+// TODO: We also need to expose the NamedTargets because the numbers are opaque.
+// TODO: Fix types
 
 // REFACTORING
 // TODO: Improve name of createAnimator
