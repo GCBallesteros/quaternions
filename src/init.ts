@@ -110,11 +110,19 @@ export function createAnimator(
     // Update moon position and phase display
     const moonData = getMoonPosition(state.currentTime);
     state.bodies.moon.position.set(...moonData.position);
-    
-    document.getElementById('moon-x')!.textContent = Math.round(moonData.position[0]).toString();
-    document.getElementById('moon-y')!.textContent = Math.round(moonData.position[1]).toString();
-    document.getElementById('moon-z')!.textContent = Math.round(moonData.position[2]).toString();
-    document.getElementById('moon-phase')!.textContent = Math.round(moonData.phase * 100).toString();
+
+    document.getElementById('moon-x')!.textContent = Math.round(
+      moonData.position[0],
+    ).toString();
+    document.getElementById('moon-y')!.textContent = Math.round(
+      moonData.position[1],
+    ).toString();
+    document.getElementById('moon-z')!.textContent = Math.round(
+      moonData.position[2],
+    ).toString();
+    document.getElementById('moon-fraction')!.textContent = Math.round(
+      moonData.phase * 100,
+    ).toString();
 
     renderer.render(scene, currentCamera);
   }

@@ -11,14 +11,12 @@ import { log } from './logger.js';
 // TODO: Make a workflow for Satellite. For example a constantly running nadir pointing sat
 // TODO: Document Satellites
 // TODO: Add Sun pointing mode. And update points
-// TODO: Fix phase angle on bodies div
 // TODO: Bodies div should show all the points
 // TODO: Plus bottom div
 // TODO: Make a Moon workflow
 // TODO: Switch camera to null destroys everything
 // TODO: Docs explain the awaitable functions mainly mov2sat and addSatellite with norad id
 // TODO: We also need to expose the NamedTargets because the numbers are opaque.
-// TODO: Fix types
 
 // REFACTORING
 // TODO: Improve name of createAnimator
