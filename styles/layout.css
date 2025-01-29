@@ -38,6 +38,21 @@
   background: #1e1e1e;
 }
 
+.coordinate-display {
+  font-family: monospace;
+  font-size: 14px;
+  margin-top: 10px;
+  display: grid;
+  gap: 5px;
+}
+
+.coordinate-display div {
+  background: #2d2d2d;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 15px;
+}
+
 #monaco-editor {
   flex: 1;
   overflow: hidden;

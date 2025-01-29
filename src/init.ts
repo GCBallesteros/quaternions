@@ -107,6 +107,12 @@ export function createAnimator(
     }
     updateTimeDisplay(state);
 
+    // Update moon position display
+    const moonPos = state.bodies.moon.position;
+    document.getElementById('moon-x')!.textContent = Math.round(moonPos.x);
+    document.getElementById('moon-y')!.textContent = Math.round(moonPos.y);
+    document.getElementById('moon-z')!.textContent = Math.round(moonPos.z);
+
     renderer.render(scene, currentCamera);
   }
   renderer.setAnimationLoop(animate);
