@@ -10,7 +10,7 @@ import {
 } from './components.js';
 import { addInitGeometries } from './init.js';
 import { log } from './logger.js';
-import { OrientedPoint, Point, Satellite } from './point.js';
+import { OrientationMode, OrientedPoint, Point, Satellite } from './point.js';
 import { State, TleSource, Vector3 } from './types.js';
 import * as utils from './utils.js';
 
@@ -372,7 +372,7 @@ export async function _addSatellite(
   state: State,
   name: string,
   tleSource: TleSource,
-  quaternion: [number, number, number, number],
+  orientationMode: OrientationMode,
 ): Promise<Result<null, string>> {
   // Satellites don't get passed coordinates because their location is determined
   // by their TLE and the simulation time
@@ -395,15 +395,17 @@ export async function _addSatellite(
   let newSatellite: Satellite;
   switch (tleSource.type) {
     case 'tle':
-      newSatellite = new Satellite(point_geo, tleSource.tle);
+      newSatellite = new Satellite(point_geo, tleSource.tle, orientationMode);
       break;
 
     case 'noradId':
-      newSatellite = await Satellite.fromNoradId(point_geo, tleSource.noradId);
+      newSatellite = await Satellite.fromNoradId(
+        point_geo,
+        tleSource.noradId,
+        orientationMode,
+      );
       break;
   }
-  const q = new THREE.Quaternion(...quaternion); // xyzw
-  newSatellite.geometry.setRotationFromQuaternion(q);
 
   state.points[name] = newSatellite;
   scene.add(newSatellite.geometry);
@@ -505,7 +507,7 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
   for (const point_name in state.points) {
     let sat = state.points[point_name];
     if (sat instanceof Satellite) {
-      sat.updatePosition(state.currentTime);
+      sat.update(state.currentTime, state);
     }
   }
   return Ok(null);

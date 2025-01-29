@@ -16,7 +16,7 @@ import {
   _toggleSimTime,
 } from './core.js';
 import { log } from './logger.js';
-import { Point } from './point.js';
+import { OrientationMode, Point } from './point.js';
 import { CommandFunction, State, TleSource, Vector3 } from './types.js';
 import { updateTimeDisplay } from './ui.js';
 import {
@@ -71,14 +71,14 @@ export function buildCommandClosures(
   async function addSatellite(
     name: string,
     tleSource: TleSource,
-    quaternion: [number, number, number, number],
+    orientationMode: OrientationMode,
   ): Promise<void> {
     const result = await _addSatellite(
       scene,
       state,
       name,
       tleSource,
-      quaternion,
+      orientationMode,
     );
     if (result.ok) {
       return;

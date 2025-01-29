@@ -9,12 +9,14 @@ import { log } from './logger.js';
 
 // Before share
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
-// TODO: Make a workflow for it
-// TODO: Satellites should have an orientation mode
+// TODO: Make a workflow for Satellite. For example a constantly running nadir pointing sat
 // TODO: Document Satellites
-// TODO: Add Sun pointing mode
-// TODO: Add Objects side tab. First thing is Moon. Should display position, phase angle and moon fraction
+// TODO: Add Sun pointing mode. And update points
+// TODO: Fix phase angle on bodies div
+// TODO: Bodies div should show all the points
 // TODO: Plus bottom div
+// TODO: Make a Moon workflow
+// TODO: Switch camera to null destroys everything
 
 // REFACTORING
 // TODO: Improve name of createAnimator
