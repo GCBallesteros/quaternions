@@ -104,6 +104,10 @@ export function setupUI(
       language: 'javascript',
       theme: 'vs-dark',
       minimap: { enabled: false },
+      scrollbar: {
+        vertical: 'hidden',
+        horizontal: 'hidden',
+      },
     },
   );
 

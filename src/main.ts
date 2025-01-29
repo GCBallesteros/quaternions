@@ -15,7 +15,6 @@ import { log } from './logger.js';
 // TODO: Add Sun pointing mode
 // TODO: Add Objects side tab. First thing is Moon. Should display position, phase angle and moon fraction
 // TODO: Plus bottom div
-// TODO: Fix the funky scroll bars on the editor
 
 // REFACTORING
 // TODO: Improve name of createAnimator
