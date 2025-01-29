@@ -6,6 +6,22 @@ export function createTimeInput(): HTMLDivElement {
   const dateInput = document.createElement('input');
   dateInput.type = 'date';
   dateInput.id = 'sim-date';
+
+  // Add date validation
+  dateInput.addEventListener('change', (e) => {
+    const input = e.target as HTMLInputElement;
+    const date = new Date(input.value);
+
+    // Check if the date is valid
+    if (isNaN(date.getTime())) {
+      // Revert to previous valid value
+      input.value = input.defaultValue;
+    } else {
+      // Store new valid value
+      input.defaultValue = input.value;
+    }
+  });
+
   container.appendChild(dateInput);
 
   // Time inputs container
