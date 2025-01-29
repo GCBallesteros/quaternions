@@ -68,3 +68,59 @@
   font-size: 14px;
   white-space: pre-wrap;
 }
+
+#time-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(30, 30, 30, 0.7);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.time-slider {
+  width: 200px;
+  -webkit-appearance: none;
+  background: transparent;
+}
+
+.time-slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  background: #4a4a4a;
+  border-radius: 2px;
+}
+
+.time-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #888;
+  margin-top: -6px;
+  cursor: pointer;
+}
+
+.time-slider::-webkit-slider-thumb:hover {
+  background: #aaa;
+}
+
+.time-slider::-moz-range-track {
+  width: 100%;
+  height: 4px;
+  background: #4a4a4a;
+  border-radius: 2px;
+}
+
+.time-slider::-moz-range-thumb {
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #888;
+  cursor: pointer;
+  border: none;
+}

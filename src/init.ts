@@ -62,6 +62,7 @@ export function initScene(
     tles: {},
     currentTime: new Date(),
     isTimeFlowing: true,
+    timeSpeedMultiplier: 400,
     cameras: { main: camera },
     bodies: { moon },
   };
@@ -100,10 +101,9 @@ export function createAnimator(
   const clock = new THREE.Clock();
   function animate() {
     const elapsed = clock.getDelta();
-    const speedup = 400;
     if (state.isTimeFlowing) {
       const simulatedTime = new Date(
-        state.currentTime.getTime() + elapsed * speedup * 1000,
+        state.currentTime.getTime() + elapsed * state.timeSpeedMultiplier * 1000,
       );
       _setTime(state, simulatedTime);
     }

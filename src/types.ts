@@ -25,6 +25,7 @@ export interface State {
   };
   currentTime: Date;
   isTimeFlowing: boolean;
+  timeSpeedMultiplier: number;
   tles: Record<string, string>;
   cameras: Record<string, THREE.PerspectiveCamera>;
   bodies: { moon: THREE.Mesh };

@@ -3,6 +3,7 @@ import { State } from '../types';
 
 export function setupTimeControls(state: State) {
   const timeToggle = document.getElementById('time-toggle') as HTMLButtonElement;
+  const timeSlider = document.getElementById('time-speed') as HTMLInputElement;
   
   timeToggle.addEventListener('click', () => {
     const result = _toggleSimTime(state);
@@ -14,9 +15,57 @@ export function setupTimeControls(state: State) {
     }
   });
 
+  timeSlider.addEventListener('input', (e) => {
+    const value = parseInt((e.target as HTMLInputElement).value);
+    // Convert linear slider value to logarithmic speed
+    if (value === 0) {
+      state.timeSpeedMultiplier = 0;
+    } else {
+      const sign = Math.sign(value);
+      const magnitude = Math.abs(value);
+      // Map 1-1000 to 1-1000 logarithmically
+      const logSpeed = Math.exp(Math.log(1000) * (magnitude / 1000));
+      state.timeSpeedMultiplier = sign * logSpeed;
+    }
+    
+    // Update speed display
+    const speedDisplay = document.getElementById('time-speed-display');
+    if (speedDisplay) {
+      const absSpeed = Math.abs(state.timeSpeedMultiplier);
+      let speedText = '';
+      if (absSpeed === 0) {
+        speedText = 'Paused';
+      } else if (absSpeed < 1) {
+        speedText = `${absSpeed.toFixed(2)}x`;
+      } else if (absSpeed < 10) {
+        speedText = `${absSpeed.toFixed(1)}x`;
+      } else {
+        speedText = `${Math.round(absSpeed)}x`;
+      }
+      speedDisplay.textContent = speedText;
+    }
+  });
+
   // Set initial state
   if (state.isTimeFlowing) {
     timeToggle.classList.add('playing');
     timeToggle.setAttribute('aria-label', 'Pause simulation');
+  }
+
+  // Set initial speed display
+  const speedDisplay = document.getElementById('time-speed-display');
+  if (speedDisplay) {
+    const absSpeed = Math.abs(state.timeSpeedMultiplier);
+    let speedText = '';
+    if (absSpeed === 0) {
+      speedText = 'Paused';
+    } else if (absSpeed < 1) {
+      speedText = `${absSpeed.toFixed(2)}x`;
+    } else if (absSpeed < 10) {
+      speedText = `${absSpeed.toFixed(1)}x`;
+    } else {
+      speedText = `${Math.round(absSpeed)}x`;
+    }
+    speedDisplay.textContent = speedText;
   }
 }

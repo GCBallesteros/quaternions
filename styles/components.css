@@ -227,6 +227,20 @@ input:checked + .slider:before {
   padding: 9px 9px;
   border-radius: 8px;
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#time-speed-display {
+  color: #fff;
+  min-width: 60px;
+  text-align: center;
+  font-family: monospace;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
 }
 
 .play-pause-btn {
