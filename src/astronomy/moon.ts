@@ -110,6 +110,7 @@ export function getMoonPosition(date: Date): {
 
   return {
     position,
+    // AI! I want the result of moonAge + 180 to be an angle defined between -180 and 180
     phase: moonAge + 180,
     age: (SYNODIC_MONTH * fixangle(moonAge)) / 360.0,
     distance: moonDistance,
