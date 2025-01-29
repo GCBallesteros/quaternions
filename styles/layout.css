@@ -31,7 +31,8 @@
   overflow: hidden;
 }
 
-#settings-container {
+#settings-container,
+#bodies-container {
   padding: 20px;
   color: white;
   background: #1e1e1e;
