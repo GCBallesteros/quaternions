@@ -108,10 +108,12 @@ export function getMoonPosition(date: Date): {
   const moonAge = lPP - L;
   //const phase = (1 - Math.cos(toRad(moonAge))) / 2;
 
+  // Convert moonAge + 180 to range [-180, 180]
+  const normalizedPhase = ((moonAge + 180 + 180) % 360) - 180;
+
   return {
     position,
-    // AI! I want the result of moonAge + 180 to be an angle defined between -180 and 180
-    phase: moonAge + 180,
+    phase: normalizedPhase,
     age: (SYNODIC_MONTH * fixangle(moonAge)) / 360.0,
     distance: moonDistance,
     angularDiameter: angularDiameter
