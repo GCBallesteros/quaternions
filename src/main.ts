@@ -17,6 +17,7 @@ import { log } from './logger.js';
 // TODO: Switch camera to null destroys everything
 // TODO: Docs explain the awaitable functions mainly mov2sat and addSatellite with norad id
 // TODO: We also need to expose the NamedTargets because the numbers are opaque.
+// TODO: When code ends with a comment I get a syntax error
 
 // REFACTORING
 // TODO: Improve name of createAnimator

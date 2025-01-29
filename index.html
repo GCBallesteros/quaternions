@@ -26,15 +26,16 @@
   <body>
     <div id="canvas-container">
       <canvas id="webgl-canvas"></canvas>
+      <div id="time-controls">
+        <button id="time-toggle">Start</button>
+      </div>
       <div id="top-links">
         <a
           href="https://quaternions.maxwellrules.com/documentation"
           target="_blank"
           >Documentation</a
         >
-        <a
-          href="https://github.com/GCBallesteros/quaternions"
-          target="_blank"
+        <a href="https://github.com/GCBallesteros/quaternions" target="_blank"
           >GitHub</a
         >
       </div>
@@ -70,7 +71,10 @@
         <div class="settings-group">
           <h3>Moon</h3>
           <div class="coordinate-display">
-            <div>ECEF: <span id="moon-x">0</span>, <span id="moon-y">0</span>, <span id="moon-z">0</span> km</div>
+            <div>
+              ECEF: <span id="moon-x">0</span>, <span id="moon-y">0</span>,
+              <span id="moon-z">0</span> km
+            </div>
             <div>Phase angle: <span id="moon-angle">0</span>°</div>
           </div>
         </div>

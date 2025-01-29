@@ -217,3 +217,32 @@ input:checked + .slider:before {
 #execute:hover {
   background-color: #0056b3;
 }
+
+#time-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(30, 30, 30, 0.8);
+  padding: 10px 20px;
+  border-radius: 8px;
+  z-index: 1000;
+}
+
+#time-toggle {
+  background-color: #f44336;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: point;
+  border-radius: 4px;
+}
+
+#time-toggle.paused {
+  background-color: #4caf50;
+}
