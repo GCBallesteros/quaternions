@@ -120,8 +120,8 @@ export function createAnimator(
     document.getElementById('moon-z')!.textContent = Math.round(
       moonData.position[2],
     ).toString();
-    document.getElementById('moon-fraction')!.textContent = Math.round(
-      moonData.phase * 100,
+    document.getElementById('moon-angle')!.textContent = Math.round(
+      moonData.phase,
     ).toString();
 
     renderer.render(scene, currentCamera);

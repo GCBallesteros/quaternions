@@ -106,11 +106,11 @@ export function getMoonPosition(date: Date): {
 
   // Calculate Moon's age and phase
   const moonAge = lPP - L;
-  const phase = (1 - Math.cos(toRad(moonAge))) / 2;
+  //const phase = (1 - Math.cos(toRad(moonAge))) / 2;
 
   return {
     position,
-    phase: phase,
+    phase: moonAge + 180,
     age: (SYNODIC_MONTH * fixangle(moonAge)) / 360.0,
     distance: moonDistance,
     angularDiameter: angularDiameter
