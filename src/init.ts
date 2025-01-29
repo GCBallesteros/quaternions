@@ -8,6 +8,7 @@ import { makeEarth } from './earth.js';
 import { makeMoon } from './moon.js';
 import { State } from './types.js';
 import { updateTimeDisplay } from './ui.js';
+import { setupTimeControls } from './components/timeControls.js';
 
 export function initializeCanvas(): {
   scene: THREE.Scene;
@@ -84,6 +85,7 @@ export function initScene(
   controls.minDistance = 8000;
   controls.maxDistance = 20000;
 
+  setupTimeControls(state);
   return state;
 }
 
