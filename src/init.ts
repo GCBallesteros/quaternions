@@ -107,11 +107,14 @@ export function createAnimator(
     }
     updateTimeDisplay(state);
 
-    // Update moon position display
-    const moonPos = state.bodies.moon.position;
-    document.getElementById('moon-x')!.textContent = Math.round(moonPos.x);
-    document.getElementById('moon-y')!.textContent = Math.round(moonPos.y);
-    document.getElementById('moon-z')!.textContent = Math.round(moonPos.z);
+    // Update moon position and phase display
+    const moonData = getMoonPosition(state.currentTime);
+    state.bodies.moon.position.set(...moonData.position);
+    
+    document.getElementById('moon-x')!.textContent = Math.round(moonData.position[0]);
+    document.getElementById('moon-y')!.textContent = Math.round(moonData.position[1]);
+    document.getElementById('moon-z')!.textContent = Math.round(moonData.position[2]);
+    document.getElementById('moon-phase')!.textContent = Math.round(moonData.phase * 100);
 
     renderer.render(scene, currentCamera);
   }
