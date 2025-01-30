@@ -7,11 +7,11 @@ function formatSpeed(timeSpeedMultiplier: number): string {
   if (absSpeed === 0) {
     speedText = 'Paused';
   } else if (absSpeed < 1) {
-    speedText = `${absSpeed.toFixed(2)}x`;
+    speedText = `${timeSpeedMultiplier.toFixed(2)}x`;
   } else if (absSpeed < 10) {
-    speedText = `${absSpeed.toFixed(1)}x`;
+    speedText = `${timeSpeedMultiplier.toFixed(1)}x`;
   } else {
-    speedText = `${Math.round(absSpeed)}x`;
+    speedText = `${Math.round(timeSpeedMultiplier)}x`;
   }
 
   return speedText;
