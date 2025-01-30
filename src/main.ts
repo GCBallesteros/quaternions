@@ -8,7 +8,6 @@ import { log } from './logger.js';
 
 // Before share
 // TODO: Add code cells
-// TODO: When code ends with a comment I get a syntax error missing a newline
 // TODO: Switch camera to null destroys everything
 // TODO: We also need to expose the NamedTargets because the numbers are opaque.
 // TODO: Bodies div should show all the points

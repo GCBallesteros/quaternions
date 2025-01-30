@@ -22,7 +22,10 @@ export function buildExecuteCommand(
       try {
         const codeToExecute = `(async () => {
           ${commandDeclarations}
-          return await (async () => { ${command} })();
+          return await (
+            async () => { 
+              ${command}
+            })();
         })()`;
 
         const result = eval(codeToExecute);
