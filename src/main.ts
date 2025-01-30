@@ -7,12 +7,12 @@ import { buildCommandClosures } from './commands.js';
 import { log } from './logger.js';
 
 // Before share
-// TODO: Add code cells
-// TODO: Switch camera to null destroys everything
 // TODO: We also need to expose the NamedTargets because the numbers are opaque.
+// TODO: Refactor: Better organization of css? Per component?
+// TODO: Refactor: Setup ui function is getting massive splitting it a bit would be nice.
 // TODO: Bodies div should show all the points
 // TODO: Change color of satellites and points from the bodies div
-// TODO:  And update points docs to include sun
+// TODO: And update points docs to include sun
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
 // TODO: Make a workflow for Satellite. For example a constantly running nadir pointing sat
 // TODO: Document Satellites

@@ -118,6 +118,22 @@ export function setupUI(
     editor.deltaDecorations([], decorations);
   }
 
+  function findNextCellLine(
+    editor: monaco.editor.IStandaloneCodeEditor,
+    currentLine: number,
+  ): number | null {
+    const model = editor.getModel();
+    if (!model) return null;
+
+    const lines = model.getLinesContent();
+    for (let i = currentLine + 1; i < lines.length; i++) {
+      if (lines[i].trim().startsWith('// %%')) {
+        return i + 1; // Return 1-based line number
+      }
+    }
+    return null;
+  }
+
   function getCurrentCell(editor: monaco.editor.IStandaloneCodeEditor): string {
     const model = editor.getModel();
     if (!model) return '';
@@ -167,32 +183,44 @@ export function setupUI(
   const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
   const modifierKey = isMac ? '⌘' : 'Ctrl';
 
+  function executeCell(editor: monaco.editor.IStandaloneCodeEditor) {
+    const cellContent = getCurrentCell(editor);
+    executeCommand(cellContent.trim());
+
+    // Move to next cell if available
+    const position = editor.getPosition();
+    if (position) {
+      const nextCellLine = findNextCellLine(editor, position.lineNumber);
+      if (nextCellLine !== null) {
+        editor.setPosition({ lineNumber: nextCellLine, column: 1 });
+        editor.revealLineInCenter(nextCellLine);
+      }
+    }
+  }
+
+  function executeScript(editor: monaco.editor.IStandaloneCodeEditor) {
+    executeCommand(editor.getValue().trim());
+  }
+
   const executeScriptButton = document.getElementById('execute-script')!;
   executeScriptButton.innerHTML = `Execute Script<br><span class="shortcut">(${modifierKey}+⇧+↵)</span>`;
-  executeScriptButton.addEventListener('click', () => {
-    executeCommand(editor.getValue().trim());
-  });
+  executeScriptButton.addEventListener('click', () => executeScript(editor));
 
   const executeCellButton = document.getElementById('execute-cell')!;
   executeCellButton.innerHTML = `Execute Cell<br><span class="shortcut">(⇧+↵)</span>`;
-  executeCellButton.addEventListener('click', () => {
-    const cellContent = getCurrentCell(editor);
-    executeCommand(cellContent.trim());
-  });
+  executeCellButton.addEventListener('click', () => executeCell(editor));
 
   // Add keyboard shortcuts
-  editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => {
-    const cellContent = getCurrentCell(editor);
-    executeCommand(cellContent.trim());
-  });
+  editor.addCommand(
+    monaco.KeyMod.Shift | monaco.KeyCode.Enter,
+    () => executeCell(editor),
+  );
 
   editor.addCommand(
     (isMac ? monaco.KeyMod.WinCtrl : monaco.KeyMod.CtrlCmd) |
       monaco.KeyMod.Shift |
       monaco.KeyCode.Enter,
-    () => {
-      executeCommand(editor.getValue().trim());
-    },
+    () => executeScript(editor),
   );
 
   // Setup resizer
