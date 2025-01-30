@@ -56,7 +56,7 @@ export function setupUI(
     '0.2',
     (value: number) => {
       state.lights.ambient.intensity = value;
-    }
+    },
   );
   const lightingGroup = document.querySelector('.settings-group:nth-child(2)');
   if (lightingGroup) {
@@ -96,6 +96,28 @@ export function setupUI(
     executeCommand(`setTime(new Date("${newDate.toISOString()}"))`);
   });
 
+  function highlightCells(editor: monaco.editor.IStandaloneCodeEditor) {
+    const model = editor.getModel();
+    if (!model) return;
+
+    const decorations: monaco.editor.IModelDeltaDecoration[] = [];
+    const lines = model.getLinesContent();
+
+    lines.forEach((line, index) => {
+      if (line.trim().startsWith('// %%')) {
+        decorations.push({
+          range: new monaco.Range(index + 1, 1, index + 1, line.length + 1),
+          options: {
+            isWholeLine: true,
+            className: 'cell-divider',
+          },
+        });
+      }
+    });
+
+    editor.deltaDecorations([], decorations);
+  }
+
   // Setup editor
   editor = monaco.editor.create(
     document.getElementById('monaco-editor') as HTMLElement,
@@ -110,6 +132,11 @@ export function setupUI(
       },
     },
   );
+
+  // Setup cell highlighting
+  editor.onDidChangeModelContent(() => highlightCells(editor));
+  // Initial highlight
+  highlightCells(editor);
 
   const executeButton = document.getElementById('execute')!;
   executeButton.addEventListener('click', () => {
@@ -159,11 +186,12 @@ export function setupUI(
   resizeCanvas();
 }
 
-const satelliteScript = `// Reset scene so that we can hit execute repeatedly
+const satelliteScript = `// %% Reset
+// Reset scene so that we can hit execute repeatedly
 // on this sample script without errors
 reset();
 
-// Simulation params
+// %% Setup simulation parameters
 const target_coords_ecef = geo2xyz([60.186, 24.828, 0]);
 const satellite_location_geo = [62.0, 34.0, 500.0];
 // quaternions are in xyzw order
@@ -182,6 +210,8 @@ addPoint("KS", target_coords_ecef);
 createLine("sat2KS", "sat", "KS");
 // Rotate 'sat' to buggy quaternion
 rot("sat", satellite_bad_quat);
+
+// %% Calculate pointing error
 // Calculate angle between z-axis of 'sat' and 'sat2KS'
 let angle_between_pointing_and_target = angle(
      "sat2KS", point("sat").frame.z
