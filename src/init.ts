@@ -62,7 +62,7 @@ export function initScene(
     tles: {},
     currentTime: new Date(),
     isTimeFlowing: true,
-    timeSpeedMultiplier: 400,
+    timeSpeedMultiplier: 2,
     cameras: { main: camera },
     bodies: { moon },
   };
