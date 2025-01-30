@@ -297,7 +297,6 @@ input:checked + .slider:before {
 
 /* Code cell dividers */
 .cell-divider {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(128, 255, 128, 0.1);
   border-top: 1px solid rgba(255, 255, 255, 0.2);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
