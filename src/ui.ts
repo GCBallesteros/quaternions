@@ -118,6 +118,31 @@ export function setupUI(
     editor.deltaDecorations([], decorations);
   }
 
+  function getCurrentCell(editor: monaco.editor.IStandaloneCodeEditor): string {
+    const model = editor.getModel();
+    if (!model) return "";
+
+    const position = editor.getPosition();
+    if (!position) return "";
+
+    const lines = model.getLinesContent();
+    let currentCell = [];
+
+    // Search backwards for cell boundary or start of file
+    for (let i = position.lineNumber - 1; i >= 0; i--) {
+      if (lines[i].trim().startsWith('// %%')) break;
+      currentCell.unshift(lines[i]);
+    }
+
+    // Search forwards for cell boundary or end of file
+    for (let i = position.lineNumber; i < lines.length; i++) {
+      if (lines[i].trim().startsWith('// %%')) break;
+      currentCell.push(lines[i]);
+    }
+
+    return currentCell.join("\n");
+  }
+
   // Setup editor
   editor = monaco.editor.create(
     document.getElementById('monaco-editor') as HTMLElement,
