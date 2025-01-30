@@ -214,9 +214,11 @@ export class Satellite extends OrientedPoint {
           switch (namedTarget) {
             case NamedTargets.Moon:
               primaryTargetVector = state.bodies.moon.position
-                .min(position_)
+                .clone()
+                .sub(position_)
                 .normalize()
                 .toArray();
+              console.log(state.bodies.moon.position);
               break;
             //case NamedTargets.Sun:
             //  primaryTargetVector = [0, 0, 0];
@@ -241,7 +243,8 @@ export class Satellite extends OrientedPoint {
           switch (namedTarget) {
             case NamedTargets.Moon:
               secondaryTargetVector = state.bodies.moon.position
-                .min(position_)
+                .clone()
+                .sub(position_)
                 .normalize()
                 .toArray();
               break;
