@@ -131,6 +131,9 @@ export function createAnimator(
   renderer.setAnimationLoop(animate);
 
   return function switchCamera(newCamera: THREE.PerspectiveCamera) {
+    if (!(newCamera instanceof THREE.PerspectiveCamera)) {
+      throw new Error('Invalid camera: switchCamera requires a PerspectiveCamera instance');
+    }
     currentCamera = newCamera; // Change the camera within the closure
   };
 }
