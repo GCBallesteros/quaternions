@@ -238,10 +238,18 @@ input:checked + .slider:before {
   background-color: #007bff;
   color: white;
   border: none;
-  padding: 10px;
+  padding: 8px 10px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   flex: 1;
+  white-space: normal;
+  line-height: 1.2;
+}
+
+#execute-script .shortcut,
+#execute-cell .shortcut {
+  font-size: 12px;
+  opacity: 0.8;
 }
 
 #execute-script:hover,

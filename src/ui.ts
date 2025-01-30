@@ -163,16 +163,37 @@ export function setupUI(
   // Initial highlight
   highlightCells(editor);
 
+  // Detect platform for keyboard shortcuts
+  const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+  const modifierKey = isMac ? '⌘' : 'Ctrl';
+
   const executeScriptButton = document.getElementById('execute-script')!;
+  executeScriptButton.innerHTML = `Execute Script<br><span class="shortcut">(${modifierKey}+⇧+↵)</span>`;
   executeScriptButton.addEventListener('click', () => {
     executeCommand(editor.getValue().trim());
   });
 
   const executeCellButton = document.getElementById('execute-cell')!;
+  executeCellButton.innerHTML = `Execute Cell<br><span class="shortcut">(⇧+↵)</span>`;
   executeCellButton.addEventListener('click', () => {
     const cellContent = getCurrentCell(editor);
     executeCommand(cellContent.trim());
   });
+
+  // Add keyboard shortcuts
+  editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => {
+    const cellContent = getCurrentCell(editor);
+    executeCommand(cellContent.trim());
+  });
+
+  editor.addCommand(
+    (isMac ? monaco.KeyMod.WinCtrl : monaco.KeyMod.CtrlCmd) |
+      monaco.KeyMod.Shift |
+      monaco.KeyCode.Enter,
+    () => {
+      executeCommand(editor.getValue().trim());
+    },
+  );
 
   // Setup resizer
   const resizer = document.getElementById('resizer')!;
