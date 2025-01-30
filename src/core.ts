@@ -55,13 +55,18 @@ function resolveVector(
       }
     }
 
+    // Special case for Sun since its position is already the direction vector
+    if (arg === 'Sun') {
+      return Ok(state.lights.sun.position.clone());
+    }
+
     if (arg.includes('->')) {
       const [startName, endName] = arg.split('->').map((name) => name.trim());
-      const startPos =
-        startName === 'Moon'
+      const startPos = 
+        startName === 'Moon' 
           ? state.bodies.moon.position
           : utils.getPositionOfPoint(state, startName);
-      const endPos =
+      const endPos = 
         endName === 'Moon'
           ? state.bodies.moon.position
           : utils.getPositionOfPoint(state, endName);
