@@ -120,13 +120,13 @@ export function setupUI(
 
   function getCurrentCell(editor: monaco.editor.IStandaloneCodeEditor): string {
     const model = editor.getModel();
-    if (!model) return "";
+    if (!model) return '';
 
     const position = editor.getPosition();
-    if (!position) return "";
+    if (!position) return '';
 
     const lines = model.getLinesContent();
-    let currentCell = [];
+    let currentCell: string[] = [];
 
     // Search backwards for cell boundary or start of file
     for (let i = position.lineNumber - 1; i >= 0; i--) {
@@ -140,7 +140,7 @@ export function setupUI(
       currentCell.push(lines[i]);
     }
 
-    return currentCell.join("\n");
+    return currentCell.join('\n');
   }
 
   // Setup editor
@@ -163,9 +163,14 @@ export function setupUI(
   // Initial highlight
   highlightCells(editor);
 
-  const executeButton = document.getElementById('execute')!;
-  executeButton.addEventListener('click', () => {
+  const executeScriptButton = document.getElementById('execute-script')!;
+  executeScriptButton.addEventListener('click', () => {
     executeCommand(editor.getValue().trim());
+  });
+
+  const executeCellButton = document.getElementById('execute-cell')!;
+  executeCellButton.addEventListener('click', () => {
+    executeCommand(editor.getValue().trim()); // For now, same behavior as execute script
   });
 
   // Setup resizer
