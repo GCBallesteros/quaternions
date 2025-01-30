@@ -119,7 +119,7 @@ export type OrientationMode =
 
 export enum NamedTargets {
   Moon,
-  //Sun,
+  Sun,
   Velocity,
   Nadir,
 }
@@ -220,9 +220,13 @@ export class Satellite extends OrientedPoint {
                 .toArray();
               console.log(state.bodies.moon.position);
               break;
-            //case NamedTargets.Sun:
-            //  primaryTargetVector = [0, 0, 0];
-            //  break;
+            case NamedTargets.Sun:
+              // Get sun direction from the directional light
+              primaryTargetVector = state.lights.sun.position
+                .clone()
+                .normalize()
+                .toArray();
+              break;
             case NamedTargets.Velocity:
               primaryTargetVector = velocity_.clone().normalize().toArray();
               break;
@@ -245,6 +249,12 @@ export class Satellite extends OrientedPoint {
               secondaryTargetVector = state.bodies.moon.position
                 .clone()
                 .sub(position_)
+                .normalize()
+                .toArray();
+              break;
+            case NamedTargets.Sun:
+              secondaryTargetVector = state.lights.sun.position
+                .clone()
                 .normalize()
                 .toArray();
               break;
