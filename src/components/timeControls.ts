@@ -61,6 +61,14 @@ export function setupTimeControls(state: State) {
     timeToggle.setAttribute('aria-label', 'Pause simulation');
   }
 
+  // Set initial speed multiplier
+  const initialValue = parseInt(timeSlider.value);
+  if (initialValue !== 0) {
+    const magnitude = Math.abs(initialValue);
+    const logSpeed = Math.exp(Math.log(1000) * (magnitude / 1000));
+    state.timeSpeedMultiplier = Math.sign(initialValue) * logSpeed;
+  }
+
   // Set initial speed display
   const speedDisplay = document.getElementById('time-speed-display');
   if (speedDisplay) {
