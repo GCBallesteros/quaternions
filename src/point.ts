@@ -128,6 +128,29 @@ export class Satellite extends OrientedPoint {
   private tle: string;
   private orientationMode: OrientationMode;
 
+  private getTargetVector(
+    namedTarget: NamedTargets,
+    position_: THREE.Vector3,
+    velocity_: THREE.Vector3,
+    state: State,
+  ): Vector3 {
+    switch (namedTarget) {
+      case NamedTargets.Moon:
+        return state.bodies.moon.position
+          .clone()
+          .sub(position_)
+          .normalize()
+          .toArray();
+      case NamedTargets.Sun:
+        // Sun light position is already the direction vector
+        return state.lights.sun.position.toArray();
+      case NamedTargets.Velocity:
+        return velocity_.clone().normalize().toArray();
+      case NamedTargets.Nadir:
+        return position_.clone().normalize().negate().toArray();
+    }
+  }
+
   constructor(
     geometry: THREE.Group,
     tle: string,
@@ -209,65 +232,23 @@ export class Satellite extends OrientedPoint {
         let primaryTargetVector: Vector3;
         let secondaryTargetVector: Vector3;
 
-        if (typeof this.orientationMode.primaryTargetVector === 'number') {
-          const namedTarget = this.orientationMode.primaryTargetVector;
-          switch (namedTarget) {
-            case NamedTargets.Moon:
-              primaryTargetVector = state.bodies.moon.position
-                .clone()
-                .sub(position_)
-                .normalize()
-                .toArray();
-              console.log(state.bodies.moon.position);
-              break;
-            case NamedTargets.Sun:
-              // Get sun direction from the directional light
-              primaryTargetVector = state.lights.sun.position
-                .clone()
-                .normalize()
-                .toArray();
-              break;
-            case NamedTargets.Velocity:
-              primaryTargetVector = velocity_.clone().normalize().toArray();
-              break;
-            case NamedTargets.Nadir:
-              primaryTargetVector = position_
-                .clone()
-                .normalize()
-                .negate()
-                .toArray();
-              break;
-          }
-        } else {
-          primaryTargetVector = this.orientationMode.primaryTargetVector;
-        }
+        primaryTargetVector = typeof this.orientationMode.primaryTargetVector === 'number'
+          ? this.getTargetVector(
+              this.orientationMode.primaryTargetVector,
+              position_,
+              velocity_,
+              state,
+            )
+          : this.orientationMode.primaryTargetVector;
 
-        if (typeof this.orientationMode.secondaryTargetVector === 'number') {
-          const namedTarget = this.orientationMode.secondaryTargetVector;
-          switch (namedTarget) {
-            case NamedTargets.Moon:
-              secondaryTargetVector = state.bodies.moon.position
-                .clone()
-                .sub(position_)
-                .normalize()
-                .toArray();
-              break;
-            case NamedTargets.Sun:
-              secondaryTargetVector = state.lights.sun.position
-                .clone()
-                .normalize()
-                .toArray();
-              break;
-            case NamedTargets.Velocity:
-              secondaryTargetVector = velocity_.normalize().toArray();
-              break;
-            case NamedTargets.Nadir:
-              secondaryTargetVector = position_.normalize().toArray();
-              break;
-          }
-        } else {
-          secondaryTargetVector = this.orientationMode.secondaryTargetVector;
-        }
+        secondaryTargetVector = typeof this.orientationMode.secondaryTargetVector === 'number'
+          ? this.getTargetVector(
+              this.orientationMode.secondaryTargetVector,
+              position_,
+              velocity_,
+              state,
+            )
+          : this.orientationMode.secondaryTargetVector;
 
         const new_orientation_result = _findBestQuaternion(
           state,
