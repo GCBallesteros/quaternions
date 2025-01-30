@@ -132,7 +132,7 @@ export function setupEditor(
   editor.onDidChangeModelContent(() => highlightCells(editor));
   highlightCells(editor);
 
-  const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+  const isMac = /Mac/.test(navigator.userAgent);
   const modifierKey = isMac ? '⌘' : 'Ctrl';
 
   function executeCell() {
