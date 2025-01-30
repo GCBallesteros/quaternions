@@ -145,6 +145,27 @@ input:checked + .slider:before {
   color: #fff;
 }
 
+/* Wrapper to position the marker relative to the slider */
+.slider-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Style for the marker */
+.slider-marker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 15px;
+  background: #4a4a4a;
+  transform: translate(-50%, -50%);
+  pointer-events: none; /* Ensures it does not interfere with slider */
+  z-index:1;
+}
+
 /* Range Control */
 .range-control {
   margin-top: 15px;

@@ -7,15 +7,17 @@ import { buildCommandClosures } from './commands.js';
 import { log } from './logger.js';
 
 // Before share
-// TODO: I want a small marker at the center to have a reference point
-// TODO: Add Sun pointing mode. And update points
-// TODO: When code ends with a comment I get a syntax error
+// TODO: Add Sun pointing mode. And update points docs
+// TODO: Cleanup points.ts
+// TODO: Add code cells
+// TODO: When code ends with a comment I get a syntax error missing a newline
 // TODO: Switch camera to null destroys everything
 // TODO: We also need to expose the NamedTargets because the numbers are opaque.
+// TODO: Bodies div should show all the points
+// TODO: Change color of satellites and points from the bodies div
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
 // TODO: Make a workflow for Satellite. For example a constantly running nadir pointing sat
 // TODO: Document Satellites
-// TODO: Bodies div should show all the points
 // TODO: Make a Moon workflow
 // TODO: Docs explain the awaitable functions mainly mov2sat and addSatellite with norad id
 
