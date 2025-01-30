@@ -170,7 +170,8 @@ export function setupUI(
 
   const executeCellButton = document.getElementById('execute-cell')!;
   executeCellButton.addEventListener('click', () => {
-    executeCommand(editor.getValue().trim()); // For now, same behavior as execute script
+    const cellContent = getCurrentCell(editor);
+    executeCommand(cellContent.trim());
   });
 
   // Setup resizer
