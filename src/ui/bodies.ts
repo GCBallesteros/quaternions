@@ -5,6 +5,7 @@ import { Vector3 } from '../types.js';
 // Track expanded state of points
 const expandedPoints = new Set<string>();
 
+// AI! Since we are passing the point we don't need to pass the position that can be deduced from point
 function createPointElement(
   name: string,
   type: string,
@@ -22,7 +23,14 @@ function createPointElement(
     </div>
     <div class="point-details">
       <div>Position: [${position[0].toFixed(2)}, ${position[1].toFixed(2)}, ${position[2].toFixed(2)}]</div>
-      ${type !== 'Point' ? `<div>Quaternion: [${point.geometry.quaternion.toArray().map(v => v.toFixed(3)).join(', ')}]</div>` : ''}
+      ${
+        type !== 'Point'
+          ? `<div>Quaternion: [${point.geometry.quaternion
+              .toArray()
+              .map((v) => v.toFixed(3))
+              .join(', ')}]</div>`
+          : ''
+      }
     </div>
   `;
 
@@ -81,7 +89,14 @@ function updatePointElement(
     const point = state.points[name];
     detailsElement.innerHTML = `
       <div>Position: [${position[0].toFixed(2)}, ${position[1].toFixed(2)}, ${position[2].toFixed(2)}]</div>
-      ${type !== 'Point' ? `<div>Quaternion: [${point.geometry.quaternion.toArray().map(v => v.toFixed(3)).join(', ')}]</div>` : ''}
+      ${
+        type !== 'Point'
+          ? `<div>Quaternion: [${point.geometry.quaternion
+              .toArray()
+              .map((v) => v.toFixed(3))
+              .join(', ')}]</div>`
+          : ''
+      }
     `;
   }
 }
@@ -133,6 +148,7 @@ function updatePointsList(state: State): void {
     }
 
     if (!pointElement) {
+      // AI! We don't need to pass position because it can be deduced from point
       pointElement = createPointElement(name, type, position, point);
       pointsList.appendChild(pointElement);
     } else {
