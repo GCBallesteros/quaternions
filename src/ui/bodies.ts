@@ -57,9 +57,7 @@ function createPointElement(
 function updatePointElement(
   element: HTMLElement,
   type: string,
-  position: Vector3,
-  state: State,
-  name: string,
+  point: Point,
 ): void {
   const typeElement = element.querySelector('.point-type');
   const detailsElement = element.querySelector('.point-details');
@@ -69,7 +67,7 @@ function updatePointElement(
   if (typeElement) typeElement.textContent = type;
 
   // Only update color picker if value is different from point's color
-  const pointColor = state.points[name].color;
+  const pointColor = point.color;
   if (colorPicker.value !== pointColor) {
     colorPicker.value = pointColor;
   }
@@ -80,12 +78,13 @@ function updatePointElement(
     // picking color the value of the picker gets set and it's not modified
     // after closing the picker. Anyways with input it's nicer and more dynamic
     colorPicker.addEventListener('input', () => {
-      state.points[name].color = colorPicker.value;
+      point.color = colorPicker.value;
     });
     colorPicker.dataset.hasChangeHandler = 'true';
   }
+
+  const position = point.position;
   if (detailsElement) {
-    const point = state.points[name];
     detailsElement.innerHTML = `
       <div>Position: [${position[0].toFixed(2)}, ${position[1].toFixed(2)}, ${position[2].toFixed(2)}]</div>
       ${
@@ -150,7 +149,7 @@ function updatePointsList(state: State): void {
       pointElement = createPointElement(name, type, point);
       pointsList.appendChild(pointElement);
     } else {
-      updatePointElement(pointElement, type, position, state, name);
+      updatePointElement(pointElement, type, position, state.points[name]);
     }
   });
 }
