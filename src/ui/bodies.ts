@@ -49,16 +49,20 @@ function updatePointElement(
   element: HTMLElement,
   type: string,
   position: Vector3,
+  state: State,
+  name: string,
 ): void {
   const typeElement = element.querySelector('.point-type');
   const detailsElement = element.querySelector('.point-details');
-  const colorPicker = element.querySelector('.color-picker') as HTMLInputElement;
+  const colorPicker = element.querySelector(
+    '.color-picker',
+  ) as HTMLInputElement;
   if (typeElement) typeElement.textContent = type;
-  
+
   // Add color picker change handler if not already added
   if (!colorPicker.dataset.hasChangeHandler) {
     colorPicker.addEventListener('change', () => {
-      state.points[name].setColor(colorPicker.value);
+      state.points[name].color = colorPicker.value;
     });
     colorPicker.dataset.hasChangeHandler = 'true';
   }
@@ -117,7 +121,7 @@ function updatePointsList(state: State): void {
       pointElement = createPointElement(name, type, position);
       pointsList.appendChild(pointElement);
     } else {
-      updatePointElement(pointElement, type, position);
+      updatePointElement(pointElement, type, position, state, name);
     }
   });
 }

@@ -19,7 +19,16 @@ export class Point {
   set position(pos: Vector3) {
     this.geometry.position.set(pos[0], pos[1], pos[2]);
   }
-  // AI! Add a set color(color: string) method to modify the color of the underlying point
+
+  set color(color: string) {
+    const sphere = this.geometry.children.find(
+      (child) => child instanceof THREE.Mesh && child.name === 'point-sphere'
+    ) as THREE.Mesh;
+
+    if (sphere && sphere.material instanceof THREE.MeshBasicMaterial) {
+      sphere.material.color.set(color);
+    }
+  }
 }
 
 export class OrientedPoint extends Point {
@@ -233,23 +242,25 @@ export class Satellite extends OrientedPoint {
         let primaryTargetVector: Vector3;
         let secondaryTargetVector: Vector3;
 
-        primaryTargetVector = typeof this.orientationMode.primaryTargetVector === 'number'
-          ? this.getTargetVector(
-              this.orientationMode.primaryTargetVector,
-              position_,
-              velocity_,
-              state,
-            )
-          : this.orientationMode.primaryTargetVector;
+        primaryTargetVector =
+          typeof this.orientationMode.primaryTargetVector === 'number'
+            ? this.getTargetVector(
+                this.orientationMode.primaryTargetVector,
+                position_,
+                velocity_,
+                state,
+              )
+            : this.orientationMode.primaryTargetVector;
 
-        secondaryTargetVector = typeof this.orientationMode.secondaryTargetVector === 'number'
-          ? this.getTargetVector(
-              this.orientationMode.secondaryTargetVector,
-              position_,
-              velocity_,
-              state,
-            )
-          : this.orientationMode.secondaryTargetVector;
+        secondaryTargetVector =
+          typeof this.orientationMode.secondaryTargetVector === 'number'
+            ? this.getTargetVector(
+                this.orientationMode.secondaryTargetVector,
+                position_,
+                velocity_,
+                state,
+              )
+            : this.orientationMode.secondaryTargetVector;
 
         const new_orientation_result = _findBestQuaternion(
           state,

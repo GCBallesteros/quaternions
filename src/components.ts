@@ -106,13 +106,11 @@ export function createFloatingPoint(
     widthSegments,
     heightSegments,
   );
-  const material = new THREE.MeshStandardMaterial({
+  const material = new THREE.MeshBasicMaterial({
     color: color,
-    metalness: 0.3,
-    roughness: 0.4,
   });
   const floatingPoint = new THREE.Mesh(geometry, material);
-  floatingPoint.name = 'point';
+  floatingPoint.name = 'point-sphere';  // Give the sphere mesh a specific name
   pointGroup.add(floatingPoint);
   return new Point(pointGroup);
 }
