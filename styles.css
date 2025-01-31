@@ -8,12 +8,41 @@
   background: #2d2d2d;
   border-radius: 4px;
   font-family: monospace;
+}
+
+.point-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 8px;
 }
 
 .point-type {
   color: #888;
   font-size: 0.9em;
+  margin-left: auto;
+}
+
+.expand-button {
+  width: 12px;
+  height: 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  color: #888;
+  user-select: none;
+}
+
+.expand-button.expanded {
+  transform: rotate(90deg);
+}
+
+.point-details {
+  margin-left: 20px;
+  margin-top: 8px;
+  display: none;
+  color: #888;
+  font-size: 0.9em;
+}
+
+.point-details.expanded {
+  display: block;
 }
