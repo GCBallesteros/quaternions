@@ -59,9 +59,18 @@ function updatePointElement(
   ) as HTMLInputElement;
   if (typeElement) typeElement.textContent = type;
 
+  // Only update color picker if value is different from point's color
+  const pointColor = state.points[name].color;
+  if (colorPicker.value !== pointColor) {
+    colorPicker.value = pointColor;
+  }
+
   // Add color picker change handler if not already added
   if (!colorPicker.dataset.hasChangeHandler) {
-    colorPicker.addEventListener('change', () => {
+    // if we listen to change we have a race condition because while we are
+    // picking color the value of the picker gets set and it's not modified
+    // after closing the picker. Anyways with input it's nicer and more dynamic
+    colorPicker.addEventListener('input', () => {
       state.points[name].color = colorPicker.value;
     });
     colorPicker.dataset.hasChangeHandler = 'true';

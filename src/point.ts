@@ -20,9 +20,20 @@ export class Point {
     this.geometry.position.set(pos[0], pos[1], pos[2]);
   }
 
+  get color(): string {
+    const sphere = this.geometry.children.find(
+      (child) => child instanceof THREE.Mesh && child.name === 'point-sphere',
+    ) as THREE.Mesh;
+
+    if (sphere && sphere.material instanceof THREE.MeshBasicMaterial) {
+      return '#' + sphere.material.color.getHexString();
+    }
+    return '#ffffff';
+  }
+
   set color(color: string) {
     const sphere = this.geometry.children.find(
-      (child) => child instanceof THREE.Mesh && child.name === 'point-sphere'
+      (child) => child instanceof THREE.Mesh && child.name === 'point-sphere',
     ) as THREE.Mesh;
 
     if (sphere && sphere.material instanceof THREE.MeshBasicMaterial) {

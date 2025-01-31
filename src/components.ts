@@ -110,7 +110,7 @@ export function createFloatingPoint(
     color: color,
   });
   const floatingPoint = new THREE.Mesh(geometry, material);
-  floatingPoint.name = 'point-sphere';  // Give the sphere mesh a specific name
+  floatingPoint.name = 'point-sphere'; // Give the sphere mesh a specific name
   pointGroup.add(floatingPoint);
   return new Point(pointGroup);
 }
