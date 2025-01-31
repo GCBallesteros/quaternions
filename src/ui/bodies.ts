@@ -1,17 +1,16 @@
 import { State } from '../types.js';
-import { OrientedPoint, Satellite } from '../point.js';
+import { Point, OrientedPoint, Satellite } from '../point.js';
 import { Vector3 } from '../types.js';
 
 // Track expanded state of points
 const expandedPoints = new Set<string>();
 
-// AI! Since we are passing the point we don't need to pass the position that can be deduced from point
 function createPointElement(
   name: string,
   type: string,
-  position: Vector3,
-  point: OrientedPoint | Satellite,
+  point: Point,
 ): HTMLElement {
+  const position = point.position;
   const pointElement = document.createElement('div');
   pointElement.className = 'point-item';
   pointElement.innerHTML = `
@@ -148,8 +147,7 @@ function updatePointsList(state: State): void {
     }
 
     if (!pointElement) {
-      // AI! We don't need to pass position because it can be deduced from point
-      pointElement = createPointElement(name, type, position, point);
+      pointElement = createPointElement(name, type, point);
       pointsList.appendChild(pointElement);
     } else {
       updatePointElement(pointElement, type, position, state, name);
