@@ -15,6 +15,7 @@ function createPointElement(
   pointElement.innerHTML = `
     <div class="point-header">
       <span class="expand-button">▶</span>
+      <input type="color" class="color-picker" value="#ffffff" title="Point color">
       <span class="point-name">${name}</span>
       <span class="point-type">${type}</span>
     </div>
@@ -51,7 +52,16 @@ function updatePointElement(
 ): void {
   const typeElement = element.querySelector('.point-type');
   const detailsElement = element.querySelector('.point-details');
+  const colorPicker = element.querySelector('.color-picker') as HTMLInputElement;
   if (typeElement) typeElement.textContent = type;
+  
+  // Add color picker change handler if not already added
+  if (!colorPicker.dataset.hasChangeHandler) {
+    colorPicker.addEventListener('change', () => {
+      state.points[name].setColor(colorPicker.value);
+    });
+    colorPicker.dataset.hasChangeHandler = 'true';
+  }
   if (detailsElement) {
     detailsElement.textContent = `Position: [${position[0].toFixed(2)}, ${position[1].toFixed(2)}, ${position[2].toFixed(2)}]`;
   }

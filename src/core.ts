@@ -336,6 +336,7 @@ export function _addPoint(
   name: string,
   coordinates: Vector3,
   quaternion: [number, number, number, number] | null = null,
+  color: string = '#ffffff'
 ): Result<null, string> {
   if (!utils.validateName(name, state)) {
     return Err('Invalid point name or name already exists');
@@ -353,7 +354,7 @@ export function _addPoint(
       return Err('Invalid quaternion: must have exactly 4 components');
     }
 
-    let new_point_: Point = createFloatingPoint();
+    let new_point_: Point = createFloatingPoint(color);
     new_point_.geometry.position.set(
       coordinates[0],
       coordinates[1],
@@ -363,7 +364,7 @@ export function _addPoint(
     const q = new THREE.Quaternion(...quaternion); // xyzw
     new_point.geometry.setRotationFromQuaternion(q);
   } else {
-    new_point = createFloatingPoint();
+    new_point = createFloatingPoint(color);
     new_point.geometry.position.set(...coordinates);
   }
 

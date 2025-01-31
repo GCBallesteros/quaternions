@@ -95,10 +95,10 @@ export function createFrame(
 
 // Floating Points
 export function createFloatingPoint(
+  color: string = '#ffffff',
   radius: number = 50,
   widthSegments: number = 16,
   heightSegments: number = 16,
-  color: number = 0xff0000,
 ): Point {
   const pointGroup = new THREE.Group();
   const geometry = new THREE.SphereGeometry(
@@ -106,10 +106,13 @@ export function createFloatingPoint(
     widthSegments,
     heightSegments,
   );
-  const material = new THREE.MeshBasicMaterial({
-    color,
+  const material = new THREE.MeshStandardMaterial({
+    color: color,
+    metalness: 0.3,
+    roughness: 0.4,
   });
   const floatingPoint = new THREE.Mesh(geometry, material);
+  floatingPoint.name = 'point';
   pointGroup.add(floatingPoint);
   return new Point(pointGroup);
 }

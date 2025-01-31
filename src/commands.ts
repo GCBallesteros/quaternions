@@ -59,8 +59,9 @@ export function buildCommandClosures(
     name: string,
     coordinates: Vector3,
     quaternion = null,
+    color = '#ffffff'
   ): void {
-    const result = _addPoint(scene, state, name, coordinates, quaternion);
+    const result = _addPoint(scene, state, name, coordinates, quaternion, color);
     if (result.ok) {
       return;
     } else {
