@@ -48,6 +48,9 @@ log(angle_between_pointing_and_target);
 // rot("sat", good_quat);
 `;
 
+// Store the decorations collection at module level so we can clear it between updates
+let cellDecorations: monaco.editor.IEditorDecorationsCollection;
+
 function highlightCells(editor: monaco.editor.IStandaloneCodeEditor) {
   const model = editor.getModel();
   if (!model) return;
@@ -67,7 +70,11 @@ function highlightCells(editor: monaco.editor.IStandaloneCodeEditor) {
     }
   });
 
-  editor.deltaDecorations([], decorations);
+  // Clear previous decorations and set new ones
+  if (cellDecorations) {
+    cellDecorations.clear();
+  }
+  cellDecorations = editor.createDecorationsCollection(decorations);
 }
 
 function findNextCellLine(
