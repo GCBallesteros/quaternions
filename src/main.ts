@@ -7,7 +7,9 @@ import { buildCommandClosures } from './commands.js';
 import { log } from './logger.js';
 
 // Before share
+// TODO: Internall get rid of results of something | null in favour of Maybe values
 // TODO: We also need to expose the NamedTargets because the numbers are opaque. and document
+// TODO: Add a target pointing mode
 // TODO: And update points docs to include sun
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
 // TODO: Make a workflow for Satellite. For example a constantly running nadir pointing sat
@@ -27,7 +29,6 @@ import { log } from './logger.js';
 // TODO: Show coordinates over the Earth
 // TODO: Buttont to bring back global camera
 // TODO: Printing objects is terrible
-// TODO: State visor
 // TODO: Plots and tabs
 
 const { scene, canvas, renderer } = initializeCanvas();

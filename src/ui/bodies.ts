@@ -23,10 +23,23 @@ function createPointElement(
       <div>Position: [${position[0].toFixed(2)}, ${position[1].toFixed(2)}, ${position[2].toFixed(2)}]</div>
       ${
         type !== 'Point'
-          ? `<div>Quaternion: [${point.geometry.quaternion
+          ? `
+            <div>Quaternion: [${point.geometry.quaternion
               .toArray()
               .map((v) => v.toFixed(3))
-              .join(', ')}]</div>`
+              .join(', ')}]</div>
+            ${
+              (point as OrientedPoint).camera
+                ? `<div>Camera: Present
+                   <div style="margin-left: 10px;">Body Orientation: [${
+                     (point as OrientedPoint).camera_orientation
+                       ?.map((v) => v.toFixed(3))
+                       ?.join(', ') ?? 'default'
+                   }]</div>
+                   </div>`
+                : '<div>Camera: None</div>'
+            }
+          `
           : ''
       }
     </div>
@@ -88,10 +101,23 @@ function updatePointElement(
       <div>Position: [${position[0].toFixed(2)}, ${position[1].toFixed(2)}, ${position[2].toFixed(2)}]</div>
       ${
         type !== 'Point'
-          ? `<div>Quaternion: [${point.geometry.quaternion
+          ? `
+            <div>Quaternion: [${point.geometry.quaternion
               .toArray()
               .map((v) => v.toFixed(3))
-              .join(', ')}]</div>`
+              .join(', ')}]</div>
+            ${
+              (point as OrientedPoint).camera
+                ? `<div>Camera: Present
+                   <div style="margin-left: 10px;">Body Orientation: [${
+                     (point as OrientedPoint).camera_orientation
+                       ?.map((v) => v.toFixed(3))
+                       ?.join(', ') ?? 'default'
+                   }]</div>
+                   </div>`
+                : '<div>Camera: None</div>'
+            }
+          `
           : ''
       }
     `;

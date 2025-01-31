@@ -79,6 +79,7 @@ export class OrientedPoint extends Point {
     if (hasCamera) {
       throw new Error('A camera named "_camera" already exists in this group!');
     }
+    this.camera_orientation=camera_orientation;
 
     let camera_orientation_in_body_frame = new THREE.Quaternion(
       camera_orientation[0],
