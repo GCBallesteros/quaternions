@@ -9,6 +9,7 @@ function createPointElement(
   name: string,
   type: string,
   position: Vector3,
+  point: OrientedPoint | Satellite,
 ): HTMLElement {
   const pointElement = document.createElement('div');
   pointElement.className = 'point-item';
@@ -20,7 +21,8 @@ function createPointElement(
       <span class="point-type">${type}</span>
     </div>
     <div class="point-details">
-      Position: [${position[0].toFixed(2)}, ${position[1].toFixed(2)}, ${position[2].toFixed(2)}]
+      <div>Position: [${position[0].toFixed(2)}, ${position[1].toFixed(2)}, ${position[2].toFixed(2)}]</div>
+      ${type !== 'Point' ? `<div>Quaternion: [${point.geometry.quaternion.toArray().map(v => v.toFixed(3)).join(', ')}]</div>` : ''}
     </div>
   `;
 
@@ -76,7 +78,11 @@ function updatePointElement(
     colorPicker.dataset.hasChangeHandler = 'true';
   }
   if (detailsElement) {
-    detailsElement.textContent = `Position: [${position[0].toFixed(2)}, ${position[1].toFixed(2)}, ${position[2].toFixed(2)}]`;
+    const point = state.points[name];
+    detailsElement.innerHTML = `
+      <div>Position: [${position[0].toFixed(2)}, ${position[1].toFixed(2)}, ${position[2].toFixed(2)}]</div>
+      ${type !== 'Point' ? `<div>Quaternion: [${point.geometry.quaternion.toArray().map(v => v.toFixed(3)).join(', ')}]</div>` : ''}
+    `;
   }
 }
 
@@ -127,7 +133,7 @@ function updatePointsList(state: State): void {
     }
 
     if (!pointElement) {
-      pointElement = createPointElement(name, type, position);
+      pointElement = createPointElement(name, type, position, point);
       pointsList.appendChild(pointElement);
     } else {
       updatePointElement(pointElement, type, position, state, name);
