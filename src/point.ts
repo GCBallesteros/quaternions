@@ -19,6 +19,7 @@ export class Point {
   set position(pos: Vector3) {
     this.geometry.position.set(pos[0], pos[1], pos[2]);
   }
+  // AI! Add a set color(color: string) method to modify the color of the underlying point
 }
 
 export class OrientedPoint extends Point {
