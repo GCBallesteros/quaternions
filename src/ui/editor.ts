@@ -85,6 +85,16 @@ function findNextCellLine(
   if (!model) return null;
 
   const lines = model.getLinesContent();
+
+  // First check if current line or next line is a cell marker
+  if (
+    currentLine < lines.length &&
+    lines[currentLine].trim().startsWith('// %%')
+  ) {
+    return currentLine + 1;
+  }
+
+  // Then search for next cell marker
   for (let i = currentLine + 1; i < lines.length; i++) {
     if (lines[i].trim().startsWith('// %%')) {
       return i + 1;
