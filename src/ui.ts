@@ -5,6 +5,7 @@ import { setupEditor } from './ui/editor.js';
 import { setupTabs } from './ui/tabs.js';
 import { setupLighting } from './ui/lighting.js';
 import { setupResizer } from './ui/resize.js';
+import { setupBodiesTab } from './ui/bodies.js';
 
 export function updateTimeDisplay(state: State) {
   const timeElement = document.getElementById('current-time');
@@ -22,6 +23,7 @@ export function setupUI(
   setupTabs(editor);
   setupLighting(state);
   setupResizer(editor, renderer, state);
+  setupBodiesTab(state);
   // Setup time input
   const timeGroup = document.querySelector('.settings-group')!;
   const timeInput = createTimeInput();

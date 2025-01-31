@@ -1,3 +1,11 @@
 @import './styles/base.css';
 @import './styles/layout.css';
 @import './styles/components.css';
+
+.point-item {
+  padding: 8px;
+  margin: 4px 0;
+  background: #2d2d2d;
+  border-radius: 4px;
+  font-family: monospace;
+}
