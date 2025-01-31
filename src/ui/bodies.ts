@@ -1,8 +1,9 @@
 import { State } from '../types.js';
+import { Point, OrientedPoint, Satellite } from '../point.js';
 
 export function setupBodiesTab(state: State): void {
   const bodiesContainer = document.getElementById('bodies-container')!;
-  
+
   // Create points section
   const pointsGroup = document.createElement('div');
   pointsGroup.className = 'settings-group';
@@ -26,7 +27,19 @@ function updatePointsList(state: State): void {
   Object.entries(state.points).forEach(([name, point]) => {
     const pointElement = document.createElement('div');
     pointElement.className = 'point-item';
-    pointElement.textContent = name;
+
+    // Determine point type
+    let type = 'Point';
+    if (point instanceof Satellite) {
+      type = 'Satellite';
+    } else if (point instanceof OrientedPoint) {
+      type = 'OrientedPoint';
+    }
+
+    pointElement.innerHTML = `
+      <span class="point-name">${name}</span>
+      <span class="point-type">${type}</span>
+    `;
     pointsList.appendChild(pointElement);
   });
 }
