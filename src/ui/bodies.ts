@@ -1,6 +1,5 @@
 import { State } from '../types.js';
 import { Point, OrientedPoint, Satellite } from '../point.js';
-import { Vector3 } from '../types.js';
 
 // Track expanded state of points
 const expandedPoints = new Set<string>();
@@ -137,7 +136,6 @@ function updatePointsList(state: State): void {
       (el) => el.querySelector('.point-name')?.textContent === name,
     ) as HTMLElement;
 
-    const position = point.position;
     let type = 'Point';
     if (point instanceof Satellite) {
       type = 'Satellite';
@@ -149,7 +147,7 @@ function updatePointsList(state: State): void {
       pointElement = createPointElement(name, type, point);
       pointsList.appendChild(pointElement);
     } else {
-      updatePointElement(pointElement, type, position, state.points[name]);
+      updatePointElement(pointElement, type, state.points[name]);
     }
   });
 }
