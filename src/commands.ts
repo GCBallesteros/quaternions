@@ -218,10 +218,20 @@ export function buildCommandClosures(
     return Object.keys(state.points);
   }
 
+  function deletePoint(name: string): void {
+    const result = _deletePoint(scene, state, name);
+    if (result.ok) {
+      return;
+    } else {
+      throw new Error(result.val);
+    }
+  }
+
   return {
     mov: mov,
     rot: rot,
     addPoint: addPoint,
+    deletePoint: deletePoint,
     addSatellite: addSatellite,
     createLine: createLine,
     angle: angle,

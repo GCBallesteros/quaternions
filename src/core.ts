@@ -534,21 +534,41 @@ export function _toggleSimTime(state: State): Result<null, string> {
   return Ok(null);
 }
 
+export function _deletePoint(
+  scene: THREE.Scene,
+  state: State,
+  pointName: string
+): Result<null, string> {
+  const point = state.points[pointName];
+  if (!point) {
+    return Err(`Point '${pointName}' does not exist`);
+  }
+
+  scene.remove(point.geometry);
+  delete state.points[pointName];
+
+  // Remove any lines that reference this point
+  for (const lineName in state.lines) {
+    const line = state.lines[lineName];
+    if (line.start === pointName || line.end === pointName) {
+      scene.remove(line.line);
+      delete state.lines[lineName];
+    }
+  }
+
+  return Ok(null);
+}
+
 export function _reset(
   scene: THREE.Scene,
   state: State,
   switchCamera: (newCamera: THREE.PerspectiveCamera) => void,
 ): void {
+  // Delete all points except 'sat' and 'nadir'
   for (const pointName in state.points) {
-    const point = state.points[pointName];
-    scene.remove(point.geometry);
-    delete state.points[pointName];
-  }
-
-  for (const lineName in state.lines) {
-    const line = state.lines[lineName].line;
-    scene.remove(line);
-    delete state.lines[lineName];
+    if (pointName !== 'sat' && pointName !== 'nadir') {
+      _deletePoint(scene, state, pointName);
+    }
   }
 
   addInitGeometries(state, scene);
