@@ -11,6 +11,7 @@ import {
 import { addInitGeometries } from './init.js';
 import { log } from './logger.js';
 import { OrientationMode, OrientedPoint, Point, Satellite } from './point.js';
+import { removePointFromUI } from './ui/bodies.js';
 import { State, TleSource, Vector3 } from './types.js';
 import * as utils from './utils.js';
 
@@ -546,6 +547,7 @@ export function _deletePoint(
 
   scene.remove(point.geometry);
   delete state.points[pointName];
+  removePointFromUI(pointName);
 
   // Remove any lines that reference this point
   for (const lineName in state.lines) {

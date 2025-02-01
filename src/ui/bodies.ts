@@ -4,6 +4,21 @@ import { Point, OrientedPoint, Satellite } from '../point.js';
 // Track expanded state of points
 const expandedPoints = new Set<string>();
 
+// Export for use in core.ts
+export function removePointFromUI(pointName: string): void {
+  const pointsList = document.getElementById('points-list');
+  if (!pointsList) return;
+
+  const pointElement = Array.from(pointsList.children).find(
+    (el) => el.querySelector('.point-name')?.textContent === pointName
+  );
+  
+  if (pointElement) {
+    pointElement.remove();
+    expandedPoints.delete(pointName);
+  }
+}
+
 function createPointElement(
   name: string,
   type: string,
