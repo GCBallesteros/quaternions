@@ -566,15 +566,13 @@ export function _reset(
   state: State,
   switchCamera: (newCamera: THREE.PerspectiveCamera) => void,
 ): void {
-  // Delete all points except 'sat' and 'nadir'
+  // Delete all points
   for (const pointName in state.points) {
-    if (pointName !== 'sat' && pointName !== 'nadir') {
-      _deletePoint(scene, state, pointName);
-    }
+    _deletePoint(scene, state, pointName);
   }
 
   addInitGeometries(state, scene);
   switchCamera(state.cameras.main);
 
-  log("Scene has been reset. Only 'sat' and 'nadir' remain.");
+  log("Scene has been reset.");
 }
