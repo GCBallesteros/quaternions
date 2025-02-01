@@ -93,7 +93,7 @@ constructor(geometry: THREE.Group, tle: string, orientationMode?: OrientationMod
 | `geometry`         | `THREE.Group`                     | A THREE.Group object representing the satellite in 3D space    |
 | `tle`              | `string`                         | The Two-Line Element (TLE) data for the satellite             |
 | `orientationMode`   | `OrientationMode`               | (Optional) Defines how the satellite's orientation is determined |
-| `camera_orientation`| `[number, number, number, number]`| (Optional) Initial camera orientation quaternion              |
+| `camera_orientation`| `[number, number, number, number]`| (Optional) Initial camera orientation quaternion defined in the satellite's body frame. If provided, a camera will be initialized and attached to the satellite. |
 
 ### Static Methods
 
