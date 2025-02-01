@@ -7,7 +7,6 @@ import { buildCommandClosures } from './commands.js';
 import { log } from './logger.js';
 
 // Before share
-// TODO: Fix two way sync points
 // TODO: Internall get rid of results of something | null in favour of Maybe values
 // TODO:  NamedTargets  document
 // TODO: Add a target pointing mode
