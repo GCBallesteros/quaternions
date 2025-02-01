@@ -10,12 +10,16 @@ import { log } from './logger.js';
 // TODO: Internall get rid of results of something | null in favour of Maybe values
 // TODO: We also need to expose the NamedTargets because the numbers are opaque. and document
 // TODO: Add a target pointing mode
+// TODO: Satellite bodies tab should show pointing mode
 // TODO: And update points docs to include sun
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
 // TODO: Make a workflow for Satellite. For example a constantly running nadir pointing sat
 // TODO: Document Satellites
-// TODO: Make a Moon workflow
+// TODO: Make a Moon workflow see from the ground
 // TODO: Docs explain the awaitable functions mainly mov2sat and addSatellite with norad id
+// TODO: Traces of satellite
+// TODO: React or Vue migration?
+// TODO: Add atmosphere
 
 // REFACTORING
 // TODO: Improve name of createAnimator
