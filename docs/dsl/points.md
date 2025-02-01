@@ -113,6 +113,95 @@ Throws an error if TLE data cannot be fetched or parsed, or if position calculat
 |------------|----------|-------------------------------------------------|
 | `noradID`  | `string` | **Getter:** Returns the satellite's NORAD ID    |
 
+## Class: `Satellite` (Subclass of `OrientedPoint`)
+
+The `Satellite` class extends `OrientedPoint` to represent satellites in orbit. It adds TLE (Two-Line Element) data management and automatic position/orientation updates based on time.
+
+### Constructor
+
+```typescript
+constructor(geometry: THREE.Group, tle: string, orientationMode?: OrientationMode, camera_orientation?: [number, number, number, number])
+```
+
+| Parameter           | Type                              | Description                                                    |
+|--------------------|-----------------------------------|----------------------------------------------------------------|
+| `geometry`         | `THREE.Group`                     | A THREE.Group object representing the satellite in 3D space    |
+| `tle`              | `string`                         | The Two-Line Element (TLE) data for the satellite             |
+| `orientationMode`   | `OrientationMode`               | (Optional) Defines how the satellite's orientation is determined |
+| `camera_orientation`| `[number, number, number, number]`| (Optional) Initial camera orientation quaternion              |
+
+### Static Methods
+
+#### `fromNoradId`
+
+Creates a new Satellite instance by fetching TLE data using a NORAD ID.
+
+```typescript
+static async fromNoradId(
+  geometry: THREE.Group,
+  noradId: string,
+  orientationMode?: OrientationMode,
+  camera_orientation?: [number, number, number, number]
+): Promise<Satellite>
+```
+
+### Methods
+
+#### `update`
+
+Updates the satellite's position and orientation based on its TLE data for a given timestamp.
+
+| Parameter   | Type     | Description                                     |
+|------------|----------|-------------------------------------------------|
+| `timestamp`| `Date`   | The time for which to calculate the position    |
+| `state`    | `State`  | Application state containing required scene data |
+
+Throws an error if TLE data cannot be parsed or if position calculation fails.
+
+## OrientationMode
+
+The `OrientationMode` type defines how a satellite's orientation is determined. It can be either:
+
+### Fixed Orientation
+
+```typescript
+{ 
+  type: 'fixed';
+  ecef_quaternion: [number, number, number, number] 
+}
+```
+
+Maintains a constant orientation in ECEF coordinates specified by a quaternion.
+
+### Dynamic Orientation
+
+```typescript
+{
+  type: 'dynamic';
+  primaryBodyVector: Vector3 | string;
+  secondaryBodyVector: Vector3 | string;
+  primaryTargetVector: Vector3 | NamedTargets;
+  secondaryTargetVector: Vector3 | NamedTargets;
+}
+```
+
+Continuously updates orientation to align body vectors with target vectors:
+- `primaryBodyVector`: Body frame vector to align (typically 'x', 'y', or 'z')
+- `secondaryBodyVector`: Secondary body frame vector for full attitude determination
+- `primaryTargetVector`: Target direction for primary alignment
+- `secondaryTargetVector`: Target direction for secondary alignment
+
+### Named Targets
+
+The following named targets are available for dynamic orientation:
+
+| Target    | Description                                     |
+|-----------|------------------------------------------------|
+| `Moon`    | Direction to the Moon                          |
+| `Sun`     | Direction to the Sun                           |
+| `Velocity`| Satellite's velocity vector                    |
+| `Nadir`   | Direction to Earth's center (pointing down)    |
+
 ## point
 
 Returns a point in the scene state.
