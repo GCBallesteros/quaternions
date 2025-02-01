@@ -1,4 +1,5 @@
 import { log } from './logger.js';
+import { NamedTargets } from './point.js';
 import { CommandFunction, State } from './types.js';
 
 export function buildExecuteCommand(
@@ -15,6 +16,7 @@ export function buildExecuteCommand(
     state,
     switchCamera,
     log,
+    NamedTargets,
   };
 
   // Pre-declare command variables
@@ -51,7 +53,7 @@ export function buildExecuteCommand(
 
       // Execute with context
       const result = await executeFunction(...contextValues);
-      
+
       if (result !== undefined) {
         log(`  ${result}`);
       }

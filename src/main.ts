@@ -7,8 +7,9 @@ import { buildCommandClosures } from './commands.js';
 import { log } from './logger.js';
 
 // Before share
+// TODO: Fix two way sync points
 // TODO: Internall get rid of results of something | null in favour of Maybe values
-// TODO: We also need to expose the NamedTargets because the numbers are opaque. and document
+// TODO:  NamedTargets  document
 // TODO: Add a target pointing mode
 // TODO: Satellite bodies tab should show pointing mode
 // TODO: And update points docs to include sun
