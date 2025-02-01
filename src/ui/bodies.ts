@@ -157,6 +157,7 @@ function updatePointsList(state: State): void {
   });
 
   // Update or create elements for current points
+  // TODO: Get the colorpicker for the default satellite
   Object.entries(state.points).forEach(([name, point]) => {
     let pointElement = Array.from(pointsList.children).find(
       (el) => el.querySelector('.point-name')?.textContent === name,
