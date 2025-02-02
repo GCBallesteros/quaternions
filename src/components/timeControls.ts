@@ -17,20 +17,29 @@ function formatSpeed(timeSpeedMultiplier: number): string {
   return speedText;
 }
 
+export function updateTimeControlUI(
+  isFlowing: boolean,
+  timeToggle: HTMLButtonElement,
+) {
+  if (isFlowing) {
+    timeToggle.classList.add('playing');
+    timeToggle.setAttribute('aria-label', 'Pause simulation');
+  } else {
+    timeToggle.classList.remove('playing');
+    timeToggle.setAttribute('aria-label', 'Play simulation');
+  }
+}
+
 export function setupTimeControls(state: State) {
-  const timeToggle = document.getElementById(
+  const timeToggleButton = document.getElementById(
     'time-toggle',
   ) as HTMLButtonElement;
   const timeSlider = document.getElementById('time-speed') as HTMLInputElement;
 
-  timeToggle.addEventListener('click', () => {
+  timeToggleButton.addEventListener('click', () => {
     const result = _toggleSimTime(state);
     if (result.ok) {
-      timeToggle.classList.toggle('playing');
-      timeToggle.setAttribute(
-        'aria-label',
-        state.isTimeFlowing ? 'Pause simulation' : 'Play simulation',
-      );
+      updateTimeControlUI(result.val, timeToggleButton);
     }
   });
 
@@ -57,8 +66,8 @@ export function setupTimeControls(state: State) {
 
   // Set initial state
   if (state.isTimeFlowing) {
-    timeToggle.classList.add('playing');
-    timeToggle.setAttribute('aria-label', 'Pause simulation');
+    timeToggleButton.classList.add('playing');
+    timeToggleButton.setAttribute('aria-label', 'Pause simulation');
   }
 
   // Set initial speed multiplier

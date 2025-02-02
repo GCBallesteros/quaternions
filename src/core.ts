@@ -520,19 +520,19 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
   return Ok(null);
 }
 
-export function _resumeSimTime(state: State): Result<null, string> {
+export function _resumeSimTime(state: State): Result<boolean, string> {
   state.isTimeFlowing = true;
-  return Ok(null);
+  return Ok(true);
 }
 
-export function _pauseSimTime(state: State): Result<null, string> {
+export function _pauseSimTime(state: State): Result<boolean, string> {
   state.isTimeFlowing = false;
-  return Ok(null);
+  return Ok(false);
 }
 
-export function _toggleSimTime(state: State): Result<null, string> {
+export function _toggleSimTime(state: State): Result<boolean, string> {
   state.isTimeFlowing = !state.isTimeFlowing;
-  return Ok(null);
+  return Ok(state.isTimeFlowing);
 }
 
 export function _deletePoint(

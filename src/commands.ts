@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { updateTimeControlUI } from './components/timeControls.js';
 import {
   _addPoint,
   _addSatellite,
@@ -198,6 +199,10 @@ export function buildCommandClosures(
     if (!result.ok) {
       throw new Error(result.val);
     }
+    const timeToggleButton = document.getElementById(
+      'time-toggle',
+    ) as HTMLButtonElement;
+    updateTimeControlUI(result.val, timeToggleButton);
   }
 
   function pauseSimTime(): void {
@@ -205,6 +210,10 @@ export function buildCommandClosures(
     if (!result.ok) {
       throw new Error(result.val);
     }
+    const timeToggleButton = document.getElementById(
+      'time-toggle',
+    ) as HTMLButtonElement;
+    updateTimeControlUI(result.val, timeToggleButton);
   }
 
   function toggleSimTime(): void {
@@ -212,6 +221,10 @@ export function buildCommandClosures(
     if (!result.ok) {
       throw new Error(result.val);
     }
+    const timeToggleButton = document.getElementById(
+      'time-toggle',
+    ) as HTMLButtonElement;
+    updateTimeControlUI(result.val, timeToggleButton);
   }
 
   function setTime(newTime: Date): void {
