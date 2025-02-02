@@ -160,7 +160,7 @@ Continuously updates orientation to align body vectors with target vectors:
 - `primaryTargetVector`: Target direction for primary alignment
 - `secondaryTargetVector`: Target direction for secondary alignment
 
-### Named Targets
+### NamedTargets
 
 The following named targets are available for dynamic orientation:
 
@@ -170,6 +170,27 @@ The following named targets are available for dynamic orientation:
 | `Sun`     | Direction to the Sun                           |
 | `Velocity`| Satellite's velocity vector                    |
 | `Nadir`   | Direction to Earth's center (pointing down)    |
+| `TargetPointing`   | Points towards a specific target. Either an existing point reference by name or a fixed ECEF coordinate    |
+
+Using `TargetPointing` requires passing additional data unlike the others.
+
+#### Example
+
+Some targets are fully specified by the simulation like `Moon` or `Nadir` and can
+simply be used as:
+
+```js
+NamedTarget.Moon
+```
+
+However, if we want to point at a specific target we need to supply that too:
+
+```js
+// Always point towards the default sat. The point must have been added before.
+NamedTarget.TargetPointing("sat");
+// or perhaps look at a fixed point in space
+NamedTarget.TargetPointing([2000, 3000, 3000]);
+```
 
 ## point
 

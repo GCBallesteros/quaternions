@@ -142,13 +142,18 @@ export type NamedTargets =
   | { type: 'Moon' }
   | { type: 'Sun' }
   | { type: 'Velocity' }
-  | { type: 'Nadir' };
+  | { type: 'Nadir' }
+  | { type: 'TargetPointing'; target: Vector3 | string };
 
 export namespace NamedTargets {
   export const Moon: NamedTargets = { type: 'Moon' };
   export const Sun: NamedTargets = { type: 'Sun' };
   export const Velocity: NamedTargets = { type: 'Velocity' };
   export const Nadir: NamedTargets = { type: 'Nadir' };
+  export const TargetPointing = (target: Vector3 | string): NamedTargets => ({
+    type: 'TargetPointing',
+    target,
+  });
 }
 
 export class Satellite extends OrientedPoint {
@@ -165,7 +170,6 @@ export class Satellite extends OrientedPoint {
     velocity_: THREE.Vector3,
     state: State,
   ): Vector3 {
-    console.log(namedTarget);
     switch (namedTarget.type) {
       case 'Moon':
         return state.bodies.moon.position
@@ -180,6 +184,20 @@ export class Satellite extends OrientedPoint {
         return velocity_.clone().normalize().toArray();
       case 'Nadir':
         return position_.clone().normalize().negate().toArray();
+      case 'TargetPointing':
+        if (typeof namedTarget.target === 'string') {
+          return new THREE.Vector3(...state.points[namedTarget.target].position)
+            .clone()
+            .sub(position_)
+            .normalize()
+            .toArray();
+        } else {
+          return new THREE.Vector3(...namedTarget.target)
+            .clone()
+            .sub(position_)
+            .normalize()
+            .toArray();
+        }
     }
   }
 
