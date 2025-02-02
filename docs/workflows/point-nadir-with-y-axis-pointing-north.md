@@ -12,7 +12,7 @@ refer to the workflow at
 [Debugging Quaternions](/workflows/debugging-quaternions).
 
 
-## 1. Set up the simulation
+## 1. Setup the simulation
 
 As in the previous workflow, we start by setting up the scene and initializing
 the satellite's position and orientation.
@@ -20,7 +20,7 @@ the satellite's position and orientation.
 ```javascript
 // Reset scene so that we can hit execute repeatedly  on this sample 
 // script without errors
-[`reset()`](/dsl/overview/#app-state-is-maintained-across-script-executions);
+reset();
 
 // Simulation params
 const target_coords_ecef = geo2xyz([60.186, 24.828, 0]);
