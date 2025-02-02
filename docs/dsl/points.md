@@ -192,6 +192,69 @@ NamedTarget.TargetPointing("sat");
 NamedTarget.TargetPointing([2000, 3000, 3000]);
 ```
 
+## addSatellite
+
+Adds a new satellite to the scene with specified TLE data and orientation mode.
+
+### Arguments
+
+| Parameter        | Type             | Description                                                    |
+|-----------------|------------------|----------------------------------------------------------------|
+| `name`          | `string`         | Unique identifier for the satellite                            |
+| `tleSource`     | `TleSource`      | Source of TLE data (either direct TLE or NORAD ID)            |
+| `orientationMode`| `OrientationMode`| Configuration for how the satellite maintains its orientation  |
+
+### TleSource
+
+Can be either:
+```typescript
+{ type: 'tle'; tle: string }
+// or
+{ type: 'noradId'; noradId: string }
+```
+
+### Returns
+
+`Promise<void>` - Must be awaited.
+
+### Example
+
+```javascript
+// Add a satellite using its NORAD ID
+await addSatellite(
+  'sentinel2b',
+  {
+    type: 'noradId',
+    noradId: '42063',
+  },
+  {
+    type: 'dynamic',
+    primaryBodyVector: 'z',
+    secondaryBodyVector: 'y',
+    primaryTargetVector: NamedTargets.Nadir,
+    secondaryTargetVector: NamedTargets.Velocity,
+  }
+);
+
+// Or using direct TLE data
+await addSatellite(
+  'mysat',
+  {
+    type: 'tle',
+    tle: `ISS (ZARYA)
+1 25544U 98067A   08264.51782528 -.00002182  00000-0 -11606-4 0  2927
+2 25544  51.6416 247.4627 0006703 130.5360 325.0288 15.72125391563537`
+  },
+  {
+    type: 'dynamic',
+    primaryBodyVector: 'z',
+    secondaryBodyVector: 'y',
+    primaryTargetVector: NamedTargets.Moon,
+    secondaryTargetVector: NamedTargets.Velocity,
+  }
+);
+```
+
 ## point
 
 Returns a point in the scene state.
