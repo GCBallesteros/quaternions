@@ -416,6 +416,10 @@ export async function _addSatellite(
 
   state.points[name] = newSatellite;
   scene.add(newSatellite.geometry);
+  
+  // Initialize satellite position immediately
+  newSatellite.update(state.currentTime, state);
+  
   return Ok(null);
 }
 
