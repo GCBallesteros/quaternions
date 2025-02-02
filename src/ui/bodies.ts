@@ -1,5 +1,16 @@
 import { State } from '../types.js';
 import { Point, OrientedPoint, Satellite } from '../point.js';
+import { Vector3, NamedTargets } from '../types.js';
+
+function formatTargetVector(target: Vector3 | NamedTargets): string {
+  if (typeof target === 'object' && target !== null && 'type' in target) {
+    if (target.type === 'TargetPointing') {
+      return `TargetPointing(${JSON.stringify(target.target)})`;
+    }
+    return target.type;
+  }
+  return JSON.stringify(target);
+}
 
 // Track expanded state of points
 const expandedPoints = new Set<string>();
@@ -10,9 +21,9 @@ export function removePointFromUI(pointName: string): void {
   if (!pointsList) return;
 
   const pointElement = Array.from(pointsList.children).find(
-    (el) => el.querySelector('.point-name')?.textContent === pointName
+    (el) => el.querySelector('.point-name')?.textContent === pointName,
   );
-  
+
   if (pointElement) {
     pointElement.remove();
     expandedPoints.delete(pointName);
@@ -46,24 +57,13 @@ function createPointElement(
             ${
               type === 'Satellite'
                 ? `<div>Orientation Mode: ${(point as any).orientationMode.type}
-                   ${(point as any).orientationMode.type === 'dynamic' 
-                     ? `<div style="margin-left: 10px;">
-                        Primary: ${(point as any).orientationMode.primaryBodyVector} → ${
-                          typeof (point as any).orientationMode.primaryTargetVector === 'object' 
-                            ? (point as any).orientationMode.primaryTargetVector.type === 'TargetPointing'
-                              ? `TargetPointing(${JSON.stringify((point as any).orientationMode.primaryTargetVector.target)})`
-                              : (point as any).orientationMode.primaryTargetVector.type
-                            : JSON.stringify((point as any).orientationMode.primaryTargetVector)
-                        }<br>
-                        Secondary: ${(point as any).orientationMode.secondaryBodyVector} → ${
-                          typeof (point as any).orientationMode.secondaryTargetVector === 'object'
-                            ? (point as any).orientationMode.secondaryTargetVector.type === 'TargetPointing'
-                              ? `TargetPointing(${JSON.stringify((point as any).orientationMode.secondaryTargetVector.target)})`
-                              : (point as any).orientationMode.secondaryTargetVector.type
-                            : JSON.stringify((point as any).orientationMode.secondaryTargetVector)
-                        }
+                   ${
+                     (point as any).orientationMode.type === 'dynamic'
+                       ? `<div style="margin-left: 10px;">
+                        Primary: ${(point as any).orientationMode.primaryBodyVector} → ${formatTargetVector((point as any).orientationMode.primaryTargetVector)}<br>
+                        Secondary: ${(point as any).orientationMode.secondaryBodyVector} → ${formatTargetVector((point as any).orientationMode.secondaryTargetVector)}
                         </div>`
-                     : `<div style="margin-left: 10px;">
+                       : `<div style="margin-left: 10px;">
                         Fixed quaternion: [${(point as any).orientationMode.ecef_quaternion.map((v: number) => v.toFixed(3)).join(', ')}]
                         </div>`
                    }</div>`
@@ -150,24 +150,13 @@ function updatePointElement(
             ${
               type === 'Satellite'
                 ? `<div>Orientation Mode: ${(point as any).orientationMode.type}
-                   ${(point as any).orientationMode.type === 'dynamic' 
-                     ? `<div style="margin-left: 10px;">
-                        Primary: ${(point as any).orientationMode.primaryBodyVector} → ${
-                          typeof (point as any).orientationMode.primaryTargetVector === 'object' 
-                            ? (point as any).orientationMode.primaryTargetVector.type === 'TargetPointing'
-                              ? `TargetPointing(${JSON.stringify((point as any).orientationMode.primaryTargetVector.target)})`
-                              : (point as any).orientationMode.primaryTargetVector.type
-                            : JSON.stringify((point as any).orientationMode.primaryTargetVector)
-                        }<br>
-                        Secondary: ${(point as any).orientationMode.secondaryBodyVector} → ${
-                          typeof (point as any).orientationMode.secondaryTargetVector === 'object'
-                            ? (point as any).orientationMode.secondaryTargetVector.type === 'TargetPointing'
-                              ? `TargetPointing(${JSON.stringify((point as any).orientationMode.secondaryTargetVector.target)})`
-                              : (point as any).orientationMode.secondaryTargetVector.type
-                            : JSON.stringify((point as any).orientationMode.secondaryTargetVector)
-                        }
+                   ${
+                     (point as any).orientationMode.type === 'dynamic'
+                       ? `<div style="margin-left: 10px;">
+                        Primary: ${(point as any).orientationMode.primaryBodyVector} → ${formatTargetVector((point as any).orientationMode.primaryTargetVector)}<br>
+                        Secondary: ${(point as any).orientationMode.secondaryBodyVector} → ${formatTargetVector((point as any).orientationMode.secondaryTargetVector)}
                         </div>`
-                     : `<div style="margin-left: 10px;">
+                       : `<div style="margin-left: 10px;">
                         Fixed quaternion: [${(point as any).orientationMode.ecef_quaternion.map((v: number) => v.toFixed(3)).join(', ')}]
                         </div>`
                    }</div>`
