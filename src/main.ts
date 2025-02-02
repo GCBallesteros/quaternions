@@ -7,14 +7,11 @@ import { buildCommandClosures } from './commands.js';
 import { log } from './logger.js';
 
 // Before share
-// TODO: Satellite bodies tab should show pointing mode
 // TODO: Add offset quaternion
 // TODO: And update points docs to include sun
-// TODO: Make a workflow for Satellite. For example a constantly running nadir pointing sat
-// TODO: Make a Moon workflow see from the ground
 // TODO: Traces of satellite
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
-// TODO: Add some examples of norad id for satellites
+// TODO: Add docs for the UI
 
 // REFACTORING
 // TODO: Improve name of createAnimator
