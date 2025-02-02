@@ -71,6 +71,7 @@ You can use these predefined targets:
 - `NamedTargets.Sun`: Track the Sun
 - `NamedTargets.Velocity`: Align with orbital velocity
 - `NamedTargets.Nadir`: Point toward Earth's center
+- `NamedTargets.TargetPointing(<point_name or ECEF coords>)`: Point at an arbitrary location or moving point
 
 ### Earth Observation Satellites
 
