@@ -42,7 +42,22 @@ pauseSimTime();
 // resumeSimTime();
 ```
 
-## Understanding the Configuration
+Now you could add a new cell at the bottom (docs here) and then run the
+following cell
+
+```js
+point("hf1a").addCamera(5);
+switchCamera(point("hf1a").camera);
+```
+
+which will add a camera with a 5 degree field of view and shows what the
+satellite is looking at.
+
+
+### Looking at another satellite!
+
+
+## Understanding the sattelite configuration
 
 The `addSatellite` function takes three main arguments:
 
