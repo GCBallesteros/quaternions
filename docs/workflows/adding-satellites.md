@@ -55,7 +55,59 @@ satellite is looking at.
 
 
 ### Looking at another satellite!
-// AI! Now have an example where we show hf1a and Sentinel-2B on Friday the 24th of January. I want Sentinel-2B pointing just like hf1a on the previous example but I want hf1a looking at Sentinel-2B as primary target. Add a camera for hf1a with a field of view of 30 degrees.
+
+Here's an example that demonstrates two satellites interacting - one tracking the Moon while being observed by another satellite:
+
+```javascript
+// Reset scene and set specific date
+reset();
+let date = new Date('2025-01-24T12:00:00Z');
+setTime(date);
+
+// Add Sentinel-2B with Moon tracking configuration
+await addSatellite(
+  'sentinel2b',
+  {
+    type: 'noradId',
+    noradId: '42063',
+  },
+  {
+    type: 'dynamic',
+    primaryBodyVector: 'z',
+    secondaryBodyVector: 'y',
+    primaryTargetVector: NamedTargets.Moon,
+    secondaryTargetVector: NamedTargets.Velocity,
+  },
+);
+
+// Add HF1A configured to track Sentinel-2B
+await addSatellite(
+  'hf1a',
+  {
+    type: 'noradId',
+    noradId: '60562',
+  },
+  {
+    type: 'dynamic',
+    primaryBodyVector: 'z',
+    secondaryBodyVector: 'y',
+    primaryTargetVector: NamedTargets.TargetPointing('sentinel2b'),
+    secondaryTargetVector: NamedTargets.Velocity,
+  },
+);
+
+// Add a camera to HF1A with 30-degree field of view
+point("hf1a").addCamera(30);
+switchCamera(point("hf1a").camera);
+
+pauseSimTime();
+```
+
+This script:
+1. Sets up the scene for January 24th, 2025
+2. Adds Sentinel-2B configured to track the Moon (like in the previous example)
+3. Adds HF1A configured to track Sentinel-2B
+4. Adds a wide-angle camera (30° FOV) to HF1A and switches to its view
 
 
 ## Understanding the sattelite configuration
