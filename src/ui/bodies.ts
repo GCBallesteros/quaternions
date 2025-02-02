@@ -48,8 +48,20 @@ function createPointElement(
                 ? `<div>Orientation Mode: ${(point as any).orientationMode.type}
                    ${(point as any).orientationMode.type === 'dynamic' 
                      ? `<div style="margin-left: 10px;">
-                        Primary: ${(point as any).orientationMode.primaryBodyVector} → ${JSON.stringify((point as any).orientationMode.primaryTargetVector)}<br>
-                        Secondary: ${(point as any).orientationMode.secondaryBodyVector} → ${JSON.stringify((point as any).orientationMode.secondaryTargetVector)}
+                        Primary: ${(point as any).orientationMode.primaryBodyVector} → ${
+                          typeof (point as any).orientationMode.primaryTargetVector === 'object' 
+                            ? (point as any).orientationMode.primaryTargetVector.type === 'TargetPointing'
+                              ? `TargetPointing(${JSON.stringify((point as any).orientationMode.primaryTargetVector.target)})`
+                              : (point as any).orientationMode.primaryTargetVector.type
+                            : JSON.stringify((point as any).orientationMode.primaryTargetVector)
+                        }<br>
+                        Secondary: ${(point as any).orientationMode.secondaryBodyVector} → ${
+                          typeof (point as any).orientationMode.secondaryTargetVector === 'object'
+                            ? (point as any).orientationMode.secondaryTargetVector.type === 'TargetPointing'
+                              ? `TargetPointing(${JSON.stringify((point as any).orientationMode.secondaryTargetVector.target)})`
+                              : (point as any).orientationMode.secondaryTargetVector.type
+                            : JSON.stringify((point as any).orientationMode.secondaryTargetVector)
+                        }
                         </div>`
                      : `<div style="margin-left: 10px;">
                         Fixed quaternion: [${(point as any).orientationMode.ecef_quaternion.map((v: number) => v.toFixed(3)).join(', ')}]
@@ -140,8 +152,20 @@ function updatePointElement(
                 ? `<div>Orientation Mode: ${(point as any).orientationMode.type}
                    ${(point as any).orientationMode.type === 'dynamic' 
                      ? `<div style="margin-left: 10px;">
-                        Primary: ${(point as any).orientationMode.primaryBodyVector} → ${JSON.stringify((point as any).orientationMode.primaryTargetVector)}<br>
-                        Secondary: ${(point as any).orientationMode.secondaryBodyVector} → ${JSON.stringify((point as any).orientationMode.secondaryTargetVector)}
+                        Primary: ${(point as any).orientationMode.primaryBodyVector} → ${
+                          typeof (point as any).orientationMode.primaryTargetVector === 'object' 
+                            ? (point as any).orientationMode.primaryTargetVector.type === 'TargetPointing'
+                              ? `TargetPointing(${JSON.stringify((point as any).orientationMode.primaryTargetVector.target)})`
+                              : (point as any).orientationMode.primaryTargetVector.type
+                            : JSON.stringify((point as any).orientationMode.primaryTargetVector)
+                        }<br>
+                        Secondary: ${(point as any).orientationMode.secondaryBodyVector} → ${
+                          typeof (point as any).orientationMode.secondaryTargetVector === 'object'
+                            ? (point as any).orientationMode.secondaryTargetVector.type === 'TargetPointing'
+                              ? `TargetPointing(${JSON.stringify((point as any).orientationMode.secondaryTargetVector.target)})`
+                              : (point as any).orientationMode.secondaryTargetVector.type
+                            : JSON.stringify((point as any).orientationMode.secondaryTargetVector)
+                        }
                         </div>`
                      : `<div style="margin-left: 10px;">
                         Fixed quaternion: [${(point as any).orientationMode.ecef_quaternion.map((v: number) => v.toFixed(3)).join(', ')}]
