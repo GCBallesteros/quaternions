@@ -55,6 +55,7 @@ satellite is looking at.
 
 
 ### Looking at another satellite!
+// AI! Now have an example where we show hf1a and Sentinel-2B on Friday the 24th of January. I want Sentinel-2B pointing just like hf1a on the previous example but I want hf1a looking at Sentinel-2B as primary target. Add a camera for hf1a with a field of view of 30 degrees.
 
 
 ## Understanding the sattelite configuration
