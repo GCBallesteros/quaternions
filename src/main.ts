@@ -8,18 +8,13 @@ import { log } from './logger.js';
 
 // Before share
 // TODO: Satellite bodies tab should show pointing mode
-// TODO: Internall get rid of results of something | null in favour of Maybe values
-// TODO: Add a target pointing mode
-// TODO: Documentation for deletePoint
-// TODO: No docs for resumeSimTime et al
+// TODO: Add offset quaternion
 // TODO: And update points docs to include sun
 // TODO: Make a workflow for Satellite. For example a constantly running nadir pointing sat
 // TODO: Make a Moon workflow see from the ground
-// TODO: Docs explain the awaitable functions mainly mov2sat and addSatellite with norad id
 // TODO: Traces of satellite
-// TODO: React or Vue migration?
-// TODO: Add atmosphere
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
+// TODO: Add some examples of norad id for satellites
 
 // REFACTORING
 // TODO: Improve name of createAnimator

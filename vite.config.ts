@@ -43,7 +43,7 @@ export default defineConfig({
           }
         },
       },
-      treeshake: false, // Prevent tree shaking
+      treeshake: true, // Prevent tree shaking
     },
   },
   optimizeDeps: {
