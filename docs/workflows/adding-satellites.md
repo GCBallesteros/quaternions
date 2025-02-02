@@ -56,12 +56,13 @@ satellite is looking at.
 
 ### Looking at another satellite!
 
-Here's an example that demonstrates two satellites interacting - one tracking the Moon while being observed by another satellite:
+Here's an example that demonstrates two satellites interacting - one tracking
+the Moon while being observed by another satellite:
 
 ```javascript
 // Reset scene and set specific date
 reset();
-let date = new Date('2025-01-24T12:00:00Z');
+let date = new Date('2025-01-23T15:48:00Z');
 setTime(date);
 
 // Add Sentinel-2B with Moon tracking configuration
@@ -75,7 +76,7 @@ await addSatellite(
     type: 'dynamic',
     primaryBodyVector: 'z',
     secondaryBodyVector: 'y',
-    primaryTargetVector: NamedTargets.Moon,
+    primaryTargetVector: NamedTargets.Nadir,
     secondaryTargetVector: NamedTargets.Velocity,
   },
 );
@@ -96,18 +97,27 @@ await addSatellite(
   },
 );
 
-// Add a camera to HF1A with 30-degree field of view
-point("hf1a").addCamera(30);
-switchCamera(point("hf1a").camera);
+// Add a camera to HF1A with 90-degree field of view. This is huge but
+// otherwise we would only see Sentinel-2B
+point("hf1a").addCamera(90);
 
 pauseSimTime();
 ```
 
-This script:
-1. Sets up the scene for January 24th, 2025
-2. Adds Sentinel-2B configured to track the Moon (like in the previous example)
-3. Adds HF1A configured to track Sentinel-2B
-4. Adds a wide-angle camera (30° FOV) to HF1A and switches to its view
+At this point in time Hypefield-1A and Sentinel-2B where flying very close by
+over the Caribbean Sea. You can now try to go into the Bodies tab and change
+the color of the points representing both satellites. Then lets watch
+Sentinel-2B orbit for a few minutes from the point of view Hyperfield-1A.
+
+Copy the following at the bottom of your current script:
+
+```js
+// %%
+switchCamera(point("hf1a").camera);
+```
+
+this will create a new cell that now can be run with (Shift+Enter). Finally
+adjust the playback speed to around 20x and hit play.
 
 
 ## Understanding the sattelite configuration
