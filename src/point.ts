@@ -79,7 +79,7 @@ export class OrientedPoint extends Point {
     if (hasCamera) {
       throw new Error('A camera named "_camera" already exists in this group!');
     }
-    this.camera_orientation=camera_orientation;
+    this.camera_orientation = camera_orientation;
 
     let camera_orientation_in_body_frame = new THREE.Quaternion(
       camera_orientation[0],
@@ -128,7 +128,6 @@ export class OrientedPoint extends Point {
   }
 }
 
-// TODO: Missing a way to do target pointing
 export type OrientationMode =
   | { type: 'fixed'; ecef_quaternion: [number, number, number, number] }
   | {
@@ -139,16 +138,26 @@ export type OrientationMode =
       secondaryTargetVector: Vector3 | NamedTargets;
     };
 
-export enum NamedTargets {
-  Moon,
-  Sun,
-  Velocity,
-  Nadir,
+export type NamedTargets =
+  | { type: 'Moon' }
+  | { type: 'Sun' }
+  | { type: 'Velocity' }
+  | { type: 'Nadir' };
+
+export namespace NamedTargets {
+  export const Moon: NamedTargets = { type: 'Moon' };
+  export const Sun: NamedTargets = { type: 'Sun' };
+  export const Velocity: NamedTargets = { type: 'Velocity' };
+  export const Nadir: NamedTargets = { type: 'Nadir' };
 }
 
 export class Satellite extends OrientedPoint {
   private tle: string;
   private orientationMode: OrientationMode;
+
+  private isNamedTarget(value: any): value is NamedTargets {
+    return typeof value === 'object' && value !== null && 'type' in value;
+  }
 
   private getTargetVector(
     namedTarget: NamedTargets,
@@ -156,19 +165,20 @@ export class Satellite extends OrientedPoint {
     velocity_: THREE.Vector3,
     state: State,
   ): Vector3 {
-    switch (namedTarget) {
-      case NamedTargets.Moon:
+    console.log(namedTarget);
+    switch (namedTarget.type) {
+      case 'Moon':
         return state.bodies.moon.position
           .clone()
           .sub(position_)
           .normalize()
           .toArray();
-      case NamedTargets.Sun:
+      case 'Sun':
         // Sun light position is already the direction vector
         return state.lights.sun.position.toArray();
-      case NamedTargets.Velocity:
+      case 'Velocity':
         return velocity_.clone().normalize().toArray();
-      case NamedTargets.Nadir:
+      case 'Nadir':
         return position_.clone().normalize().negate().toArray();
     }
   }
@@ -254,25 +264,27 @@ export class Satellite extends OrientedPoint {
         let primaryTargetVector: Vector3;
         let secondaryTargetVector: Vector3;
 
-        primaryTargetVector =
-          typeof this.orientationMode.primaryTargetVector === 'number'
-            ? this.getTargetVector(
-                this.orientationMode.primaryTargetVector,
-                position_,
-                velocity_,
-                state,
-              )
-            : this.orientationMode.primaryTargetVector;
+        primaryTargetVector = this.isNamedTarget(
+          this.orientationMode.primaryTargetVector,
+        )
+          ? this.getTargetVector(
+              this.orientationMode.primaryTargetVector,
+              position_,
+              velocity_,
+              state,
+            )
+          : this.orientationMode.primaryTargetVector;
 
-        secondaryTargetVector =
-          typeof this.orientationMode.secondaryTargetVector === 'number'
-            ? this.getTargetVector(
-                this.orientationMode.secondaryTargetVector,
-                position_,
-                velocity_,
-                state,
-              )
-            : this.orientationMode.secondaryTargetVector;
+        secondaryTargetVector = this.isNamedTarget(
+          this.orientationMode.secondaryTargetVector,
+        )
+          ? this.getTargetVector(
+              this.orientationMode.secondaryTargetVector,
+              position_,
+              velocity_,
+              state,
+            )
+          : this.orientationMode.secondaryTargetVector;
 
         const new_orientation_result = _findBestQuaternion(
           state,
