@@ -8,10 +8,10 @@ import { log } from './logger.js';
 
 // Before share
 // TODO: Add offset quaternion
-// TODO: And update points docs to include sun
 // TODO: Traces of satellite
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
 // TODO: Add docs for the UI
+// TODO: Make a learning track
 
 // REFACTORING
 // TODO: Improve name of createAnimator
