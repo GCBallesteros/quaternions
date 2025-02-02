@@ -53,3 +53,30 @@ satellite positions.
  ```js
  setTime(new Date('2024-01-24T12:00:00Z'))
  ```
+
+## toggleSimTime
+
+Toggles the simulation time between running and paused states. When running, time advances at the rate specified by the time multiplier.
+
+**Example**:
+```js
+toggleSimTime() // If time was running, it will pause. If it was paused, it will resume.
+```
+
+## pauseSimTime
+
+Pauses the simulation time. The simulation time will stop advancing until resumed.
+
+**Example**:
+```js
+pauseSimTime() // Time stops advancing
+```
+
+## resumeSimTime
+
+Resumes the simulation time. Time will begin advancing at the rate specified by the time multiplier.
+
+**Example**:
+```js
+resumeSimTime() // Time begins advancing again
+```
