@@ -50,8 +50,9 @@ are special rules for arguments that expect a vector. Most of the time one of th
 following 3 will be valid:
 
 1. A 3-element array representing the target vector.
-2. A string of the form "startPoint->endPoint" to define a vector between two points. The special name "Moon" can be used as either start or end point to reference the Moon's current position.
+2. A string of the form "startPoint->endPoint" to define a vector between two points. The special name `Moon` can be used as either start or end point to reference the Moon's current position.
 3. The name of a previously created line. It's direction will be used as input.
+4. `Sun` is a proxy for the direction pointing at the Sun.
 
 
 ### Accessing and Modifying State
