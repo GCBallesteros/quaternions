@@ -74,4 +74,3 @@ their corresponding NORAD IDs.
 - [TLE Data](https://www.celestrak.com/NORAD/elements/stations.txt): A text
 file listing current Two-Line Element (TLE) sets for satellites, which are
 required to calculate their positions.
-

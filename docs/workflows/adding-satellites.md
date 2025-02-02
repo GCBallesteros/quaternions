@@ -67,10 +67,23 @@ For dynamic orientation, you specify:
 ### Available Named Targets
 
 You can use these predefined targets:
-- `{ type: 'Moon' }`: Track the Moon
-- `{ type: 'Sun' }`: Track the Sun
-- `{ type: 'Velocity' }`: Align with orbital velocity
-- `{ type: 'Nadir' }`: Point toward Earth's center
+- `NamedTargets.Moon`: Track the Moon
+- `NamedTargets.Sun`: Track the Sun
+- `NamedTargets.Velocity`: Align with orbital velocity
+- `NamedTargets.Nadir`: Point toward Earth's center
+
+### Earth Observation Satellites
+
+Here's a list of some notable Earth observation satellites you can track:
+
+| Satellite    | NORAD ID | Description |
+|--------------|----------|-------------|
+| Sentinel-2A  | 40697    | Part of the EU's Copernicus program, provides high-resolution optical imaging |
+| Sentinel-2B  | 42063    | Twin satellite to Sentinel-2A, together they provide 5-day revisit coverage |
+| Sentinel-2C  | 60989    | Next generation Sentinel-2 satellite |
+| PRISMA      | 44072    | Italian hyperspectral imaging satellite |
+| Landsat 9   | 49260    | Latest in the Landsat series, provides medium-resolution multispectral imagery |
+
 
 ## Tips
 
