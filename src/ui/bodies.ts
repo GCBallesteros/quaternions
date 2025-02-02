@@ -1,6 +1,6 @@
 import { State } from '../types.js';
-import { Point, OrientedPoint, Satellite } from '../point.js';
-import { Vector3, NamedTargets } from '../types.js';
+import { Point, OrientedPoint, Satellite, NamedTargets } from '../point.js';
+import { Vector3 } from '../types.js';
 
 function formatTargetVector(target: Vector3 | NamedTargets): string {
   if (typeof target === 'object' && target !== null && 'type' in target) {
