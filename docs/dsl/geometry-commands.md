@@ -29,6 +29,19 @@ Creates a line between two points or coordinates.
 | `startArg`| `array\|string` | Starting point or coordinates         |
 | `endArg`  | `array\|string` | Ending point or coordinates          |
 
+## deletePoint
+
+Removes a point from the scene.
+
+| Parameter  | Type     | Description                     |
+|-----------|----------|---------------------------------|
+| `name`    | `string` | Name of the point to delete     |
+
+**Example**
+```js
+deletePoint("sat"); // Removes the point named "sat" from the scene
+```
+
 ## listPoints
 
 Lists all points currently present in the scene. 
