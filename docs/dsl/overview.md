@@ -46,7 +46,7 @@ position relative to the Earth's surface.
 
 Most places that expect a point can either take the name of one that has
 been previously defined or a `[number, number, number]`. Similarly there
-is special rules for arguments that expect a vector. Most of the time one of the
+are special rules for arguments that expect a vector. Most of the time one of the
 following 3 will be valid:
 
 1. A 3-element array representing the target vector.
