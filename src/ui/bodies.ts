@@ -44,6 +44,20 @@ function createPointElement(
               .map((v) => v.toFixed(3))
               .join(', ')}]</div>
             ${
+              type === 'Satellite'
+                ? `<div>Orientation Mode: ${(point as any).orientationMode.type}
+                   ${(point as any).orientationMode.type === 'dynamic' 
+                     ? `<div style="margin-left: 10px;">
+                        Primary: ${(point as any).orientationMode.primaryBodyVector} → ${JSON.stringify((point as any).orientationMode.primaryTargetVector)}<br>
+                        Secondary: ${(point as any).orientationMode.secondaryBodyVector} → ${JSON.stringify((point as any).orientationMode.secondaryTargetVector)}
+                        </div>`
+                     : `<div style="margin-left: 10px;">
+                        Fixed quaternion: [${(point as any).orientationMode.ecef_quaternion.map((v: number) => v.toFixed(3)).join(', ')}]
+                        </div>`
+                   }</div>`
+                : ''
+            }
+            ${
               (point as OrientedPoint).camera
                 ? `<div>Camera: Present
                    <div style="margin-left: 10px;">Body Orientation: [${
@@ -121,6 +135,20 @@ function updatePointElement(
               .toArray()
               .map((v) => v.toFixed(3))
               .join(', ')}]</div>
+            ${
+              type === 'Satellite'
+                ? `<div>Orientation Mode: ${(point as any).orientationMode.type}
+                   ${(point as any).orientationMode.type === 'dynamic' 
+                     ? `<div style="margin-left: 10px;">
+                        Primary: ${(point as any).orientationMode.primaryBodyVector} → ${JSON.stringify((point as any).orientationMode.primaryTargetVector)}<br>
+                        Secondary: ${(point as any).orientationMode.secondaryBodyVector} → ${JSON.stringify((point as any).orientationMode.secondaryTargetVector)}
+                        </div>`
+                     : `<div style="margin-left: 10px;">
+                        Fixed quaternion: [${(point as any).orientationMode.ecef_quaternion.map((v: number) => v.toFixed(3)).join(', ')}]
+                        </div>`
+                   }</div>`
+                : ''
+            }
             ${
               (point as OrientedPoint).camera
                 ? `<div>Camera: Present
