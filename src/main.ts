@@ -7,19 +7,19 @@ import { buildCommandClosures } from './commands.js';
 import { log } from './logger.js';
 
 // Before share
-// TODO: Internall get rid of results of something | null in favour of Maybe values
-// TODO:  NamedTargets  document
-// TODO: Add a target pointing mode
 // TODO: Satellite bodies tab should show pointing mode
+// TODO: Internall get rid of results of something | null in favour of Maybe values
+// TODO: Add a target pointing mode
+// TODO: Documentation for deletePoint
+// TODO: No docs for resumeSimTime et al
 // TODO: And update points docs to include sun
-// TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
 // TODO: Make a workflow for Satellite. For example a constantly running nadir pointing sat
-// TODO: Document Satellites
 // TODO: Make a Moon workflow see from the ground
 // TODO: Docs explain the awaitable functions mainly mov2sat and addSatellite with norad id
 // TODO: Traces of satellite
 // TODO: React or Vue migration?
 // TODO: Add atmosphere
+// TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
 
 // REFACTORING
 // TODO: Improve name of createAnimator

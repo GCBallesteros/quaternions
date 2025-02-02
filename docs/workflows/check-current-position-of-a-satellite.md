@@ -16,7 +16,7 @@ Here is the code that you can run directly in the integrated editor:
 // Set simulation to current time and move satellite
 let now = new Date();
 setTime(now);
-mov2sat("sat", "60562", now);
+await mov2sat("sat", "60562", now);
 ```
 
 :::tip
@@ -33,7 +33,7 @@ let currentDate = new Date();
 let previousHour = new Date(currentDate.getTime() - (60 * 60 * 1000));
 
 setTime(previousHour);
-mov2sat("sat", "60562", previousHour);
+await mov2sat("sat", "60562", previousHour);
 ```
 
 Or to check its position at a specific date and time:
@@ -41,7 +41,7 @@ Or to check its position at a specific date and time:
 ```javascript
 let specificDate = new Date('2025-01-01T15:25:00Z');
 setTime(specificDate);
-mov2sat("sat", "60562", specificDate);
+await mov2sat("sat", "60562", specificDate);
 ```
 
 The `setTime` function updates time-dependent elements in the scene, specifically

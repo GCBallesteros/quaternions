@@ -40,11 +40,15 @@ Moves a point to the position of a satellite at a given timestamp.
 | `cosparId`    | `string` | COSPAR ID of the satellite.                                                  |
 | `timestamp`   | `Date`   | The time for which the position is computed.                                |
 
+::: tip
+Remember `mov2sat` must always be `await`ed in user scripts.
+:::
+
 **Example**:
 ```js
 // Move the `sat` point to the current position of the object with
 // NORAD catalog number 60562 
-mov2sat("sat", "60562", new Date());
+await mov2sat("sat", "60562", new Date());
 ```
 
 ## `findBestQuaternion`

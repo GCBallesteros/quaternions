@@ -105,10 +105,14 @@ Creates a new Satellite instance by fetching TLE data using a NORAD ID.
 static async fromNoradId(
   geometry: THREE.Group,
   noradId: string,
-  orientationMode?: OrientationMode,
+  orientationMode: OrientationMode,
   camera_orientation?: [number, number, number, number]
 ): Promise<Satellite>
 ```
+
+::: tip
+Remember `fromNoradId` must always be `await`ed in user scripts.
+:::
 
 ### Methods
 
