@@ -4,6 +4,7 @@ import {
   _addSatellite,
   _angle,
   _createLine,
+  _deletePoint,
   _fetchTLE,
   _findBestQuaternion,
   _mov,
@@ -59,9 +60,16 @@ export function buildCommandClosures(
     name: string,
     coordinates: Vector3,
     quaternion = null,
-    color = '#ffffff'
+    color = '#ffffff',
   ): void {
-    const result = _addPoint(scene, state, name, coordinates, quaternion, color);
+    const result = _addPoint(
+      scene,
+      state,
+      name,
+      coordinates,
+      quaternion,
+      color,
+    );
     if (result.ok) {
       return;
     } else {
@@ -228,31 +236,31 @@ export function buildCommandClosures(
   }
 
   return {
-    mov: mov,
-    rot: rot,
-    addPoint: addPoint,
-    deletePoint: deletePoint,
-    addSatellite: addSatellite,
-    createLine: createLine,
-    angle: angle,
-    rad2deg: rad2deg,
-    deg2rad: deg2rad,
-    fetchTLE: fetchTLE,
-    mov2sat: mov2sat,
-    findBestQuaternion: findBestQuaternion,
-    point: point,
-    reset: reset,
-    setTime: setTime,
-    listPoints: listPoints,
-    resumeSimTime: resumeSimTime,
-    pauseSimTime: pauseSimTime,
-    toggleSimTime: toggleSimTime,
+    mov,
+    rot,
+    addPoint,
+    deletePoint,
+    addSatellite,
+    createLine,
+    angle,
+    rad2deg,
+    deg2rad,
+    fetchTLE,
+    mov2sat,
+    findBestQuaternion,
+    point,
+    reset,
+    setTime,
+    listPoints,
+    resumeSimTime,
+    pauseSimTime,
+    toggleSimTime,
     // Add utility functions to commands
-    geo2xyz: geo2xyz,
-    getPositionOfPoint: getPositionOfPoint,
-    sph2xyz: sph2xyz,
-    validateName: validateName,
-    xyz2geo: xyz2geo,
-    xyz2sph: xyz2sph,
+    geo2xyz,
+    getPositionOfPoint,
+    sph2xyz,
+    validateName,
+    xyz2geo,
+    xyz2sph,
   };
 }
