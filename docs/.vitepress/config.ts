@@ -33,6 +33,10 @@ export default defineConfig({
             text: 'Optimal satellite orientation',
             link: '/workflows/point-nadir-with-y-axis-pointing-north',
           },
+          {
+            text: 'Adding Satellitess',
+            link: '/workflows/adding-satellites',
+          },
         ],
       },
       {
