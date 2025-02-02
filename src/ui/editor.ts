@@ -1,4 +1,5 @@
 import * as monaco from 'monaco-editor';
+import { Option, None, Some } from 'ts-results';
 
 export const satelliteScript = `// %% Reset
 // Reset scene so that we can hit execute repeatedly
@@ -80,9 +81,9 @@ function highlightCells(editor: monaco.editor.IStandaloneCodeEditor) {
 function findNextCellLine(
   editor: monaco.editor.IStandaloneCodeEditor,
   currentLine: number,
-): number | null {
+): Option<number> {
   const model = editor.getModel();
-  if (!model) return null;
+  if (!model) return None;
 
   const lines = model.getLinesContent();
 
@@ -91,16 +92,16 @@ function findNextCellLine(
     currentLine < lines.length &&
     lines[currentLine].trim().startsWith('// %%')
   ) {
-    return currentLine + 1;
+    return Some(currentLine + 1);
   }
 
   // Then search for next cell marker
   for (let i = currentLine + 1; i < lines.length; i++) {
     if (lines[i].trim().startsWith('// %%')) {
-      return i + 1;
+      return Some(i + 1);
     }
   }
-  return null;
+  return None;
 }
 
 function getCurrentCell(editor: monaco.editor.IStandaloneCodeEditor): string {
@@ -159,9 +160,10 @@ export function setupEditor(
     const position = editor.getPosition();
     if (position) {
       const nextCellLine = findNextCellLine(editor, position.lineNumber);
-      if (nextCellLine !== null) {
-        editor.setPosition({ lineNumber: nextCellLine, column: 1 });
-        editor.revealLineInCenter(nextCellLine);
+      if (nextCellLine.some) {
+        const line = nextCellLine.val;
+        editor.setPosition({ lineNumber: line, column: 1 });
+        editor.revealLineInCenter(line);
       }
     }
   }
