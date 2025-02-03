@@ -47,8 +47,8 @@ export default defineConfig({
           { text: 'Point Classes', link: '/dsl/points' },
           { text: 'Movement & Attitude', link: '/dsl/movement-and-attitude' },
           { text: 'Geometry Commands', link: '/dsl/geometry-commands' },
-          { text: 'Utility', link: '/dsl/utility'},
-          { text: 'Camera Work', link: '/dsl/cameras'}
+          { text: 'Utility', link: '/dsl/utility' },
+          { text: 'Camera Work', link: '/dsl/cameras' },
         ],
       },
       {

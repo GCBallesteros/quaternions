@@ -7,25 +7,25 @@ import { buildCommandClosures } from './commands.js';
 import { log } from './logger.js';
 
 // Before share
-// TODO: Add offset quaternion
-// TODO: Traces of satellite
+// TODO: init.ts move moon logic to set_Time (monday Morning)
+// TODO: Add docs for the UI (monday night)
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
-// TODO: Add docs for the UI
-// TODO: Make a learning track
+// TODO: Add offset quaternion
+// TODO: Moon should be correctly oriented
+// TODO: Traces of satellite
+// TODO: Add diagram to findBestQuaternion documentation
 
 // REFACTORING
-// TODO: Improve name of createAnimator
-// TODO: Improve consistency on how we pass points around internally
 // TODO: Expose more options for object creation, widths, colors ...
 // TODO: Normalize quats before applying
 
 // EXTRA FEATURES
-// TODO: Add diagram to findBestQuaternion documentation
+// TODO: Plots
+// TODO: Button to bring back global camera
+// TODO: Printing objects is terrible
+// TODO: Make a learning track
 // TODO: Transition smoothly between cameras
 // TODO: Show coordinates over the Earth
-// TODO: Buttont to bring back global camera
-// TODO: Printing objects is terrible
-// TODO: Plots and tabs
 
 const { scene, canvas, renderer } = initializeCanvas();
 let state = initScene(scene, canvas, renderer);

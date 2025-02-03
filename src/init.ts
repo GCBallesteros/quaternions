@@ -103,28 +103,12 @@ export function createAnimator(
     const elapsed = clock.getDelta();
     if (state.isTimeFlowing) {
       const simulatedTime = new Date(
-        state.currentTime.getTime() + elapsed * state.timeSpeedMultiplier * 1000,
+        state.currentTime.getTime() +
+          elapsed * state.timeSpeedMultiplier * 1000,
       );
       _setTime(state, simulatedTime);
     }
     updateTimeDisplay(state);
-
-    // Update moon position and phase display
-    const moonData = getMoonPosition(state.currentTime);
-    state.bodies.moon.position.set(...moonData.position);
-
-    document.getElementById('moon-x')!.textContent = Math.round(
-      moonData.position[0],
-    ).toString();
-    document.getElementById('moon-y')!.textContent = Math.round(
-      moonData.position[1],
-    ).toString();
-    document.getElementById('moon-z')!.textContent = Math.round(
-      moonData.position[2],
-    ).toString();
-    document.getElementById('moon-angle')!.textContent = Math.round(
-      moonData.phase,
-    ).toString();
 
     renderer.render(scene, currentCamera);
   }
@@ -132,7 +116,9 @@ export function createAnimator(
 
   return function switchCamera(newCamera: THREE.PerspectiveCamera) {
     if (!(newCamera instanceof THREE.PerspectiveCamera)) {
-      throw new Error('Invalid camera: switchCamera requires a PerspectiveCamera instance');
+      throw new Error(
+        'Invalid camera: switchCamera requires a PerspectiveCamera instance',
+      );
     }
     currentCamera = newCamera; // Change the camera within the closure
   };

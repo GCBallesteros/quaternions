@@ -63,11 +63,11 @@ function resolveVector(
 
     if (arg.includes('->')) {
       const [startName, endName] = arg.split('->').map((name) => name.trim());
-      const startPos = 
-        startName === 'Moon' 
+      const startPos =
+        startName === 'Moon'
           ? state.bodies.moon.position
           : utils.getPositionOfPoint(state, startName);
-      const endPos = 
+      const endPos =
         endName === 'Moon'
           ? state.bodies.moon.position
           : utils.getPositionOfPoint(state, endName);
@@ -337,7 +337,7 @@ export function _addPoint(
   name: string,
   coordinates: Vector3,
   quaternion: [number, number, number, number] | null = null,
-  color: string = '#ffffff'
+  color: string = '#ffffff',
 ): Result<null, string> {
   if (!utils.validateName(name, state)) {
     return Err('Invalid point name or name already exists');
@@ -416,10 +416,10 @@ export async function _addSatellite(
 
   state.points[name] = newSatellite;
   scene.add(newSatellite.geometry);
-  
+
   // Initialize satellite position immediately
   newSatellite.update(state.currentTime, state);
-  
+
   return Ok(null);
 }
 
@@ -511,8 +511,6 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
 
   // Update celestial bodies positions
   updateSunLight(state.lights.sun, newTime);
-  const moonPos = getMoonPosition(newTime);
-  state.bodies.moon.position.set(...moonPos.position);
 
   // Update orbiting satellites
   for (const point_name in state.points) {
@@ -521,6 +519,24 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
       sat.update(state.currentTime, state);
     }
   }
+
+  // Update moon position and phase display
+  const moonData = getMoonPosition(state.currentTime);
+  state.bodies.moon.position.set(...moonData.position);
+
+  document.getElementById('moon-x')!.textContent = Math.round(
+    moonData.position[0],
+  ).toString();
+  document.getElementById('moon-y')!.textContent = Math.round(
+    moonData.position[1],
+  ).toString();
+  document.getElementById('moon-z')!.textContent = Math.round(
+    moonData.position[2],
+  ).toString();
+  document.getElementById('moon-angle')!.textContent = Math.round(
+    moonData.phase,
+  ).toString();
+
   return Ok(null);
 }
 
@@ -542,7 +558,7 @@ export function _toggleSimTime(state: State): Result<boolean, string> {
 export function _deletePoint(
   scene: THREE.Scene,
   state: State,
-  pointName: string
+  pointName: string,
 ): Result<null, string> {
   const point = state.points[pointName];
   if (!point) {
@@ -578,5 +594,5 @@ export function _reset(
   addInitGeometries(state, scene);
   switchCamera(state.cameras.main);
 
-  log("Scene has been reset.");
+  log('Scene has been reset.');
 }
