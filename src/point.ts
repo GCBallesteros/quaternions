@@ -1,5 +1,6 @@
 import * as satellite from 'satellite.js';
 import * as THREE from 'three';
+import { Trail } from './trail.js';
 import { _fetchTLE, _findBestQuaternion } from './core.js';
 import { log } from './logger.js';
 import { State, Vector3, Vector4 } from './types.js';
@@ -159,6 +160,7 @@ export namespace NamedTargets {
 export class Satellite extends OrientedPoint {
   private tle: string;
   private orientationMode: OrientationMode;
+  private trail: Trail | null = null;
 
   private isNamedTarget(value: any): value is NamedTargets {
     return typeof value === 'object' && value !== null && 'type' in value;
@@ -217,9 +219,15 @@ export class Satellite extends OrientedPoint {
     this.tle = tle;
     this.orientationMode = orientationMode;
 
-    if (camera_orientation) {
-      // Add the trace
-      console.log("Adding traces to satellite")
+    // Initialize trail if we have a parent scene
+    if (geometry.parent) {
+      this.trail = new Trail(geometry.parent as THREE.Scene, geometry.position);
+    }
+  }
+
+  dispose() {
+    if (this.trail) {
+      this.trail.dispose();
     }
   }
 
@@ -329,5 +337,10 @@ export class Satellite extends OrientedPoint {
     this.position = [position_.x, position_.y, position_.z];
     const q = new THREE.Quaternion(...new_orientation); // xyzw
     this.geometry.setRotationFromQuaternion(q);
+
+    // Update trail if it exists
+    if (this.trail) {
+      this.trail.update(this.geometry.position);
+    }
   }
 }
