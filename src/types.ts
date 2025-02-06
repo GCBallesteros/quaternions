@@ -28,5 +28,5 @@ export interface State {
   timeSpeedMultiplier: number;
   tles: Record<string, string>;
   cameras: Record<string, THREE.PerspectiveCamera>;
-  bodies: { moon: THREE.Mesh };
+  bodies: { moon: THREE.Mesh; earth: THREE.Mesh };
 }

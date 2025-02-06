@@ -82,6 +82,7 @@ export function buildCommandClosures(
     name: string,
     tleSource: TleSource,
     orientationMode: OrientationMode,
+    cameraOrientation?: [number, number, number, number],
   ): Promise<void> {
     const result = await _addSatellite(
       scene,
@@ -89,6 +90,7 @@ export function buildCommandClosures(
       name,
       tleSource,
       orientationMode,
+      cameraOrientation,
     );
     if (result.ok) {
       return;

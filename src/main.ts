@@ -7,11 +7,20 @@ import { buildCommandClosures } from './commands.js';
 import { log } from './logger.js';
 
 // Before share
+// TODO: Trails: Fix scene passig mess
+// TODO: Trails: Broken if not nadir pointing
+// TODO: Trails: Check trail disappears when deleting satellites and resetting
+// TODO: Trails: Toggles for trail. Toggle untoggle destroys the trail or even better only if time flows
+// TODO: Trails: Should use camera orientation instead of doing weird assumpions
+// TODO: Trails: Docs
+// TODO: Time: Fix time use always UTC everywhere and run tests
+// TODO: Time: Docs explain this
+// TODO: Add POV Window
+// TODO: Add plots with callbacks
 // TODO: Add docs for the UI (monday night)
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
 // TODO: Add offset quaternion
 // TODO: Moon should be correctly oriented
-// TODO: Traces of satellite
 // TODO: Add diagram to findBestQuaternion documentation
 
 // REFACTORING
@@ -19,7 +28,6 @@ import { log } from './logger.js';
 // TODO: Normalize quats before applying
 
 // EXTRA FEATURES
-// TODO: Plots
 // TODO: Button to bring back global camera
 // TODO: Printing objects is terrible
 // TODO: Make a learning track

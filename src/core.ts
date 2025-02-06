@@ -380,6 +380,7 @@ export async function _addSatellite(
   name: string,
   tleSource: TleSource,
   orientationMode: OrientationMode,
+  cameraOrientation?: [number, number, number, number],
 ): Promise<Result<null, string>> {
   // Satellites don't get passed coordinates because their location is determined
   // by their TLE and the simulation time
@@ -402,14 +403,22 @@ export async function _addSatellite(
   let newSatellite: Satellite;
   switch (tleSource.type) {
     case 'tle':
-      newSatellite = new Satellite(point_geo, tleSource.tle, orientationMode);
+      newSatellite = new Satellite(
+        scene,
+        point_geo,
+        tleSource.tle,
+        orientationMode,
+        cameraOrientation,
+      );
       break;
 
     case 'noradId':
       newSatellite = await Satellite.fromNoradId(
+        scene,
         point_geo,
         tleSource.noradId,
         orientationMode,
+        cameraOrientation,
       );
       break;
   }

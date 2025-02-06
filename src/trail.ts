@@ -14,9 +14,10 @@ export class Trail {
   private currentSegmentIndex: number = 0;
   private currentCurveIndex: number = 0;
   private totalSegments: number = 0;
+  private prevCurve: THREE.Vector3[] | null;
   private lastPosition: THREE.Vector3;
 
-  constructor(scene: THREE.Scene, initialPosition: THREE.Vector3) {
+  constructor(pointGroup: THREE.Group, initialPosition: THREE.Vector3, scene) {
     this.trailVertices = new Float32Array(MAX_VERTICES * 3);
     this.trailIndices = new Uint16Array(
       MAX_SEGMENTS * (NUM_CURVE_POINTS - 1) * 6,
@@ -60,27 +61,47 @@ export class Trail {
       depthWrite: false,
       depthTest: true,
       blending: THREE.AdditiveBlending,
-      side: THREE.BackSide,
+      side: THREE.DoubleSide,
     });
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     scene.add(this.mesh);
+    this.prevCurve = null;
   }
 
-  private computeCurve(position: THREE.Vector3): THREE.Vector3[] {
+  /**
+   * Computes a curve that follows the Earth's surface below the satellite
+   * Creates a ribbon-like trail by computing points in an arc perpendicular to the velocity
+   */
+  private computeCurrentCurve(
+    position: THREE.Vector3,
+    earth: THREE.Object3D,
+  ): THREE.Vector3[] {
     const curvePoints: THREE.Vector3[] = [];
     const nadir = position.clone().negate().normalize();
     const velocity = new THREE.Vector3()
       .subVectors(position, this.lastPosition)
       .normalize();
-    const totalFOV = Math.PI / 8;
+
+    // Define the field of view for the trail width
+    const totalFOV = Math.PI / 8; // 22.5 degrees total width
     const halfFOV = totalFOV / 2;
 
     for (let i = 0; i < NUM_CURVE_POINTS; i++) {
       const t = i / (NUM_CURVE_POINTS - 1);
       const theta = THREE.MathUtils.lerp(-halfFOV, halfFOV, t);
       const dir = nadir.clone().applyAxisAngle(velocity, theta).normalize();
-      curvePoints.push(dir.multiplyScalar(6371 * 1.02)); // Earth radius * slight offset
+      const raycaster = new THREE.Raycaster(position, dir);
+      const intersects = raycaster.intersectObject(earth);
+
+      if (intersects.length > 0) {
+        const surfPt = intersects[0].point
+          .clone()
+          .multiplyScalar(1.005);
+        curvePoints.push(surfPt);
+      } else {
+        curvePoints.push(new THREE.Vector3());
+      }
     }
 
     return curvePoints;
@@ -101,25 +122,28 @@ export class Trail {
       this.trailVertices[index] = pt.x;
       this.trailVertices[index + 1] = pt.y;
       this.trailVertices[index + 2] = pt.z;
-      this.trailAlpha[alphaIndex] = 0.8;
+      this.trailAlpha[alphaIndex] = 1.0;
     }
 
     this.currentCurveIndex = (this.currentCurveIndex + 1) % (MAX_SEGMENTS + 1);
 
-    if (prevCurve) {
-      for (let i = 0; i < NUM_CURVE_POINTS - 1; i++) {
-        let i0 = (startIndex / 3 + i) % MAX_VERTICES;
-        let i1 = (i0 - NUM_CURVE_POINTS + MAX_VERTICES) % MAX_VERTICES;
-        let i2 = (i1 + 1) % MAX_VERTICES;
-        let i3 = (i0 + 1) % MAX_VERTICES;
+    if (!prevCurve) {
+      return;
+    }
 
-        this.trailIndices[indexOffset++] = i0;
-        this.trailIndices[indexOffset++] = i1;
-        this.trailIndices[indexOffset++] = i2;
-        this.trailIndices[indexOffset++] = i2;
-        this.trailIndices[indexOffset++] = i3;
-        this.trailIndices[indexOffset++] = i0;
-      }
+    for (let i = 0; i < NUM_CURVE_POINTS - 1; i++) {
+      let i0 = (startIndex / 3 + i) % MAX_VERTICES;
+      let i1 = (i0 - NUM_CURVE_POINTS + MAX_VERTICES) % MAX_VERTICES;
+      let i2 = (i1 + 1) % MAX_VERTICES;
+      let i3 = (i0 + 1) % MAX_VERTICES;
+
+      this.trailIndices[indexOffset++] = i0;
+      this.trailIndices[indexOffset++] = i1;
+      this.trailIndices[indexOffset++] = i2;
+
+      this.trailIndices[indexOffset++] = i2;
+      this.trailIndices[indexOffset++] = i3;
+      this.trailIndices[indexOffset++] = i0;
     }
 
     this.currentSegmentIndex = (this.currentSegmentIndex + 1) % MAX_SEGMENTS;
@@ -133,7 +157,7 @@ export class Trail {
 
     const minFade = 0.002;
     const maxFade = 0.02;
-    const fadeThreshold = 0.6;
+    const fadeThreshold = 0.9;
 
     for (let i = 0; i < MAX_VERTICES; i++) {
       let alpha = this.trailAlpha[i];
@@ -157,16 +181,16 @@ export class Trail {
     this.geometry.computeVertexNormals();
   }
 
-  update(position: THREE.Vector3) {
-    const currCurve = this.computeCurve(position);
-    const prevCurve = this.computeCurve(this.lastPosition);
+  update(position: THREE.Vector3, earth: THREE.Object3D) {
+    const currCurve = this.computeCurrentCurve(position, earth);
 
-    this.addSegment(prevCurve, currCurve);
+    this.addSegment(this.prevCurve, currCurve);
     if (this.totalSegments > 0) {
       this.updateMesh();
     }
 
     this.lastPosition.copy(position);
+    this.prevCurve = currCurve;
   }
 
   dispose() {

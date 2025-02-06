@@ -6,6 +6,7 @@ import { createFloatingPoint } from './components.js';
 import { _createLine, _mov, _setTime, addFrame } from './core.js';
 import { makeEarth } from './earth.js';
 import { makeMoon } from './moon.js';
+import { Satellite } from './point.js';
 import { State } from './types.js';
 import { updateTimeDisplay } from './ui.js';
 import { setupTimeControls } from './components/timeControls.js';
@@ -55,6 +56,11 @@ export function initScene(
   const moon = makeMoon();
   scene.add(moon);
 
+  // Initialize Earth
+  let earth_geometries = makeEarth();
+  scene.add(earth_geometries.earth);
+  scene.add(earth_geometries.earth_frame);
+
   let state: State = {
     points: {},
     lines: {},
@@ -64,17 +70,13 @@ export function initScene(
     isTimeFlowing: true,
     timeSpeedMultiplier: 2,
     cameras: { main: camera },
-    bodies: { moon },
+    bodies: { moon, earth: earth_geometries.earth },
   };
 
   const moonPos = getMoonPosition(state.currentTime);
   state.bodies.moon.position.set(...moonPos.position);
 
   updateSunLight(state.lights.sun, state.currentTime);
-
-  let earth_geometries = makeEarth();
-  scene.add(earth_geometries.earth);
-  scene.add(earth_geometries.earth_frame);
 
   // Add initial geometries
   addInitGeometries(state, scene);
@@ -107,7 +109,17 @@ export function createAnimator(
           elapsed * state.timeSpeedMultiplier * 1000,
       );
       _setTime(state, simulatedTime);
+
+      //for (const pointName in state.points) {
+      //  const point = state.points[pointName];
+      //  if (point instanceof Satellite) {
+      //    //if (point.trail) {
+      //      point.update(point.geometry.position, state.bodies.earth);
+      //    //}
+      //  }
+      //}
     }
+
     updateTimeDisplay(state);
 
     renderer.render(scene, currentCamera);

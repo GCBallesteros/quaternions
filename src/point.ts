@@ -160,7 +160,7 @@ export namespace NamedTargets {
 export class Satellite extends OrientedPoint {
   private tle: string;
   private orientationMode: OrientationMode;
-  private trail: Trail | null = null;
+  public trail: Trail | null = null;
 
   private isNamedTarget(value: any): value is NamedTargets {
     return typeof value === 'object' && value !== null && 'type' in value;
@@ -204,6 +204,7 @@ export class Satellite extends OrientedPoint {
   }
 
   constructor(
+    scene,
     geometry: THREE.Group,
     tle: string,
     orientationMode: OrientationMode = {
@@ -220,8 +221,9 @@ export class Satellite extends OrientedPoint {
     this.orientationMode = orientationMode;
 
     // Initialize trail if we have a parent scene
-    if (geometry.parent) {
-      this.trail = new Trail(geometry.parent as THREE.Scene, geometry.position);
+    console.log(camera_orientation);
+    if (camera_orientation) {
+      this.trail = new Trail(geometry, geometry.position, scene);
     }
   }
 
@@ -232,6 +234,7 @@ export class Satellite extends OrientedPoint {
   }
 
   static async fromNoradId(
+    scene,
     geometry: THREE.Group,
     noradId: string,
 
@@ -252,7 +255,7 @@ export class Satellite extends OrientedPoint {
     } else {
       throw new Error(result.val);
     }
-    return new Satellite(geometry, tle, orientationMode, camera_orientation);
+    return new Satellite(scene, geometry, tle, orientationMode, camera_orientation, scene);
   }
 
   update(timestamp: Date, state: State): void {
@@ -340,7 +343,7 @@ export class Satellite extends OrientedPoint {
 
     // Update trail if it exists
     if (this.trail) {
-      this.trail.update(this.geometry.position);
+      this.trail.update(this.geometry.position, state.bodies.earth);
     }
   }
 }
