@@ -216,6 +216,11 @@ export class Satellite extends OrientedPoint {
     super(geometry, camera_orientation);
     this.tle = tle;
     this.orientationMode = orientationMode;
+
+    if (camera_orientation) {
+      // Add the trace
+      console.log("Adding traces to satellite")
+    }
   }
 
   static async fromNoradId(
