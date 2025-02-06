@@ -7,7 +7,6 @@ import { buildCommandClosures } from './commands.js';
 import { log } from './logger.js';
 
 // Before share
-// TODO: init.ts move moon logic to set_Time (monday Morning)
 // TODO: Add docs for the UI (monday night)
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
 // TODO: Add offset quaternion

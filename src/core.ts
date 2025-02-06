@@ -524,6 +524,7 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
   const moonData = getMoonPosition(state.currentTime);
   state.bodies.moon.position.set(...moonData.position);
 
+  // TODO: Use moonData.phase to turn the moon so that it always points the same way
   document.getElementById('moon-x')!.textContent = Math.round(
     moonData.position[0],
   ).toString();

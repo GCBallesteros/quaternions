@@ -1,0 +1,179 @@
+import * as THREE from 'three';
+
+const NUM_CURVE_POINTS = 3;
+const MAX_SEGMENTS = 250;
+const MAX_VERTICES = (MAX_SEGMENTS + 1) * NUM_CURVE_POINTS;
+
+export class Trail {
+  private geometry: THREE.BufferGeometry;
+  private material: THREE.ShaderMaterial;
+  private mesh: THREE.Mesh;
+  private trailVertices: Float32Array;
+  private trailIndices: Uint16Array;
+  private trailAlpha: Float32Array;
+  private currentSegmentIndex: number = 0;
+  private currentCurveIndex: number = 0;
+  private totalSegments: number = 0;
+  private lastPosition: THREE.Vector3;
+
+  constructor(scene: THREE.Scene, initialPosition: THREE.Vector3) {
+    this.trailVertices = new Float32Array(MAX_VERTICES * 3);
+    this.trailIndices = new Uint16Array(
+      MAX_SEGMENTS * (NUM_CURVE_POINTS - 1) * 6,
+    );
+    this.trailAlpha = new Float32Array(MAX_VERTICES).fill(1.0);
+    this.lastPosition = initialPosition.clone();
+
+    this.geometry = new THREE.BufferGeometry();
+    this.geometry.setAttribute(
+      'position',
+      new THREE.BufferAttribute(this.trailVertices, 3),
+    );
+    this.geometry.setIndex(new THREE.BufferAttribute(this.trailIndices, 1));
+    this.geometry.setAttribute(
+      'alpha',
+      new THREE.BufferAttribute(this.trailAlpha, 1),
+    );
+
+    this.material = new THREE.ShaderMaterial({
+      vertexShader: `
+        precision highp float;
+        varying float vAlpha;
+        attribute float alpha;
+        void main() {
+          vAlpha = alpha;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        precision highp float;
+        varying float vAlpha;
+        uniform vec3 uColor;
+        void main() {
+          gl_FragColor = vec4(uColor * vAlpha, vAlpha);
+        }
+      `,
+      uniforms: {
+        uColor: { value: new THREE.Color(1.0, 1.0, 0.0) },
+      },
+      transparent: true,
+      depthWrite: false,
+      depthTest: true,
+      blending: THREE.AdditiveBlending,
+      side: THREE.BackSide,
+    });
+
+    this.mesh = new THREE.Mesh(this.geometry, this.material);
+    scene.add(this.mesh);
+  }
+
+  private computeCurve(position: THREE.Vector3): THREE.Vector3[] {
+    const curvePoints: THREE.Vector3[] = [];
+    const nadir = position.clone().negate().normalize();
+    const velocity = new THREE.Vector3()
+      .subVectors(position, this.lastPosition)
+      .normalize();
+    const totalFOV = Math.PI / 8;
+    const halfFOV = totalFOV / 2;
+
+    for (let i = 0; i < NUM_CURVE_POINTS; i++) {
+      const t = i / (NUM_CURVE_POINTS - 1);
+      const theta = THREE.MathUtils.lerp(-halfFOV, halfFOV, t);
+      const dir = nadir.clone().applyAxisAngle(velocity, theta).normalize();
+      curvePoints.push(dir.multiplyScalar(6371 * 1.02)); // Earth radius * slight offset
+    }
+
+    return curvePoints;
+  }
+
+  private addSegment(
+    prevCurve: THREE.Vector3[] | null,
+    currCurve: THREE.Vector3[],
+  ) {
+    let startIndex = this.currentCurveIndex * NUM_CURVE_POINTS * 3;
+    let indexOffset = this.currentSegmentIndex * (NUM_CURVE_POINTS - 1) * 6;
+
+    for (let i = 0; i < NUM_CURVE_POINTS; i++) {
+      const pt = currCurve[i];
+      let index = startIndex + i * 3;
+      let alphaIndex = startIndex / 3 + i;
+
+      this.trailVertices[index] = pt.x;
+      this.trailVertices[index + 1] = pt.y;
+      this.trailVertices[index + 2] = pt.z;
+      this.trailAlpha[alphaIndex] = 0.8;
+    }
+
+    this.currentCurveIndex = (this.currentCurveIndex + 1) % (MAX_SEGMENTS + 1);
+
+    if (prevCurve) {
+      for (let i = 0; i < NUM_CURVE_POINTS - 1; i++) {
+        let i0 = (startIndex / 3 + i) % MAX_VERTICES;
+        let i1 = (i0 - NUM_CURVE_POINTS + MAX_VERTICES) % MAX_VERTICES;
+        let i2 = (i1 + 1) % MAX_VERTICES;
+        let i3 = (i0 + 1) % MAX_VERTICES;
+
+        this.trailIndices[indexOffset++] = i0;
+        this.trailIndices[indexOffset++] = i1;
+        this.trailIndices[indexOffset++] = i2;
+        this.trailIndices[indexOffset++] = i2;
+        this.trailIndices[indexOffset++] = i3;
+        this.trailIndices[indexOffset++] = i0;
+      }
+    }
+
+    this.currentSegmentIndex = (this.currentSegmentIndex + 1) % MAX_SEGMENTS;
+    this.totalSegments = Math.min(this.totalSegments + 1, MAX_SEGMENTS);
+  }
+
+  private updateMesh() {
+    this.geometry.attributes.position.needsUpdate = true;
+    // Index is guaranteed to exist by the setIndex in the constructor
+    this.geometry.index!.needsUpdate = true;
+
+    const minFade = 0.002;
+    const maxFade = 0.02;
+    const fadeThreshold = 0.6;
+
+    for (let i = 0; i < MAX_VERTICES; i++) {
+      let alpha = this.trailAlpha[i];
+      let fadeFactor: number;
+
+      if (alpha > fadeThreshold) {
+        fadeFactor = minFade;
+      } else {
+        let t = alpha / fadeThreshold;
+        fadeFactor = minFade + (maxFade - minFade) * (1 - t * t);
+      }
+
+      this.trailAlpha[i] = Math.max(0, alpha - fadeFactor);
+    }
+
+    this.geometry.attributes.alpha.needsUpdate = true;
+    this.geometry.setDrawRange(
+      0,
+      Math.min(this.totalSegments, MAX_SEGMENTS) * (NUM_CURVE_POINTS - 1) * 6,
+    );
+    this.geometry.computeVertexNormals();
+  }
+
+  update(position: THREE.Vector3) {
+    const currCurve = this.computeCurve(position);
+    const prevCurve = this.computeCurve(this.lastPosition);
+
+    this.addSegment(prevCurve, currCurve);
+    if (this.totalSegments > 0) {
+      this.updateMesh();
+    }
+
+    this.lastPosition.copy(position);
+  }
+
+  dispose() {
+    this.geometry.dispose();
+    this.material.dispose();
+    if (this.mesh.parent) {
+      this.mesh.parent.remove(this.mesh);
+    }
+  }
+}
