@@ -2,12 +2,6 @@ import * as THREE from 'three';
 
 const MOON_RADIUS = 1737.1;
 
-const MOON_ROTATION = {
-  x: Math.PI / 2,
-  y: Math.PI / 4,
-  z: 0,
-};
-
 export function makeMoon(): THREE.Mesh {
   const moonGeometry = new THREE.SphereGeometry(MOON_RADIUS, 64, 64);
   const textureLoader = new THREE.TextureLoader();
@@ -24,7 +18,7 @@ export function makeMoon(): THREE.Mesh {
   });
 
   const moon = new THREE.Mesh(moonGeometry, moonMaterial);
-  moon.rotation.set(MOON_ROTATION.x, MOON_ROTATION.y, MOON_ROTATION.z);
+  moon.rotation.x = Math.PI / 2;
 
   return moon;
 }
