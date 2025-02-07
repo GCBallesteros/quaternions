@@ -234,7 +234,7 @@ export class Satellite extends OrientedPoint {
   }
 
   static async fromNoradId(
-    scene,
+    scene: THREE.Scene,
     geometry: THREE.Group,
     noradId: string,
 
@@ -255,7 +255,7 @@ export class Satellite extends OrientedPoint {
     } else {
       throw new Error(result.val);
     }
-    return new Satellite(scene, geometry, tle, orientationMode, camera_orientation, scene);
+    return new Satellite(scene, geometry, tle, orientationMode, camera_orientation);
   }
 
   update(timestamp: Date, state: State): void {
