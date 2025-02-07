@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { disposeObject } from './utils.js';
 
 const NUM_CURVE_POINTS = 3;
 const MAX_SEGMENTS = 250;
@@ -201,10 +202,9 @@ export class Trail {
   }
 
   dispose() {
-    this.geometry.dispose();
-    this.material.dispose();
     if (this.mesh.parent) {
       this.mesh.parent.remove(this.mesh);
     }
+    disposeObject(this.mesh);
   }
 }

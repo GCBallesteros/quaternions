@@ -115,3 +115,30 @@ export function xyz2geo(xyz: Vector3): Vector3 {
   const [latitude, longitude, radius] = xyz2sph(xyz);
   return [latitude, longitude, radius - RADIUS_EARTH];
 }
+
+/**
+ * Recursively disposes of a Three.js object and all its children
+ * Handles geometries, materials, and textures
+ */
+export function disposeObject(object: THREE.Object3D): void {
+  while (object.children.length > 0) {
+    disposeObject(object.children[0]);
+    object.remove(object.children[0]);
+  }
+
+  if ((object as any).geometry) {
+    (object as any).geometry.dispose();
+  }
+
+  if ((object as any).material) {
+    if (Array.isArray((object as any).material)) {
+      (object as any).material.forEach((material: THREE.Material) => {
+        if ((material as any).map) (material as any).map.dispose();
+        material.dispose();
+      });
+    } else {
+      if ((object as any).material.map) (object as any).material.map.dispose();
+      (object as any).material.dispose();
+    }
+  }
+}

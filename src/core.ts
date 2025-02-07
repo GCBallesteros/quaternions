@@ -575,7 +575,11 @@ export function _deletePoint(
     return Err(`Point '${pointName}' does not exist`);
   }
 
-  scene.remove(point.geometry);
+  if (point instanceof Satellite) {
+    point.dispose(scene);
+  } else {
+    scene.remove(point.geometry);
+  }
   delete state.points[pointName];
   removePointFromUI(pointName);
 

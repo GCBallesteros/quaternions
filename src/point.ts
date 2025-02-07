@@ -4,12 +4,18 @@ import { Trail } from './trail.js';
 import { _fetchTLE, _findBestQuaternion } from './core.js';
 import { log } from './logger.js';
 import { State, Vector3, Vector4 } from './types.js';
+import { disposeObject } from './utils.js';
 
 export class Point {
   public geometry: THREE.Group;
 
   constructor(geometry: THREE.Group) {
     this.geometry = geometry;
+  }
+
+  dispose(scene: THREE.Scene): void {
+    scene.remove(this.geometry);
+    disposeObject(this.geometry);
   }
 
   get position(): Vector3 {
@@ -227,10 +233,11 @@ export class Satellite extends OrientedPoint {
     }
   }
 
-  dispose() {
+  dispose(scene: THREE.Scene): void {
     if (this.trail) {
       this.trail.dispose();
     }
+    super.dispose(scene);
   }
 
   static async fromNoradId(
@@ -255,7 +262,13 @@ export class Satellite extends OrientedPoint {
     } else {
       throw new Error(result.val);
     }
-    return new Satellite(scene, geometry, tle, orientationMode, camera_orientation);
+    return new Satellite(
+      scene,
+      geometry,
+      tle,
+      orientationMode,
+      camera_orientation,
+    );
   }
 
   update(timestamp: Date, state: State): void {
