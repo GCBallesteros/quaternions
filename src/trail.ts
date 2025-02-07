@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { Option, Some, None } from 'ts-results';
 import { disposeObject } from './utils.js';
 
 const NUM_CURVE_POINTS = 3;
@@ -86,7 +87,7 @@ export class Trail {
   private computeCurrentCurve(
     position: THREE.Vector3,
     earth: THREE.Object3D,
-  ): THREE.Vector3[] | null {
+  ): Option<THREE.Vector3[]> {
     const curvePoints: THREE.Vector3[] = [];
     const nadir = position.clone().negate().normalize();
     const velocity = new THREE.Vector3()
@@ -108,13 +109,11 @@ export class Trail {
         const surfPt = intersects[0].point.clone().multiplyScalar(1.003);
         curvePoints.push(surfPt);
       } else {
-        // AI! Use an Optional value from results-ts
-        // If any point doesn't hit the Earth, return null
-        return null;
+        return None;
       }
     }
 
-    return curvePoints;
+    return Some(curvePoints);
   }
 
   private addSegment(
@@ -192,10 +191,9 @@ export class Trail {
   }
 
   update(position: THREE.Vector3, earth: THREE.Object3D) {
-    const currCurve = this.computeCurrentCurve(position, earth);
+    const currCurveOption = this.computeCurrentCurve(position, earth);
 
-    // AI! Use an Optional value from results-ts
-    if (currCurve === null) {
+    if (!currCurveOption.some) {
       // Reset the trail if any point misses the Earth
       this.prevCurve = null;
       this.currentSegmentIndex = 0;
@@ -204,6 +202,7 @@ export class Trail {
       this.trailAlpha.fill(0);
       this.geometry.attributes.alpha.needsUpdate = true;
     } else {
+      const currCurve = currCurveOption.val;
       this.addSegment(this.prevCurve, currCurve);
       if (this.totalSegments > 0) {
         this.updateMesh();
