@@ -86,7 +86,7 @@ export class Trail {
   private computeCurrentCurve(
     position: THREE.Vector3,
     earth: THREE.Object3D,
-  ): THREE.Vector3[] {
+  ): THREE.Vector3[] | null {
     const curvePoints: THREE.Vector3[] = [];
     const nadir = position.clone().negate().normalize();
     const velocity = new THREE.Vector3()
@@ -108,7 +108,8 @@ export class Trail {
         const surfPt = intersects[0].point.clone().multiplyScalar(1.003);
         curvePoints.push(surfPt);
       } else {
-        curvePoints.push(new THREE.Vector3());
+        // If any point doesn't hit the Earth, return null
+        return null;
       }
     }
 
@@ -192,13 +193,23 @@ export class Trail {
   update(position: THREE.Vector3, earth: THREE.Object3D) {
     const currCurve = this.computeCurrentCurve(position, earth);
 
-    this.addSegment(this.prevCurve, currCurve);
-    if (this.totalSegments > 0) {
-      this.updateMesh();
+    if (currCurve === null) {
+      // Reset the trail if any point misses the Earth
+      this.prevCurve = null;
+      this.currentSegmentIndex = 0;
+      this.currentCurveIndex = 0;
+      this.totalSegments = 0;
+      this.trailAlpha.fill(0);
+      this.geometry.attributes.alpha.needsUpdate = true;
+    } else {
+      this.addSegment(this.prevCurve, currCurve);
+      if (this.totalSegments > 0) {
+        this.updateMesh();
+      }
+      this.prevCurve = currCurve;
     }
 
     this.lastPosition.copy(position);
-    this.prevCurve = currCurve;
   }
 
   dispose() {
