@@ -31,18 +31,12 @@ export function removePointFromUI(pointName: string): void {
   }
 }
 
-function createPointElement(
-  name: string,
-  type: string,
-  point: Point,
-): HTMLElement {
+function generatePointHTML(name: string, type: string, point: Point): string {
   const position = point.position;
-  const pointElement = document.createElement('div');
-  pointElement.className = 'point-item';
-  pointElement.innerHTML = `
+  return `
     <div class="point-header">
       <span class="expand-button">▶</span>
-      <input type="color" class="color-picker" value="#ffffff" title="Point color">
+      <input type="color" class="color-picker" value="${point.color}" title="Point color">
       <span class="point-name">${name}</span>
       ${
         type === 'Satellite' && (point as OrientedPoint).camera
@@ -58,50 +52,111 @@ function createPointElement(
       <span class="point-type">${type}</span>
     </div>
     <div class="point-details">
-      <div>Position: [${position[0].toFixed(2)}, ${position[1].toFixed(2)}, ${position[2].toFixed(2)}]</div>
-      ${
-        type !== 'Point'
-          ? `
-            <div>Quaternion: [${point.geometry.quaternion
-              .toArray()
-              .map((v) => v.toFixed(3))
-              .join(', ')}]</div>
-            ${
-              type === 'Satellite'
-                ? `<div>Orientation Mode: ${(point as any).orientationMode.type}
-                   ${
-                     (point as any).orientationMode.type === 'dynamic'
-                       ? `<div style="margin-left: 10px;">
-                        Primary: ${(point as any).orientationMode.primaryBodyVector} → ${formatTargetVector((point as any).orientationMode.primaryTargetVector)}<br>
-                        Secondary: ${(point as any).orientationMode.secondaryBodyVector} → ${formatTargetVector((point as any).orientationMode.secondaryTargetVector)}
-                        </div>`
-                       : `<div style="margin-left: 10px;">
-                        Fixed quaternion: [${(point as any).orientationMode.ecef_quaternion.map((v: number) => v.toFixed(3)).join(', ')}]
-                        </div>`
-                   }</div>`
-                : ''
-            }
-            ${
-              (point as OrientedPoint).camera
-                ? `<div>Camera: Present
-                   <div style="margin-left: 10px;">Body Orientation: [${
-                     (point as OrientedPoint).camera_orientation
-                       ?.map((v) => v.toFixed(3))
-                       ?.join(', ') ?? 'default'
-                   }]</div>
-                   </div>`
-                : '<div>Camera: None</div>'
-            }
-            <div class="point-controls">
-            </div>
-          `
-          : ''
-      }
+      ${generatePointDetails(type, point)}
     </div>
   `;
+}
 
-  const expandButton = pointElement.querySelector('.expand-button');
-  const details = pointElement.querySelector('.point-details');
+function generatePointDetails(type: string, point: Point): string {
+  const position = point.position;
+  return `
+    <div>Position: [${position[0].toFixed(2)}, ${position[1].toFixed(2)}, ${position[2].toFixed(2)}]</div>
+    ${
+      type !== 'Point'
+        ? `
+          <div>Quaternion: [${point.geometry.quaternion
+            .toArray()
+            .map((v) => v.toFixed(3))
+            .join(', ')}]</div>
+          ${generateOrientationDetails(type, point)}
+        `
+        : ''
+    }
+  `;
+}
+
+function generateOrientationDetails(type: string, point: Point): string {
+  if (type === 'Satellite') {
+    return `
+      <div>Orientation Mode: ${(point as any).orientationMode.type}
+        ${
+          (point as any).orientationMode.type === 'dynamic'
+            ? `<div style="margin-left: 10px;">
+              Primary: ${(point as any).orientationMode.primaryBodyVector} → ${formatTargetVector((point as any).orientationMode.primaryTargetVector)}<br>
+              Secondary: ${(point as any).orientationMode.secondaryBodyVector} → ${formatTargetVector((point as any).orientationMode.secondaryTargetVector)}
+              </div>`
+            : `<div style="margin-left: 10px;">
+              Fixed quaternion: [${(point as any).orientationMode.ecef_quaternion.map((v: number) => v.toFixed(3)).join(', ')}]
+              </div>`
+        }
+      </div>
+      ${generateCameraDetails(point as OrientedPoint)}
+    `;
+  }
+  return generateCameraDetails(point as OrientedPoint);
+}
+
+function generateCameraDetails(point: OrientedPoint): string {
+  return point.camera
+    ? `<div>Camera: Present
+       <div style="margin-left: 10px;">Body Orientation: [${
+         point.camera_orientation?.map((v) => v.toFixed(3))?.join(', ') ??
+         'default'
+       }]</div>
+       </div>`
+    : '<div>Camera: None</div>';
+}
+
+function setupTrailToggle(element: HTMLElement, point: Satellite): void {
+  const trailSwitch = element.querySelector(
+    '.trail-switch',
+  ) as HTMLInputElement;
+  if (!trailSwitch) return;
+
+  trailSwitch.addEventListener('change', () => {
+    if (trailSwitch.checked) {
+      if (!point.hasTrail && point.camera) {
+        point.trail = new Trail(
+          point.geometry,
+          point.geometry.position,
+          point.geometry.parent as THREE.Scene,
+        );
+        point.hasTrail = true;
+      }
+    } else {
+      if (point.trail) {
+        point.trail.dispose();
+        point.trail = null;
+        point.hasTrail = false;
+      }
+    }
+  });
+}
+
+function setupColorPicker(element: HTMLElement, point: Point): void {
+  const colorPicker = element.querySelector(
+    '.color-picker',
+  ) as HTMLInputElement;
+  if (!colorPicker) return;
+
+  // Only update color picker if value is different from point's color
+  const pointColor = point.color;
+  if (colorPicker.value !== pointColor) {
+    colorPicker.value = pointColor;
+  }
+
+  // Add color picker change handler if not already added
+  if (!colorPicker.dataset.hasChangeHandler) {
+    colorPicker.addEventListener('input', () => {
+      point.color = colorPicker.value;
+    });
+    colorPicker.dataset.hasChangeHandler = 'true';
+  }
+}
+
+function setupExpandButton(element: HTMLElement, name: string): void {
+  const expandButton = element.querySelector('.expand-button');
+  const details = element.querySelector('.point-details');
 
   expandButton?.addEventListener('click', () => {
     if (expandButton.classList.contains('expanded')) {
@@ -117,31 +172,22 @@ function createPointElement(
     expandButton?.classList.add('expanded');
     details?.classList.add('expanded');
   }
+}
 
-  // Add trail toggle handler for satellites
+function createPointElement(
+  name: string,
+  type: string,
+  point: Point,
+): HTMLElement {
+  const pointElement = document.createElement('div');
+  pointElement.className = 'point-item';
+  pointElement.innerHTML = generatePointHTML(name, type, point);
+
+  setupExpandButton(pointElement, name);
+  setupColorPicker(pointElement, point);
+
   if (type === 'Satellite') {
-    const trailSwitch = pointElement.querySelector(
-      '.trail-switch',
-    ) as HTMLInputElement;
-    trailSwitch.addEventListener('change', () => {
-      const satellite = point as Satellite;
-      if (trailSwitch.checked) {
-        if (!satellite.hasTrail && satellite.camera) {
-          satellite.trail = new Trail(
-            satellite.geometry,
-            satellite.geometry.position,
-            satellite.geometry.parent as THREE.Scene,
-          );
-          satellite.hasTrail = true;
-        }
-      } else {
-        if (satellite.trail) {
-          satellite.trail.dispose();
-          satellite.trail = null;
-          satellite.hasTrail = false;
-        }
-      }
-    });
+    setupTrailToggle(pointElement, point as Satellite);
   }
 
   return pointElement;
@@ -149,117 +195,17 @@ function createPointElement(
 
 function updatePointElement(
   element: HTMLElement,
+  name: string,
   type: string,
   point: Point,
 ): void {
-  const typeElement = element.querySelector('.point-type');
-  const detailsElement = element.querySelector('.point-details');
-  const colorPicker = element.querySelector(
-    '.color-picker',
-  ) as HTMLInputElement;
-  if (typeElement) typeElement.textContent = type;
+  element.innerHTML = generatePointHTML(name, type, point);
 
-  // Only update color picker if value is different from point's color
-  const pointColor = point.color;
-  if (colorPicker.value !== pointColor) {
-    colorPicker.value = pointColor;
-  }
+  setupExpandButton(element, name);
+  setupColorPicker(element, point);
 
-  // Add color picker change handler if not already added
-  if (!colorPicker.dataset.hasChangeHandler) {
-    // if we listen to change we have a race condition because while we are
-    // picking color the value of the picker gets set and it's not modified
-    // after closing the picker. Anyways with input it's nicer and more dynamic
-    colorPicker.addEventListener('input', () => {
-      point.color = colorPicker.value;
-    });
-    colorPicker.dataset.hasChangeHandler = 'true';
-  }
-
-  const position = point.position;
-  if (detailsElement) {
-    // Store the previous trail switch state if it exists
-    const previousTrailSwitch = element.querySelector(
-      '.trail-switch',
-    ) as HTMLInputElement;
-    const wasChecked = previousTrailSwitch?.checked;
-
-    detailsElement.innerHTML = `
-      <div>Position: [${position[0].toFixed(2)}, ${position[1].toFixed(2)}, ${position[2].toFixed(2)}]</div>
-      ${
-        type !== 'Point'
-          ? `
-            <div>Quaternion: [${point.geometry.quaternion
-              .toArray()
-              .map((v) => v.toFixed(3))
-              .join(', ')}]</div>
-            ${
-              type === 'Satellite'
-                ? `<div>Orientation Mode: ${(point as any).orientationMode.type}
-                   ${
-                     (point as any).orientationMode.type === 'dynamic'
-                       ? `<div style="margin-left: 10px;">
-                        Primary: ${(point as any).orientationMode.primaryBodyVector} → ${formatTargetVector((point as any).orientationMode.primaryTargetVector)}<br>
-                        Secondary: ${(point as any).orientationMode.secondaryBodyVector} → ${formatTargetVector((point as any).orientationMode.secondaryTargetVector)}
-                        </div>`
-                       : `<div style="margin-left: 10px;">
-                        Fixed quaternion: [${(point as any).orientationMode.ecef_quaternion.map((v: number) => v.toFixed(3)).join(', ')}]
-                        </div>`
-                   }</div>`
-                : ''
-            }
-            ${
-              (point as OrientedPoint).camera
-                ? `<div>Camera: Present
-                   <div style="margin-left: 10px;">Body Orientation: [${
-                     (point as OrientedPoint).camera_orientation
-                       ?.map((v) => v.toFixed(3))
-                       ?.join(', ') ?? 'default'
-                   }]</div>
-                   </div>`
-                : '<div>Camera: None</div>'
-            }
-          `
-          : ''
-      }
-    `;
-
-    // Restore trail switch functionality if this is a satellite
-    if (type === 'Satellite') {
-      const trailSwitch = element.querySelector(
-        '.trail-switch',
-      ) as HTMLInputElement;
-      if (trailSwitch) {
-        // Restore previous state if it existed
-        if (wasChecked !== undefined) {
-          trailSwitch.checked = wasChecked;
-        }
-
-        // Remove old listener and add new one
-        const newTrailSwitch = element.querySelector(
-          '.trail-switch',
-        ) as HTMLInputElement;
-        newTrailSwitch.addEventListener('change', () => {
-          const satellite = point as Satellite;
-          if (newTrailSwitch.checked) {
-            satellite.hasTrail = true;
-            if (!satellite.trail && satellite.camera) {
-              satellite.trail = new Trail(
-                satellite.geometry,
-                satellite.geometry.position,
-                satellite.geometry.parent as THREE.Scene,
-              );
-            }
-          } else {
-            satellite.hasTrail = false;
-            if (satellite.trail) {
-              satellite.trail.dispose();
-              satellite.trail = null;
-            }
-          }
-        });
-      }
-    }
+  if (type === 'Satellite') {
+    setupTrailToggle(element, point as Satellite);
   }
 }
 
@@ -312,7 +258,7 @@ function updatePointsList(state: State): void {
       pointElement = createPointElement(name, type, point);
       pointsList.appendChild(pointElement);
     } else {
-      updatePointElement(pointElement, type, state.points[name]);
+      updatePointElement(pointElement, name, type, state.points[name]);
     }
   });
 }
