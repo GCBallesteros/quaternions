@@ -108,6 +108,7 @@ export class Trail {
         const surfPt = intersects[0].point.clone().multiplyScalar(1.003);
         curvePoints.push(surfPt);
       } else {
+        // AI! Use an Optional value from results-ts
         // If any point doesn't hit the Earth, return null
         return null;
       }
@@ -193,6 +194,7 @@ export class Trail {
   update(position: THREE.Vector3, earth: THREE.Object3D) {
     const currCurve = this.computeCurrentCurve(position, earth);
 
+    // AI! Use an Optional value from results-ts
     if (currCurve === null) {
       // Reset the trail if any point misses the Earth
       this.prevCurve = null;
