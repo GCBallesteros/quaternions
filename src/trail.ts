@@ -16,8 +16,13 @@ export class Trail {
   private totalSegments: number = 0;
   private prevCurve: THREE.Vector3[] | null;
   private lastPosition: THREE.Vector3;
+  private color: THREE.Color;
 
-  constructor(pointGroup: THREE.Group, initialPosition: THREE.Vector3, scene) {
+  constructor(
+    pointGroup: THREE.Group,
+    initialPosition: THREE.Vector3,
+    scene: THREE.Scene,
+  ) {
     this.trailVertices = new Float32Array(MAX_VERTICES * 3);
     this.trailIndices = new Uint16Array(
       MAX_SEGMENTS * (NUM_CURVE_POINTS - 1) * 6,
@@ -35,6 +40,10 @@ export class Trail {
       'alpha',
       new THREE.BufferAttribute(this.trailAlpha, 1),
     );
+
+    const sphere = pointGroup.getObjectByName('point-sphere');
+    // @ts-ignore `point-sphere` is a THREE.Mesh
+    this.color = sphere!.material.color;
 
     this.material = new THREE.ShaderMaterial({
       vertexShader: `
@@ -55,7 +64,7 @@ export class Trail {
         }
       `,
       uniforms: {
-        uColor: { value: new THREE.Color(1.0, 1.0, 0.0) },
+        uColor: { value: this.color },
       },
       transparent: true,
       depthWrite: false,
@@ -95,9 +104,7 @@ export class Trail {
       const intersects = raycaster.intersectObject(earth);
 
       if (intersects.length > 0) {
-        const surfPt = intersects[0].point
-          .clone()
-          .multiplyScalar(1.003);
+        const surfPt = intersects[0].point.clone().multiplyScalar(1.003);
         curvePoints.push(surfPt);
       } else {
         curvePoints.push(new THREE.Vector3());
