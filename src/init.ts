@@ -6,7 +6,6 @@ import { createFloatingPoint } from './components.js';
 import { _createLine, _mov, _setTime, addFrame } from './core.js';
 import { makeEarth } from './earth.js';
 import { makeMoon } from './moon.js';
-import { Satellite } from './point.js';
 import { State } from './types.js';
 import { updateTimeDisplay } from './ui.js';
 import { setupTimeControls } from './components/timeControls.js';
@@ -17,7 +16,7 @@ export function initializeCanvas(): {
   renderer: THREE.WebGLRenderer;
 } {
   const canvas = document.getElementById('webgl-canvas')!;
-  const renderer = new THREE.WebGLRenderer({ canvas });
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 
   const scene = new THREE.Scene();

@@ -97,7 +97,7 @@ export class Trail {
       if (intersects.length > 0) {
         const surfPt = intersects[0].point
           .clone()
-          .multiplyScalar(1.005);
+          .multiplyScalar(1.003);
         curvePoints.push(surfPt);
       } else {
         curvePoints.push(new THREE.Vector3());

@@ -8,8 +8,9 @@ import { log } from './logger.js';
 
 // Before share
 // TODO: Trails: Fix scene passig mess
+// TODO: Trails: Sync sat color with trail color
 // TODO: Trails: Broken if not nadir pointing
-// TODO: Trails: Check trail disappears when deleting satellites and resetting
+// TODO: Trails: Make trail disappear when deleting satellites and resetting
 // TODO: Trails: Toggles for trail. Toggle untoggle destroys the trail or even better only if time flows
 // TODO: Trails: Should use camera orientation instead of doing weird assumpions
 // TODO: Trails: Docs
@@ -17,7 +18,7 @@ import { log } from './logger.js';
 // TODO: Time: Docs explain this
 // TODO: Add POV Window
 // TODO: Add plots with callbacks
-// TODO: Add docs for the UI (monday night)
+// TODO: Add docs for the UI
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
 // TODO: Add offset quaternion
 // TODO: Moon should be correctly oriented
@@ -31,8 +32,9 @@ import { log } from './logger.js';
 // TODO: Button to bring back global camera
 // TODO: Printing objects is terrible
 // TODO: Make a learning track
-// TODO: Transition smoothly between cameras
+// TODO: Transition smoothly between cameras (maybe)
 // TODO: Show coordinates over the Earth
+// TODO: POV: Higher resolution textures
 
 const { scene, canvas, renderer } = initializeCanvas();
 let state = initScene(scene, canvas, renderer);
