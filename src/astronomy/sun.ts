@@ -54,12 +54,13 @@ function sunRadVector(t: number): number {
  * @returns Julian Date
  */
 export function dateToJulian(date: Date): number {
-  const year = date.getUTCFullYear();
-  const month = date.getUTCMonth() + 1; // JavaScript months are 0-based
-  const day = date.getUTCDate();
-  const hour = date.getUTCHours();
-  const minute = date.getUTCMinutes();
-  const second = date.getUTCSeconds();
+  // Date is already in UTC, no need for UTC conversion
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1; // JavaScript months are 0-based
+  const day = date.getDate();
+  const hour = date.getHours();
+  const minute = date.getMinutes();
+  const second = date.getSeconds();
 
   let y = year;
   let m = month;

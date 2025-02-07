@@ -8,6 +8,7 @@ import { log } from './logger.js';
 
 // Before share
 // TODO: Trails: Fix scene passig mess
+// TODO: Add offset quaternion and ability and a setter for it
 // TODO: Trails: Broken if not nadir pointing (maybe)
 // TODO: Trails: Should use camera orientation instead of doing weird assumpions
 // TODO: Trails: Docs
@@ -19,7 +20,6 @@ import { log } from './logger.js';
 // TODO: Add plots with callbacks
 // TODO: Add docs for the UI
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
-// TODO: Add offset quaternion
 // TODO: Moon should be correctly oriented
 // TODO: Add diagram to findBestQuaternion documentation
 
@@ -28,6 +28,10 @@ import { log } from './logger.js';
 // TODO: Normalize quats before applying
 
 // EXTRA FEATURES
+// TODO: Distance function
+// TODO: Relative rotation
+// TODO: Cameras so we don't have to go to state
+// TODO: Load workflows button
 // TODO: Button to bring back global camera
 // TODO: Printing objects is terrible
 // TODO: Make a learning track

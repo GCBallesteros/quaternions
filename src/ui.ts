@@ -10,7 +10,7 @@ import { setupBodiesTab } from './ui/bodies.js';
 export function updateTimeDisplay(state: State) {
   const timeElement = document.getElementById('current-time');
   if (timeElement) {
-    timeElement.textContent = state.currentTime.toLocaleString();
+    timeElement.textContent = state.currentTime.toISOString();
   }
 }
 
@@ -41,18 +41,22 @@ export function setupUI(
 
   const currentTime = state.currentTime;
   dateInput.value = currentTime.toISOString().split('T')[0];
-  hoursInput.value = currentTime.getHours().toString().padStart(2, '0');
-  minutesInput.value = currentTime.getMinutes().toString().padStart(2, '0');
-  secondsInput.value = currentTime.getSeconds().toString().padStart(2, '0');
+  hoursInput.value = currentTime.getUTCHours().toString().padStart(2, '0');
+  minutesInput.value = currentTime.getUTCMinutes().toString().padStart(2, '0');
+  secondsInput.value = currentTime.getUTCSeconds().toString().padStart(2, '0');
 
   // Setup update button
   const updateButton = document.getElementById('update-time');
   updateButton?.addEventListener('click', () => {
-    const newDate = new Date(dateInput.value);
-    newDate.setHours(
-      parseInt(hoursInput.value),
-      parseInt(minutesInput.value),
-      parseInt(secondsInput.value),
+    const newDate = new Date(
+      Date.UTC(
+        new Date(dateInput.value).getUTCFullYear(),
+        new Date(dateInput.value).getUTCMonth(),
+        new Date(dateInput.value).getUTCDate(),
+        parseInt(hoursInput.value),
+        parseInt(minutesInput.value),
+        parseInt(secondsInput.value),
+      ),
     );
     executeCommand(`setTime(new Date("${newDate.toISOString()}"))`);
   });
