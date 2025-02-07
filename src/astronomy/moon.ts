@@ -4,22 +4,22 @@ import { toRad, dateToJulian, eci2ecef } from './sun.js';
 const SYNODIC_MONTH = 29.53058868;
 
 // Astronomical constants
-const EPOCH_1980 = 2444238.5;  // 1980 January 0.0
+const EPOCH_1980 = 2444238.5; // 1980 January 0.0
 
 // Constants for the Moon's orbit, epoch 1980.0
-const MOON_MEAN_LONGITUDE_EPOCH = 64.975464;     // Moon's mean longitude at the epoch
-const MOON_MEAN_LONGITUDE_PERIGEE = 349.383063;  // Mean longitude of perigee at epoch
-const MOON_MEAN_LONGITUDE_NODE = 151.950429;     // Mean longitude of node at epoch
-const MOON_INCLINATION = 5.145396;              // Inclination of Moon's orbit
-const MOON_ECCENTRICITY = 0.054900;             // Eccentricity of Moon's orbit
-const MOON_ANGULAR_SIZE = 0.5181;               // Moon's angular size at distance a
-const MOON_SEMI_MAJOR_AXIS = 384401.0;          // Semi-major axis of Moon's orbit in km
-const MOON_PARALLAX = 0.9507;                   // Parallax at distance a from Earth
+const MOON_MEAN_LONGITUDE_EPOCH = 64.975464; // Moon's mean longitude at the epoch
+const MOON_MEAN_LONGITUDE_PERIGEE = 349.383063; // Mean longitude of perigee at epoch
+const MOON_MEAN_LONGITUDE_NODE = 151.950429; // Mean longitude of node at epoch
+const MOON_INCLINATION = 5.145396; // Inclination of Moon's orbit
+const MOON_ECCENTRICITY = 0.0549; // Eccentricity of Moon's orbit
+const MOON_ANGULAR_SIZE = 0.5181; // Moon's angular size at distance a
+const MOON_SEMI_MAJOR_AXIS = 384401.0; // Semi-major axis of Moon's orbit in km
+const MOON_PARALLAX = 0.9507; // Parallax at distance a from Earth
 
 // Constants for the Sun's apparent orbit
-const SUN_ECLIPTIC_LONGITUDE_EPOCH = 278.833540;  // Ecliptic longitude of Sun at epoch
-const SUN_ECLIPTIC_LONGITUDE_PERIGEE = 282.596403;  // Ecliptic longitude at perigee
-const SUN_ORBIT_ECCENTRICITY = 0.016718;          // Eccentricity of Earth's orbit
+const SUN_ECLIPTIC_LONGITUDE_EPOCH = 278.83354; // Ecliptic longitude of Sun at epoch
+const SUN_ECLIPTIC_LONGITUDE_PERIGEE = 282.596403; // Ecliptic longitude at perigee
+const SUN_ORBIT_ECCENTRICITY = 0.016718; // Eccentricity of Earth's orbit
 
 function fixangle(a: number): number {
   return a - 360.0 * Math.floor(a / 360.0);
@@ -47,7 +47,9 @@ export function getMoonPosition(date: Date): {
 
   // Calculation of the Moon's position
   const ml = fixangle(13.1763966 * daysSince1980 + MOON_MEAN_LONGITUDE_EPOCH);
-  const MM = fixangle(ml - 0.1114041 * daysSince1980 - MOON_MEAN_LONGITUDE_PERIGEE);
+  const MM = fixangle(
+    ml - 0.1114041 * daysSince1980 - MOON_MEAN_LONGITUDE_PERIGEE,
+  );
   const MN = fixangle(MOON_MEAN_LONGITUDE_NODE - 0.0529539 * daysSince1980);
 
   // Evection
@@ -84,18 +86,22 @@ export function getMoonPosition(date: Date): {
   const y = Math.sin(toRad(lPP - NP)) * Math.cos(toRad(MOON_INCLINATION));
   const x = Math.cos(toRad(lPP - NP));
 
-  const moonLong = fixangle(Math.atan2(y, x) * 180 / Math.PI + NP);
-  const moonLat = Math.asin(
-    Math.sin(toRad(lPP - NP)) * Math.sin(toRad(MOON_INCLINATION))
-  ) * 180 / Math.PI;
+  const moonLong = fixangle((Math.atan2(y, x) * 180) / Math.PI + NP);
+  const moonLat =
+    (Math.asin(Math.sin(toRad(lPP - NP)) * Math.sin(toRad(MOON_INCLINATION))) *
+      180) /
+    Math.PI;
 
   // Calculate the Moon's distance
-  const moonDistance = (MOON_SEMI_MAJOR_AXIS * (1 - MOON_ECCENTRICITY * MOON_ECCENTRICITY)) /
+  const moonDistance =
+    (MOON_SEMI_MAJOR_AXIS * (1 - MOON_ECCENTRICITY * MOON_ECCENTRICITY)) /
     (1 + MOON_ECCENTRICITY * Math.cos(toRad(MmP + mEc)));
 
   // Convert to rectangular ECI coordinates
-  const xECI = moonDistance * Math.cos(toRad(moonLong)) * Math.cos(toRad(moonLat));
-  const yECI = moonDistance * Math.sin(toRad(moonLong)) * Math.cos(toRad(moonLat));
+  const xECI =
+    moonDistance * Math.cos(toRad(moonLong)) * Math.cos(toRad(moonLat));
+  const yECI =
+    moonDistance * Math.sin(toRad(moonLong)) * Math.cos(toRad(moonLat));
   const zECI = moonDistance * Math.sin(toRad(moonLat));
 
   const position = eci2ecef([xECI, yECI, zECI], jd);
@@ -116,6 +122,6 @@ export function getMoonPosition(date: Date): {
     phase: normalizedPhase,
     age: (SYNODIC_MONTH * fixangle(moonAge)) / 360.0,
     distance: moonDistance,
-    angularDiameter: angularDiameter
+    angularDiameter: angularDiameter,
   };
 }
