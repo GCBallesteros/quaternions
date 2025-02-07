@@ -113,20 +113,20 @@
 
 .slider {
   position: relative;
-  width: 60px;
-  height: 30px;
+  width: 30px;
+  height: 15px;
   background-color: #333;
-  border-radius: 15px;
+  border-radius: 8px;
   transition: 0.4s;
 }
 
 .slider:before {
   position: absolute;
   content: '';
-  height: 22px;
-  width: 22px;
-  left: 4px;
-  bottom: 4px;
+  height: 11px;
+  width: 11px;
+  left: 2px;
+  bottom: 2px;
   background-color: white;
   border-radius: 50%;
   transition: 0.4s;
@@ -137,12 +137,50 @@ input:checked + .slider {
 }
 
 input:checked + .slider:before {
-  transform: translateX(30px);
+  transform: translateX(15px);
 }
 
 .switch-label {
-  margin-left: 10px;
+  margin-left: 6px;
   color: #fff;
+  font-size: 0.9em;
+}
+
+.trail-toggle {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 12px;
+  gap: 5px;
+}
+
+.point-header {
+  display: grid;
+  grid-template-columns: minmax(100px, auto) auto 80px;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.point-name-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.point-type {
+  text-align: right;
+  color: #888;
+  font-size: 0.9em;
+}
+
+.camera-icon {
+  margin-left: 5px;
+  color: #888;
+  font-size: 1.1em;
+}
+
+.camera-icon.active {
+  color: #007bff;
 }
 
 /* Wrapper to position the marker relative to the slider */

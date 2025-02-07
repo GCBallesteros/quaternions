@@ -167,6 +167,7 @@ export class Satellite extends OrientedPoint {
   private tle: string;
   private orientationMode: OrientationMode;
   public trail: Trail | null = null;
+  public hasTrail: boolean = false;
 
   private isNamedTarget(value: any): value is NamedTargets {
     return typeof value === 'object' && value !== null && 'type' in value;
@@ -226,9 +227,9 @@ export class Satellite extends OrientedPoint {
     this.tle = tle;
     this.orientationMode = orientationMode;
 
-    // Initialize trail if we have a parent scene
-    console.log(camera_orientation);
+    // Initialize trail state if we have a camera
     if (camera_orientation) {
+      this.hasTrail = true;
       this.trail = new Trail(geometry, geometry.position, scene);
     }
   }

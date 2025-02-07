@@ -1,6 +1,7 @@
-import { State } from '../types.js';
-import { Point, OrientedPoint, Satellite, NamedTargets } from '../point.js';
-import { Vector3 } from '../types.js';
+import * as THREE from 'three';
+import { NamedTargets, OrientedPoint, Point, Satellite } from '../point.js';
+import { Trail } from '../trail.js';
+import { State, Vector3 } from '../types.js';
 
 function formatTargetVector(target: Vector3 | NamedTargets): string {
   if (typeof target === 'object' && target !== null && 'type' in target) {
@@ -43,6 +44,17 @@ function createPointElement(
       <span class="expand-button">▶</span>
       <input type="color" class="color-picker" value="#ffffff" title="Point color">
       <span class="point-name">${name}</span>
+      ${
+        type === 'Satellite' && (point as OrientedPoint).camera
+          ? `<div class="trail-toggle">
+               <label class="switch">
+                 <input type="checkbox" class="trail-switch" ${(point as Satellite).hasTrail ? 'checked' : ''}>
+                 <span class="slider"></span>
+               </label>
+               <span class="camera-icon ${(point as OrientedPoint).camera ? 'active' : ''}">📷</span>
+             </div>`
+          : ''
+      }
       <span class="point-type">${type}</span>
     </div>
     <div class="point-details">
@@ -80,6 +92,8 @@ function createPointElement(
                    </div>`
                 : '<div>Camera: None</div>'
             }
+            <div class="point-controls">
+            </div>
           `
           : ''
       }
@@ -102,6 +116,32 @@ function createPointElement(
   if (expandedPoints.has(name)) {
     expandButton?.classList.add('expanded');
     details?.classList.add('expanded');
+  }
+
+  // Add trail toggle handler for satellites
+  if (type === 'Satellite') {
+    const trailSwitch = pointElement.querySelector(
+      '.trail-switch',
+    ) as HTMLInputElement;
+    trailSwitch.addEventListener('change', () => {
+      const satellite = point as Satellite;
+      if (trailSwitch.checked) {
+        if (!satellite.hasTrail && satellite.camera) {
+          satellite.trail = new Trail(
+            satellite.geometry,
+            satellite.geometry.position,
+            satellite.geometry.parent as THREE.Scene,
+          );
+          satellite.hasTrail = true;
+        }
+      } else {
+        if (satellite.trail) {
+          satellite.trail.dispose();
+          satellite.trail = null;
+          satellite.hasTrail = false;
+        }
+      }
+    });
   }
 
   return pointElement;
@@ -138,6 +178,12 @@ function updatePointElement(
 
   const position = point.position;
   if (detailsElement) {
+    // Store the previous trail switch state if it exists
+    const previousTrailSwitch = element.querySelector(
+      '.trail-switch',
+    ) as HTMLInputElement;
+    const wasChecked = previousTrailSwitch?.checked;
+
     detailsElement.innerHTML = `
       <div>Position: [${position[0].toFixed(2)}, ${position[1].toFixed(2)}, ${position[2].toFixed(2)}]</div>
       ${
@@ -177,6 +223,43 @@ function updatePointElement(
           : ''
       }
     `;
+
+    // Restore trail switch functionality if this is a satellite
+    if (type === 'Satellite') {
+      const trailSwitch = element.querySelector(
+        '.trail-switch',
+      ) as HTMLInputElement;
+      if (trailSwitch) {
+        // Restore previous state if it existed
+        if (wasChecked !== undefined) {
+          trailSwitch.checked = wasChecked;
+        }
+
+        // Remove old listener and add new one
+        const newTrailSwitch = element.querySelector(
+          '.trail-switch',
+        ) as HTMLInputElement;
+        newTrailSwitch.addEventListener('change', () => {
+          const satellite = point as Satellite;
+          if (newTrailSwitch.checked) {
+            satellite.hasTrail = true;
+            if (!satellite.trail && satellite.camera) {
+              satellite.trail = new Trail(
+                satellite.geometry,
+                satellite.geometry.position,
+                satellite.geometry.parent as THREE.Scene,
+              );
+            }
+          } else {
+            satellite.hasTrail = false;
+            if (satellite.trail) {
+              satellite.trail.dispose();
+              satellite.trail = null;
+            }
+          }
+        });
+      }
+    }
   }
 }
 

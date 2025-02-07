@@ -9,10 +9,10 @@ import { log } from './logger.js';
 // Before share
 // TODO: Trails: Fix scene passig mess
 // TODO: Trails: Broken if not nadir pointing
-// TODO: Trails: Make trail disappear when deleting satellites and resetting
-// TODO: Trails: Toggles for trail. Toggle untoggle destroys the trail or even better only if time flows
 // TODO: Trails: Should use camera orientation instead of doing weird assumpions
 // TODO: Trails: Docs
+// TODO: Trails: Scripted version
+// TODO: Bodies: Remove massive code duplication
 // TODO: Time: Fix time use always UTC everywhere and run tests (my inputs are always local time)
 // TODO: Time: Docs explain this
 
