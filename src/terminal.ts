@@ -6,7 +6,7 @@ export function buildExecuteCommand(
   commands: Record<string, CommandFunction>,
   state: State,
   switchCamera: any,
-): (command: string) => void {
+): (command: string) => Promise<void> {
   // Context object to maintain state between executions
   const context = {
     console,

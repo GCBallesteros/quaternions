@@ -251,6 +251,31 @@ export function buildCommandClosures(
     }
   }
 
+  async function longRunning(iterations: number = 100000000): Promise<void> {
+    const worker = new Worker(
+      new URL('./workers/longRunningWorker.ts', import.meta.url),
+      { type: 'module' },
+    );
+
+    log('Starting long calculation...');
+
+    return new Promise((resolve, reject) => {
+      worker.onmessage = (e) => {
+        const { result } = e.data;
+        log(`Calculation complete! Result: ${result}`);
+        worker.terminate();
+        resolve();
+      };
+
+      worker.onerror = (error) => {
+        worker.terminate();
+        reject(error);
+      };
+
+      worker.postMessage({ iterations });
+    });
+  }
+
   return {
     mov,
     rot,
@@ -271,6 +296,7 @@ export function buildCommandClosures(
     resumeSimTime,
     pauseSimTime,
     toggleSimTime,
+    longRunning,
     // Add utility functions to commands
     geo2xyz,
     getPositionOfPoint,
