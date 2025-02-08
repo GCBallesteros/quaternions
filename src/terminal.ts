@@ -38,9 +38,9 @@ export function buildExecuteCommand(
             })();
           } catch (error) {
             if (error instanceof Error) {
-              console.log(\`Error: \${error.message}\`);
+              log(\`Error: \${error.message}\`);
             } else {
-              console.log(\`Error: \${String(error)}\`);
+              log(\`Error: \${String(error)}\`);
             }
           }
         })();
