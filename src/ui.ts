@@ -48,16 +48,20 @@ export function setupUI(
   // Setup update button
   const updateButton = document.getElementById('update-time');
   updateButton?.addEventListener('click', () => {
-    const newDate = new Date(
-      Date.UTC(
-        new Date(dateInput.value).getUTCFullYear(),
-        new Date(dateInput.value).getUTCMonth(),
-        new Date(dateInput.value).getUTCDate(),
-        parseInt(hoursInput.value),
-        parseInt(minutesInput.value),
-        parseInt(secondsInput.value),
-      ),
+    const dateComponents = dateInput.value.split('-').map((n) => parseInt(n));
+    const dateResult = utcDate(
+      dateComponents[0],
+      dateComponents[1],
+      dateComponents[2],
+      parseInt(hoursInput.value),
+      parseInt(minutesInput.value),
+      parseInt(secondsInput.value),
     );
-    executeCommand(`setTime(new Date("${newDate.toISOString()}"))`);
+
+    if (dateResult.ok) {
+      executeCommand(`setTime(new Date("${dateResult.val.toISOString()}"))`);
+    } else {
+      log(dateResult.val);
+    }
   });
 }

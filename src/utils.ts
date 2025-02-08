@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { log } from './logger.js';
 import { Vector3, State } from './types.js';
+import { Result, Ok, Err } from 'ts-results';
 
 const RADIUS_EARTH = 6371.0;
 
@@ -114,6 +115,51 @@ export function xyz2sph(point: Vector3): Vector3 {
 export function xyz2geo(xyz: Vector3): Vector3 {
   const [latitude, longitude, radius] = xyz2sph(xyz);
   return [latitude, longitude, radius - RADIUS_EARTH];
+}
+
+/**
+ * Creates a Date object using UTC values
+ * @param year - Full year (e.g., 2024)
+ * @param month - Month (1-12)
+ * @param day - Day of month (1-31)
+ * @param hours - Hours (0-23), optional
+ * @param minutes - Minutes (0-59), optional
+ * @param seconds - Seconds (0-59), optional
+ * @returns Result containing either a Date object or an error message
+ */
+export function utcDate(
+  year: number,
+  month: number,
+  day: number,
+  hours: number = 0,
+  minutes: number = 0,
+  seconds: number = 0,
+): Result<Date, string> {
+  try {
+    // Month adjustment since Date expects 0-based months
+    const date = new Date(
+      Date.UTC(year, month - 1, day, hours, minutes, seconds),
+    );
+
+    // Validate the date by checking if the components match what we provided
+    // This catches invalid dates like 2024-02-30
+    if (
+      date.getUTCFullYear() !== year ||
+      date.getUTCMonth() !== month - 1 ||
+      date.getUTCDate() !== day ||
+      date.getUTCHours() !== hours ||
+      date.getUTCMinutes() !== minutes ||
+      date.getUTCSeconds() !== seconds
+    ) {
+      return Err('Invalid date components provided');
+    }
+
+    return Ok(date);
+  } catch (e) {
+    return Err(
+      `Failed to create date: ${e instanceof Error ? e.message : String(e)}`,
+    );
+  }
 }
 
 /**
