@@ -10,8 +10,8 @@ import { log } from './logger.js';
 // TODO: Trails: Fix scene passig mess
 // TODO: Trails: Broken if not nadir pointing (maybe)
 // TODO: Trails: Should use camera orientation instead of doing weird assumpions
-// TODO: Trails: Docs
 // TODO: Trails: Scripted version
+// TODO: Trails: Docs
 // TODO: Time: Docs explain utcDate and everything is utc
 // TODO: Offset: Document new offset option and setter with example retrieving point
 
