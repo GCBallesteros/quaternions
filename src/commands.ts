@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { updateTimeControlUI } from './components/timeControls.js';
+import { utcDate } from './utils.js';
 import {
   _addPoint,
   _addSatellite,
@@ -277,5 +278,6 @@ export function buildCommandClosures(
     validateName,
     xyz2geo,
     xyz2sph,
+    utcDate,
   };
 }
