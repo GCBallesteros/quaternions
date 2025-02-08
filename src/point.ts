@@ -143,6 +143,7 @@ export type OrientationMode =
       secondaryBodyVector: Vector3 | string;
       primaryTargetVector: Vector3 | NamedTargets;
       secondaryTargetVector: Vector3 | NamedTargets;
+      offset?: [number, number, number, number];
     };
 
 export type NamedTargets =
@@ -352,7 +353,17 @@ export class Satellite extends OrientedPoint {
     }
 
     this.position = [position_.x, position_.y, position_.z];
-    const q = new THREE.Quaternion(...new_orientation); // xyzw
+    let q = new THREE.Quaternion(...new_orientation); // xyzw
+
+    // Apply additional rotation if specified in dynamic mode
+    if (
+      this.orientationMode.type === 'dynamic' &&
+      this.orientationMode.offset
+    ) {
+      const offsetQ = new THREE.Quaternion(...this.orientationMode.offset);
+      q = q.multiply(offsetQ);
+    }
+
     this.geometry.setRotationFromQuaternion(q);
 
     // Update trail if it exists
