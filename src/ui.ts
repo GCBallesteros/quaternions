@@ -49,19 +49,21 @@ export function setupUI(
   const updateButton = document.getElementById('update-time');
   updateButton?.addEventListener('click', () => {
     const dateComponents = dateInput.value.split('-').map((n) => parseInt(n));
-    const dateResult = utcDate(
-      dateComponents[0],
-      dateComponents[1],
-      dateComponents[2],
-      parseInt(hoursInput.value),
-      parseInt(minutesInput.value),
-      parseInt(secondsInput.value),
+    executeCommand(
+      `(() => {
+        const dateResult = utcDate(
+          ${dateComponents[0]},
+          ${dateComponents[1]},
+          ${dateComponents[2]},
+          ${parseInt(hoursInput.value)},
+          ${parseInt(minutesInput.value)},
+          ${parseInt(secondsInput.value)}
+        );
+        if (!dateResult.ok) {
+          throw new Error(dateResult.val);
+        }
+        setTime(dateResult.val);
+      })()`,
     );
-
-    if (dateResult.ok) {
-      executeCommand(`setTime(new Date("${dateResult.val.toISOString()}"))`);
-    } else {
-      log(dateResult.val);
-    }
   });
 }

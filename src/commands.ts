@@ -278,6 +278,12 @@ export function buildCommandClosures(
     validateName,
     xyz2geo,
     xyz2sph,
-    utcDate,
+    utcDate: (...args: Parameters<typeof utcDate>) => {
+      const result = utcDate(...args);
+      if (!result.ok) {
+        throw new Error(result.val);
+      }
+      return result.val;
+    },
   };
 }
