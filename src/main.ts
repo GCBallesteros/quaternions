@@ -13,8 +13,7 @@ import { log } from './logger.js';
 // TODO: Trails: Should use camera orientation instead of doing weird assumpions
 // TODO: Trails: Docs
 // TODO: Trails: Scripted version
-// TODO: Time: Fix time use always UTC everywhere and run tests (my inputs are always local time)
-// TODO: Time: Docs explain this
+// TODO: Time: Docs explain utcDate and everything is utc
 
 // TODO: Add POV Window
 // TODO: Add plots with callbacks
@@ -28,6 +27,7 @@ import { log } from './logger.js';
 // TODO: Normalize quats before applying
 
 // EXTRA FEATURES
+// TODO: Webworkers for long running function
 // TODO: Distance function
 // TODO: Relative rotation
 // TODO: Cameras so we don't have to go to state
