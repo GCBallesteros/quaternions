@@ -212,7 +212,7 @@ export class Satellite extends OrientedPoint {
   }
 
   constructor(
-    scene,
+    scene: THREE.Scene,
     geometry: THREE.Group,
     tle: string,
     orientationMode: OrientationMode = {
@@ -271,6 +271,14 @@ export class Satellite extends OrientedPoint {
       orientationMode,
       camera_orientation,
     );
+  }
+
+  set offset(offset: [number, number, number, number]) {
+    if (this.orientationMode.type === 'dynamic') {
+      this.orientationMode.offset = offset;
+    } else {
+      log('Trying to set orientation offset on non-dynamic mode.');
+    }
   }
 
   update(timestamp: Date, state: State): void {
