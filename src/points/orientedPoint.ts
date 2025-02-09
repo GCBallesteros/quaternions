@@ -77,6 +77,32 @@ export class OrientedPoint extends Point {
     return camera as THREE.Camera;
   }
 
+  get cameraEcefAxis(): Record<string, Vector3> | null {
+    let camera = this.camera;
+
+    if (!camera) {
+      console.warn('No camera named "_camera" available in this group!');
+      return null;
+    }
+
+    // Get the world quaternion which includes both body and camera rotations
+    const worldQuaternion = new THREE.Quaternion();
+    camera.getWorldQuaternion(worldQuaternion);
+
+    // Define the camera's canonical axes in its local frame and transform to ECEF
+    const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(
+      worldQuaternion,
+    );
+    const rows = new THREE.Vector3(-1, 0, 0).applyQuaternion(worldQuaternion);
+    const columns = new THREE.Vector3(0, 1, 0).applyQuaternion(worldQuaternion);
+
+    return {
+      direction: [direction.x, direction.y, direction.z],
+      rows: [rows.x, rows.y, rows.z],
+      columns: [columns.x, columns.y, columns.z],
+    };
+  }
+
   get cameraBodyAxis(): Record<string, Vector3> | null {
     let camera_quat_body = this.camera?.quaternion;
 
