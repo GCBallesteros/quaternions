@@ -6,6 +6,7 @@ import { setupTabs } from './ui/tabs.js';
 import { setupLighting } from './ui/lighting.js';
 import { setupResizer } from './ui/resize.js';
 import { setupBodiesTab } from './ui/bodies.js';
+import { utcDate } from './utils.js';
 
 export function updateTimeDisplay(state: State) {
   const timeElement = document.getElementById('current-time');
@@ -49,21 +50,18 @@ export function setupUI(
   const updateButton = document.getElementById('update-time');
   updateButton?.addEventListener('click', () => {
     const dateComponents = dateInput.value.split('-').map((n) => parseInt(n));
-    executeCommand(
-      `(() => {
-        const dateResult = utcDate(
-          ${dateComponents[0]},
-          ${dateComponents[1]},
-          ${dateComponents[2]},
-          ${parseInt(hoursInput.value)},
-          ${parseInt(minutesInput.value)},
-          ${parseInt(secondsInput.value)}
-        );
-        if (!dateResult.ok) {
-          throw new Error(dateResult.val);
-        }
-        setTime(dateResult.val);
-      })()`,
+    const dateResult = utcDate(
+      dateComponents[0],
+      dateComponents[1],
+      dateComponents[2],
+      parseInt(hoursInput.value),
+      parseInt(minutesInput.value),
+      parseInt(secondsInput.value),
     );
+    if (dateResult.ok) {
+      executeCommand(`setTime(new Date("${dateResult.val.toISOString()}"))`);
+    } else {
+      console.log(dateResult.val);
+    }
   });
 }
