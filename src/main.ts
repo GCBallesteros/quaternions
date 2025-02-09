@@ -27,10 +27,10 @@ import { log } from './logger.js';
 
 // REFACTORING
 // TODO: Expose more options for object creation, widths, colors ...
+// TODO: Migrate to React
 // TODO: Normalize quats before applying
 
 // EXTRA FEATURES
-// TODO: Webworkers for long running function
 // TODO: Cameras so we don't have to go to state
 // TODO: Load workflows button
 // TODO: Button to bring back global camera
