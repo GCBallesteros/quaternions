@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { OrientedPoint, Point } from './point.js';
+import { OrientedPoint, Point } from './points/point.js';
 
 export type Vector3 = [number, number, number];
 export type Vector4 = [number, number, number, number];

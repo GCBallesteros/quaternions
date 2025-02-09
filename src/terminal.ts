@@ -1,12 +1,12 @@
 import { log } from './logger.js';
-import { NamedTargets } from './point.js';
+import { NamedTargets } from './points/point.js';
 import { CommandFunction, State } from './types.js';
 
 export function buildExecuteCommand(
   commands: Record<string, CommandFunction>,
   state: State,
   switchCamera: any,
-): (command: string) => Promise<void> {
+): (command: string) => void {
   // Context object to maintain state between executions
   const context = {
     console,

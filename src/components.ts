@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Point } from './point.js';
+import { Point } from './points/point.js';
 
 // Object Frames
 function createArrow(

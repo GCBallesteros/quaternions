@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import { updateTimeControlUI } from './components/timeControls.js';
-import { utcDate } from './utils.js';
 import {
   _addPoint,
   _addSatellite,
@@ -19,13 +18,14 @@ import {
   _toggleSimTime,
 } from './core.js';
 import { log } from './logger.js';
-import { OrientationMode, Point } from './point.js';
+import { OrientationMode, Point } from './points/point.js';
 import { CommandFunction, State, TleSource, Vector3 } from './types.js';
 import { updateTimeDisplay } from './ui.js';
 import {
   geo2xyz,
   getPositionOfPoint,
   sph2xyz,
+  utcDate,
   validateName,
   xyz2geo,
   xyz2sph,
