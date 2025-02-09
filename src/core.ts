@@ -36,7 +36,7 @@ export function _rot(
     return Err(`Only instances of OrientedPoint can be rotated`);
   }
 
-  const quaternion = new THREE.Quaternion(q[0], q[1], q[2], q[3]);
+  const quaternion = new THREE.Quaternion(...q);
   pt.geometry.setRotationFromQuaternion(quaternion);
 
   return Ok(null);
@@ -596,6 +596,37 @@ export function _deletePoint(
       delete state.lines[lineName];
     }
   }
+
+  return Ok(null);
+}
+
+export function _relativeRot(
+  state: State,
+  point_name: string,
+  q: [number, number, number, number],
+): Result<null, string> {
+  const pt = state.points[point_name];
+
+  if (!pt) {
+    return Err(`Point '${point_name}' does not exist.`);
+  }
+
+  if (!(pt instanceof OrientedPoint)) {
+    return Err(`Only instances of OrientedPoint can be rotated`);
+  }
+
+  const additionalRotation = new THREE.Quaternion(...q);
+
+  // Get current rotation
+  const currentRotation = new THREE.Quaternion();
+  pt.geometry.getWorldQuaternion(currentRotation);
+
+  // Multiply quaternions to combine rotations (order matters!)
+  // additionalRotation * currentRotation means "apply current rotation first,
+  // then additional"
+  const newRotation = additionalRotation.multiply(currentRotation);
+
+  pt.geometry.setRotationFromQuaternion(newRotation);
 
   return Ok(null);
 }

@@ -14,6 +14,7 @@ import {
   _reset,
   _resumeSimTime,
   _rot,
+  _relativeRot,
   _setTime,
   _toggleSimTime,
 } from './core.js';
@@ -194,6 +195,18 @@ export function buildCommandClosures(
     return state.points[point];
   }
 
+  function relativeRot(
+    point_name: string,
+    q: [number, number, number, number],
+  ): void {
+    const result = _relativeRot(state, point_name, q);
+    if (result.ok) {
+      return;
+    } else {
+      throw new Error(result.val);
+    }
+  }
+
   function reset(): void {
     _reset(scene, state, switchCamera);
   }
@@ -298,6 +311,7 @@ export function buildCommandClosures(
     pauseSimTime,
     toggleSimTime,
     longRunning,
+    relativeRot,
     // Add utility functions to commands
     geo2xyz,
     getPositionOfPoint,
