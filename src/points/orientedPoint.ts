@@ -343,7 +343,11 @@ export class Satellite extends OrientedPoint {
 
     // Update trail if it exists
     if (this.trail) {
-      this.trail.update(this.geometry.position, state.bodies.earth);
+      this.trail.update(
+        this.geometry.position,
+        state.bodies.earth,
+        this.cameraBodyAxis,
+      );
     }
   }
 }

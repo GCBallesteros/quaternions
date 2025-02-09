@@ -87,12 +87,15 @@ export class Trail {
   private computeCurrentCurve(
     position: THREE.Vector3,
     earth: THREE.Object3D,
+    cameraAxes: Record<string, [number, number, number]> | null,
   ): Option<THREE.Vector3[]> {
+    if (!cameraAxes) {
+      return None;
+    }
+
     const curvePoints: THREE.Vector3[] = [];
-    const nadir = position.clone().negate().normalize();
-    const velocity = new THREE.Vector3()
-      .subVectors(position, this.lastPosition)
-      .normalize();
+    const direction = new THREE.Vector3(...cameraAxes.direction);
+    const columns = new THREE.Vector3(...cameraAxes.columns);
 
     // Define the field of view for the trail width
     const totalFOV = Math.PI / 8; // 22.5 degrees total width
@@ -101,7 +104,7 @@ export class Trail {
     for (let i = 0; i < NUM_CURVE_POINTS; i++) {
       const t = i / (NUM_CURVE_POINTS - 1);
       const theta = THREE.MathUtils.lerp(-halfFOV, halfFOV, t);
-      const dir = nadir.clone().applyAxisAngle(velocity, theta).normalize();
+      const dir = direction.clone().applyAxisAngle(columns, theta).normalize();
       const raycaster = new THREE.Raycaster(position, dir);
       const intersects = raycaster.intersectObject(earth);
 
@@ -190,8 +193,16 @@ export class Trail {
     this.geometry.computeVertexNormals();
   }
 
-  update(position: THREE.Vector3, earth: THREE.Object3D) {
-    const currCurveOption = this.computeCurrentCurve(position, earth);
+  update(
+    position: THREE.Vector3,
+    earth: THREE.Object3D,
+    cameraAxes: Record<string, [number, number, number]> | null,
+  ) {
+    const currCurveOption = this.computeCurrentCurve(
+      position,
+      earth,
+      cameraAxes,
+    );
 
     if (!currCurveOption.some) {
       // Reset the trail if any point misses the Earth
