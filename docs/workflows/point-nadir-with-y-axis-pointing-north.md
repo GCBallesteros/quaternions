@@ -58,7 +58,7 @@ as possible to the z-axis of the Earth-Centered, Earth-Fixed (ECEF) system.
 ```javascript
 point("sat").addCamera(50);  // Add a "camera" to the satellite in the default orientation
 let good_quat = findBestQuaternion(
-    point("sat").cameraBodyDirection, // The satellite's body z-axis (camera direction)
+    point("sat").cameraBodyAxis.direction, // The satellite's body z-axis (camera direction)
     "y",                              // The secondary body vector (y-axis)
     "sat->KS",                        // The vector from sat to the target point "KS"
     [0, 0, 1]                         // The target for the secondary vector (aligning y-axis to Earth's z-axis)
@@ -75,7 +75,7 @@ Quaternions](/workflows/debugging-quaternions) workflow.
 
 2. **OrientedPoints** may have a _camera_ that by default is pointed in the
 direction of the z-axis of the body frame. We can access the pointing direction
-(if a camera has been added to the point) via the `cameraBodyDirection`
+(if a camera has been added to the point) via the `cameraBodyAxis` getter.
 
 
 ## 3. Visualizing the Results

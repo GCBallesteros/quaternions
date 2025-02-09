@@ -14,6 +14,8 @@ import { log } from './logger.js';
 // TODO: Trails: Docs
 // TODO: Time: Docs explain utcDate and everything is utc
 // TODO: Offset: Document new offset option and setter with example retrieving point
+// TODO: Distance function
+// TODO: Relative rotation
 
 // TODO: Add POV Window
 // TODO: Add plots with callbacks
@@ -28,8 +30,6 @@ import { log } from './logger.js';
 
 // EXTRA FEATURES
 // TODO: Webworkers for long running function
-// TODO: Distance function
-// TODO: Relative rotation
 // TODO: Cameras so we don't have to go to state
 // TODO: Load workflows button
 // TODO: Button to bring back global camera

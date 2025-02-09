@@ -41,7 +41,7 @@ log(angle_between_pointing_and_target);
 // switchCamera(point("sat").camera);
 // // Point camera at the target
 // let good_quat = findBestQuaternion(
-//     point("sat").cameraBodyDirection,
+//     point("sat").cameraBodyAxis.direction,
 //     "y",
 //     "sat->KS",
 //     [0,0,1]

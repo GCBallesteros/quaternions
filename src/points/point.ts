@@ -120,23 +120,28 @@ export class OrientedPoint extends Point {
     return camera as THREE.Camera;
   }
 
-  // AI! We have cameraBodyDirection which is the pointing direction of the camera. Howerver,
-  // a camera has other two other canonical axis oriented along the rows and columns of the sensor
-  // Please modify this function so that it returns instead a Record<string, Vector3> with the 3
-  // canonical directions. We can assume that in the body axies they point along -x, y and z.
-  // The keys to the objects should be: direction, rows and columns.
-  get cameraBodyDirection(): Vector3 | null {
+  get cameraBodyAxis(): Record<string, Vector3> | null {
     let camera_quat_body = this.camera?.quaternion;
-    const camera_default_dir = new THREE.Vector3(0, 0, -1);
 
     if (!camera_quat_body) {
       console.warn('No camera named "_camera" available in this group!');
       return null;
     }
 
-    const camera_dir = camera_default_dir.applyQuaternion(camera_quat_body);
+    // Define the camera's canonical axes in its local frame
+    const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(
+      camera_quat_body,
+    );
+    const rows = new THREE.Vector3(-1, 0, 0).applyQuaternion(camera_quat_body);
+    const columns = new THREE.Vector3(0, 1, 0).applyQuaternion(
+      camera_quat_body,
+    );
 
-    return [camera_dir.x, camera_dir.y, camera_dir.z];
+    return {
+      direction: [direction.x, direction.y, direction.z],
+      rows: [rows.x, rows.y, rows.z],
+      columns: [columns.x, columns.y, columns.z],
+    };
   }
 }
 
