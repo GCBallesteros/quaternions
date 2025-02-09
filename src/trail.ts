@@ -1,5 +1,6 @@
 import * as THREE from 'three';
-import { Option, Some, None } from 'ts-results';
+import { None, Option, Some } from 'ts-results';
+import { Vector3 } from './types.js';
 import { disposeObject } from './utils.js';
 
 const NUM_CURVE_POINTS = 3;
@@ -87,7 +88,7 @@ export class Trail {
   private computeCurrentCurve(
     position: THREE.Vector3,
     earth: THREE.Object3D,
-    cameraAxes: Record<string, [number, number, number]> | null,
+    cameraAxes: Record<string, Vector3> | null,
   ): Option<THREE.Vector3[]> {
     if (!cameraAxes) {
       return None;
@@ -196,7 +197,7 @@ export class Trail {
   update(
     position: THREE.Vector3,
     earth: THREE.Object3D,
-    cameraAxes: Record<string, [number, number, number]> | null,
+    cameraAxes: Record<string, Vector3> | null,
   ) {
     const currCurveOption = this.computeCurrentCurve(
       position,

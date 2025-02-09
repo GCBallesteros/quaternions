@@ -372,7 +372,7 @@ export class Satellite extends OrientedPoint {
       this.trail.update(
         this.geometry.position,
         state.bodies.earth,
-        this.cameraBodyAxis,
+        this.cameraEcefAxis,
       );
     }
   }

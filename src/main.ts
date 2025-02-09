@@ -7,15 +7,15 @@ import { buildCommandClosures } from './commands.js';
 import { log } from './logger.js';
 
 // Before share
-// TODO: Trails: Fix scene passig mess
+// TODO: Relative rotation
 // TODO: Trails: Broken if not nadir pointing (maybe)
-// TODO: Trails: Should use camera orientation instead of doing weird assumpions
+// TODO: Trails: Fix scene passig mess
 // TODO: Trails: Scripted version
 // TODO: Trails: Docs
 // TODO: Time: Docs explain utcDate and everything is utc
 // TODO: Offset: Document new offset option and setter with example retrieving point
+// TODO: Docs: By convention the trail is along rows
 // TODO: Distance function
-// TODO: Relative rotation
 
 // TODO: Add POV Window
 // TODO: Add plots with callbacks
