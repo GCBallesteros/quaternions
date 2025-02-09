@@ -10,9 +10,14 @@ import {
 } from './components.js';
 import { addInitGeometries } from './init.js';
 import { log } from './logger.js';
-import { OrientationMode, OrientedPoint, Point, Satellite } from './points/point.js';
-import { removePointFromUI } from './ui/bodies.js';
+import {
+  OrientationMode,
+  OrientedPoint,
+  Satellite,
+} from './points/orientedPoint.js';
+import { Point } from './points/point.js';
 import { State, TleSource, Vector3 } from './types.js';
+import { removePointFromUI } from './ui/bodies.js';
 import * as utils from './utils.js';
 
 export function _rot(
