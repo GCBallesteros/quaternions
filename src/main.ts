@@ -7,15 +7,15 @@ import { buildCommandClosures } from './commands.js';
 import { log } from './logger.js';
 
 // Before share
-// TODO: Trails: Broken if not nadir pointing (maybe)
+// TONIGHT
 // TODO: Trails: Fix scene passig mess
 // TODO: Use camera real FOV
 // TODO: Trails: Scripted version
 // TODO: Trails: Docs
 // TODO: Time: Docs explain utcDate and everything is utc
 // TODO: Offset: Document new offset option and setter with example retrieving point
-// TODO: Docs: By convention the trail is along rows
 // TODO: Docs: relativeRot
+// TODO: Docs: By convention the trail is along rows
 // TODO: Distance function
 
 // TODO: Add POV Window
@@ -26,6 +26,7 @@ import { log } from './logger.js';
 // TODO: Add diagram to findBestQuaternion documentation
 
 // REFACTORING
+// TODO: Get rid of pos and rot functions
 // TODO: Expose more options for object creation, widths, colors ...
 // TODO: Migrate to React
 // TODO: Normalize quats before applying
