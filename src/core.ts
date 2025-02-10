@@ -10,7 +10,7 @@ import {
 } from './components.js';
 import { addInitGeometries } from './init.js';
 import { log } from './logger.js';
-import { OrientedPoint } from './points/orientedPoint.js';
+import { OrientedPoint, CameraConfig } from './points/orientedPoint.js';
 import { Point } from './points/point.js';
 import { OrientationMode, Satellite } from './points/satellite.js';
 import { State, TleSource, Vector3 } from './types.js';
@@ -382,7 +382,7 @@ export async function _addSatellite(
   name: string,
   tleSource: TleSource,
   orientationMode: OrientationMode,
-  cameraOrientation?: [number, number, number, number],
+  cameraConfig?: CameraConfig,
 ): Promise<Result<null, string>> {
   // Satellites don't get passed coordinates because their location is determined
   // by their TLE and the simulation time
@@ -410,7 +410,7 @@ export async function _addSatellite(
         point_geo,
         tleSource.tle,
         orientationMode,
-        cameraOrientation,
+        cameraConfig,
       );
       break;
 
@@ -420,7 +420,7 @@ export async function _addSatellite(
         point_geo,
         tleSource.noradId,
         orientationMode,
-        cameraOrientation,
+        cameraConfig,
       );
       break;
   }

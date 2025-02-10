@@ -4,7 +4,7 @@ import { _fetchTLE, _findBestQuaternion } from '../core.js';
 import { log } from '../logger.js';
 import { Trail } from '../trail.js';
 import { State, Vector3 } from '../types.js';
-import { OrientedPoint } from './orientedPoint.js';
+import { OrientedPoint, CameraConfig } from './orientedPoint.js';
 
 export type OrientationMode =
   | { type: 'fixed'; ecef_quaternion: [number, number, number, number] }
@@ -93,14 +93,14 @@ export class Satellite extends OrientedPoint {
       primaryTargetVector: NamedTargets.Nadir,
       secondaryTargetVector: NamedTargets.Velocity,
     },
-    camera_orientation?: [number, number, number, number],
+    cameraConfig?: CameraConfig,
   ) {
-    super(geometry, camera_orientation);
+    super(geometry, cameraConfig);
     this.tle = tle;
     this.orientationMode = orientationMode;
 
     // Initialize trail state if we have a camera
-    if (camera_orientation) {
+    if (cameraConfig) {
       this.hasTrail = true;
       this.trail = new Trail(geometry, geometry.position, scene);
     }
@@ -125,7 +125,7 @@ export class Satellite extends OrientedPoint {
       primaryTargetVector: NamedTargets.Nadir,
       secondaryTargetVector: NamedTargets.Velocity,
     },
-    camera_orientation?: [number, number, number, number],
+    cameraConfig?: CameraConfig,
   ): Promise<Satellite> {
     const result = await _fetchTLE(noradId);
     let tle: string;
@@ -135,13 +135,7 @@ export class Satellite extends OrientedPoint {
     } else {
       throw new Error(result.val);
     }
-    return new Satellite(
-      scene,
-      geometry,
-      tle,
-      orientationMode,
-      camera_orientation,
-    );
+    return new Satellite(scene, geometry, tle, orientationMode, cameraConfig);
   }
 
   set offset(offset: [number, number, number, number]) {
