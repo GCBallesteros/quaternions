@@ -166,6 +166,37 @@ export function utcDate(
  * Recursively disposes of a Three.js object and all its children
  * Handles geometries, materials, and textures
  */
+/**
+ * Calculates the great circle distance between two points on Earth using the haversine formula.
+ * @param lat1 Latitude of first point in degrees
+ * @param lon1 Longitude of first point in degrees
+ * @param lat2 Latitude of second point in degrees
+ * @param lon2 Longitude of second point in degrees
+ * @returns Distance in kilometers
+ */
+export function haversineDistance(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number,
+): number {
+  // Convert latitude and longitude from degrees to radians
+  const φ1 = (lat1 * Math.PI) / 180;
+  const φ2 = (lat2 * Math.PI) / 180;
+  const Δφ = ((lat2 - lat1) * Math.PI) / 180;
+  const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+
+  // Haversine formula
+  const a =
+    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  // Calculate distance using Earth's radius
+  return RADIUS_EARTH * c;
+}
+
 export function disposeObject(object: THREE.Object3D): void {
   while (object.children.length > 0) {
     disposeObject(object.children[0]);
