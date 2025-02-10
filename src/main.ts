@@ -12,6 +12,8 @@ import { log } from './logger.js';
 // TODO: Offset: Document new offset option and setter with example retrieving point
 // TODO: Docs: relativeRot
 // TODO: Docs: By convention the trail is along row
+// TODO: Docs put cameraConfig in a better place
+// TODO: Docs trial toggles
 // TODO: Distance function
 
 // TODO: Add POV Window

@@ -80,3 +80,23 @@ Resumes the simulation time. Time will begin advancing at the rate specified by 
 ```js
 resumeSimTime() // Time begins advancing again
 ```
+
+## haversineDistance
+
+Calculates the great circle distance between two points on Earth using the haversine formula.
+
+| Parameter | Type     | Description                           |
+|-----------|----------|---------------------------------------|
+| `lat1`    | `number` | Latitude of first point in degrees    |
+| `lon1`    | `number` | Longitude of first point in degrees   |
+| `lat2`    | `number` | Latitude of second point in degrees   |
+| `lon2`    | `number` | Longitude of second point in degrees  |
+
+**Returns**: Distance in kilometers between the two points along Earth's surface.
+
+**Example**:
+```js
+// Calculate distance between London and New York
+const distance = haversineDistance(51.5074, -0.1278, 40.7128, -74.0060);
+log(`Distance: ${distance} km`);
+```
