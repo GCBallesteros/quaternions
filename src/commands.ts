@@ -11,12 +11,15 @@ import {
   _mov,
   _mov2sat,
   _pauseSimTime,
+  _pauseTrail,
   _reset,
   _resumeSimTime,
+  _resumeTrail,
   _rot,
   _relativeRot,
   _setTime,
   _toggleSimTime,
+  _toggleTrail,
 } from './core.js';
 import { log } from './logger.js';
 import { OrientationMode } from './points/satellite.js';
@@ -268,6 +271,37 @@ export function buildCommandClosures(
     }
   }
 
+  function updateTrailSwitch(satelliteName: string, checked: boolean) {
+    const pointItems = document.querySelectorAll('.point-item');
+    for (const item of pointItems) {
+      if (item.querySelector('.point-name')?.textContent === satelliteName) {
+        const trailSwitch = item.querySelector(
+          '.trail-switch',
+        ) as HTMLInputElement;
+        if (trailSwitch) trailSwitch.checked = checked;
+        break;
+      }
+    }
+  }
+
+  function resumeTrail(satelliteName: string): void {
+    const result = _resumeTrail(state, satelliteName);
+    if (!result.ok) throw new Error(result.val);
+    updateTrailSwitch(satelliteName, true);
+  }
+
+  function pauseTrail(satelliteName: string): void {
+    const result = _pauseTrail(state, satelliteName);
+    if (!result.ok) throw new Error(result.val);
+    updateTrailSwitch(satelliteName, false);
+  }
+
+  function toggleTrail(satelliteName: string): void {
+    const result = _toggleTrail(state, satelliteName);
+    if (!result.ok) throw new Error(result.val);
+    updateTrailSwitch(satelliteName, result.val);
+  }
+
   async function longRunning(iterations: number = 100000000): Promise<void> {
     const worker = new Worker(
       new URL('./workers/longRunningWorker.ts', import.meta.url),
@@ -315,6 +349,9 @@ export function buildCommandClosures(
     toggleSimTime,
     longRunning,
     relativeRot,
+    resumeTrail,
+    pauseTrail,
+    toggleTrail,
     // Add utility functions to commands
     geo2xyz,
     getPositionOfPoint,

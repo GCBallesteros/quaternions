@@ -8,13 +8,10 @@ import { log } from './logger.js';
 
 // Before share
 // TONIGHT
-// TODO: Trails: Scripted version
 // TODO: Trails: Docs
-// TODO: Docs all around We now have cameraConfigs
-// TODO: Time: Docs explain utcDate and everything is utc
 // TODO: Offset: Document new offset option and setter with example retrieving point
 // TODO: Docs: relativeRot
-// TODO: Docs: By convention the trail is along rows
+// TODO: Docs: By convention the trail is along row
 // TODO: Distance function
 
 // TODO: Add POV Window

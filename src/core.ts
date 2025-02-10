@@ -15,6 +15,7 @@ import { Point } from './points/point.js';
 import { OrientationMode, Satellite } from './points/satellite.js';
 import { State, TleSource, Vector3 } from './types.js';
 import { removePointFromUI } from './ui/bodies.js';
+import { Trail } from './trail.js';
 import * as utils from './utils.js';
 
 export function _rot(
@@ -626,6 +627,65 @@ export function _relativeRot(
   pt.geometry.setRotationFromQuaternion(newRotation);
 
   return Ok(null);
+}
+
+function getSatellite(
+  state: State,
+  satelliteName: string,
+): Result<Satellite, string> {
+  const satellite = state.points[satelliteName];
+  if (!satellite || !(satellite instanceof Satellite)) {
+    return Err(`${satelliteName} is not a valid satellite`);
+  }
+  return Ok(satellite);
+}
+
+export function _resumeTrail(
+  state: State,
+  satelliteName: string,
+): Result<boolean, string> {
+  const satResult = getSatellite(state, satelliteName);
+  if (!satResult.ok) return satResult;
+  const satellite = satResult.val;
+
+  if (!satellite.camera)
+    return Err(`${satelliteName} does not have a camera attached`);
+  if (!satellite.trail) {
+    satellite.trail = new Trail(
+      satellite.geometry,
+      satellite.geometry.position,
+      satellite.geometry.parent as THREE.Scene,
+    );
+  }
+  satellite.hasTrail = true;
+  return Ok(true);
+}
+
+export function _pauseTrail(
+  state: State,
+  satelliteName: string,
+): Result<boolean, string> {
+  const satResult = getSatellite(state, satelliteName);
+  if (!satResult.ok) return satResult;
+  const satellite = satResult.val;
+
+  if (satellite.trail) {
+    satellite.trail.dispose();
+    satellite.trail = null;
+  }
+  satellite.hasTrail = false;
+  return Ok(false);
+}
+
+export function _toggleTrail(
+  state: State,
+  satelliteName: string,
+): Result<boolean, string> {
+  const satResult = getSatellite(state, satelliteName);
+  if (!satResult.ok) return satResult;
+  return satResult.val.hasTrail
+    ? _pauseTrail(state, satelliteName)
+    : _resumeTrail(state, satelliteName);
 }
 
 export function _reset(
