@@ -1,15 +1,20 @@
 import * as THREE from 'three';
 import { Vector3, Vector4 } from '../types.js';
+
+export interface CameraConfig {
+  orientation: Vector4;
+  fov: number;
+}
 import { Point } from './point.js';
 
 export class OrientedPoint extends Point {
   public camera_orientation?: Vector4;
-  constructor(geometry: THREE.Group, camera_orientation?: Vector4) {
+  constructor(geometry: THREE.Group, cameraConfig?: CameraConfig) {
     super(geometry);
 
-    if (camera_orientation !== undefined) {
-      this.camera_orientation = camera_orientation;
-      this.addCamera(10, camera_orientation);
+    if (cameraConfig !== undefined) {
+      this.camera_orientation = cameraConfig.orientation;
+      this.addCamera(cameraConfig);
     }
   }
 
@@ -28,10 +33,7 @@ export class OrientedPoint extends Point {
     return basisVectors;
   }
 
-  addCamera(
-    fov: number,
-    camera_orientation: [number, number, number, number] = [0, 0, 0, 1],
-  ): void {
+  addCamera(config: CameraConfig): void {
     const hasCamera = this.geometry.children.some(
       (child) => child instanceof THREE.Camera && child.name === '_camera',
     );
@@ -39,16 +41,16 @@ export class OrientedPoint extends Point {
     if (hasCamera) {
       throw new Error('A camera named "_camera" already exists in this group!');
     }
-    this.camera_orientation = camera_orientation;
+    this.camera_orientation = config.orientation;
 
     let camera_orientation_in_body_frame = new THREE.Quaternion(
-      camera_orientation[0],
-      camera_orientation[1],
-      camera_orientation[2],
-      camera_orientation[3],
+      config.orientation[0],
+      config.orientation[1],
+      config.orientation[2],
+      config.orientation[3],
     );
 
-    const camera = new THREE.PerspectiveCamera(fov, 1, 400, 500000);
+    const camera = new THREE.PerspectiveCamera(config.fov, 1, 400, 500000);
     camera.name = '_camera';
     let camera_to_z_quaternion = new THREE.Quaternion();
     camera_to_z_quaternion.setFromAxisAngle(
