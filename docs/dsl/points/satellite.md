@@ -1,102 +1,8 @@
-# Point Classes
-
-
-The `Point` and `OrientedPoint` classes represent points in 3D space,
-implemented using the `three.js` library.
-
-- **`Point`** is the base class representing a point with a position in 3D
-space.  
-
-- **`OrientedPoint`** extends `Point` and adds orientation information using
-quaternions. It can also have a camera attached for scene rendering and
-perspective control.
-
-Points can be retrieved from the scene via the `point` function (see below).
-These classes are seldomly interacted with directly except through the latter
-function. When we do retrieve them, it is mostly to use the getter methods. For
-example, when we want the basis vector for the reference frame of an
-`OrientedPoint`.
-
-Very sparingly one interacts on user scripts with this classes except to
-retrieve some information from them , such as position or orientation, or to
-use of the methods on them.
-
-
-## Class: `Point`
-
-The `Point` class provides basic functionality for positioning a point in 3D
-space using a `THREE.Group` object.
-
-### Properties
-
-| Property     | Type             | Description                                                                 |
-|--------------|------------------|-----------------------------------------------------------------------------|
-| `geometry`   | `THREE.Group`    | The underlying Three.js object that stores the point's position and transformations. |
-| `position`   | `Vector3`        | **Getter:** Returns the current position as a tuple `[x, y, z]`.  
- **Setter:** Sets the point's position in 3D space. |
-
----
-
-## Class: `OrientedPoint` (Subclass of `Point`)
-
-The `OrientedPoint` class extends `Point` and introduces orientation in 3D
-space using quaternions. It also supports adding a camera to the point.
-
-### Camera Configuration
-
-The `CameraConfig` interface defines the configuration for cameras attached to points:
-
-```typescript
-interface CameraConfig = {
-  orientation: Vector4;  // Quaternion defining camera orientation
-  fov: number;          // Field of view in degrees
-};
-```
-
-### Constructor
-
-```typescript
-constructor(geometry: THREE.Group, cameraConfig?: CameraConfig)
-```
-
-| Parameter     | Type          | Description                                                    |
-|--------------|---------------|----------------------------------------------------------------|
-| `geometry`   | `THREE.Group` | A THREE.Group object representing the point in 3D space        |
-| `cameraConfig`| `CameraConfig`| (Optional) Configuration for the attached camera               |
-
-If a camera configuration is provided, a camera will be added to the point's THREE.Group and named
-`_camera` for identification. The camera will be oriented according to the provided configuration.
-
-### Properties
-
-| Property     | Type                  | Description                                                                 |
-|--------------|-----------------------|-----------------------------------------------------------------------------|
-| `frame`      | `{ x, y, z: Vector3 }`| Returns the local coordinate frame vectors (x, y, z) of the point. Each vector is represented as a tuple `[x, y, z]`. |
-| `camera`     | `THREE.Camera \| null` | **Getter:** Returns the first attached camera named "Camera" in the point's group or `null` if no such camera exists. |
-
-### Methods
-
-#### `addCamera`
-
-Adds a THREE.PerspectiveCamera to the point's group using the provided configuration.
-
-```typescript
-addCamera(config: CameraConfig): void
-```
-
-| Parameter | Type          | Description                                                    |
-|-----------|---------------|----------------------------------------------------------------|
-| `config`  | `CameraConfig`| Configuration object containing camera orientation and FOV      |
-
-The camera will be oriented according to the configuration's orientation quaternion and use the specified field of view.
-Throws an error if a camera named "_camera" already exists in the group.
-
-
-## Class: `Satellite` (Subclass of `OrientedPoint`)
+# Class: `Satellite` (Subclass of `OrientedPoint`)
 
 The `Satellite` class extends `OrientedPoint` to represent satellites in orbit. It adds TLE (Two-Line Element) data management and automatic position/orientation updates based on time.
 
-### Constructor
+## Constructor
 
 ```typescript
 constructor(geometry: THREE.Group, tle: string, orientationMode?: OrientationMode, cameraConfig?: CameraConfig)
@@ -109,9 +15,9 @@ constructor(geometry: THREE.Group, tle: string, orientationMode?: OrientationMod
 | `orientationMode`| `OrientationMode`| Defines how the satellite's orientation is determined       |
 | `cameraConfig`  | `CameraConfig` | (Optional) Configuration for the satellite's camera            |
 
-### Static Methods
+## Static Methods
 
-#### `fromNoradId`
+### `fromNoradId`
 
 Creates a new Satellite instance by fetching TLE data using a NORAD ID.
 
@@ -128,9 +34,9 @@ static async fromNoradId(
 Remember `fromNoradId` must always be `await`ed in user scripts.
 :::
 
-### Methods
+## Methods
 
-#### `update`
+### `update`
 
 Updates the satellite's position and orientation based on its TLE data for a given timestamp.
 
@@ -188,7 +94,7 @@ The following named targets are available for dynamic orientation:
 
 Using `TargetPointing` requires passing additional data unlike the others.
 
-#### Example
+### Example
 
 Some targets are fully specified by the simulation like `Moon` or `Nadir` and can
 simply be used as:

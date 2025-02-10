@@ -44,7 +44,15 @@ export default defineConfig({
         collapsed: true,
         items: [
           { text: 'Overview', link: '/dsl/overview' },
-          { text: 'Point Classes', link: '/dsl/points' },
+          {
+            text: 'Point Geometries',
+            link: '/dsl/points/overview',
+            items: [
+              { text: 'Point', link: '/dsl/points/point' },
+              { text: 'OrientedPoint', link: '/dsl/points/orientedPoint' },
+              { text: 'Satellite', link: '/dsl/points/satellite' },
+            ],
+          },
           { text: 'Movement & Attitude', link: '/dsl/movement-and-attitude' },
           { text: 'Geometry Commands', link: '/dsl/geometry-commands' },
           { text: 'Utility', link: '/dsl/utility' },
