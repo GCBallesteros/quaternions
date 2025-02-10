@@ -42,19 +42,30 @@ space using a `THREE.Group` object.
 The `OrientedPoint` class extends `Point` and introduces orientation in 3D
 space using quaternions. It also supports adding a camera to the point.
 
+### Camera Configuration
+
+The `CameraConfig` type defines the configuration for cameras attached to points:
+
+```typescript
+type CameraConfig = {
+  orientation: Vector4;  // Quaternion defining camera orientation
+  fov: number;          // Field of view in degrees
+};
+```
+
 ### Constructor
 
 ```typescript
-constructor(geometry: THREE.Group, camera?: THREE.PerspectiveCamera)
+constructor(geometry: THREE.Group, cameraConfig?: CameraConfig)
 ```
 
-| Parameter    | Type                     | Description                                                                 |
-|--------------|--------------------------|-----------------------------------------------------------------------------|
-| `geometry`   | `THREE.Group`            | A THREE.Group object representing the point in 3D space.                   |
-| `camera`     | `THREE.PerspectiveCamera`| (Optional) A camera to be attached to the point.                           |
+| Parameter     | Type          | Description                                                    |
+|--------------|---------------|----------------------------------------------------------------|
+| `geometry`   | `THREE.Group` | A THREE.Group object representing the point in 3D space        |
+| `cameraConfig`| `CameraConfig`| (Optional) Configuration for the attached camera               |
 
-If a camera is provided, it is added to the point's THREE.Group and named
-`_camera` for identification.
+If a camera configuration is provided, a camera will be added to the point's THREE.Group and named
+`_camera` for identification. The camera will be oriented according to the provided configuration.
 
 ### Properties
 
@@ -67,15 +78,18 @@ If a camera is provided, it is added to the point's THREE.Group and named
 
 #### `addCamera`
 
-Adds a THREE.PerspectiveCamera with the specified field of view (FOV) to the
-point's group.
+Adds a THREE.PerspectiveCamera to the point's group using the provided configuration.
 
-| Parameters         | Type                    | Returns | Description                                                                 |
-|--------------------|-------|-----------------|-----------------------------------------------------------------------------|
-| `fov: number`      | `number`                | `void` | Full FOV of the camera in degrees |
-|`camera_orientation`| `[number, number, number, number]` | `void` | Orientation of the camera with respect to the body frame. Defaults to the identity quaternion with the camera assumed to point in the +z direction. |
+```typescript
+addCamera(config: CameraConfig): void
+```
 
- Throws an error if a camera with the name "Camera" already exists. |
+| Parameter | Type          | Description                                                    |
+|-----------|---------------|----------------------------------------------------------------|
+| `config`  | `CameraConfig`| Configuration object containing camera orientation and FOV      |
+
+The camera will be oriented according to the configuration's orientation quaternion and use the specified field of view.
+Throws an error if a camera named "_camera" already exists in the group.
 
 
 ## Class: `Satellite` (Subclass of `OrientedPoint`)
@@ -85,15 +99,15 @@ The `Satellite` class extends `OrientedPoint` to represent satellites in orbit. 
 ### Constructor
 
 ```typescript
-constructor(geometry: THREE.Group, tle: string, orientationMode?: OrientationMode, camera_orientation?: [number, number, number, number])
+constructor(geometry: THREE.Group, tle: string, orientationMode?: OrientationMode, cameraConfig?: CameraConfig)
 ```
 
-| Parameter           | Type                              | Description                                                    |
-|--------------------|-----------------------------------|----------------------------------------------------------------|
-| `geometry`         | `THREE.Group`                     | A THREE.Group object representing the satellite in 3D space    |
-| `tle`              | `string`                         | The Two-Line Element (TLE) data for the satellite             |
-| `orientationMode`   | `OrientationMode`               | Defines how the satellite's orientation is determined           |
-| `camera_orientation`| `[number, number, number, number]`| (Optional) Initial camera orientation quaternion defined in the satellite's body frame. If provided, a camera will be initialized and attached to the satellite. |
+| Parameter        | Type           | Description                                                    |
+|-----------------|----------------|----------------------------------------------------------------|
+| `geometry`      | `THREE.Group`  | A THREE.Group object representing the satellite in 3D space    |
+| `tle`           | `string`       | The Two-Line Element (TLE) data for the satellite             |
+| `orientationMode`| `OrientationMode`| Defines how the satellite's orientation is determined       |
+| `cameraConfig`  | `CameraConfig` | (Optional) Configuration for the satellite's camera            |
 
 ### Static Methods
 
