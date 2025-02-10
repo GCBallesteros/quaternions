@@ -37,7 +37,12 @@ log(angle_between_pointing_and_target);
 // and watch the scene from its point of view.
 
 // // Add a camera wit a FOV of 50 degrees and switch to the satellite camera
-// point("sat").addCamera(50);
+// point("sat").addCamera(
+//   {
+//     fov: 50,
+//     orientation: [0, 0, 0, 1],
+//   }
+// );
 // switchCamera(point("sat").camera);
 // // Point camera at the target
 // let good_quat = findBestQuaternion(
