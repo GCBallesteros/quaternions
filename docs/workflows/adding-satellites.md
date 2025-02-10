@@ -46,7 +46,12 @@ Now you could add a new cell at the bottom (docs here) and then run the
 following cell
 
 ```js
-point("hf1a").addCamera(5);
+point("hf1a").addCamera(
+  {
+    orientation:[0, 0 , 0, 1],
+    fov: 10,
+  }
+);
 switchCamera(point("hf1a").camera);
 ```
 
@@ -98,8 +103,13 @@ await addSatellite(
 );
 
 // Add a camera to HF1A with 90-degree field of view. This is huge but
-// otherwise we would only see Sentinel-2B
-point("hf1a").addCamera(90);
+// otherwise we would only see Sentinel-2B and nothing of the Earth
+point("hf1a").addCamera(
+  {
+    orientation: [0, 0, 0, 1],
+    fov: 90,
+  }
+);
 
 pauseSimTime();
 ```

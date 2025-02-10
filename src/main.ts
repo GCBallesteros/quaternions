@@ -8,11 +8,9 @@ import { log } from './logger.js';
 
 // Before share
 // TONIGHT
-// TODO: Create satellit.ts
-// TODO: Trails: Fix scene passig mess
-// TODO: Use camera real FOV
 // TODO: Trails: Scripted version
 // TODO: Trails: Docs
+// TODO: Docs all around We now have cameraConfigs
 // TODO: Time: Docs explain utcDate and everything is utc
 // TODO: Offset: Document new offset option and setter with example retrieving point
 // TODO: Docs: relativeRot
