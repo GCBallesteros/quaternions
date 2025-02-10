@@ -1,5 +1,5 @@
 import { log } from './logger.js';
-import { NamedTargets } from './points/orientedPoint.js';
+import { NamedTargets } from './points/satellite.js';
 import { CommandFunction, State } from './types.js';
 
 export function buildExecuteCommand(

@@ -10,12 +10,9 @@ import {
 } from './components.js';
 import { addInitGeometries } from './init.js';
 import { log } from './logger.js';
-import {
-  OrientationMode,
-  OrientedPoint,
-  Satellite,
-} from './points/orientedPoint.js';
+import { OrientedPoint } from './points/orientedPoint.js';
 import { Point } from './points/point.js';
+import { OrientationMode, Satellite } from './points/satellite.js';
 import { State, TleSource, Vector3 } from './types.js';
 import { removePointFromUI } from './ui/bodies.js';
 import * as utils from './utils.js';

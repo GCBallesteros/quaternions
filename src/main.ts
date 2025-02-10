@@ -8,6 +8,7 @@ import { log } from './logger.js';
 
 // Before share
 // TONIGHT
+// TODO: Create satellit.ts
 // TODO: Trails: Fix scene passig mess
 // TODO: Use camera real FOV
 // TODO: Trails: Scripted version
