@@ -99,7 +99,9 @@ export class Trail {
     const columns = new THREE.Vector3(...cameraAxes.columns);
 
     // Get the camera's FOV for the trail width
-    const camera = this.mesh.parent?.getObjectByName('_camera') as THREE.PerspectiveCamera;
+    const camera = this.mesh.parent?.getObjectByName(
+      '_camera',
+    ) as THREE.PerspectiveCamera;
     if (!camera) {
       return None;
     }
