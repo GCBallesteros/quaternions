@@ -19,7 +19,7 @@ import {
   _toggleSimTime,
 } from './core.js';
 import { log } from './logger.js';
-import { OrientationMode } from './points/orientedPoint.js';
+import { OrientationMode } from './points/satellite.js';
 import { Point } from './points/point.js';
 import { CommandFunction, State, TleSource, Vector3 } from './types.js';
 import { updateTimeDisplay } from './ui.js';

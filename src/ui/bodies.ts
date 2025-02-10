@@ -1,10 +1,7 @@
 import * as THREE from 'three';
-import {
-  NamedTargets,
-  OrientedPoint,
-  Satellite,
-} from '../points/orientedPoint.js';
+import { OrientedPoint } from '../points/orientedPoint.js';
 import { Point } from '../points/point.js';
+import { NamedTargets, Satellite } from '../points/satellite.js';
 import { Trail } from '../trail.js';
 import { State, Vector3 } from '../types.js';
 
