@@ -98,9 +98,13 @@ export class Trail {
     const direction = new THREE.Vector3(...cameraAxes.direction);
     const columns = new THREE.Vector3(...cameraAxes.columns);
 
-    // Define the field of view for the trail width
-    const totalFOV = Math.PI / 8; // 22.5 degrees total width
-    const halfFOV = totalFOV / 2;
+    // Get the camera's FOV for the trail width
+    const camera = this.mesh.parent?.getObjectByName('_camera') as THREE.PerspectiveCamera;
+    if (!camera) {
+      return None;
+    }
+    const fovRadians = (camera.fov * Math.PI) / 180;
+    const halfFOV = fovRadians / 2;
 
     for (let i = 0; i < NUM_CURVE_POINTS; i++) {
       const t = i / (NUM_CURVE_POINTS - 1);
