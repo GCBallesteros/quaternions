@@ -101,7 +101,9 @@ export function createAnimator(
   let currentCamera = initialCamera;
 
   const clock = new THREE.Clock();
+  let frameCount = 0;
   function animate() {
+    frameCount++;
     const elapsed = clock.getDelta();
     if (state.isTimeFlowing) {
       const simulatedTime = new Date(
@@ -112,6 +114,18 @@ export function createAnimator(
     }
 
     updateTimeDisplay(state);
+
+    // Update all plots
+    Object.entries(state.plots).forEach(([plotId, plot]) => {
+      if (frameCount - plot.lastSample >= plot.sampleEvery) {
+        const values = plot.callback();
+        plot.data.push({
+          timestamp: state.currentTime.getTime(),
+          values,
+        });
+        plot.lastSample = frameCount;
+      }
+    });
 
     renderer.render(scene, currentCamera);
   }
