@@ -26,7 +26,7 @@ export function setupUI(
   setupLighting(state);
   setupResizer(editor, renderer, state);
   setupBodiesTab(state);
-  setupPlotsTab();
+  setupPlotsTab(state);
   // Setup time input
   const timeGroup = document.querySelector('.settings-group')!;
   const timeInput = createTimeInput();
