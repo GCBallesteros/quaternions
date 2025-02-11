@@ -263,6 +263,13 @@ input:checked + .slider:before {
   transition: background-color 0.2s;
 }
 
+.plot-item {
+  padding: 8px;
+  margin: 4px 0;
+  background: #2d2d2d;
+  border-radius: 4px;
+}
+
 /* Execute Buttons */
 .execute-buttons {
   display: flex;

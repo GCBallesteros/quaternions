@@ -1,11 +1,12 @@
 import { WebGLRenderer } from 'three';
-import { State } from './types.js';
 import { createTimeInput } from './components/timeInput.js';
-import { setupEditor } from './ui/editor.js';
-import { setupTabs } from './ui/tabs.js';
-import { setupLighting } from './ui/lighting.js';
-import { setupResizer } from './ui/resize.js';
+import { State } from './types.js';
 import { setupBodiesTab } from './ui/bodies.js';
+import { setupEditor } from './ui/editor.js';
+import { setupLighting } from './ui/lighting.js';
+import { setupPlotsTab } from './ui/plots.js';
+import { setupResizer } from './ui/resize.js';
+import { setupTabs } from './ui/tabs.js';
 import { utcDate } from './utils.js';
 
 export function updateTimeDisplay(state: State) {
@@ -25,6 +26,7 @@ export function setupUI(
   setupLighting(state);
   setupResizer(editor, renderer, state);
   setupBodiesTab(state);
+  setupPlotsTab();
   // Setup time input
   const timeGroup = document.querySelector('.settings-group')!;
   const timeInput = createTimeInput();
