@@ -688,6 +688,40 @@ export function _toggleTrail(
     : _resumeTrail(state, satelliteName);
 }
 
+export function _createPlot(
+  state: State,
+  id: string,
+  config: { title: string; lines: string[]; sampleEvery?: number },
+  callback: () => number[]
+): Result<null, string> {
+  if (state.plots[id]) {
+    return Err(`Plot with id '${id}' already exists`);
+  }
+
+  state.plots[id] = {
+    title: config.title,
+    lines: config.lines,
+    data: [],
+    callback,
+    sampleEvery: config.sampleEvery ?? 10,
+    lastSample: 0
+  };
+
+  return Ok(null);
+}
+
+export function _removePlot(
+  state: State,
+  id: string
+): Result<null, string> {
+  if (!state.plots[id]) {
+    return Err(`Plot with id '${id}' does not exist`);
+  }
+
+  delete state.plots[id];
+  return Ok(null);
+}
+
 export function _reset(
   scene: THREE.Scene,
   state: State,
