@@ -121,16 +121,12 @@ export function createAnimator(
         if (frameCount - plot.lastSample >= plot.sampleEvery) {
           const values = plot.callback();
           const timestamp = state.currentTime.getTime();
-          if (!plot.data.isFull) {
-            plot.data.timestamps.push(timestamp);
+          if (plot.data.currentIndex < plot.data.maxPoints) {
+            plot.data.timestamps[plot.data.currentIndex] = timestamp;
             values.forEach((value, i) => {
-              plot.data.values[plot.lines[i]].push(value);
+              plot.data.values[plot.lines[i]][plot.data.currentIndex] = value;
             });
-
-            // Check if buffer is now full
-            if (plot.data.timestamps.length >= plot.data.maxPoints) {
-              plot.data.isFull = true;
-            }
+            plot.data.currentIndex++;
           }
           plot.lastSample = frameCount;
         }
