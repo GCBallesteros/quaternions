@@ -1,5 +1,6 @@
 import { Chart } from 'chart.js/auto';
 import { State, Plot } from '../types.js';
+import 'chartjs-adapter-date-fns';
 
 const charts = new Map<string, Chart>();
 
@@ -91,12 +92,10 @@ function updatePlots(state: State): void {
     // Update chart data
     const chart = charts.get(plotId);
     if (chart) {
-      chart.data.labels = plot.data.map((d) => d.timestamp);
-      plot.lines.forEach((_, i) => {
-        chart.data.datasets[i].data = plot.data.map((d) => d.values[i]);
+      chart.data.labels = plot.data.timestamps;
+      plot.lines.forEach((line, i) => {
+        chart.data.datasets[i].data = plot.data.values[line];
       });
-      // AI! I get Uncaught Error: This method is not implemented: Check that a complete date adapter is provided.
-      // Starting from this line on the dev tool
       chart.update('none'); // Update without animation
     }
   });
