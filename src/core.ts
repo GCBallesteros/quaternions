@@ -703,9 +703,9 @@ export function _createPlot(
     lines: config.lines,
     data: {
       timestamps: [],
-      values: Object.fromEntries(config.lines.map(line => [line, []])),
+      values: Object.fromEntries(config.lines.map((line) => [line, []])),
       maxPoints: 1000,
-      isFull: false
+      isFull: false,
     },
     callback,
     sampleEvery: config.sampleEvery ?? 10,
