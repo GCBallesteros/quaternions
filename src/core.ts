@@ -702,10 +702,12 @@ export function _createPlot(
     title: config.title,
     lines: config.lines,
     data: {
-      timestamps: new Array(1000).fill(0),  // Pre-allocate fixed buffer
-      values: Object.fromEntries(config.lines.map(line => [line, new Array(1000).fill(0)])),
+      timestamps: new Array(1000).fill(0), // Pre-allocate fixed buffer
+      values: Object.fromEntries(
+        config.lines.map((line) => [line, new Array(1000).fill(0)]),
+      ),
       maxPoints: 1000,
-      currentIndex: 0
+      currentIndex: 0,
     },
     callback,
     sampleEvery: config.sampleEvery ?? 10,

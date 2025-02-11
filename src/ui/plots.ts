@@ -40,9 +40,9 @@ function createPlotElement(plotId: string, plot: Plot): HTMLElement {
           },
           adapters: {
             date: {
-              locale: enUS
-            }
-          }
+              locale: enUS,
+            },
+          },
         },
       },
     },
@@ -101,13 +101,21 @@ function updatePlots(state: State): void {
       // Get data in chronological order from circular buffer
       const start = plot.data.currentIndex;
       const orderedData = {
-        timestamps: [...plot.data.timestamps.slice(start), ...plot.data.timestamps.slice(0, start)],
-        values: Object.fromEntries(plot.lines.map(line => [
-          line,
-          [...plot.data.values[line].slice(start), ...plot.data.values[line].slice(0, start)]
-        ]))
+        timestamps: [
+          ...plot.data.timestamps.slice(start),
+          ...plot.data.timestamps.slice(0, start),
+        ],
+        values: Object.fromEntries(
+          plot.lines.map((line) => [
+            line,
+            [
+              ...plot.data.values[line].slice(start),
+              ...plot.data.values[line].slice(0, start),
+            ],
+          ]),
+        ),
       };
-      
+
       chart.data.labels = orderedData.timestamps;
       plot.lines.forEach((line, i) => {
         chart.data.datasets[i].data = orderedData.values[line];
