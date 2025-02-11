@@ -1,6 +1,7 @@
 import { Chart } from 'chart.js/auto';
 import { State, Plot } from '../types.js';
 import 'chartjs-adapter-date-fns';
+import { enUS } from 'date-fns/locale';
 
 const charts = new Map<string, Chart>();
 
@@ -37,6 +38,11 @@ function createPlotElement(plotId: string, plot: Plot): HTMLElement {
           time: {
             unit: 'second',
           },
+          adapters: {
+            date: {
+              locale: enUS
+            }
+          }
         },
       },
     },
