@@ -98,9 +98,19 @@ function updatePlots(state: State): void {
     // Update chart data
     const chart = charts.get(plotId);
     if (chart) {
-      chart.data.labels = plot.data.timestamps;
+      // Get data in chronological order from circular buffer
+      const start = plot.data.currentIndex;
+      const orderedData = {
+        timestamps: [...plot.data.timestamps.slice(start), ...plot.data.timestamps.slice(0, start)],
+        values: Object.fromEntries(plot.lines.map(line => [
+          line,
+          [...plot.data.values[line].slice(start), ...plot.data.values[line].slice(0, start)]
+        ]))
+      };
+      
+      chart.data.labels = orderedData.timestamps;
       plot.lines.forEach((line, i) => {
-        chart.data.datasets[i].data = plot.data.values[line];
+        chart.data.datasets[i].data = orderedData.values[line];
       });
       chart.update('none'); // Update without animation
     }
