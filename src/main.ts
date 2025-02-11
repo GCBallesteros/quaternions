@@ -20,6 +20,9 @@ import { log } from './logger.js';
 // TODO: Add POV Window
 // TODO: Plots: Callbacks should be able to get the state? Maybe?
 // TODO: Plots: Actually plot something!
+// TODO: Plots: A breaking callback destroys the animation loop!
+// TODO: Plots: reset resets plots
+// TODO: Plots; Perf is terrible
 // TODO: Add docs for the UI
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
 // TODO: Moon should be correctly oriented
