@@ -15,9 +15,11 @@ import { log } from './logger.js';
 // TODO: Docs put cameraConfig in a better place
 // TODO: Docs trial toggles
 // TODO: Distance function
+// TODO: Docs use utcDate on all the example
 
 // TODO: Add POV Window
-// TODO: Add plots with callbacks
+// TODO: Plots: Callbacks should be able to get the state? Maybe?
+// TODO: Plots: Actually plot something!
 // TODO: Add docs for the UI
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
 // TODO: Moon should be correctly oriented

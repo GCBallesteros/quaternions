@@ -710,6 +710,7 @@ export function _createPlot(
   return Ok(null);
 }
 
+// TODO: Check if this enough for proper cleanup
 export function _removePlot(
   state: State,
   id: string
