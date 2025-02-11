@@ -121,16 +121,17 @@ export function createAnimator(
         if (frameCount - plot.lastSample >= plot.sampleEvery) {
           const values = plot.callback();
           const timestamp = state.currentTime.getTime();
-          const idx = plot.data.currentIndex;
+          if (!plot.data.isFull) {
+            plot.data.timestamps.push(timestamp);
+            values.forEach((value, i) => {
+              plot.data.values[plot.lines[i]].push(value);
+            });
 
-          // Update circular buffer
-          plot.data.timestamps[idx] = timestamp;
-          values.forEach((value, i) => {
-            plot.data.values[plot.lines[i]][idx] = value;
-          });
-
-          // Update index
-          plot.data.currentIndex = (idx + 1) % plot.data.maxPoints;
+            // Check if buffer is now full
+            if (plot.data.timestamps.length >= plot.data.maxPoints) {
+              plot.data.isFull = true;
+            }
+          }
           plot.lastSample = frameCount;
         }
       });
