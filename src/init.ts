@@ -119,9 +119,10 @@ export function createAnimator(
     Object.entries(state.plots).forEach(([plotId, plot]) => {
       if (frameCount - plot.lastSample >= plot.sampleEvery) {
         const values = plot.callback();
-        plot.data.push({
-          timestamp: state.currentTime.getTime(),
-          values,
+        const timestamp = state.currentTime.getTime();
+        plot.data.timestamps.push(timestamp);
+        values.forEach((value, i) => {
+          plot.data.values[plot.lines[i]].push(value);
         });
         plot.lastSample = frameCount;
       }

@@ -692,7 +692,7 @@ export function _createPlot(
   state: State,
   id: string,
   config: { title: string; lines: string[]; sampleEvery?: number },
-  callback: () => number[]
+  callback: () => number[],
 ): Result<null, string> {
   if (state.plots[id]) {
     return Err(`Plot with id '${id}' already exists`);
@@ -701,20 +701,20 @@ export function _createPlot(
   state.plots[id] = {
     title: config.title,
     lines: config.lines,
-    data: [],
+    data: {
+      timestamps: [],
+      values: Object.fromEntries(config.lines.map((line) => [line, []])),
+    },
     callback,
     sampleEvery: config.sampleEvery ?? 10,
-    lastSample: 0
+    lastSample: 0,
   };
 
   return Ok(null);
 }
 
 // TODO: Check if this enough for proper cleanup
-export function _removePlot(
-  state: State,
-  id: string
-): Result<null, string> {
+export function _removePlot(state: State, id: string): Result<null, string> {
   if (!state.plots[id]) {
     return Err(`Plot with id '${id}' does not exist`);
   }

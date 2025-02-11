@@ -8,7 +8,10 @@ export type Vector4 = [number, number, number, number];
 export interface Plot {
   title: string;
   lines: string[];
-  data: { timestamp: number; values: number[] }[];
+  data: {
+    timestamps: number[];
+    values: Record<string, number[]>;
+  };
   callback: () => number[];
   sampleEvery: number; // How many animation frames between samples
   lastSample: number; // Frame count of last sample
