@@ -32,7 +32,8 @@
 }
 
 #settings-container,
-#bodies-container {
+#bodies-container,
+#plots-container {
   padding: 20px;
   color: white;
   background: #1e1e1e;
