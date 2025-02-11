@@ -70,6 +70,7 @@ export function initScene(
     timeSpeedMultiplier: 2,
     cameras: { main: camera },
     bodies: { moon, earth: earth_geometries.earth },
+    plots: {},
   };
 
   const moonPos = getMoonPosition(state.currentTime);
