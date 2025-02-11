@@ -115,18 +115,20 @@ export function createAnimator(
 
     updateTimeDisplay(state);
 
-    // Update all plots
-    Object.entries(state.plots).forEach(([plotId, plot]) => {
-      if (frameCount - plot.lastSample >= plot.sampleEvery) {
-        const values = plot.callback();
-        const timestamp = state.currentTime.getTime();
-        plot.data.timestamps.push(timestamp);
-        values.forEach((value, i) => {
-          plot.data.values[plot.lines[i]].push(value);
-        });
-        plot.lastSample = frameCount;
-      }
-    });
+    // Update all plots when time is flowing
+    if (state.isTimeFlowing) {
+      Object.entries(state.plots).forEach(([plotId, plot]) => {
+        if (frameCount - plot.lastSample >= plot.sampleEvery) {
+          const values = plot.callback();
+          const timestamp = state.currentTime.getTime();
+          plot.data.timestamps.push(timestamp);
+          values.forEach((value, i) => {
+            plot.data.values[plot.lines[i]].push(value);
+          });
+          plot.lastSample = frameCount;
+        }
+      });
+    }
 
     renderer.render(scene, currentCamera);
   }
