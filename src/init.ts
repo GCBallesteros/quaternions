@@ -108,15 +108,6 @@ export function createAnimator(
           elapsed * state.timeSpeedMultiplier * 1000,
       );
       _setTime(state, simulatedTime);
-
-      //for (const pointName in state.points) {
-      //  const point = state.points[pointName];
-      //  if (point instanceof Satellite) {
-      //    //if (point.trail) {
-      //      point.update(point.geometry.position, state.bodies.earth);
-      //    //}
-      //  }
-      //}
     }
 
     updateTimeDisplay(state);
