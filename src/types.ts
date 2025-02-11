@@ -12,7 +12,7 @@ export interface Plot {
     timestamps: number[];
     values: Record<string, number[]>;
     maxPoints: number; // Maximum number of points to store
-    isFull: boolean; // Whether the buffer is full
+    currentIndex: number; // Current position in array
   };
   callback: () => number[];
   sampleEvery: number; // How many animation frames between samples

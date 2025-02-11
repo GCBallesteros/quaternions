@@ -98,9 +98,11 @@ function updatePlots(state: State): void {
     // Update chart data
     const chart = charts.get(plotId);
     if (chart) {
-      chart.data.labels = plot.data.timestamps;
+      // Only use the filled portion of the arrays
+      const usedData = plot.data.timestamps.slice(0, plot.data.currentIndex);
+      chart.data.labels = usedData;
       plot.lines.forEach((line, i) => {
-        chart.data.datasets[i].data = plot.data.values[line];
+        chart.data.datasets[i].data = plot.data.values[line].slice(0, plot.data.currentIndex);
       });
       chart.update('none'); // Update without animation
     }
