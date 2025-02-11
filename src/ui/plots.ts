@@ -102,7 +102,10 @@ function updatePlots(state: State): void {
       const usedData = plot.data.timestamps.slice(0, plot.data.currentIndex);
       chart.data.labels = usedData;
       plot.lines.forEach((line, i) => {
-        chart.data.datasets[i].data = plot.data.values[line].slice(0, plot.data.currentIndex);
+        chart.data.datasets[i].data = plot.data.values[line].slice(
+          0,
+          plot.data.currentIndex,
+        );
       });
       chart.update('none'); // Update without animation
     }
