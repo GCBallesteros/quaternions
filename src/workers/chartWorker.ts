@@ -50,13 +50,13 @@ self.onmessage = async (e: MessageEvent) => {
         },
       });
 
-      charts.set(plotId, { 
-        chart, 
+      charts.set(plotId, {
+        chart,
         canvas,
         data: {
           timestamps: [],
-          values: Object.fromEntries(config.lines.map(line => [line, []]))
-        }
+          values: Object.fromEntries(config.lines.map((line) => [line, []])),
+        },
       });
       break;
     }
@@ -65,7 +65,7 @@ self.onmessage = async (e: MessageEvent) => {
       const chartData = charts.get(plotId);
       if (chartData) {
         const { chart, data: storedData } = chartData;
-        
+
         // Append new data points
         storedData.timestamps.push(...data.timestamps);
         config.lines.forEach((line: string) => {
@@ -77,7 +77,7 @@ self.onmessage = async (e: MessageEvent) => {
         config.lines.forEach((line: string, i: number) => {
           chart.data.datasets[i].data = storedData.values[line];
         });
-        
+
         chart.update('none');
       }
       break;
