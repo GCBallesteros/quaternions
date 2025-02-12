@@ -1,54 +1,37 @@
-import { Chart } from 'chart.js/auto';
 import { State, Plot } from '../types.js';
-import 'chartjs-adapter-date-fns';
-import { enUS } from 'date-fns/locale';
 
-const charts = new Map<string, Chart>();
+const workers = new Map<string, Worker>();
+const canvases = new Map<string, HTMLCanvasElement>();
 
 function createPlotElement(plotId: string, plot: Plot): HTMLElement {
   const plotElement = document.createElement('div');
   plotElement.className = 'plot-item';
 
   const canvas = document.createElement('canvas');
+  canvas.width = 800;  // Set fixed size for OffscreenCanvas
+  canvas.height = 400;
   plotElement.appendChild(canvas);
+  canvases.set(plotId, canvas);
 
-  const chart = new Chart(canvas, {
-    type: 'line',
-    data: {
-      labels: [],
-      datasets: plot.lines.map((line, i) => ({
-        label: line,
-        data: [],
-        borderColor: getLineColor(i),
-        tension: 0.4,
-      })),
-    },
-    options: {
-      responsive: true,
-      animation: false,
-      plugins: {
-        title: {
-          display: true,
-          text: plot.title,
-        },
-      },
-      scales: {
-        x: {
-          type: 'time',
-          time: {
-            unit: 'second',
-          },
-          adapters: {
-            date: {
-              locale: enUS,
-            },
-          },
-        },
-      },
-    },
-  });
+  // Create worker and transfer canvas control
+  const worker = new Worker(
+    new URL('../workers/chartWorker.ts', import.meta.url),
+    { type: 'module' }
+  );
+  workers.set(plotId, worker);
 
-  charts.set(plotId, chart);
+  // Transfer canvas control to worker
+  const offscreen = canvas.transferControlToOffscreen();
+  worker.postMessage({
+    type: 'INIT',
+    plotId,
+    canvas: offscreen,
+    config: {
+      title: plot.title,
+      lines: plot.lines
+    }
+  }, [offscreen]);
+
   return plotElement;
 }
 
@@ -74,10 +57,11 @@ function updatePlots(state: State): void {
   Array.from(plotsList.children).forEach((element) => {
     const plotId = element.getAttribute('data-plot-id');
     if (plotId && !currentPlots.has(plotId)) {
-      const chart = charts.get(plotId);
-      if (chart) {
-        chart.destroy();
-        charts.delete(plotId);
+      const worker = workers.get(plotId);
+      if (worker) {
+        worker.postMessage({ type: 'DESTROY', plotId });
+        worker.terminate();
+        workers.delete(plotId);
       }
       element.remove();
     }
@@ -95,19 +79,17 @@ function updatePlots(state: State): void {
       plotsList.appendChild(plotElement);
     }
 
-    // Update chart data
-    const chart = charts.get(plotId);
-    if (chart) {
-      // Only use the filled portion of the arrays
-      const usedData = plot.data.timestamps.slice(0, plot.data.currentIndex);
-      chart.data.labels = usedData;
-      plot.lines.forEach((line, i) => {
-        chart.data.datasets[i].data = plot.data.values[line].slice(
-          0,
-          plot.data.currentIndex,
-        );
+    // Update worker with new data
+    const worker = workers.get(plotId);
+    if (worker) {
+      worker.postMessage({
+        type: 'UPDATE',
+        plotId,
+        config: {
+          lines: plot.lines
+        },
+        data: plot.data
       });
-      chart.update('none'); // Update without animation
     }
   });
 }
