@@ -66,13 +66,25 @@ self.onmessage = async (e: MessageEvent) => {
       if (chartData) {
         const { chart, data: storedData } = chartData;
 
-        // Append new data points
+        // Append new data points while maintaining maxPoints limit
+        const maxPoints = 1000; // Maximum points to keep
+
+        // Add new points
         storedData.timestamps.push(...data.timestamps);
         config.lines.forEach((line: string) => {
           storedData.values[line].push(...data.values[line]);
         });
 
-        // Update chart with all stored data
+        // Trim arrays if they exceed maxPoints
+        if (storedData.timestamps.length > maxPoints) {
+          const excess = storedData.timestamps.length - maxPoints;
+          storedData.timestamps = storedData.timestamps.slice(excess);
+          config.lines.forEach((line: string) => {
+            storedData.values[line] = storedData.values[line].slice(excess);
+          });
+        }
+
+        // Update chart with stored data
         chart.data.labels = storedData.timestamps;
         config.lines.forEach((line: string, i: number) => {
           chart.data.datasets[i].data = storedData.values[line];

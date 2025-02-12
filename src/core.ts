@@ -712,6 +712,7 @@ export function _createPlot(
     callback,
     sampleEvery: config.sampleEvery ?? 10,
     lastSample: 0,
+    lastSentIndex: 0,
   };
 
   return Ok(null);
