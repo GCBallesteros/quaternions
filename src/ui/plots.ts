@@ -8,7 +8,7 @@ function createPlotElement(plotId: string, plot: Plot): HTMLElement {
   plotElement.className = 'plot-item';
 
   const canvas = document.createElement('canvas');
-  canvas.width = 800;  // Set fixed size for OffscreenCanvas
+  canvas.width = 800; // Set fixed size for OffscreenCanvas
   canvas.height = 400;
   plotElement.appendChild(canvas);
   canvases.set(plotId, canvas);
@@ -16,21 +16,24 @@ function createPlotElement(plotId: string, plot: Plot): HTMLElement {
   // Create worker and transfer canvas control
   const worker = new Worker(
     new URL('../workers/chartWorker.ts', import.meta.url),
-    { type: 'module' }
+    { type: 'module' },
   );
   workers.set(plotId, worker);
 
   // Transfer canvas control to worker
   const offscreen = canvas.transferControlToOffscreen();
-  worker.postMessage({
-    type: 'INIT',
-    plotId,
-    canvas: offscreen,
-    config: {
-      title: plot.title,
-      lines: plot.lines
-    }
-  }, [offscreen]);
+  worker.postMessage(
+    {
+      type: 'INIT',
+      plotId,
+      canvas: offscreen,
+      config: {
+        title: plot.title,
+        lines: plot.lines,
+      },
+    },
+    [offscreen],
+  );
 
   return plotElement;
 }
@@ -86,9 +89,9 @@ function updatePlots(state: State): void {
         type: 'UPDATE',
         plotId,
         config: {
-          lines: plot.lines
+          lines: plot.lines,
         },
-        data: plot.data
+        data: plot.data,
       });
     }
   });
