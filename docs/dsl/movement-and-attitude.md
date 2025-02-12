@@ -79,4 +79,4 @@ const quaternion = findBestQuaternion(
   "A->B",
   [0, 0, 1],
 );
-
+```
