@@ -76,7 +76,18 @@ self.onmessage = async (e: MessageEvent<WorkerMessage>) => {
               type: 'time',
               time: {
                 unit: 'second',
+                displayFormats: {
+                  second: 'HH:mm:ss',
+                  minute: 'HH:mm',
+                  hour: 'HH:mm'
+                },
+                tooltipFormat: 'yyyy-MM-dd HH:mm:ss',
               },
+              adapters: {
+                date: {
+                  zone: 'UTC'
+                }
+              }
             },
           },
         },
