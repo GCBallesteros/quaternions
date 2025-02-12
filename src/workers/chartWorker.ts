@@ -81,7 +81,6 @@ self.onmessage = async (e: MessageEvent<WorkerMessage>) => {
                   minute: 'HH:mm',
                   hour: 'HH:mm',
                 },
-                tooltipFormat: 'yyyy-MM-dd HH:mm:ss',
               },
               adapters: {
                 date: {
