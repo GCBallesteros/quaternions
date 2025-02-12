@@ -18,16 +18,20 @@ import { log } from './logger.js';
 // TODO: Docs use utcDate on all the example
 
 // TODO: Add POV Window
+//
+// Thursday
 // TODO: Plots: Callbacks should be able to get the state? Maybe?
 // TODO: Plots: A breaking callback destroys the animation loop!
 // TODO: Plots: reset resets plots
+// TODO: Plots: Add download data button
 // TODO: Plots: Add error handling
-// TODO: Plots: The dates are not very useful as they are now. Maybe only put time 
-// and not date and make sure it's utc
+// TODO: Plots: Times should be UTC
+//
 // TODO: Add docs for the UI
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
 // TODO: Moon should be correctly oriented
 // TODO: Add diagram to findBestQuaternion documentation
+// TODO: Normal points should resize as we get closer on the camera
 
 // REFACTORING
 // TODO: Get rid of pos and rot functions

@@ -153,7 +153,7 @@ await addSatellite(
     secondaryBodyVector: 'y',
     primaryTargetVector: NamedTargets.Nadir,
     secondaryTargetVector: NamedTargets.Velocity,
-  }
+  },
 );
 
 // Or using direct TLE data
@@ -163,7 +163,7 @@ await addSatellite(
     type: 'tle',
     tle: `ISS (ZARYA)
 1 25544U 98067A   08264.51782528 -.00002182  00000-0 -11606-4 0  2927
-2 25544  51.6416 247.4627 0006703 130.5360 325.0288 15.72125391563537`
+2 25544  51.6416 247.4627 0006703 130.5360 325.0288 15.72125391563537`,
   },
   {
     type: 'dynamic',
@@ -171,7 +171,7 @@ await addSatellite(
     secondaryBodyVector: 'y',
     primaryTargetVector: NamedTargets.Moon,
     secondaryTargetVector: NamedTargets.Velocity,
-  }
+  },
 );
 ```
 
@@ -191,7 +191,8 @@ A `Point`, `OrientedPoint`, or `Satellite` instance.
 
 #### Example
 
-```javascript
+```js
 // Calculate the angle between the x-axis of the `sat` point
 // and the nadir direction
 angle("nadir", point("sat").frame.x);
+```

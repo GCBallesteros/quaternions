@@ -8,7 +8,7 @@ space using quaternions. It also supports adding a camera to the point.
 The `CameraConfig` interface defines the configuration for cameras attached to points:
 
 ```typescript
-interface CameraConfig = {
+interface CameraConfig {
   orientation: Vector4;  // Quaternion defining camera orientation
   fov: number;           // Field of view in degrees
 };

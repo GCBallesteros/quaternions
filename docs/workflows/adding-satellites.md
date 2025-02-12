@@ -104,12 +104,10 @@ await addSatellite(
 
 // Add a camera to HF1A with 90-degree field of view. This is huge but
 // otherwise we would only see Sentinel-2B and nothing of the Earth
-point("hf1a").addCamera(
-  {
-    orientation: [0, 0, 0, 1],
-    fov: 90,
-  }
-);
+point('hf1a').addCamera({
+  orientation: [0, 0, 0, 1],
+  fov: 90,
+});
 
 pauseSimTime();
 ```
@@ -122,7 +120,6 @@ Sentinel-2B orbit for a few minutes from the point of view Hyperfield-1A.
 Copy the following at the bottom of your current script:
 
 ```js
-// %%
 switchCamera(point("hf1a").camera);
 ```
 
