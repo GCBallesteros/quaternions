@@ -22,12 +22,12 @@
   },
   "dependencies": {
     "monaco-editor": "^0.52.2",
-    "vite-plugin-monaco-editor-esm": "^2.0.1"
+    "vite-plugin-monaco-editor-esm": "^2.0.1",
     "three": "^0.172.0",
     "satellite.js": "^5.0.0",
     "chart.js": "^4.4.7",
     "chartjs-adapter-date-fns": "^3.0.0",
     "date-fns": "^4.1.0",
-    "ts-results": "^3.3.0",
+    "ts-results": "^3.3.0"
   }
 }
