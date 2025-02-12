@@ -279,8 +279,8 @@ input:checked + .slider:before {
   left: 8px;
   right: 16px;
   bottom: 8px;
-  width: calc(100% - 24px) !important;
-  height: calc(100% - 16px) !important;
+  width: 95%  !important;
+  height: 95% !important;
 }
 
 /* Execute Buttons */

@@ -22,7 +22,6 @@ import { log } from './logger.js';
 // TODO: Plots: A breaking callback destroys the animation loop!
 // TODO: Plots: reset resets plots
 // TODO: Plots: Add error handling
-// TODO: Plots: Add types types for the worker messages
 // TODO: Plots: The dates are not very useful as they are now. Maybe only put time 
 // and not date and make sure it's utc
 // TODO: Add docs for the UI
