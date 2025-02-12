@@ -6,6 +6,10 @@ let charts = new Map<
   {
     chart: Chart;
     canvas: OffscreenCanvas;
+    data: {
+      timestamps: number[];
+      values: Record<string, number[]>;
+    };
   }
 >();
 
@@ -15,7 +19,7 @@ self.onmessage = async (e: MessageEvent) => {
   switch (type) {
     case 'INIT': {
       const canvas = e.data.canvas as OffscreenCanvas;
-      const chart = new Chart(canvas, {
+      const chart = new Chart(canvas as unknown as HTMLCanvasElement, {
         type: 'line',
         data: {
           labels: [],
@@ -46,22 +50,34 @@ self.onmessage = async (e: MessageEvent) => {
         },
       });
 
-      charts.set(plotId, { chart, canvas });
+      charts.set(plotId, { 
+        chart, 
+        canvas,
+        data: {
+          timestamps: [],
+          values: Object.fromEntries(config.lines.map(line => [line, []]))
+        }
+      });
       break;
     }
 
     case 'UPDATE': {
       const chartData = charts.get(plotId);
       if (chartData) {
-        const { chart } = chartData;
-        const usedData = data.timestamps.slice(0, data.currentIndex);
-        chart.data.labels = usedData;
-        config.lines.forEach((line: string, i: number) => {
-          chart.data.datasets[i].data = data.values[line].slice(
-            0,
-            data.currentIndex,
-          );
+        const { chart, data: storedData } = chartData;
+        
+        // Append new data points
+        storedData.timestamps.push(...data.timestamps);
+        config.lines.forEach((line: string) => {
+          storedData.values[line].push(...data.values[line]);
         });
+
+        // Update chart with all stored data
+        chart.data.labels = storedData.timestamps;
+        config.lines.forEach((line: string, i: number) => {
+          chart.data.datasets[i].data = storedData.values[line];
+        });
+        
         chart.update('none');
       }
       break;
