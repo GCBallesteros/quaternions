@@ -1,10 +1,13 @@
 import { Chart } from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
 
-let charts = new Map<string, {
-  chart: Chart;
-  canvas: OffscreenCanvas;
-}>();
+let charts = new Map<
+  string,
+  {
+    chart: Chart;
+    canvas: OffscreenCanvas;
+  }
+>();
 
 self.onmessage = async (e: MessageEvent) => {
   const { type, plotId, config, data } = e.data;
@@ -30,19 +33,19 @@ self.onmessage = async (e: MessageEvent) => {
             title: {
               display: true,
               text: config.title,
-            }
+            },
           },
           scales: {
             x: {
               type: 'time',
               time: {
                 unit: 'second',
-              }
-            }
-          }
-        }
+              },
+            },
+          },
+        },
       });
-      
+
       charts.set(plotId, { chart, canvas });
       break;
     }
@@ -54,7 +57,10 @@ self.onmessage = async (e: MessageEvent) => {
         const usedData = data.timestamps.slice(0, data.currentIndex);
         chart.data.labels = usedData;
         config.lines.forEach((line: string, i: number) => {
-          chart.data.datasets[i].data = data.values[line].slice(0, data.currentIndex);
+          chart.data.datasets[i].data = data.values[line].slice(
+            0,
+            data.currentIndex,
+          );
         });
         chart.update('none');
       }
@@ -74,8 +80,14 @@ self.onmessage = async (e: MessageEvent) => {
 
 function getLineColor(index: number): string {
   const colors = [
-    '#ff6384', '#36a2eb', '#cc65fe', '#ffce56',
-    '#4bc0c0', '#ff9f40', '#9966ff', '#c9cbcf'
+    '#ff6384',
+    '#36a2eb',
+    '#cc65fe',
+    '#ffce56',
+    '#4bc0c0',
+    '#ff9f40',
+    '#9966ff',
+    '#c9cbcf',
   ];
   return colors[index % colors.length];
 }
