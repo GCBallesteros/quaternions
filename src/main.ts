@@ -23,6 +23,7 @@ import { log } from './logger.js';
 // TODO: Plots: A breaking callback destroys the animation loop!
 // TODO: Plots: reset resets plots
 // TODO: Plots; Perf is terrible
+// TODO: Plots: Stop also updating the plot while the time is not flowing
 // TODO: Add docs for the UI
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
 // TODO: Moon should be correctly oriented

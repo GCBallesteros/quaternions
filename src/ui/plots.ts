@@ -123,5 +123,5 @@ export function setupPlotsTab(state: State): void {
   `;
 
   // Setup periodic updates
-  setInterval(() => updatePlots(state), 100);
+  setInterval(() => updatePlots(state), 1000);
 }
