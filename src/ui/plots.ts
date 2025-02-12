@@ -85,6 +85,7 @@ function updatePlots(state: State): void {
     // Update worker with new data
     const worker = workers.get(plotId);
     if (worker) {
+      // TODO: We don't need to pass all the data
       worker.postMessage({
         type: 'UPDATE',
         plotId,
