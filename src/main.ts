@@ -19,11 +19,12 @@ import { log } from './logger.js';
 
 // TODO: Add POV Window
 // TODO: Plots: Callbacks should be able to get the state? Maybe?
-// TODO: Plots: Actually plot something!
 // TODO: Plots: A breaking callback destroys the animation loop!
 // TODO: Plots: reset resets plots
-// TODO: Plots; Perf is terrible
-// TODO: Plots: Stop also updating the plot while the time is not flowing
+// TODO: Plots: Add error handling
+// TODO: Plots: Add types types for the worker messages
+// TODO: Plots: The dates are not very useful as they are now. Maybe only put time 
+// and not date and make sure it's utc
 // TODO: Add docs for the UI
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
 // TODO: Moon should be correctly oriented
