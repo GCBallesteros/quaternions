@@ -88,16 +88,16 @@ function updatePlots(state: State): void {
       const plot = state.plots[plotId];
       const lastIndex = plot.data.currentIndex;
       const prevIndex = lastIndex - 1;
-      
+
       if (prevIndex >= 0) {
         // Send just the latest point
         const newData = {
           timestamps: [plot.data.timestamps[prevIndex]],
-          values: {} as Record<string, number[]>
+          values: {} as Record<string, number[]>,
         };
-        
+
         // For each line, get just the new value
-        plot.lines.forEach(line => {
+        plot.lines.forEach((line) => {
           newData.values[line] = [plot.data.values[line][prevIndex]];
         });
 
