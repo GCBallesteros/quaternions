@@ -17,6 +17,7 @@ export interface Plot {
   callback: () => number[];
   sampleEvery: number; // How many animation frames between samples
   lastSample: number; // Frame count of last sample
+  lastSentIndex: number; // Last index sent to worker
 }
 
 export type CommandFunction = (...args: any[]) => any;

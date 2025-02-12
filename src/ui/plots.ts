@@ -82,23 +82,26 @@ function updatePlots(state: State): void {
       plotsList.appendChild(plotElement);
     }
 
-    // Update worker with only new data points
+    // Update worker with all new data points since last update
     const worker = workers.get(plotId);
     if (worker) {
       const plot = state.plots[plotId];
-      const lastIndex = plot.data.currentIndex;
-      const prevIndex = lastIndex - 1;
+      const lastSentIndex = plot.lastSentIndex || 0;
+      const currentIndex = plot.data.currentIndex;
 
-      if (prevIndex >= 0) {
-        // Send just the latest point
+      if (currentIndex > lastSentIndex) {
+        // Send all new points
         const newData = {
-          timestamps: [plot.data.timestamps[prevIndex]],
+          timestamps: plot.data.timestamps.slice(lastSentIndex, currentIndex),
           values: {} as Record<string, number[]>,
         };
 
-        // For each line, get just the new value
+        // For each line, get all new values
         plot.lines.forEach((line) => {
-          newData.values[line] = [plot.data.values[line][prevIndex]];
+          newData.values[line] = plot.data.values[line].slice(
+            lastSentIndex,
+            currentIndex,
+          );
         });
 
         worker.postMessage({
@@ -109,6 +112,9 @@ function updatePlots(state: State): void {
           },
           data: newData,
         });
+
+        // Update the last sent index
+        plot.lastSentIndex = currentIndex;
       }
     }
   });
