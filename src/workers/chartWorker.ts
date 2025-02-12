@@ -62,6 +62,8 @@ self.onmessage = async (e: MessageEvent<WorkerMessage>) => {
         },
         options: {
           responsive: true,
+          maintainAspectRatio: true,
+          aspectRatio: 2,
           animation: false,
           plugins: {
             title: {

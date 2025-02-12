@@ -268,12 +268,19 @@ input:checked + .slider:before {
   margin: 4px 0;
   background: #2d2d2d;
   border-radius: 4px;
-  height: 300px;
+  position: relative;
+  width: 100%;
+  padding-top: 50%; /* This creates a 2:1 aspect ratio */
 }
 
 .plot-item canvas {
-  width: 100% !important;
-  height: 100% !important;
+  position: absolute !important;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  width: calc(100% - 16px) !important;
+  height: calc(100% - 16px) !important;
 }
 
 /* Execute Buttons */
