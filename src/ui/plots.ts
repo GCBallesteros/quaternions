@@ -53,6 +53,9 @@ function getLineColor(index: number): string {
 }
 
 function updatePlots(state: State): void {
+  // Early return if time is not flowing since there's no new data to display
+  if (!state.isTimeFlowing) return;
+
   const plotsList = document.getElementById('plots-list')!;
   const currentPlots = new Set(Object.keys(state.plots));
 
