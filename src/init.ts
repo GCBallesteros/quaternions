@@ -103,7 +103,6 @@ export function createAnimator(
   const clock = new THREE.Clock();
   let frameCount = 0;
   function animate() {
-    frameCount++;
     const elapsed = clock.getDelta();
     if (state.isTimeFlowing) {
       const simulatedTime = new Date(
@@ -117,8 +116,9 @@ export function createAnimator(
 
     // Update all plots when time is flowing
     if (state.isTimeFlowing) {
-      Object.entries(state.plots).forEach(([plotId, plot]) => {
-        if (frameCount - plot.lastSample >= plot.sampleEvery) {
+      frameCount++;
+      Object.entries(state.plots).forEach(([_, plot]) => {
+        if ((frameCount % plot.sampleEvery)==0) {
           const values = plot.callback();
           const timestamp = state.currentTime.getTime();
           if (plot.data.currentIndex < plot.data.maxPoints) {
@@ -128,7 +128,7 @@ export function createAnimator(
             });
             plot.data.currentIndex++;
           }
-          plot.lastSample = frameCount;
+          frameCount = 0;
         }
       });
     }
