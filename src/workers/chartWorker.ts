@@ -84,14 +84,20 @@ self.onmessage = async (e: MessageEvent<WorkerMessage>) => {
                 tooltipFormat: 'yyyy-MM-dd HH:mm:ss',
               },
               ticks: {
-                callback: function(value) {
+                callback: function (value) {
                   // Ensure we're using UTC time for display
                   const date = new Date(value);
                   const hours = date.getUTCHours().toString().padStart(2, '0');
-                  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-                  const seconds = date.getUTCSeconds().toString().padStart(2, '0');
+                  const minutes = date
+                    .getUTCMinutes()
+                    .toString()
+                    .padStart(2, '0');
+                  const seconds = date
+                    .getUTCSeconds()
+                    .toString()
+                    .padStart(2, '0');
                   return `${hours}:${minutes}:${seconds}`;
-                }
+                },
               },
               adapters: {
                 date: {
