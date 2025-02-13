@@ -30,31 +30,41 @@ export function updatePlots(state: State, frameCount: number): void {
         }
       } catch (error) {
         log(`Plot "${plotId}" callback failed. Plot will not update further.`);
-        // AI! I don't want a total cleanup here. Just stop the the updating. Like that i can see where the plot left. If I want a full cleanup then i will have a flag in cleanUp plot. By total cleanup i mean deleting the div too
-        cleanupPlot(plotId);
+        // Just stop the worker and remove from state to stop updates
+        const worker = workers.get(plotId);
+        if (worker) {
+          worker.postMessage({ type: 'DESTROY', plotId });
+          worker.terminate();
+          workers.delete(plotId);
+        }
         delete state.plots[plotId];
       }
     }
   });
 }
 
-export function cleanupPlot(plotId: string): void {
+export function cleanupPlot(
+  plotId: string,
+  removeElement: boolean = false,
+): void {
   const worker = workers.get(plotId);
   if (worker) {
     worker.postMessage({ type: 'DESTROY', plotId });
     worker.terminate();
     workers.delete(plotId);
   }
-  const plotElement = document.querySelector(`[data-plot-id="${plotId}"]`);
-  if (plotElement) {
-    plotElement.remove();
+  if (removeElement) {
+    const plotElement = document.querySelector(`[data-plot-id="${plotId}"]`);
+    if (plotElement) {
+      plotElement.remove();
+    }
   }
   canvases.delete(plotId);
 }
 
 export function cleanupAllPlots(state: State): void {
   Object.keys(state.plots).forEach((plotId) => {
-    cleanupPlot(plotId);
+    cleanupPlot(plotId, true);
   });
   state.plots = {};
 }
