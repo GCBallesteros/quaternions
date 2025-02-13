@@ -6,43 +6,15 @@ import { getPositionOfPoint } from './utils.js';
 import { buildCommandClosures } from './commands.js';
 import { log } from './logger.js';
 
-// Before share
-// TONIGHT
-// TODO: Trails: Docs
-// TODO: Offset: Document new offset option and setter with example retrieving point
-// TODO: Docs: relativeRot
-// TODO: Docs: By convention the trail is along row
-// TODO: Docs put cameraConfig in a better place
-// TODO: Docs trial toggles
 // TODO: Distance function
-// TODO: Docs use utcDate on all the example
-
-// TODO: Add POV Window
-//
-// Thursday
-// TODO: Plots: reset resets plots
-//
-// TODO: Add docs for the UI
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
-// TODO: Moon should be correctly oriented
 // TODO: Add diagram to findBestQuaternion documentation
-// TODO: Normal points should resize as we get closer on the camera
-
-// REFACTORING
-// TODO: Get rid of pos and rot functions
+// TODO: Get rid rot functions
 // TODO: Expose more options for object creation, widths, colors ...
 // TODO: Migrate to React
 // TODO: Normalize quats before applying
-
-// EXTRA FEATURES
-// TODO: Cameras so we don't have to go to state
 // TODO: Load workflows button
-// TODO: Button to bring back global camera
-// TODO: Printing objects is terrible
-// TODO: Make a learning track
 // TODO: Transition smoothly between cameras (maybe)
-// TODO: Show coordinates over the Earth
-// TODO: POV: Higher resolution textures
 
 const { scene, canvas, renderer } = initializeCanvas();
 let state = initScene(scene, canvas, renderer);
