@@ -1,7 +1,7 @@
 import { State, Plot } from '../types.js';
 
 export const workers = new Map<string, Worker>();
-const canvases = new Map<string, HTMLCanvasElement>();
+export const canvases = new Map<string, HTMLCanvasElement>();
 
 function createPlotElement(
   plotId: string,
@@ -111,6 +111,7 @@ function updatePlots(state: State): void {
         worker.terminate();
         workers.delete(plotId);
       }
+      canvases.delete(plotId);
       element.remove();
     }
   });

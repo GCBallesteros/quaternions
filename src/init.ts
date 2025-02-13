@@ -9,7 +9,7 @@ import { makeMoon } from './moon.js';
 import { State } from './types.js';
 import { updateTimeDisplay } from './ui.js';
 import { setupTimeControls } from './components/timeControls.js';
-import { workers } from './ui/plots.js';
+import { workers, canvases } from './ui/plots.js';
 import { log } from './logger.js';
 
 export function initializeCanvas(): {
@@ -155,8 +155,15 @@ export function createAnimator(
               worker.terminate();
               workers.delete(plotId);
             }
-            // Remove this plot from the state to prevent further attempts
+            // Remove this plot from the state and UI to prevent further attempts
             delete state.plots[plotId];
+            const plotElement = document.querySelector(
+              `[data-plot-id="${plotId}"]`,
+            );
+            if (plotElement) {
+              plotElement.remove();
+            }
+            canvases.delete(plotId);
           }
           frameCount = 0;
         }
