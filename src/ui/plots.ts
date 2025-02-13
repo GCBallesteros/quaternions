@@ -80,20 +80,6 @@ function createPlotElement(
   return plotElement;
 }
 
-function getLineColor(index: number): string {
-  const colors = [
-    '#ff6384',
-    '#36a2eb',
-    '#cc65fe',
-    '#ffce56',
-    '#4bc0c0',
-    '#ff9f40',
-    '#9966ff',
-    '#c9cbcf',
-  ];
-  return colors[index % colors.length];
-}
-
 function updatePlots(state: State): void {
   // Early return if time is not flowing since there's no new data to display
   if (!state.isTimeFlowing) return;
