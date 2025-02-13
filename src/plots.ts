@@ -3,8 +3,6 @@ import { workers, canvases } from './ui/plots.js';
 import { log } from './logger.js';
 
 export function updatePlots(state: State, frameCount: number): void {
-  if (!state.isTimeFlowing) return;
-
   Object.entries(state.plots).forEach(([plotId, plot]) => {
     if (frameCount % plot.sampleEvery == 0) {
       try {
@@ -32,6 +30,7 @@ export function updatePlots(state: State, frameCount: number): void {
         }
       } catch (error) {
         log(`Plot "${plotId}" callback failed. Plot will not update further.`);
+        // AI! I don't want a total cleanup here. Just stop the the updating. Like that i can see where the plot left. If I want a full cleanup then i will have a flag in cleanUp plot. By total cleanup i mean deleting the div too
         cleanupPlot(plotId);
         delete state.plots[plotId];
       }
