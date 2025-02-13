@@ -1,6 +1,6 @@
 import { State, Plot } from '../types.js';
 
-const workers = new Map<string, Worker>();
+export const workers = new Map<string, Worker>();
 const canvases = new Map<string, HTMLCanvasElement>();
 
 function createPlotElement(
@@ -130,36 +130,40 @@ function updatePlots(state: State): void {
     // Update worker with all new data points since last update
     const worker = workers.get(plotId);
     if (worker) {
-      const plot = state.plots[plotId];
-      const lastSentIndex = plot.lastSentIndex || 0;
-      const currentIndex = plot.data.currentIndex;
+      try {
+        const plot = state.plots[plotId];
+        const lastSentIndex = plot.lastSentIndex || 0;
+        const currentIndex = plot.data.currentIndex;
 
-      if (currentIndex > lastSentIndex) {
-        // Send all new points
-        const newData = {
-          timestamps: plot.data.timestamps.slice(lastSentIndex, currentIndex),
-          values: {} as Record<string, number[]>,
-        };
+        if (currentIndex > lastSentIndex) {
+          // Send all new points
+          const newData = {
+            timestamps: plot.data.timestamps.slice(lastSentIndex, currentIndex),
+            values: {} as Record<string, number[]>,
+          };
 
-        // For each line, get all new values
-        plot.lines.forEach((line) => {
-          newData.values[line] = plot.data.values[line].slice(
-            lastSentIndex,
-            currentIndex,
-          );
-        });
+          // For each line, get all new values
+          plot.lines.forEach((line) => {
+            newData.values[line] = plot.data.values[line].slice(
+              lastSentIndex,
+              currentIndex,
+            );
+          });
 
-        worker.postMessage({
-          type: 'UPDATE',
-          plotId,
-          config: {
-            lines: plot.lines,
-          },
-          data: newData,
-        });
+          worker.postMessage({
+            type: 'UPDATE',
+            plotId,
+            config: {
+              lines: plot.lines,
+            },
+            data: newData,
+          });
 
-        // Update the last sent index
-        plot.lastSentIndex = currentIndex;
+          // Update the last sent index
+          plot.lastSentIndex = currentIndex;
+        }
+      } catch (error) {
+        console.error(`Plot "${plotId}": Error processing plot data:`, error);
       }
     }
   });
