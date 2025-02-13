@@ -215,8 +215,8 @@ export function buildCommandClosures(
     }
   }
 
-  function reset(): void {
-    _reset(scene, state, switchCamera);
+  function reset(cleanupPlots: boolean = false): void {
+    _reset(scene, state, switchCamera, cleanupPlots);
   }
 
   function resumeSimTime(): void {

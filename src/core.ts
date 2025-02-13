@@ -8,6 +8,7 @@ import {
   createFrame,
   createLineGeometry,
 } from './components.js';
+import { workers, canvases } from './ui/plots.js';
 import { addInitGeometries } from './init.js';
 import { log } from './logger.js';
 import { OrientedPoint, CameraConfig } from './points/orientedPoint.js';
@@ -732,14 +733,36 @@ export function _reset(
   scene: THREE.Scene,
   state: State,
   switchCamera: (newCamera: THREE.PerspectiveCamera) => void,
+  cleanupPlots: boolean = false,
 ): void {
   // Delete all points
   for (const pointName in state.points) {
     _deletePoint(scene, state, pointName);
   }
 
+  if (cleanupPlots) {
+    // Cleanup plots and their workers
+    Object.keys(state.plots).forEach((plotId) => {
+      const worker = workers.get(plotId);
+      if (worker) {
+        worker.postMessage({ type: 'DESTROY', plotId });
+        worker.terminate();
+        workers.delete(plotId);
+      }
+      // Remove plot element from UI
+      const plotElement = document.querySelector(`[data-plot-id="${plotId}"]`);
+      if (plotElement) {
+        plotElement.remove();
+      }
+      canvases.delete(plotId);
+    });
+    state.plots = {};
+  }
+
   addInitGeometries(state, scene);
   switchCamera(state.cameras.main);
 
-  log('Scene has been reset.');
+  log(
+    'Scene has been reset.' + (cleanupPlots ? ' Plots have been cleared.' : ''),
+  );
 }
