@@ -283,6 +283,24 @@ input:checked + .slider:before {
   height: 95% !important;
 }
 
+.plot-download-button {
+  position: absolute;
+  top: 8px;
+  right: 24px;
+  z-index: 10;
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.plot-download-button:hover {
+  background: #0056b3;
+}
+
 /* Execute Buttons */
 .execute-buttons {
   display: flex;

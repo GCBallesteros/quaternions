@@ -3,14 +3,54 @@ import { State, Plot } from '../types.js';
 const workers = new Map<string, Worker>();
 const canvases = new Map<string, HTMLCanvasElement>();
 
-function createPlotElement(plotId: string, plot: Plot): HTMLElement {
+function createPlotElement(
+  plotId: string,
+  plot: Plot,
+  state: State,
+): HTMLElement {
   const plotElement = document.createElement('div');
   plotElement.className = 'plot-item';
+
+  // Make download button
+  const downloadButton = document.createElement('button');
+  downloadButton.className = 'plot-download-button';
+  downloadButton.textContent = 'Download Data';
+  downloadButton.onclick = () => {
+    const plot = state.plots[plotId];
+    if (!plot) return;
+
+    // Create CSV content
+    const headers = ['Timestamp', ...plot.lines];
+    const rows = [headers];
+
+    // Add data rows
+    for (let i = 0; i < plot.data.currentIndex; i++) {
+      const timestamp = new Date(plot.data.timestamps[i]).toISOString();
+      const values = plot.lines.map((line) =>
+        plot.data.values[line][i].toString(),
+      );
+      rows.push([timestamp, ...values]);
+    }
+
+    const csvContent = rows.map((row) => row.join(',')).join('\n');
+
+    // Create and trigger download
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${plot.title.replace(/\s+/g, '_')}_${new Date().toISOString()}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  };
 
   const canvas = document.createElement('canvas');
   canvas.width = 800; // Set fixed size for OffscreenCanvas
   canvas.height = 400;
   plotElement.appendChild(canvas);
+  plotElement.appendChild(downloadButton);
   canvases.set(plotId, canvas);
 
   // Create worker and transfer canvas control
@@ -80,7 +120,7 @@ function updatePlots(state: State): void {
     ) as HTMLElement;
 
     if (!plotElement) {
-      plotElement = createPlotElement(plotId, plot);
+      plotElement = createPlotElement(plotId, plot, state);
       plotElement.setAttribute('data-plot-id', plotId);
       plotsList.appendChild(plotElement);
     }

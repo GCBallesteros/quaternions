@@ -81,6 +81,12 @@ self.onmessage = async (e: MessageEvent<WorkerMessage>) => {
                   minute: 'HH:mm',
                   hour: 'HH:mm',
                 },
+                tooltipFormat: 'yyyy-MM-dd HH:mm:ss',
+              },
+              ticks: {
+                callback: function(value) {
+                  return new Date(value).toISOString().slice(11, 19); // Returns HH:mm:ss in UTC
+                }
               },
               adapters: {
                 date: {
