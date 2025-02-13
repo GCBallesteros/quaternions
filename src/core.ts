@@ -8,7 +8,7 @@ import {
   createFrame,
   createLineGeometry,
 } from './components.js';
-import { cleanupAllPlots } from './plots.js';
+import { cleanupAllPlots, cleanupPlot } from './plots.js';
 import { addInitGeometries } from './init.js';
 import { log } from './logger.js';
 import { OrientedPoint, CameraConfig } from './points/orientedPoint.js';
@@ -725,7 +725,7 @@ export function _removePlot(state: State, id: string): Result<null, string> {
     return Err(`Plot with id '${id}' does not exist`);
   }
 
-  delete state.plots[id];
+  cleanupPlot(id, state, true);
   return Ok(null);
 }
 

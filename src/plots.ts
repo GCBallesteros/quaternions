@@ -30,14 +30,7 @@ export function updatePlots(state: State, frameCount: number): void {
         }
       } catch (error) {
         log(`Plot "${plotId}" callback failed. Plot will not update further.`);
-        // Just stop the worker and remove from state to stop updates
-        const worker = workers.get(plotId);
-        if (worker) {
-          worker.postMessage({ type: 'DESTROY', plotId });
-          worker.terminate();
-          workers.delete(plotId);
-        }
-        delete state.plots[plotId];
+        cleanupPlot(plotId, state, false);
       }
     }
   });
@@ -45,6 +38,7 @@ export function updatePlots(state: State, frameCount: number): void {
 
 export function cleanupPlot(
   plotId: string,
+  state: State,
   removeElement: boolean = false,
 ): void {
   const worker = workers.get(plotId);
@@ -53,18 +47,19 @@ export function cleanupPlot(
     worker.terminate();
     workers.delete(plotId);
   }
+  canvases.delete(plotId);
+
   if (removeElement) {
     const plotElement = document.querySelector(`[data-plot-id="${plotId}"]`);
     if (plotElement) {
       plotElement.remove();
     }
+    delete state.plots[plotId];
   }
-  canvases.delete(plotId);
 }
 
 export function cleanupAllPlots(state: State): void {
   Object.keys(state.plots).forEach((plotId) => {
-    cleanupPlot(plotId, true);
+    cleanupPlot(plotId, state, true);
   });
-  state.plots = {};
 }
