@@ -9,8 +9,8 @@ import { makeMoon } from './moon.js';
 import { State } from './types.js';
 import { updateTimeDisplay } from './ui.js';
 import { setupTimeControls } from './components/timeControls.js';
-import { workers, canvases } from './ui/plots.js';
 import { log } from './logger.js';
+import { updatePlots } from './plots.js';
 
 export function initializeCanvas(): {
   scene: THREE.Scene;
@@ -119,55 +119,8 @@ export function createAnimator(
     // Update all plots when time is flowing
     if (state.isTimeFlowing) {
       frameCount++;
-      Object.entries(state.plots).forEach(([plotId, plot]) => {
-        if (frameCount % plot.sampleEvery == 0) {
-          try {
-            const values = plot.callback();
-            if (!Array.isArray(values) || values.length !== plot.lines.length) {
-              console.error(
-                `Plot "${plotId}": Callback returned invalid data. Expected ${plot.lines.length} values, got ${values?.length}`,
-              );
-              return;
-            }
-
-            const timestamp = state.currentTime.getTime();
-            if (plot.data.currentIndex < plot.data.maxPoints) {
-              plot.data.timestamps[plot.data.currentIndex] = timestamp;
-              values.forEach((value, i) => {
-                if (typeof value !== 'number' || !isFinite(value)) {
-                  console.error(
-                    `Plot "${plotId}": Invalid value at index ${i}: ${value}`,
-                  );
-                  return;
-                }
-                plot.data.values[plot.lines[i]][plot.data.currentIndex] = value;
-              });
-              plot.data.currentIndex++;
-            }
-          } catch (error) {
-            log(
-              `Plot "${plotId}" callback failed. Plot will not update further.`,
-            );
-            // Kill the worker if the callback fails
-            const worker = workers.get(plotId);
-            if (worker) {
-              worker.postMessage({ type: 'DESTROY', plotId });
-              worker.terminate();
-              workers.delete(plotId);
-            }
-            // Remove this plot from the state and UI to prevent further attempts
-            delete state.plots[plotId];
-            const plotElement = document.querySelector(
-              `[data-plot-id="${plotId}"]`,
-            );
-            if (plotElement) {
-              plotElement.remove();
-            }
-            canvases.delete(plotId);
-          }
-          frameCount = 0;
-        }
-      });
+      updatePlots(state, frameCount);
+      frameCount = frameCount % 1000; // Prevent potential overflow
     }
 
     renderer.render(scene, currentCamera);

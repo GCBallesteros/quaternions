@@ -8,7 +8,7 @@ import {
   createFrame,
   createLineGeometry,
 } from './components.js';
-import { workers, canvases } from './ui/plots.js';
+import { cleanupAllPlots } from './plots.js';
 import { addInitGeometries } from './init.js';
 import { log } from './logger.js';
 import { OrientedPoint, CameraConfig } from './points/orientedPoint.js';
@@ -741,22 +741,7 @@ export function _reset(
   }
 
   if (cleanupPlots) {
-    // Cleanup plots and their workers
-    Object.keys(state.plots).forEach((plotId) => {
-      const worker = workers.get(plotId);
-      if (worker) {
-        worker.postMessage({ type: 'DESTROY', plotId });
-        worker.terminate();
-        workers.delete(plotId);
-      }
-      // Remove plot element from UI
-      const plotElement = document.querySelector(`[data-plot-id="${plotId}"]`);
-      if (plotElement) {
-        plotElement.remove();
-      }
-      canvases.delete(plotId);
-    });
-    state.plots = {};
+    cleanupAllPlots(state);
   }
 
   addInitGeometries(state, scene);
