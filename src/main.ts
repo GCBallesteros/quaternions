@@ -20,12 +20,7 @@ import { log } from './logger.js';
 // TODO: Add POV Window
 //
 // Thursday
-// TODO: Plots: Callbacks should be able to get the state? Maybe?
-// TODO: Plots: A breaking callback destroys the animation loop!
 // TODO: Plots: reset resets plots
-// TODO: Plots: Add download data button
-// TODO: Plots: Add error handling
-// TODO: Plots: Times should be UTC
 //
 // TODO: Add docs for the UI
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
