@@ -25,7 +25,9 @@ function createPlotElement(
 
     // Add data rows
     for (let i = 0; i < plot.data.currentIndex; i++) {
-      const timestamp = new Date(plot.data.timestamps[i]).toISOString();
+      // Ensure we use UTC time consistently
+      const date = new Date(plot.data.timestamps[i]);
+      const timestamp = date.toISOString();
       const values = plot.lines.map((line) =>
         plot.data.values[line][i].toString(),
       );

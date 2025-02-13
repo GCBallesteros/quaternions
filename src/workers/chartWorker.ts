@@ -85,7 +85,12 @@ self.onmessage = async (e: MessageEvent<WorkerMessage>) => {
               },
               ticks: {
                 callback: function(value) {
-                  return new Date(value).toISOString().slice(11, 19); // Returns HH:mm:ss in UTC
+                  // Ensure we're using UTC time for display
+                  const date = new Date(value);
+                  const hours = date.getUTCHours().toString().padStart(2, '0');
+                  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+                  const seconds = date.getUTCSeconds().toString().padStart(2, '0');
+                  return `${hours}:${minutes}:${seconds}`;
                 }
               },
               adapters: {
