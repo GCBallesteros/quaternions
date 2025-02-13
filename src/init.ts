@@ -10,6 +10,7 @@ import { State } from './types.js';
 import { updateTimeDisplay } from './ui.js';
 import { setupTimeControls } from './components/timeControls.js';
 import { workers } from './ui/plots.js';
+import { log } from './logger.js';
 
 export function initializeCanvas(): {
   scene: THREE.Scene;
@@ -144,7 +145,9 @@ export function createAnimator(
               plot.data.currentIndex++;
             }
           } catch (error) {
-            console.error(`Plot "${plotId}": Error executing callback:`, error);
+            log(
+              `Plot "${plotId}" callback failed. Plot will not update further.`,
+            );
             // Kill the worker if the callback fails
             const worker = workers.get(plotId);
             if (worker) {
@@ -152,6 +155,8 @@ export function createAnimator(
               worker.terminate();
               workers.delete(plotId);
             }
+            // Remove this plot from the state to prevent further attempts
+            delete state.plots[plotId];
           }
           frameCount = 0;
         }
