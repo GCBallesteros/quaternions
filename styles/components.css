@@ -270,24 +270,39 @@ input:checked + .slider:before {
   border-radius: 4px;
   position: relative;
   width: 100%;
-  padding-top: 50%; /* This creates a 2:1 aspect ratio */
+  padding-top: 55%; /* Increased to accommodate header */
 }
 
 .plot-item canvas {
   position: absolute !important;
-  top: 8px;
+  top: 40px; /* Leave space for header */
   left: 8px;
   right: 16px;
   bottom: 8px;
-  width: 95%  !important;
-  height: 95% !important;
+  width: 95% !important;
+  height: calc(95% - 32px) !important; /* Adjust height to account for header */
+}
+
+.plot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+  background: #1e1e1e;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.plot-id {
+  font-family: monospace;
+  color: #666;
+  font-size: 0.9em;
 }
 
 .plot-download-button {
-  position: absolute;
-  top: 8px;
-  right: 24px;
-  z-index: 10;
   background: #007bff;
   color: white;
   border: none;
