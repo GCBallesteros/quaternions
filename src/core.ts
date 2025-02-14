@@ -8,6 +8,7 @@ import {
   createFrame,
   createLineGeometry,
 } from './components.js';
+import { cleanupAllPlots, cleanupPlot } from './plots.js';
 import { addInitGeometries } from './init.js';
 import { log } from './logger.js';
 import { OrientedPoint, CameraConfig } from './points/orientedPoint.js';
@@ -688,18 +689,65 @@ export function _toggleTrail(
     : _resumeTrail(state, satelliteName);
 }
 
+export function _createPlot(
+  state: State,
+  id: string,
+  config: { title: string; lines: string[]; sampleEvery?: number },
+  callback: () => number[],
+): Result<null, string> {
+  if (state.plots[id]) {
+    return Err(`Plot with id '${id}' already exists`);
+  }
+
+  state.plots[id] = {
+    title: config.title,
+    lines: config.lines,
+    data: {
+      timestamps: new Array(1000).fill(0),
+      values: Object.fromEntries(
+        config.lines.map((line) => [line, new Array(1000).fill(0)]),
+      ),
+      maxPoints: 1000,
+      currentIndex: 0,
+    },
+    callback,
+    sampleEvery: config.sampleEvery ?? 10,
+    lastSample: 0,
+    lastSentIndex: 0,
+  };
+
+  return Ok(null);
+}
+
+// TODO: Check if this enough for proper cleanup
+export function _removePlot(state: State, id: string): Result<null, string> {
+  if (!state.plots[id]) {
+    return Err(`Plot with id '${id}' does not exist`);
+  }
+
+  cleanupPlot(id, state, true);
+  return Ok(null);
+}
+
 export function _reset(
   scene: THREE.Scene,
   state: State,
   switchCamera: (newCamera: THREE.PerspectiveCamera) => void,
+  cleanupPlots: boolean = false,
 ): void {
   // Delete all points
   for (const pointName in state.points) {
     _deletePoint(scene, state, pointName);
   }
 
+  if (cleanupPlots) {
+    cleanupAllPlots(state);
+  }
+
   addInitGeometries(state, scene);
   switchCamera(state.cameras.main);
 
-  log('Scene has been reset.');
+  log(
+    'Scene has been reset.' + (cleanupPlots ? ' Plots have been cleared.' : ''),
+  );
 }

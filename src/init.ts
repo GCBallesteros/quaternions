@@ -9,6 +9,8 @@ import { makeMoon } from './moon.js';
 import { State } from './types.js';
 import { updateTimeDisplay } from './ui.js';
 import { setupTimeControls } from './components/timeControls.js';
+import { log } from './logger.js';
+import { updatePlots } from './plots.js';
 
 export function initializeCanvas(): {
   scene: THREE.Scene;
@@ -70,6 +72,7 @@ export function initScene(
     timeSpeedMultiplier: 2,
     cameras: { main: camera },
     bodies: { moon, earth: earth_geometries.earth },
+    plots: {},
   };
 
   const moonPos = getMoonPosition(state.currentTime);
@@ -100,6 +103,7 @@ export function createAnimator(
   let currentCamera = initialCamera;
 
   const clock = new THREE.Clock();
+  let frameCount = 0;
   function animate() {
     const elapsed = clock.getDelta();
     if (state.isTimeFlowing) {
@@ -111,6 +115,13 @@ export function createAnimator(
     }
 
     updateTimeDisplay(state);
+
+    // Update all plots when time is flowing
+    if (state.isTimeFlowing) {
+      frameCount++;
+      updatePlots(state, frameCount);
+      frameCount = frameCount % 1000; // Prevent potential overflow
+    }
 
     renderer.render(scene, currentCamera);
   }

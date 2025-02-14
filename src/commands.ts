@@ -20,6 +20,8 @@ import {
   _setTime,
   _toggleSimTime,
   _toggleTrail,
+  _createPlot,
+  _removePlot,
 } from './core.js';
 import { log } from './logger.js';
 import { OrientationMode } from './points/satellite.js';
@@ -213,8 +215,8 @@ export function buildCommandClosures(
     }
   }
 
-  function reset(): void {
-    _reset(scene, state, switchCamera);
+  function reset(cleanupPlots: boolean = false): void {
+    _reset(scene, state, switchCamera, cleanupPlots);
   }
 
   function resumeSimTime(): void {
@@ -302,6 +304,20 @@ export function buildCommandClosures(
     updateTrailSwitch(satelliteName, result.val);
   }
 
+  function createPlot(
+    id: string,
+    config: { title: string; lines: string[]; sampleEvery?: number },
+    callback: () => number[],
+  ): void {
+    const result = _createPlot(state, id, config, callback);
+    if (!result.ok) throw new Error(result.val);
+  }
+
+  function removePlot(id: string): void {
+    const result = _removePlot(state, id);
+    if (!result.ok) throw new Error(result.val);
+  }
+
   async function longRunning(iterations: number = 100000000): Promise<void> {
     const worker = new Worker(
       new URL('./workers/longRunningWorker.ts', import.meta.url),
@@ -349,6 +365,8 @@ export function buildCommandClosures(
     toggleSimTime,
     longRunning,
     relativeRot,
+    createPlot,
+    removePlot,
     resumeTrail,
     pauseTrail,
     toggleTrail,
