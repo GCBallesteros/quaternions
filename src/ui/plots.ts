@@ -11,6 +11,16 @@ function createPlotElement(
   const plotElement = document.createElement('div');
   plotElement.className = 'plot-item';
 
+  // Create header div for ID and download button
+  const plotHeader = document.createElement('div');
+  plotHeader.className = 'plot-header';
+
+  // Add plot ID display
+  const plotIdDisplay = document.createElement('div');
+  plotIdDisplay.className = 'plot-id';
+  plotIdDisplay.textContent = `ID: ${plotId}`;
+  plotHeader.appendChild(plotIdDisplay);
+
   // Make download button
   const downloadButton = document.createElement('button');
   downloadButton.className = 'plot-download-button';
@@ -52,7 +62,8 @@ function createPlotElement(
   canvas.width = 800; // Set fixed size for OffscreenCanvas
   canvas.height = 400;
   plotElement.appendChild(canvas);
-  plotElement.appendChild(downloadButton);
+  plotHeader.appendChild(downloadButton);
+  plotElement.appendChild(plotHeader);
   canvases.set(plotId, canvas);
 
   // Create worker and transfer canvas control
