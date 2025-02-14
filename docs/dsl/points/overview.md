@@ -4,6 +4,7 @@
 The `Point`, `OrientedPoint` and `Satellite` classes represent points in 3D space
 with increasing levels of functionality.
 
+
 - **[`Point`](/dsl/points/point)** is the base class representing a point with a position in 3D
 space.  
 
