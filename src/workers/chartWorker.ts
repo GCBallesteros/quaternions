@@ -81,6 +81,7 @@ self.onmessage = async (e: MessageEvent<WorkerMessage>) => {
             x: {
               type: 'time',
               ticks: {
+                maxTicksLimit: 10,
                 callback: function (value) {
                   // Ensure we're using UTC time for display
                   const date = new Date(value);
