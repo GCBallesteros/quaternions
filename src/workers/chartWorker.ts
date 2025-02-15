@@ -58,6 +58,7 @@ self.onmessage = async (e: MessageEvent<WorkerMessage>) => {
             data: [],
             borderColor: getLineColor(i),
             tension: 0.4,
+            normalized: true,
           })),
         },
         options: {
@@ -70,19 +71,15 @@ self.onmessage = async (e: MessageEvent<WorkerMessage>) => {
               display: true,
               text: message.config.title,
             },
+            decimation: {
+              enabled: true,
+              algorithm: 'lttb', // Largest-Triangle-Three-Buckets
+              samples: 200,
+            },
           },
           scales: {
             x: {
               type: 'time',
-              time: {
-                unit: 'second',
-                displayFormats: {
-                  second: 'HH:mm:ss',
-                  minute: 'HH:mm',
-                  hour: 'HH:mm',
-                },
-                tooltipFormat: 'yyyy-MM-dd HH:mm:ss',
-              },
               ticks: {
                 callback: function (value) {
                   // Ensure we're using UTC time for display
@@ -97,11 +94,6 @@ self.onmessage = async (e: MessageEvent<WorkerMessage>) => {
                     .toString()
                     .padStart(2, '0');
                   return `${hours}:${minutes}:${seconds}`;
-                },
-              },
-              adapters: {
-                date: {
-                  zone: 'UTC',
                 },
               },
             },
