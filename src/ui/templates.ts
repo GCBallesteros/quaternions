@@ -1,5 +1,6 @@
 import { html } from 'lit-html';
-import { Point, OrientedPoint } from '../points/orientedPoint.js';
+import { Point } from '../points/point.js';
+import { OrientedPoint } from '../points/orientedPoint.js';
 import { Satellite, NamedTargets } from '../points/satellite.js';
 import { Vector3 } from '../types.js';
 

@@ -118,7 +118,7 @@ function updatePointElement(
   type: string,
   point: Point,
 ): void {
-  element.innerHTML = generatePointHTML(name, type, point);
+  render(pointTemplate(name, type, point), element);
 
   setupExpandButton(element, name);
   setupColorPicker(element, point);
