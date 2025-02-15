@@ -37,9 +37,13 @@ export namespace NamedTargets {
 
 export class Satellite extends OrientedPoint {
   private tle: string;
-  private orientationMode: OrientationMode;
+  private _orientationMode: OrientationMode;
   public trail: Trail | null = null;
   public hasTrail: boolean = false;
+
+  get orientationMode(): OrientationMode {
+    return this._orientationMode;
+  }
 
   private isNamedTarget(value: any): value is NamedTargets {
     return typeof value === 'object' && value !== null && 'type' in value;
@@ -97,7 +101,7 @@ export class Satellite extends OrientedPoint {
   ) {
     super(geometry, cameraConfig);
     this.tle = tle;
-    this.orientationMode = orientationMode;
+    this._orientationMode = orientationMode;
 
     // Initialize trail state if we have a camera
     if (cameraConfig) {
