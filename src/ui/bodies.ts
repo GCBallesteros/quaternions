@@ -1,19 +1,11 @@
 import * as THREE from 'three';
+import { render } from 'lit-html';
 import { OrientedPoint } from '../points/orientedPoint.js';
 import { Point } from '../points/point.js';
-import { NamedTargets, Satellite } from '../points/satellite.js';
+import { Satellite } from '../points/satellite.js';
 import { Trail } from '../trail.js';
-import { State, Vector3 } from '../types.js';
-
-function formatTargetVector(target: Vector3 | NamedTargets): string {
-  if (typeof target === 'object' && target !== null && 'type' in target) {
-    if (target.type === 'TargetPointing') {
-      return `TargetPointing(${JSON.stringify(target.target)})`;
-    }
-    return target.type;
-  }
-  return JSON.stringify(target);
-}
+import { State } from '../types.js';
+import { pointTemplate } from './templates.js';
 
 // Track expanded state of points
 const expandedPoints = new Set<string>();
@@ -31,82 +23,6 @@ export function removePointFromUI(pointName: string): void {
     pointElement.remove();
     expandedPoints.delete(pointName);
   }
-}
-
-function generatePointHTML(name: string, type: string, point: Point): string {
-  const position = point.position;
-  return `
-    <div class="point-header">
-      <span class="expand-button">▶</span>
-      <input type="color" class="color-picker" value="${point.color}" title="Point color">
-      <span class="point-name">${name}</span>
-      ${
-        type === 'Satellite' && (point as OrientedPoint).camera
-          ? `<div class="trail-toggle">
-               <label class="switch">
-                 <input type="checkbox" class="trail-switch" ${(point as Satellite).hasTrail ? 'checked' : ''}>
-                 <span class="slider"></span>
-               </label>
-               <span class="camera-icon ${(point as OrientedPoint).camera ? 'active' : ''}">📷</span>
-             </div>`
-          : ''
-      }
-      <span class="point-type">${type}</span>
-    </div>
-    <div class="point-details">
-      ${generatePointDetails(type, point)}
-    </div>
-  `;
-}
-
-function generatePointDetails(type: string, point: Point): string {
-  const position = point.position;
-  return `
-    <div>Position: [${position[0].toFixed(2)}, ${position[1].toFixed(2)}, ${position[2].toFixed(2)}]</div>
-    ${
-      type !== 'Point'
-        ? `
-          <div>Quaternion: [${point.geometry.quaternion
-            .toArray()
-            .map((v) => v.toFixed(3))
-            .join(', ')}]</div>
-          ${generateOrientationDetails(type, point)}
-        `
-        : ''
-    }
-  `;
-}
-
-function generateOrientationDetails(type: string, point: Point): string {
-  if (type === 'Satellite') {
-    return `
-      <div>Orientation Mode: ${(point as any).orientationMode.type}
-        ${
-          (point as any).orientationMode.type === 'dynamic'
-            ? `<div style="margin-left: 10px;">
-              Primary: ${(point as any).orientationMode.primaryBodyVector} → ${formatTargetVector((point as any).orientationMode.primaryTargetVector)}<br>
-              Secondary: ${(point as any).orientationMode.secondaryBodyVector} → ${formatTargetVector((point as any).orientationMode.secondaryTargetVector)}
-              </div>`
-            : `<div style="margin-left: 10px;">
-              Fixed quaternion: [${(point as any).orientationMode.ecef_quaternion.map((v: number) => v.toFixed(3)).join(', ')}]
-              </div>`
-        }
-      </div>
-      ${generateCameraDetails(point as OrientedPoint)}
-    `;
-  }
-  return generateCameraDetails(point as OrientedPoint);
-}
-
-function generateCameraDetails(point: OrientedPoint): string {
-  return point.camera
-    ? `<div>Camera: Present
-       <div style="margin-left: 10px;">Body Orientation: [${
-         point.camera_orientation?.map((v) => v.toFixed(3))?.join(', ') ??
-         'default'
-       }]</div>
-       </div>`
-    : '<div>Camera: None</div>';
 }
 
 function setupTrailToggle(element: HTMLElement, point: Satellite): void {
@@ -183,7 +99,8 @@ function createPointElement(
 ): HTMLElement {
   const pointElement = document.createElement('div');
   pointElement.className = 'point-item';
-  pointElement.innerHTML = generatePointHTML(name, type, point);
+
+  render(pointTemplate(name, type, point), pointElement);
 
   setupExpandButton(pointElement, name);
   setupColorPicker(pointElement, point);

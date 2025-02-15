@@ -1,4 +1,6 @@
+import { render } from 'lit-html';
 import { State, Plot } from '../types.js';
+import { plotTemplate } from './templates.js';
 
 export const workers = new Map<string, Worker>();
 export const canvases = new Map<string, HTMLCanvasElement>();
@@ -12,20 +14,11 @@ function createPlotElement(
   plotElement.className = 'plot-item';
 
   // Create header div for ID and download button
-  const plotHeader = document.createElement('div');
-  plotHeader.className = 'plot-header';
-
-  // Add plot ID display
-  const plotIdDisplay = document.createElement('div');
-  plotIdDisplay.className = 'plot-id';
-  plotIdDisplay.textContent = `ID: ${plotId}`;
-  plotHeader.appendChild(plotIdDisplay);
-
-  // Make download button
-  const downloadButton = document.createElement('button');
-  downloadButton.className = 'plot-download-button';
-  downloadButton.textContent = 'Download Data';
-  downloadButton.onclick = () => {
+  render(plotTemplate(plotId, plot.title), plotElement);
+  
+  const downloadButton = plotElement.querySelector('.plot-download-button');
+  if (downloadButton) {
+    downloadButton.addEventListener('click', () => {
     const plot = state.plots[plotId];
     if (!plot) return;
 
