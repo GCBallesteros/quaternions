@@ -112,11 +112,23 @@ export class Trail {
       const t = i / (NUM_CURVE_POINTS - 1);
       const theta = THREE.MathUtils.lerp(-halfFOV, halfFOV, t);
       const dir = direction.clone().applyAxisAngle(columns, theta).normalize();
-      const raycaster = new THREE.Raycaster(position, dir);
-      const intersects = raycaster.intersectObject(earth);
+      // Analytical ray-sphere intersection
+      // Ray: p(t) = origin + t*direction
+      // Sphere: |p - center|^2 = R^2
+      // Solving quadratic equation: at^2 + bt + c = 0
+      const a = dir.lengthSq();
+      const b = 2.0 * position.dot(dir);
+      const EARTH_RADIUS = 6371.0;
+      const c = position.lengthSq() - EARTH_RADIUS * EARTH_RADIUS;
 
-      if (intersects.length > 0) {
-        const surfPt = intersects[0].point.clone().multiplyScalar(1.003);
+      const discriminant = b * b - 4 * a * c;
+      if (discriminant >= 0) {
+        // Get closest intersection (smaller t)
+        const t = (-b - Math.sqrt(discriminant)) / (2 * a);
+        const intersectionPoint = position
+          .clone()
+          .add(dir.clone().multiplyScalar(t));
+        const surfPt = intersectionPoint.clone().multiplyScalar(1.003);
         curvePoints.push(surfPt);
       } else {
         return None;
