@@ -27,6 +27,13 @@ export function getSavedScripts(): Record<string, SavedScript> {
   return saved ? JSON.parse(saved) : {};
 }
 
+export function deleteScript(name: string): void {
+  const scripts = getSavedScripts();
+  delete scripts[name];
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(scripts));
+  updateScriptSelector();
+}
+
 export function updateScriptSelector(): void {
   const selector = document.getElementById(
     'saved-scripts',

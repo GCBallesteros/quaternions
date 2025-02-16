@@ -5,6 +5,7 @@ import {
   updateScriptSelector,
   getSavedScripts,
   SavedScript,
+  deleteScript,
 } from '../storage.js';
 import { Option, None, Some } from 'ts-results';
 
@@ -294,8 +295,20 @@ export function setupEditor(
           item.className = 'script-item';
           item.innerHTML = `
             <span class="script-name">${script.name}</span>
-            <span class="script-date">${new Date(script.timestamp).toLocaleString()}</span>
+            <div style="display: flex; align-items: center;">
+              <span class="script-date">${new Date(script.timestamp).toLocaleString()}</span>
+              <span class="delete-script" title="Delete script">🗑️</span>
+            </div>
           `;
+          const deleteBtn = item.querySelector('.delete-script') as HTMLElement;
+          deleteBtn.onclick = (e) => {
+            e.stopPropagation();
+            if (confirm(`Delete script "${script.name}"?`)) {
+              deleteScript(script.name);
+              scriptList.removeChild(item);
+            }
+          };
+
           item.onclick = () => {
             editor.setValue(script.content);
             modal.classList.remove('active');
