@@ -1,28 +1,26 @@
+import { render } from 'lit-html';
 import { State } from '../types.js';
-import { createRangeInput } from '../components/rangeInput.js';
+import { settingsTemplate } from './settingsTemplates.js';
 
 export function setupLighting(state: State): void {
-  // Setup sun light toggle
-  const sunToggle = document.getElementById('sun-toggle') as HTMLInputElement;
-  sunToggle.addEventListener('change', () => {
-    state.lights.sun.visible = sunToggle.checked;
-  });
+  const settingsContainer = document.getElementById('settings-container')!;
 
-  // Setup ambient light intensity control
-  const rangeInput = createRangeInput(
-    'Ambient Light',
-    'ambient-intensity',
-    '0',
-    '1',
-    '0.05',
-    '0.2',
-    (value: number) => {
-      state.lights.ambient.intensity = value;
-    },
-  );
+  // Setup event listeners
+  document.addEventListener('sun-toggle-change', ((e: CustomEvent) => {
+    state.lights.sun.visible = e.detail.checked;
+  }) as EventListener);
 
-  const lightingGroup = document.querySelector('.settings-group:nth-child(2)');
-  if (lightingGroup) {
-    lightingGroup.appendChild(rangeInput);
+  document.addEventListener('ambient-intensity-change', ((e: CustomEvent) => {
+    state.lights.ambient.intensity = e.detail.value;
+  }) as EventListener);
+
+  function updateSettings() {
+    render(settingsTemplate(state), settingsContainer);
   }
+
+  // Initial render
+  updateSettings();
+
+  // Setup periodic updates
+  setInterval(updateSettings, 250);
 }

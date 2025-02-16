@@ -9,13 +9,6 @@ import { setupResizer } from './ui/resize.js';
 import { setupTabs } from './ui/tabs.js';
 import { utcDate } from './utils.js';
 
-export function updateTimeDisplay(state: State) {
-  const timeElement = document.getElementById('current-time');
-  if (timeElement) {
-    timeElement.textContent = state.currentTime.toISOString();
-  }
-}
-
 export function setupUI(
   state: State,
   executeCommand: (command: string) => void,

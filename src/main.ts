@@ -1,6 +1,6 @@
 import { createAnimator, initScene, initializeCanvas } from './init.js';
 import { buildExecuteCommand } from './terminal.js';
-import { updateTimeDisplay, setupUI } from './ui.js';
+import { setupUI } from './ui.js';
 import { getPositionOfPoint } from './utils.js';
 
 import { buildCommandClosures } from './commands.js';
@@ -24,9 +24,6 @@ const switchCamera = createAnimator(renderer, scene, state, camera);
 const commands = buildCommandClosures(scene, state, switchCamera);
 
 let executeCommand = buildExecuteCommand(commands, state, switchCamera);
-
-// Initialize time display
-updateTimeDisplay(state);
 
 // Update all lines in the registry before each render
 function updateAllLines(): void {

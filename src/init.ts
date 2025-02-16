@@ -7,7 +7,6 @@ import { _createLine, _mov, _setTime, addFrame } from './core.js';
 import { makeEarth } from './earth.js';
 import { makeMoon } from './moon.js';
 import { State } from './types.js';
-import { updateTimeDisplay } from './ui.js';
 import { setupTimeControls } from './components/timeControls.js';
 import { log } from './logger.js';
 import { updatePlots } from './plots.js';
@@ -113,8 +112,6 @@ export function createAnimator(
       );
       _setTime(state, simulatedTime);
     }
-
-    updateTimeDisplay(state);
 
     // Update all plots when time is flowing
     if (state.isTimeFlowing) {
