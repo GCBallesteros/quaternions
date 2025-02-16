@@ -358,26 +358,6 @@ input:checked + .slider:before {
   background-color: #0056b3;
 }
 
-#saved-scripts {
-  flex: 1;
-  background-color: #1e1e1e;
-  color: white;
-  border: 1px solid #333;
-  padding: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
-}
-
-#saved-scripts:hover {
-  border-color: #007bff;
-}
-
-#saved-scripts option {
-  background-color: #1e1e1e;
-  color: white;
-  padding: 4px;
-}
 
 /* Modal Dialog */
 .modal-overlay {
