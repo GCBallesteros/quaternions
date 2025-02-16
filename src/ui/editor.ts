@@ -7,6 +7,7 @@ import {
   SavedScript,
   deleteScript,
 } from '../storage.js';
+import { cheatsheetContent } from '../cheatsheet.js';
 import { Option, None, Some } from 'ts-results';
 
 export const satelliteScript = `// %% Reset
@@ -345,22 +346,22 @@ export function setupEditor(
   const cheatsheetLink = document.getElementById('cheatsheet-link');
   const cheatsheetModal = document.getElementById('cheatsheet-modal');
   const closeCheatsheet = document.getElementById('close-cheatsheet');
-  const cheatsheetContent = document.getElementById('cheatsheet-content');
+  const cheatsheetContentEl = document.getElementById('cheatsheet-content');
 
   if (
     cheatsheetLink &&
     cheatsheetModal &&
     closeCheatsheet &&
-    cheatsheetContent
+    cheatsheetContentEl
   ) {
     // Load cheatsheet content
-    fetch('/cheatsheet.html')
-      .then((response) => response.text())
-      .then((html) => {
-        // Replace platform-specific shortcuts
-        const processedHtml = html.replace(/⌘\/Ctrl/g, isMac ? '⌘' : 'Ctrl');
-        cheatsheetContent.innerHTML = processedHtml;
-      });
+    if (cheatsheetContent) {
+      const processedContent = cheatsheetContent.replace(
+        /⌘\/Ctrl/g,
+        isMac ? '⌘' : 'Ctrl',
+      );
+      cheatsheetContentEl.innerHTML = processedContent;
+    }
 
     // Show cheatsheet
     cheatsheetLink.addEventListener('click', (e) => {
