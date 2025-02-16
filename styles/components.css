@@ -335,7 +335,8 @@ input:checked + .slider:before {
 }
 
 #execute-script,
-#execute-cell {
+#execute-cell,
+#save-script {
   background-color: #007bff;
   color: white;
   border: none;
@@ -348,14 +349,37 @@ input:checked + .slider:before {
 }
 
 #execute-script .shortcut,
-#execute-cell .shortcut {
+#execute-cell .shortcut,
+#save-script .shortcut {
   font-size: 12px;
   opacity: 0.8;
 }
 
 #execute-script:hover,
-#execute-cell:hover {
+#execute-cell:hover,
+#save-script:hover {
   background-color: #0056b3;
+}
+
+#saved-scripts {
+  flex: 1;
+  background-color: #1e1e1e;
+  color: white;
+  border: 1px solid #333;
+  padding: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+}
+
+#saved-scripts:hover {
+  border-color: #007bff;
+}
+
+#saved-scripts option {
+  background-color: #1e1e1e;
+  color: white;
+  padding: 4px;
 }
 
 #time-controls {

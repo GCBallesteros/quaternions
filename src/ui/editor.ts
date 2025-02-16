@@ -1,4 +1,5 @@
 import * as monaco from 'monaco-editor';
+import { loadScript, saveScript, updateScriptSelector } from '../storage.js';
 import { Option, None, Some } from 'ts-results';
 
 export const satelliteScript = `// %% Reset
@@ -185,6 +186,35 @@ export function setupEditor(
   const executeCellButton = document.getElementById('execute-cell')!;
   executeCellButton.innerHTML = `Execute Cell<br><span class="shortcut">(⇧+↵)</span>`;
   executeCellButton.addEventListener('click', () => executeCell());
+
+  const saveScriptButton = document.getElementById('save-script')!;
+  saveScriptButton.innerHTML = `Save Script<br><span class="shortcut">(${modifierKey}+S)</span>`;
+  saveScriptButton.addEventListener('click', () => {
+    const name = prompt('Enter a name for this script:');
+    if (name) {
+      saveScript(name, editor.getValue());
+    }
+  });
+
+  document.getElementById('saved-scripts')?.addEventListener('change', (e) => {
+    const select = e.target as HTMLSelectElement;
+    const scriptName = select.value;
+    if (scriptName) {
+      const content = loadScript(scriptName);
+      if (content) {
+        editor.setValue(content);
+      }
+      select.value = ''; // Reset selector to placeholder
+    }
+  });
+
+  // Add save shortcut
+  editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () =>
+    saveScriptButton.click(),
+  );
+
+  // Initialize saved scripts selector
+  updateScriptSelector();
 
   // Add keyboard shortcuts
   editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, executeCell);
