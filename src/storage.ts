@@ -1,6 +1,6 @@
 const STORAGE_KEY = 'quaternions_saved_scripts';
 
-interface SavedScript {
+export interface SavedScript {
   name: string;
   content: string;
   timestamp: number;
