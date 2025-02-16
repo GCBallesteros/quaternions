@@ -379,6 +379,89 @@ input:checked + .slider:before {
   padding: 4px;
 }
 
+/* Modal Dialog */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-dialog {
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 20px;
+  width: 400px;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+}
+
+.modal-title {
+  color: #fff;
+  margin: 0 0 15px 0;
+  font-size: 16px;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 8px;
+  background: #333;
+  border: 1px solid #555;
+  color: #fff;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.modal-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.modal-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.modal-button.primary {
+  background: #007bff;
+  color: #fff;
+}
+
+.modal-button.primary:hover {
+  background: #0056b3;
+}
+
+.modal-button.secondary {
+  background: #333;
+  color: #fff;
+}
+
+.modal-button.secondary:hover {
+  background: #444;
+}
+
 #time-controls {
   position: absolute;
   bottom: 20px;
