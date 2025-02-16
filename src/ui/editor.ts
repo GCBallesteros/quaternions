@@ -357,7 +357,9 @@ export function setupEditor(
     fetch('/cheatsheet.html')
       .then((response) => response.text())
       .then((html) => {
-        cheatsheetContent.innerHTML = html;
+        // Replace platform-specific shortcuts
+        const processedHtml = html.replace(/⌘\/Ctrl/g, isMac ? '⌘' : 'Ctrl');
+        cheatsheetContent.innerHTML = processedHtml;
       });
 
     // Show cheatsheet
