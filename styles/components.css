@@ -418,7 +418,6 @@ input:checked + .slider:before {
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  border-bottom: 1px solid #333;
 }
 
 .close-button {
@@ -445,6 +444,42 @@ input:checked + .slider:before {
   padding: 20px;
   overflow-y: auto;
   height: calc(90vh - 73px);
+  color: #fff;
+}
+
+.cheatsheet-section {
+  margin-bottom: 40px;
+}
+
+.cheatsheet-section h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #007bff;
+}
+
+.cheatsheet-section p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.shortcut-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px 24px;
+  align-items: center;
+}
+
+.shortcut-key {
+  font-family: monospace;
+  background: #333;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.shortcut-description {
+  color: #ccc;
 }
 
 .modal-title {
