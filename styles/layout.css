@@ -23,6 +23,8 @@
   background-color: #333;
   z-index: 1;
   position: relative;
+  display: flex;
+  align-items: flex-start;
 }
 
 #editor-container {
