@@ -14,7 +14,7 @@ function createPlotElement(
   plotElement.className = 'plot-item';
 
   // Create header div for ID and download button
-  render(plotTemplate(plotId, plot.title), plotElement);
+  render(plotTemplate(plotId), plotElement);
 
   const downloadButton = plotElement.querySelector('.plot-download-button');
   if (downloadButton) {
