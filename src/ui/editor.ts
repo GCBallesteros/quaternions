@@ -1,5 +1,11 @@
 import * as monaco from 'monaco-editor';
-import { loadScript, saveScript, updateScriptSelector } from '../storage.js';
+import {
+  loadScript,
+  saveScript,
+  updateScriptSelector,
+  getSavedScripts,
+  SavedScript,
+} from '../storage.js';
 import { Option, None, Some } from 'ts-results';
 
 export const satelliteScript = `// %% Reset
@@ -199,9 +205,10 @@ export function setupEditor(
         (e) => {
           if ((e.metaKey || e.ctrlKey) && e.key === 's') {
             e.preventDefault();
+            e.stopPropagation();
           }
         },
-        { once: true },
+        { capture: true },
       );
 
       const modal = document.querySelector('#save-dialog') as HTMLElement;
@@ -250,16 +257,17 @@ export function setupEditor(
     id: 'open-script',
     label: 'Open Script',
     keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyO],
-    run: () => {
+    run: (ed) => {
       // Prevent default browser open
       window.addEventListener(
         'keydown',
         (e) => {
           if ((e.metaKey || e.ctrlKey) && e.key === 'o') {
             e.preventDefault();
+            e.stopPropagation();
           }
         },
-        { once: true },
+        { capture: true },
       );
 
       const modal = document.querySelector('#open-dialog') as HTMLElement;
@@ -272,7 +280,7 @@ export function setupEditor(
       const scripts = getSavedScripts();
       scriptList.innerHTML = '';
       Object.values(scripts)
-        .sort((a, b) => b.timestamp - a.timestamp)
+        .sort((a: SavedScript, b: SavedScript) => b.timestamp - a.timestamp)
         .forEach((script) => {
           const item = document.createElement('div');
           item.className = 'script-item';
