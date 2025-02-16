@@ -341,6 +341,44 @@ export function setupEditor(
     },
   });
 
+  // Setup cheatsheet functionality
+  const cheatsheetLink = document.getElementById('cheatsheet-link');
+  const cheatsheetModal = document.getElementById('cheatsheet-modal');
+  const closeCheatsheet = document.getElementById('close-cheatsheet');
+  const cheatsheetContent = document.getElementById('cheatsheet-content');
+
+  if (
+    cheatsheetLink &&
+    cheatsheetModal &&
+    closeCheatsheet &&
+    cheatsheetContent
+  ) {
+    // Load cheatsheet content
+    fetch('/cheatsheet.html')
+      .then((response) => response.text())
+      .then((html) => {
+        cheatsheetContent.innerHTML = html;
+      });
+
+    // Show cheatsheet
+    cheatsheetLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      cheatsheetModal.classList.add('active');
+    });
+
+    // Hide cheatsheet
+    closeCheatsheet.addEventListener('click', () => {
+      cheatsheetModal.classList.remove('active');
+    });
+
+    // Close on escape key
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && cheatsheetModal.classList.contains('active')) {
+        cheatsheetModal.classList.remove('active');
+      }
+    });
+  }
+
   // Update the selector placeholder to show the correct modifier key
   const savedScriptsSelect = document.getElementById(
     'saved-scripts',

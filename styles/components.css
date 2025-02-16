@@ -406,6 +406,47 @@ input:checked + .slider:before {
   font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
 }
 
+.modal-dialog.fullscreen {
+  width: 90vw;
+  height: 90vh;
+  max-width: 1200px;
+  padding: 0;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #333;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.close-button:hover {
+  background: #333;
+  color: #fff;
+}
+
+.modal-content {
+  padding: 20px;
+  overflow-y: auto;
+  height: calc(90vh - 73px);
+}
+
 .modal-title {
   color: #fff;
   margin: 0 0 15px 0;
