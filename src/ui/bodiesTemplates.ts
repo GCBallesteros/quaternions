@@ -2,7 +2,18 @@ import { html } from 'lit-html';
 import { Point } from '../points/point.js';
 import { OrientedPoint } from '../points/orientedPoint.js';
 import { Satellite } from '../points/satellite.js';
-import { State } from '../types.js';
+import { State, Vector3 } from '../types.js';
+import { NamedTargets } from '../points/satellite.js';
+
+function formatTargetVector(target: Vector3 | NamedTargets): string {
+  if (typeof target === 'object' && target !== null && 'type' in target) {
+    if (target.type === 'TargetPointing') {
+      return `TargetPointing(${JSON.stringify(target.target)})`;
+    }
+    return target.type;
+  }
+  return JSON.stringify(target);
+}
 
 export const moonTemplate = (moonPos: {
   x: number;
@@ -22,30 +33,90 @@ export const moonTemplate = (moonPos: {
   </div>
 `;
 
-export const bodiesTemplate = (
-  state: State,
-  expandedPoints: Set<string>,
-) => html`
-  ${moonTemplate({
-    x: Math.round(state.bodies.moon.position.x),
-    y: Math.round(state.bodies.moon.position.y),
-    z: Math.round(state.bodies.moon.position.z),
-    angle: Math.round((state.bodies.moon as any).phase || 0),
-  })}
-  <div class="settings-group">
-    <h3>Points</h3>
-    <div id="points-list">
-      ${Object.entries(state.points).map(([name, point]) => {
-        const type =
-          point instanceof Satellite
-            ? 'Satellite'
-            : point instanceof OrientedPoint
-              ? 'OrientedPoint'
-              : 'Point';
-        return pointItemTemplate(name, type, point, expandedPoints.has(name));
-      })}
-    </div>
+const trailToggleTemplate = (satellite: Satellite) => html`
+  <div class="trail-toggle">
+    <label class="switch">
+      <input
+        type="checkbox"
+        class="trail-switch"
+        ?checked=${satellite.hasTrail}
+        @change=${(e: Event) => {
+          const checked = (e.target as HTMLInputElement).checked;
+          if (checked) {
+            satellite.enableTrail();
+          } else {
+            satellite.disableTrail();
+          }
+        }}
+      />
+      <span class="slider"></span>
+    </label>
+    <span class="camera-icon active">📷</span>
   </div>
+`;
+
+const satelliteOrientationTemplate = (satellite: Satellite) => html`
+  <div>
+    Orientation Mode: ${satellite.orientationMode.type}
+    ${satellite.orientationMode.type === 'dynamic'
+      ? html`
+          <div style="margin-left: 10px;">
+            Primary: ${(satellite.orientationMode as any).primaryBodyVector} →
+            ${formatTargetVector(
+              (satellite.orientationMode as any).primaryTargetVector,
+            )}<br />
+            Secondary: ${(satellite.orientationMode as any).secondaryBodyVector}
+            →
+            ${formatTargetVector(
+              (satellite.orientationMode as any).secondaryTargetVector,
+            )}
+          </div>
+        `
+      : html`
+          <div style="margin-left: 10px;">
+            Fixed quaternion:
+            [${(satellite.orientationMode as any).ecef_quaternion
+              .map((v) => v.toFixed(3))
+              .join(', ')}]
+          </div>
+        `}
+  </div>
+`;
+
+const cameraDetailsTemplate = (point: OrientedPoint) => html`
+  <div>
+    Camera: ${point.camera ? 'Present' : 'None'}
+    ${point.camera
+      ? html`
+          <div style="margin-left: 10px;">
+            Body Orientation:
+            [${point.camera_orientation?.map((v) => v.toFixed(3))?.join(', ') ??
+            'default'}]
+          </div>
+        `
+      : ''}
+  </div>
+`;
+
+const pointDetailsTemplate = (type: string, point: Point) => html`
+  <div>Position: [${point.position.map((v) => v.toFixed(2)).join(', ')}]</div>
+  ${type !== 'Point'
+    ? html`
+        <div>
+          Quaternion:
+          [${point.geometry.quaternion
+            .toArray()
+            .map((v) => v.toFixed(3))
+            .join(', ')}]
+        </div>
+        ${type === 'Satellite'
+          ? html`
+              ${satelliteOrientationTemplate(point as Satellite)}
+              ${cameraDetailsTemplate(point as OrientedPoint)}
+            `
+          : cameraDetailsTemplate(point as OrientedPoint)}
+      `
+    : ''}
 `;
 
 export const pointItemTemplate = (
@@ -78,85 +149,38 @@ export const pointItemTemplate = (
       />
       <span class="point-name">${name}</span>
       ${type === 'Satellite' && (point as OrientedPoint).camera
-        ? html`
-            <div class="trail-toggle">
-              <label class="switch">
-                <input
-                  type="checkbox"
-                  class="trail-switch"
-                  ?checked=${(point as Satellite).hasTrail}
-                  @change=${(e: Event) => {
-                    const satellite = point as Satellite;
-                    const checked = (e.target as HTMLInputElement).checked;
-                    if (checked) {
-                      satellite.enableTrail();
-                    } else {
-                      satellite.disableTrail();
-                    }
-                  }}
-                />
-                <span class="slider"></span>
-              </label>
-              <span class="camera-icon active">📷</span>
-            </div>
-          `
+        ? trailToggleTemplate(point as Satellite)
         : ''}
       <span class="point-type">${type}</span>
     </div>
     <div class="point-details ${isExpanded ? 'expanded' : ''}">
-      <div>
-        Position: [${point.position.map((v) => v.toFixed(2)).join(', ')}]
-      </div>
-      ${type !== 'Point'
-        ? html`
-            <div>
-              Quaternion:
-              [${point.geometry.quaternion
-                .toArray()
-                .map((v) => v.toFixed(3))
-                .join(', ')}]
-            </div>
-            ${type === 'Satellite'
-              ? html`
-                  <div>
-                    Orientation Mode:
-                    ${(point as Satellite).orientationMode.type}
-                    ${(point as Satellite).orientationMode.type === 'dynamic'
-                      ? html`
-                          <div style="margin-left: 10px;">
-                            Primary:
-                            ${((point as Satellite).orientationMode as any)
-                              .primaryBodyVector}
-                            →
-                            ${JSON.stringify(
-                              ((point as Satellite).orientationMode as any)
-                                .primaryTargetVector,
-                            )}<br />
-                            Secondary:
-                            ${((point as Satellite).orientationMode as any)
-                              .secondaryBodyVector}
-                            →
-                            ${JSON.stringify(
-                              ((point as Satellite).orientationMode as any)
-                                .secondaryTargetVector,
-                            )}
-                          </div>
-                        `
-                      : html`
-                          <div style="margin-left: 10px;">
-                            Fixed quaternion:
-                            [${(
-                              (point as Satellite).orientationMode as any
-                            ).ecef_quaternion
-                              .map((v) => v.toFixed(3))
-                              .join(', ')}]
-                          </div>
-                        `}
-                  </div>
-                `
-              : ''}
-          `
-        : ''}
+      ${pointDetailsTemplate(type, point)}
+    </div>
+  </div>
+`;
+
+export const bodiesTemplate = (
+  state: State,
+  expandedPoints: Set<string>,
+) => html`
+  ${moonTemplate({
+    x: Math.round(state.bodies.moon.position.x),
+    y: Math.round(state.bodies.moon.position.y),
+    z: Math.round(state.bodies.moon.position.z),
+    angle: Math.round((state.bodies.moon as any).phase || 0),
+  })}
+  <div class="settings-group">
+    <h3>Points</h3>
+    <div id="points-list">
+      ${Object.entries(state.points).map(([name, point]) => {
+        const type =
+          point instanceof Satellite
+            ? 'Satellite'
+            : point instanceof OrientedPoint
+              ? 'OrientedPoint'
+              : 'Point';
+        return pointItemTemplate(name, type, point, expandedPoints.has(name));
+      })}
     </div>
   </div>
 `;
