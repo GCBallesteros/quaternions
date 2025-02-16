@@ -1,88 +1,74 @@
+import { html, render } from 'lit-html';
 import { _toggleSimTime } from '../core.js';
 import { State } from '../types.js';
 
 function formatSpeed(timeSpeedMultiplier: number): string {
   const absSpeed = Math.abs(timeSpeedMultiplier);
-  let speedText = '';
-  if (absSpeed === 0) {
-    speedText = 'Paused';
-  } else if (absSpeed < 1) {
-    speedText = `${timeSpeedMultiplier.toFixed(2)}x`;
-  } else if (absSpeed < 10) {
-    speedText = `${timeSpeedMultiplier.toFixed(1)}x`;
-  } else {
-    speedText = `${Math.round(timeSpeedMultiplier)}x`;
-  }
-
-  return speedText;
+  if (absSpeed === 0) return 'Paused';
+  if (absSpeed < 1) return `${timeSpeedMultiplier.toFixed(2)}x`;
+  if (absSpeed < 10) return `${timeSpeedMultiplier.toFixed(1)}x`;
+  return `${Math.round(timeSpeedMultiplier)}x`;
 }
 
-export function updateTimeControlUI(
-  isFlowing: boolean,
-  timeToggle: HTMLButtonElement,
+function timeControlsTemplate(
+  state: State,
+  handleTimeToggle: () => void,
+  handleSpeedChange: (e: Event) => void,
 ) {
-  if (isFlowing) {
-    timeToggle.classList.add('playing');
-    timeToggle.setAttribute('aria-label', 'Pause simulation');
-  } else {
-    timeToggle.classList.remove('playing');
-    timeToggle.setAttribute('aria-label', 'Play simulation');
-  }
+  return html`
+    <button
+      class="play-pause-btn ${state.isTimeFlowing ? 'playing' : ''}"
+      @click=${handleTimeToggle}
+      aria-label=${state.isTimeFlowing ? 'Pause simulation' : 'Play simulation'}
+    ></button>
+    <div class="slider-wrapper">
+      <div class="slider-marker"></div>
+      <input
+        type="range"
+        min="-1000"
+        max="1000"
+        value="100"
+        step="1"
+        class="time-slider"
+        @input=${handleSpeedChange}
+      />
+    </div>
+    <div id="time-speed-display">${formatSpeed(state.timeSpeedMultiplier)}</div>
+  `;
 }
 
-export function setupTimeControls(state: State) {
-  const timeToggleButton = document.getElementById(
-    'time-toggle',
-  ) as HTMLButtonElement;
-  const timeSlider = document.getElementById('time-speed') as HTMLInputElement;
+export function setupTimeControls(state: State): void {
+  const container = document.getElementById('time-controls');
+  if (!container) return;
 
-  timeToggleButton.addEventListener('click', () => {
+  function handleTimeToggle() {
     const result = _toggleSimTime(state);
     if (result.ok) {
-      updateTimeControlUI(result.val, timeToggleButton);
+      renderTimeControls();
     }
-  });
+  }
 
-  timeSlider.addEventListener('input', (e) => {
+  function handleSpeedChange(e: Event) {
     const value = parseInt((e.target as HTMLInputElement).value);
-    // Convert linear slider value to logarithmic speed
     if (value === 0) {
       state.timeSpeedMultiplier = 0;
     } else {
       const sign = Math.sign(value);
       const magnitude = Math.abs(value);
-      // Map 1-1000 to 1-1000 logarithmically
       const logSpeed = Math.exp(Math.log(1000) * (magnitude / 1000));
       state.timeSpeedMultiplier = sign * logSpeed;
     }
-
-    // Update speed display
-    const speedDisplay = document.getElementById('time-speed-display');
-    if (speedDisplay) {
-      const speedText = formatSpeed(state.timeSpeedMultiplier);
-      speedDisplay.textContent = speedText;
-    }
-  });
-
-  // Set initial state
-  if (state.isTimeFlowing) {
-    timeToggleButton.classList.add('playing');
-    timeToggleButton.setAttribute('aria-label', 'Pause simulation');
+    renderTimeControls();
   }
 
-  // Set initial speed multiplier
-  const initialValue = parseInt(timeSlider.value);
-  if (initialValue !== 0) {
-    const magnitude = Math.abs(initialValue);
-    const logSpeed = Math.exp(Math.log(1000) * (magnitude / 1000));
-    state.timeSpeedMultiplier = Math.sign(initialValue) * logSpeed;
+  function renderTimeControls() {
+    if (!container) return;
+    render(
+      timeControlsTemplate(state, handleTimeToggle, handleSpeedChange),
+      container,
+    );
   }
 
-  // Set initial speed display
-  const speedDisplay = document.getElementById('time-speed-display');
-  if (speedDisplay) {
-    const speedText = formatSpeed(state.timeSpeedMultiplier);
-    speedDisplay.textContent = speedText;
-    speedDisplay.textContent = speedText;
-  }
+  // Initial render
+  renderTimeControls();
 }
