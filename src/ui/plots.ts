@@ -5,6 +5,39 @@ import { plotTemplate } from './templates.js';
 export const workers = new Map<string, Worker>();
 export const canvases = new Map<string, HTMLCanvasElement>();
 
+function downloadPlotData(plotId: string, state: State) {
+  const plot = state.plots[plotId];
+  if (!plot) return;
+
+  // Create CSV content
+  const headers = ['Timestamp', ...plot.lines];
+  const rows = [headers];
+
+  // Add data rows
+  for (let i = 0; i < plot.data.currentIndex; i++) {
+    // Ensure we use UTC time consistently
+    const date = new Date(plot.data.timestamps[i]);
+    const timestamp = date.toISOString();
+    const values = plot.lines.map((line) =>
+      plot.data.values[line][i].toString(),
+    );
+    rows.push([timestamp, ...values]);
+  }
+
+  const csvContent = rows.map((row) => row.join(',')).join('\n');
+
+  // Create and trigger download
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${plot.title.replace(/\s+/g, '_')}_${new Date().toISOString()}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  window.URL.revokeObjectURL(url);
+}
+
 function createPlotElement(
   plotId: string,
   plot: Plot,
@@ -13,44 +46,10 @@ function createPlotElement(
   const plotElement = document.createElement('div');
   plotElement.className = 'plot-item';
 
-  // Create header div for ID and download button
-  render(plotTemplate(plotId), plotElement);
-
-  const downloadButton = plotElement.querySelector('.plot-download-button');
-  if (downloadButton) {
-    downloadButton.addEventListener('click', () => {
-      const plot = state.plots[plotId];
-      if (!plot) return;
-
-      // Create CSV content
-      const headers = ['Timestamp', ...plot.lines];
-      const rows = [headers];
-
-      // Add data rows
-      for (let i = 0; i < plot.data.currentIndex; i++) {
-        // Ensure we use UTC time consistently
-        const date = new Date(plot.data.timestamps[i]);
-        const timestamp = date.toISOString();
-        const values = plot.lines.map((line) =>
-          plot.data.values[line][i].toString(),
-        );
-        rows.push([timestamp, ...values]);
-      }
-
-      const csvContent = rows.map((row) => row.join(',')).join('\n');
-
-      // Create and trigger download
-      const blob = new Blob([csvContent], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${plot.title.replace(/\s+/g, '_')}_${new Date().toISOString()}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-    });
-  }
+  render(
+    plotTemplate(plotId, () => downloadPlotData(plotId, state)),
+    plotElement,
+  );
 
   const canvas = document.createElement('canvas');
   canvas.width = 800; // Set fixed size for OffscreenCanvas
