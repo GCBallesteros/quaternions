@@ -27,7 +27,6 @@ import { log } from './logger.js';
 import { OrientationMode } from './points/satellite.js';
 import { Point } from './points/point.js';
 import { CommandFunction, State, TleSource, Vector3 } from './types.js';
-import { updateTimeDisplay } from './ui.js';
 import {
   geo2xyz,
   getPositionOfPoint,
@@ -257,7 +256,6 @@ export function buildCommandClosures(
     if (!result.ok) {
       throw new Error(result.val);
     }
-    updateTimeDisplay(state);
   }
 
   function listPoints(): string[] {
