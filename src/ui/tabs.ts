@@ -1,24 +1,36 @@
+import { render } from 'lit-html';
 import * as monaco from 'monaco-editor';
+import { tabs, tabsTemplate } from './tabTemplates.js';
 
 export function setupTabs(editor: monaco.editor.IStandaloneCodeEditor): void {
-  const tabButtons = document.querySelectorAll('.tab-button');
-  const tabContents = document.querySelectorAll('.tab-content');
+  const tabsContainer = document.querySelector('#tab-container') as HTMLElement;
+  if (!tabsContainer) return;
 
-  tabButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-      const tabName = button.getAttribute('data-tab');
-
-      // Update active states
-      tabButtons.forEach((btn) => btn.classList.remove('active'));
-      tabContents.forEach((content) => content.classList.remove('active'));
-
-      button.classList.add('active');
-      document.getElementById(`${tabName}-container`)?.classList.add('active');
-
-      // Trigger Monaco editor resize if editor tab is activated
-      if (tabName === 'editor') {
-        editor.layout();
-      }
+  const handleTabClick = (tabId: string) => {
+    // Update tab contents
+    document.querySelectorAll('.tab-content').forEach((content) => {
+      content.classList.remove('active');
     });
-  });
+    document.getElementById(`${tabId}-container`)?.classList.add('active');
+
+    // Trigger Monaco editor resize if editor tab is activated
+    if (tabId === 'editor') {
+      editor.layout();
+    }
+
+    // Update tabs
+    updateTabs(tabId);
+  };
+
+  const updateTabs = (activeTabId: string) => {
+    const updatedTabs = tabs.map((tab) => ({
+      ...tab,
+      active: tab.id === activeTabId,
+    }));
+
+    render(tabsTemplate(updatedTabs, handleTabClick), tabsContainer);
+  };
+
+  // Initial render
+  updateTabs('editor');
 }
