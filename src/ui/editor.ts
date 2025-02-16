@@ -187,7 +187,7 @@ export function setupEditor(
   executeCellButton.innerHTML = `Execute Cell<br><span class="shortcut">(⇧+↵)</span>`;
   executeCellButton.addEventListener('click', () => executeCell());
 
-  // Add save shortcut
+  // Add save and open shortcuts
   editor.addAction({
     id: 'save-script',
     label: 'Save Script',
@@ -245,12 +245,71 @@ export function setupEditor(
     },
   });
 
+  // Add open shortcut
+  editor.addAction({
+    id: 'open-script',
+    label: 'Open Script',
+    keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyO],
+    run: () => {
+      // Prevent default browser open
+      window.addEventListener(
+        'keydown',
+        (e) => {
+          if ((e.metaKey || e.ctrlKey) && e.key === 'o') {
+            e.preventDefault();
+          }
+        },
+        { once: true },
+      );
+
+      const modal = document.querySelector('#open-dialog') as HTMLElement;
+      const scriptList = modal.querySelector('.script-list') as HTMLElement;
+      const cancelBtn = document.querySelector(
+        '#cancel-open',
+      ) as HTMLButtonElement;
+
+      // Populate script list
+      const scripts = getSavedScripts();
+      scriptList.innerHTML = '';
+      Object.values(scripts)
+        .sort((a, b) => b.timestamp - a.timestamp)
+        .forEach((script) => {
+          const item = document.createElement('div');
+          item.className = 'script-item';
+          item.innerHTML = `
+            <span class="script-name">${script.name}</span>
+            <span class="script-date">${new Date(script.timestamp).toLocaleString()}</span>
+          `;
+          item.onclick = () => {
+            editor.setValue(script.content);
+            modal.classList.remove('active');
+          };
+          scriptList.appendChild(item);
+        });
+
+      modal.classList.add('active');
+
+      const handleCancel = () => {
+        modal.classList.remove('active');
+      };
+
+      const handleKeydown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          handleCancel();
+        }
+      };
+
+      cancelBtn.onclick = handleCancel;
+      window.addEventListener('keydown', handleKeydown, { once: true });
+    },
+  });
+
   // Update the selector placeholder to show the correct modifier key
   const savedScriptsSelect = document.getElementById(
     'saved-scripts',
   ) as HTMLSelectElement;
   if (savedScriptsSelect) {
-    savedScriptsSelect.options[0].text = `Load saved script... (${modifierKey}+S to save)`;
+    savedScriptsSelect.options[0].text = `Load saved script... (${modifierKey}+S to save, ${modifierKey}+O to browse)`;
   }
 
   document.getElementById('saved-scripts')?.addEventListener('change', (e) => {
