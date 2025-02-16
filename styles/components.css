@@ -335,8 +335,7 @@ input:checked + .slider:before {
 }
 
 #execute-script,
-#execute-cell,
-#save-script {
+#execute-cell {
   background-color: #007bff;
   color: white;
   border: none;
@@ -349,15 +348,13 @@ input:checked + .slider:before {
 }
 
 #execute-script .shortcut,
-#execute-cell .shortcut,
-#save-script .shortcut {
+#execute-cell .shortcut {
   font-size: 12px;
   opacity: 0.8;
 }
 
 #execute-script:hover,
-#execute-cell:hover,
-#save-script:hover {
+#execute-cell:hover {
   background-color: #0056b3;
 }
 

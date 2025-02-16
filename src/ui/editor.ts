@@ -187,14 +187,37 @@ export function setupEditor(
   executeCellButton.innerHTML = `Execute Cell<br><span class="shortcut">(⇧+↵)</span>`;
   executeCellButton.addEventListener('click', () => executeCell());
 
-  const saveScriptButton = document.getElementById('save-script')!;
-  saveScriptButton.innerHTML = `Save Script<br><span class="shortcut">(${modifierKey}+S)</span>`;
-  saveScriptButton.addEventListener('click', () => {
-    const name = prompt('Enter a name for this script:');
-    if (name) {
-      saveScript(name, editor.getValue());
-    }
+  // Add save shortcut
+  editor.addAction({
+    id: 'save-script',
+    label: 'Save Script',
+    keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS],
+    run: (ed) => {
+      // Prevent default browser save
+      window.addEventListener(
+        'keydown',
+        (e) => {
+          if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+            e.preventDefault();
+          }
+        },
+        { once: true },
+      );
+
+      const name = prompt('Enter a name for this script:');
+      if (name) {
+        saveScript(name, ed.getValue());
+      }
+    },
   });
+
+  // Update the selector placeholder to show the correct modifier key
+  const savedScriptsSelect = document.getElementById(
+    'saved-scripts',
+  ) as HTMLSelectElement;
+  if (savedScriptsSelect) {
+    savedScriptsSelect.options[0].text = `Load saved script... (${modifierKey}+S to save)`;
+  }
 
   document.getElementById('saved-scripts')?.addEventListener('change', (e) => {
     const select = e.target as HTMLSelectElement;
@@ -207,11 +230,6 @@ export function setupEditor(
       select.value = ''; // Reset selector to placeholder
     }
   });
-
-  // Add save shortcut
-  editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () =>
-    saveScriptButton.click(),
-  );
 
   // Initialize saved scripts selector
   updateScriptSelector();
