@@ -543,16 +543,25 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
 
 export function _resumeSimTime(state: State): Result<boolean, string> {
   state.isTimeFlowing = true;
+  document
+    .querySelector('#time-controls')
+    ?.dispatchEvent(new Event('time-state-changed'));
   return Ok(true);
 }
 
 export function _pauseSimTime(state: State): Result<boolean, string> {
   state.isTimeFlowing = false;
+  document
+    .querySelector('#time-controls')
+    ?.dispatchEvent(new Event('time-state-changed'));
   return Ok(false);
 }
 
 export function _toggleSimTime(state: State): Result<boolean, string> {
   state.isTimeFlowing = !state.isTimeFlowing;
+  document
+    .querySelector('#time-controls')
+    ?.dispatchEvent(new Event('time-state-changed'));
   return Ok(state.isTimeFlowing);
 }
 
