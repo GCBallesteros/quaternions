@@ -41,6 +41,25 @@ export class Satellite extends OrientedPoint {
   public trail: Trail | null = null;
   public hasTrail: boolean = false;
 
+  public enableTrail(): void {
+    if (!this.hasTrail && this.camera) {
+      this.trail = new Trail(
+        this.geometry,
+        this.geometry.position,
+        this.geometry.parent as THREE.Scene,
+      );
+      this.hasTrail = true;
+    }
+  }
+
+  public disableTrail(): void {
+    if (this.trail) {
+      this.trail.dispose();
+      this.trail = null;
+      this.hasTrail = false;
+    }
+  }
+
   get orientationMode(): OrientationMode {
     return this._orientationMode;
   }

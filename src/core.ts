@@ -533,23 +533,10 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
     }
   }
 
-  // Update moon position and phase display
+  // Update moon position and phase
   const moonData = getMoonPosition(state.currentTime);
   state.bodies.moon.position.set(...moonData.position);
-
-  // TODO: Use moonData.phase to turn the moon so that it always points the same way
-  document.getElementById('moon-x')!.textContent = Math.round(
-    moonData.position[0],
-  ).toString();
-  document.getElementById('moon-y')!.textContent = Math.round(
-    moonData.position[1],
-  ).toString();
-  document.getElementById('moon-z')!.textContent = Math.round(
-    moonData.position[2],
-  ).toString();
-  document.getElementById('moon-angle')!.textContent = Math.round(
-    moonData.phase,
-  ).toString();
+  (state.bodies.moon as any).phase = moonData.phase;
 
   return Ok(null);
 }
