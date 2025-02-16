@@ -10,8 +10,10 @@
   cursor: pointer;
 }
 
-.switch-container.large {
-  transform: scale(1.2);
+.switch-container {
+  display: flex;
+  align-items: center;
+  height: 30px;
   margin: 16px 0;
 }
 
