@@ -1,8 +1,29 @@
 import { html } from 'lit-html';
 import { State } from '../types.js';
 import { utcDate } from '../utils.js';
-
 import { createTimeInput } from './timeInput.js';
+
+function handleTimeUpdate(executeCommand: (command: string) => void) {
+  const dateInput = document.getElementById('sim-date') as HTMLInputElement;
+  const hoursInput = document.getElementById('sim-hours') as HTMLInputElement;
+  const minutesInput = document.getElementById('sim-minutes') as HTMLInputElement;
+  const secondsInput = document.getElementById('sim-seconds') as HTMLInputElement;
+
+  const dateComponents = dateInput.value.split('-').map((n) => parseInt(n));
+  const dateResult = utcDate(
+    dateComponents[0],
+    dateComponents[1],
+    dateComponents[2],
+    parseInt(hoursInput.value),
+    parseInt(minutesInput.value),
+    parseInt(secondsInput.value),
+  );
+  if (dateResult.ok) {
+    executeCommand(`setTime(new Date("${dateResult.val.toISOString()}"))`);
+  } else {
+    console.log(dateResult.val);
+  }
+}
 
 export const timeTemplate = (
   currentTime: Date,
@@ -72,31 +93,6 @@ export const settingsTemplate = (
   state: State,
   executeCommand: (command: string) => void,
 ) => html`
-  // AI! Refactor this function to a function
-  ${timeTemplate(state.currentTime, () => {
-    const dateInput = document.getElementById('sim-date') as HTMLInputElement;
-    const hoursInput = document.getElementById('sim-hours') as HTMLInputElement;
-    const minutesInput = document.getElementById(
-      'sim-minutes',
-    ) as HTMLInputElement;
-    const secondsInput = document.getElementById(
-      'sim-seconds',
-    ) as HTMLInputElement;
-
-    const dateComponents = dateInput.value.split('-').map((n) => parseInt(n));
-    const dateResult = utcDate(
-      dateComponents[0],
-      dateComponents[1],
-      dateComponents[2],
-      parseInt(hoursInput.value),
-      parseInt(minutesInput.value),
-      parseInt(secondsInput.value),
-    );
-    if (dateResult.ok) {
-      executeCommand(`setTime(new Date("${dateResult.val.toISOString()}"))`);
-    } else {
-      console.log(dateResult.val);
-    }
-  })}
+  ${timeTemplate(state.currentTime, () => handleTimeUpdate(executeCommand))}
   ${lightingTemplate(state.lights.sun.visible, state.lights.ambient.intensity)}
 `;
