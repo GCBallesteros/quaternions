@@ -72,6 +72,7 @@ export const settingsTemplate = (
   state: State,
   executeCommand: (command: string) => void,
 ) => html`
+  // AI! Refactor this function to a function
   ${timeTemplate(state.currentTime, () => {
     const dateInput = document.getElementById('sim-date') as HTMLInputElement;
     const hoursInput = document.getElementById('sim-hours') as HTMLInputElement;
