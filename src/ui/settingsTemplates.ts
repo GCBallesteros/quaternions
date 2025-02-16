@@ -1,10 +1,18 @@
 import { html } from 'lit-html';
 import { State } from '../types.js';
+import { utcDate } from '../utils.js';
 
-export const timeTemplate = (currentTime: string) => html`
+import { createTimeInput } from './timeInput.js';
+
+export const timeTemplate = (
+  currentTime: Date,
+  onTimeUpdate: () => void,
+) => html`
   <div class="settings-group">
     <h3>UTC Time</h3>
-    <div id="current-time">${currentTime}</div>
+    <div id="current-time">${currentTime.toISOString()}</div>
+    ${createTimeInput(currentTime)}
+    <button id="update-time" @click=${onTimeUpdate}>Update Time</button>
   </div>
 `;
 
@@ -60,7 +68,34 @@ export const lightingTemplate = (
   </div>
 `;
 
-export const settingsTemplate = (state: State) => html`
-  ${timeTemplate(state.currentTime.toISOString())}
+export const settingsTemplate = (
+  state: State,
+  executeCommand: (command: string) => void,
+) => html`
+  ${timeTemplate(state.currentTime, () => {
+    const dateInput = document.getElementById('sim-date') as HTMLInputElement;
+    const hoursInput = document.getElementById('sim-hours') as HTMLInputElement;
+    const minutesInput = document.getElementById(
+      'sim-minutes',
+    ) as HTMLInputElement;
+    const secondsInput = document.getElementById(
+      'sim-seconds',
+    ) as HTMLInputElement;
+
+    const dateComponents = dateInput.value.split('-').map((n) => parseInt(n));
+    const dateResult = utcDate(
+      dateComponents[0],
+      dateComponents[1],
+      dateComponents[2],
+      parseInt(hoursInput.value),
+      parseInt(minutesInput.value),
+      parseInt(secondsInput.value),
+    );
+    if (dateResult.ok) {
+      executeCommand(`setTime(new Date("${dateResult.val.toISOString()}"))`);
+    } else {
+      console.log(dateResult.val);
+    }
+  })}
   ${lightingTemplate(state.lights.sun.visible, state.lights.ambient.intensity)}
 `;

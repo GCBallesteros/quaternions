@@ -1,8 +1,12 @@
 import { render } from 'lit-html';
 import { State } from '../types.js';
 import { settingsTemplate } from './settingsTemplates.js';
+import { utcDate } from '../utils.js';
 
-export function setupLighting(state: State): void {
+export function setupLighting(
+  state: State,
+  executeCommand: (command: string) => void,
+): void {
   const settingsContainer = document.getElementById('settings-container')!;
 
   // Setup event listeners
@@ -15,7 +19,7 @@ export function setupLighting(state: State): void {
   }) as EventListener);
 
   function updateSettings() {
-    render(settingsTemplate(state), settingsContainer);
+    render(settingsTemplate(state, executeCommand), settingsContainer);
   }
 
   // Initial render
