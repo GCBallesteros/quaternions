@@ -199,18 +199,6 @@ export function setupEditor(
     label: 'Save Script',
     keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS],
     run: (ed) => {
-      // Prevent default browser save
-      window.addEventListener(
-        'keydown',
-        (e) => {
-          if ((e.metaKey || e.ctrlKey) && e.key === 's') {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-        },
-        { capture: true },
-      );
-
       const modal = document.querySelector('#save-dialog') as HTMLElement;
       const input = document.querySelector(
         '#script-name-input',
@@ -222,20 +210,40 @@ export function setupEditor(
         '#cancel-save',
       ) as HTMLButtonElement;
 
+      // Prevent default save action
+      window.addEventListener(
+        'keydown',
+        (e) => {
+          if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        },
+        { capture: true, once: true },
+      );
+
       modal.classList.add('active');
       input.value = '';
       input.focus();
+
+      const cleanup = () => {
+        confirmBtn.onclick = null;
+        cancelBtn.onclick = null;
+        input.onkeydown = null;
+      };
 
       const handleSave = () => {
         const name = input.value.trim();
         if (name) {
           saveScript(name, ed.getValue());
           modal.classList.remove('active');
+          cleanup();
         }
       };
 
       const handleCancel = () => {
         modal.classList.remove('active');
+        cleanup();
       };
 
       const handleKeydown = (e: KeyboardEvent) => {
@@ -258,7 +266,13 @@ export function setupEditor(
     label: 'Open Script',
     keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyO],
     run: (ed) => {
-      // Prevent default browser open
+      const modal = document.querySelector('#open-dialog') as HTMLElement;
+      const scriptList = modal.querySelector('.script-list') as HTMLElement;
+      const cancelBtn = document.querySelector(
+        '#cancel-open',
+      ) as HTMLButtonElement;
+
+      // Prevent default open action
       window.addEventListener(
         'keydown',
         (e) => {
@@ -267,14 +281,8 @@ export function setupEditor(
             e.stopPropagation();
           }
         },
-        { capture: true },
+        { capture: true, once: true },
       );
-
-      const modal = document.querySelector('#open-dialog') as HTMLElement;
-      const scriptList = modal.querySelector('.script-list') as HTMLElement;
-      const cancelBtn = document.querySelector(
-        '#cancel-open',
-      ) as HTMLButtonElement;
 
       // Populate script list
       const scripts = getSavedScripts();
@@ -291,14 +299,22 @@ export function setupEditor(
           item.onclick = () => {
             editor.setValue(script.content);
             modal.classList.remove('active');
+            cleanup();
           };
           scriptList.appendChild(item);
         });
 
       modal.classList.add('active');
 
+      const cleanup = () => {
+        cancelBtn.onclick = null;
+        window.removeEventListener('keydown', handleKeydown);
+        scriptList.innerHTML = '';
+      };
+
       const handleCancel = () => {
         modal.classList.remove('active');
+        cleanup();
       };
 
       const handleKeydown = (e: KeyboardEvent) => {
@@ -308,7 +324,7 @@ export function setupEditor(
       };
 
       cancelBtn.onclick = handleCancel;
-      window.addEventListener('keydown', handleKeydown, { once: true });
+      window.addEventListener('keydown', handleKeydown);
     },
   });
 
