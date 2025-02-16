@@ -105,7 +105,7 @@ const cameraDetailsTemplate = (point: OrientedPoint) => html`
   </div>
 `;
 
-export const plotTemplate = (plotId: string, title: string) => html`
+export const plotTemplate = (plotId: string) => html`
   <div class="plot-header">
     <div class="plot-id">ID: ${plotId}</div>
     <button class="plot-download-button">Download Data</button>
