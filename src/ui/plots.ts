@@ -1,6 +1,6 @@
 import { render } from 'lit-html';
 import { State, Plot } from '../types.js';
-import { plotTemplate } from './templates.js';
+import { plotTemplate } from './plotsTemplates.js';
 
 export const workers = new Map<string, Worker>();
 export const canvases = new Map<string, HTMLCanvasElement>();
