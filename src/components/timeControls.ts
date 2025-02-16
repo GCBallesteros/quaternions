@@ -48,6 +48,11 @@ export function setupTimeControls(state: State): void {
     }
   }
 
+  // Listen for time state changes from external commands
+  container.addEventListener('time-state-changed', () => {
+    renderTimeControls();
+  });
+
   function handleSpeedChange(e: Event) {
     const value = parseInt((e.target as HTMLInputElement).value);
     if (value === 0) {
