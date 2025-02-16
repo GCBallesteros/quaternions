@@ -6,8 +6,12 @@ import { createTimeInput } from './timeInput.js';
 function handleTimeUpdate(executeCommand: (command: string) => void) {
   const dateInput = document.getElementById('sim-date') as HTMLInputElement;
   const hoursInput = document.getElementById('sim-hours') as HTMLInputElement;
-  const minutesInput = document.getElementById('sim-minutes') as HTMLInputElement;
-  const secondsInput = document.getElementById('sim-seconds') as HTMLInputElement;
+  const minutesInput = document.getElementById(
+    'sim-minutes',
+  ) as HTMLInputElement;
+  const secondsInput = document.getElementById(
+    'sim-seconds',
+  ) as HTMLInputElement;
 
   const dateComponents = dateInput.value.split('-').map((n) => parseInt(n));
   const dateResult = utcDate(
@@ -33,7 +37,9 @@ export const timeTemplate = (
     <h3>UTC Time</h3>
     <div id="current-time">${currentTime.toISOString()}</div>
     ${createTimeInput(currentTime)}
-    <button id="update-time" @click=${onTimeUpdate}>Update Time</button>
+    <button id="update-time" class="full-width-button" @click=${onTimeUpdate}>
+      Update Time
+    </button>
   </div>
 `;
 
@@ -44,7 +50,7 @@ export const lightingTemplate = (
   <div class="settings-group">
     <h3>Lighting</h3>
     <div class="control-row">
-      <div class="switch-container">
+      <div class="switch-container large">
         <label class="switch">
           <input
             type="checkbox"
