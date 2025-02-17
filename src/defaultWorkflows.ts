@@ -6,10 +6,10 @@ interface WorkflowExample {
 export const defaultWorkflows: Record<string, WorkflowExample> = {
   'Quaternion Debugging': {
     script: `some script`,
-    docLink: 'documentation/workflows/debugging-quaternions.html'
+    docLink: 'documentation/workflows/debugging-quaternions.html',
   },
   'Adding Satellites': {
     script: `some other script`,
-    docLink: 'documentation/workflows/adding-satellites.html'
-  }
+    docLink: 'documentation/workflows/adding-satellites.html',
+  },
 };
