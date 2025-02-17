@@ -135,7 +135,6 @@ export function setupGlobalShortcuts(
             <span class="script-name">${name}</span>
             <div style="display: flex; align-items: center; gap: 12px;">
               <a href="${content.docLink}" target="_blank" class="script-docs">docs</a>
-              <span class="script-date">Example</span>
             </div>
           `;
 
