@@ -432,15 +432,17 @@ input:checked + .slider:before {
 }
 
 .cheatsheet-section h2 {
-  font-size: 28px;
+  font-size: 24px;
   margin-bottom: 20px;
-  color: #007bff;
+  color: #fff;
+  padding: 0 20px;
 }
 
 .cheatsheet-section p {
   font-size: 16px;
   line-height: 1.6;
   margin-bottom: 16px;
+  padding: 0 20px;
 }
 
 .shortcut-list {
@@ -448,6 +450,7 @@ input:checked + .slider:before {
   grid-template-columns: auto 1fr;
   gap: 12px 24px;
   align-items: center;
+  padding: 0 20px;
 }
 
 .shortcut-key {
@@ -463,9 +466,9 @@ input:checked + .slider:before {
 }
 
 .modal-title {
-  color: #fff;
+  color: #007bff;
   margin: 0 0 15px 0;
-  font-size: 16px;
+  font-size: 32px;
 }
 
 .modal-input {
