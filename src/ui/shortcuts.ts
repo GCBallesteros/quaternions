@@ -5,6 +5,7 @@ import {
   saveScript,
   SavedScript,
 } from '../storage.js';
+import { defaultWorkflows } from '../defaultWorkflows.js';
 
 export function setupGlobalShortcuts(
   editor: monaco.editor.IStandaloneCodeEditor,
@@ -77,38 +78,73 @@ export function setupGlobalShortcuts(
         ) as HTMLButtonElement;
 
         // Populate script list
-        const scripts = getSavedScripts();
         scriptList.innerHTML = '';
-        Object.values(scripts)
-          .sort((a: SavedScript, b: SavedScript) => b.timestamp - a.timestamp)
-          .forEach((script) => {
-            const item = document.createElement('div');
-            item.className = 'script-item';
-            item.innerHTML = `
+
+        // User scripts section
+        const scripts = getSavedScripts();
+        if (Object.keys(scripts).length > 0) {
+          const userScriptsTitle = document.createElement('h3');
+          userScriptsTitle.textContent = 'Your Scripts';
+          userScriptsTitle.style.color = '#fff';
+          userScriptsTitle.style.padding = '0 12px 12px';
+          scriptList.appendChild(userScriptsTitle);
+
+          Object.values(scripts)
+            .sort((a: SavedScript, b: SavedScript) => b.timestamp - a.timestamp)
+            .forEach((script) => {
+              const item = document.createElement('div');
+              item.className = 'script-item';
+              item.innerHTML = `
             <span class="script-name">${script.name}</span>
             <div style="display: flex; align-items: center;">
               <span class="script-date">${new Date(script.timestamp).toLocaleString()}</span>
               <span class="delete-script" title="Delete script">🗑️</span>
             </div>
           `;
-            const deleteBtn = item.querySelector(
-              '.delete-script',
-            ) as HTMLElement;
-            deleteBtn.onclick = (e) => {
-              e.stopPropagation();
-              if (confirm(`Delete script "${script.name}"?`)) {
-                deleteScript(script.name);
-                scriptList.removeChild(item);
-              }
-            };
+              const deleteBtn = item.querySelector(
+                '.delete-script',
+              ) as HTMLElement;
+              deleteBtn.onclick = (e) => {
+                e.stopPropagation();
+                if (confirm(`Delete script "${script.name}"?`)) {
+                  deleteScript(script.name);
+                  scriptList.removeChild(item);
+                }
+              };
 
-            item.onclick = () => {
-              editor.setValue(script.content);
-              modal.classList.remove('active');
-              cleanup();
-            };
-            scriptList.appendChild(item);
-          });
+              item.onclick = () => {
+                editor.setValue(script.content);
+                modal.classList.remove('active');
+                cleanup();
+              };
+              scriptList.appendChild(item);
+            });
+        }
+
+        // Default workflows section
+        const defaultTitle = document.createElement('h3');
+        defaultTitle.textContent = 'Example Scripts';
+        defaultTitle.style.color = '#fff';
+        defaultTitle.style.padding = '20px 12px 12px';
+        scriptList.appendChild(defaultTitle);
+
+        Object.entries(defaultWorkflows).forEach(([name, content]) => {
+          const item = document.createElement('div');
+          item.className = 'script-item';
+          item.innerHTML = `
+            <span class="script-name">${name}</span>
+            <div style="display: flex; align-items: center;">
+              <span class="script-date">Example</span>
+            </div>
+          `;
+
+          item.onclick = () => {
+            editor.setValue(content);
+            modal.classList.remove('active');
+            cleanup();
+          };
+          scriptList.appendChild(item);
+        });
 
         modal.classList.add('active');
 
