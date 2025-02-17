@@ -140,23 +140,23 @@ input:checked + .slider {
 
 /* Tiny switch style for trails */
 .point-header .trail-toggle .switch {
-  width: 20px !important;
-  height: 12px !important;
+  width: 28px !important;
+  height: 16px !important;
 }
 
 .point-header .trail-toggle .slider {
-  border-radius: 12px !important;
+  border-radius: 16px !important;
 }
 
 .point-header .trail-toggle .slider:before {
-  height: 8px !important;
-  width: 8px !important;
+  height: 12px !important;
+  width: 12px !important;
   left: 2px !important;
   bottom: 2px !important;
 }
 
 .point-header .trail-toggle input:checked + .slider:before {
-  transform: translateX(8px) !important;
+  transform: translateX(12px) !important;
 }
 
 /* Large switch style for settings */
