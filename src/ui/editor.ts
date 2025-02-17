@@ -1,13 +1,9 @@
 import * as monaco from 'monaco-editor';
-import {
-  loadScript,
-  saveScript,
-  updateScriptSelector,
-  getSavedScripts,
-  SavedScript,
-  deleteScript,
-} from '../storage.js';
 import { Option, None, Some } from 'ts-results';
+import { render } from 'lit-html';
+import { editorTemplate } from './editorTemplates.js';
+import { loadScript, updateScriptSelector } from '../storage.js';
+import { initLogger } from '../logger.js';
 
 export const satelliteScript = `// %% Reset
 // Reset scene so that we can hit execute repeatedly
@@ -145,26 +141,33 @@ function getCurrentCell(editor: monaco.editor.IStandaloneCodeEditor): string {
 export function setupEditor(
   executeCommand: (command: string) => void,
 ): monaco.editor.IStandaloneCodeEditor {
-  const editor = monaco.editor.create(
-    document.getElementById('monaco-editor') as HTMLElement,
-    {
-      value: satelliteScript,
-      language: 'javascript',
-      theme: 'vs-dark',
-      minimap: { enabled: false },
-      scrollbar: {
-        vertical: 'hidden',
-        horizontal: 'hidden',
-      },
+  const container = document.getElementById('editor-container');
+  if (!container) throw new Error('Editor container not found');
+
+  const isMac = /Mac/.test(navigator.userAgent);
+  const modifierKey = isMac ? '⌘' : 'Ctrl';
+
+  // Render editor template first
+  render(editorTemplate(modifierKey), container);
+  initLogger();
+
+  const editorElement = document.getElementById('monaco-editor');
+  if (!editorElement) throw new Error('Monaco editor element not found');
+
+  const editor = monaco.editor.create(editorElement, {
+    value: satelliteScript,
+    language: 'javascript',
+    theme: 'vs-dark',
+    minimap: { enabled: false },
+    scrollbar: {
+      vertical: 'hidden',
+      horizontal: 'hidden',
     },
-  );
+  });
 
   // Setup cell highlighting
   editor.onDidChangeModelContent(() => highlightCells(editor));
   highlightCells(editor);
-
-  const isMac = /Mac/.test(navigator.userAgent);
-  const modifierKey = isMac ? '⌘' : 'Ctrl';
 
   function executeCell() {
     const cellContent = getCurrentCell(editor);
@@ -186,36 +189,13 @@ export function setupEditor(
   }
 
   // Setup buttons
-  const executeScriptButton = document.getElementById('execute-script')!;
-  executeScriptButton.innerHTML = `Execute Script<br><span class="shortcut">(${modifierKey}+⇧+↵)</span>`;
-  executeScriptButton.addEventListener('click', () => executeScript());
+  const executeScriptButton = document.getElementById('execute-script');
+  const executeCellButton = document.getElementById('execute-cell');
 
-  const executeCellButton = document.getElementById('execute-cell')!;
-  executeCellButton.innerHTML = `Execute Cell<br><span class="shortcut">(⇧+↵)</span>`;
-  executeCellButton.addEventListener('click', () => executeCell());
-
-  // Update the selector placeholder to show the correct modifier key
-  const savedScriptsSelect = document.getElementById(
-    'saved-scripts',
-  ) as HTMLSelectElement;
-  if (savedScriptsSelect) {
-    savedScriptsSelect.options[0].text = `Load saved script... (${modifierKey}+S to save, ${modifierKey}+O to browse)`;
+  if (executeScriptButton && executeCellButton) {
+    executeScriptButton.addEventListener('click', () => executeScript());
+    executeCellButton.addEventListener('click', () => executeCell());
   }
-
-  document.getElementById('saved-scripts')?.addEventListener('change', (e) => {
-    const select = e.target as HTMLSelectElement;
-    const scriptName = select.value;
-    if (scriptName) {
-      const content = loadScript(scriptName);
-      if (content) {
-        editor.setValue(content);
-      }
-      select.value = ''; // Reset selector to placeholder
-    }
-  });
-
-  // Initialize saved scripts selector
-  updateScriptSelector();
 
   // Add keyboard shortcuts
   editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, executeCell);

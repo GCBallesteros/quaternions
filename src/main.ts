@@ -51,9 +51,9 @@ function updateAllLines(): void {
 // FINISH PREPPING THE RENDERER AND SOME CALLBACKS
 scene.onBeforeRender = updateAllLines;
 
+setupCheatsheet();
+setupUI(state, executeCommand, renderer);
+
 log(
   'Visit quaternions.maxwellrules.com/documentation for the full documentation',
 );
-
-setupCheatsheet();
-setupUI(state, executeCommand, renderer);
