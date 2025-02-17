@@ -2,7 +2,6 @@ import * as monaco from 'monaco-editor';
 import {
   deleteScript,
   getSavedScripts,
-  loadScript,
   saveScript,
   SavedScript,
 } from '../storage.js';
