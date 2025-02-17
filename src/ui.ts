@@ -6,6 +6,7 @@ import { setupLighting as setupSettings } from './ui/settings.js';
 import { setupPlotsTab } from './ui/plots.js';
 import { setupResizer } from './ui/resize.js';
 import { setupTabs } from './ui/tabs.js';
+import { setupGlobalShortcuts } from './ui/shortcuts.js';
 
 export function setupUI(
   state: State,
@@ -13,6 +14,7 @@ export function setupUI(
   renderer: WebGLRenderer,
 ): void {
   const editor = setupEditor(executeCommand);
+  setupGlobalShortcuts(editor);
   setupTabs(editor);
   setupSettings(state, executeCommand);
   setupResizer(editor, renderer, state);
