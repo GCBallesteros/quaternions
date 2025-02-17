@@ -102,11 +102,10 @@
 }
 
 /* Switch/Toggle */
+/* Base switch styles */
 .switch {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 30px;
   cursor: pointer;
 }
 
@@ -124,17 +123,12 @@
   right: 0;
   bottom: 0;
   background-color: #333;
-  border-radius: 34px;
   transition: 0.4s;
 }
 
 .slider:before {
   position: absolute;
   content: '';
-  height: 22px;
-  width: 22px;
-  left: 4px;
-  bottom: 4px;
   background-color: white;
   border-radius: 50%;
   transition: 0.4s;
@@ -144,7 +138,45 @@ input:checked + .slider {
   background-color: #007bff;
 }
 
-input:checked + .slider:before {
+/* Tiny switch style for trails */
+.point-header .trail-toggle .switch {
+  width: 20px !important;
+  height: 12px !important;
+}
+
+.point-header .trail-toggle .slider {
+  border-radius: 12px !important;
+}
+
+.point-header .trail-toggle .slider:before {
+  height: 8px !important;
+  width: 8px !important;
+  left: 2px !important;
+  bottom: 2px !important;
+}
+
+.point-header .trail-toggle input:checked + .slider:before {
+  transform: translateX(8px) !important;
+}
+
+/* Large switch style for settings */
+.settings-group .switch {
+  width: 60px;
+  height: 30px;
+}
+
+.settings-group .slider {
+  border-radius: 30px;
+}
+
+.settings-group .slider:before {
+  height: 22px;
+  width: 22px;
+  left: 4px;
+  bottom: 4px;
+}
+
+.settings-group input:checked + .slider:before {
   transform: translateX(30px);
 }
 
