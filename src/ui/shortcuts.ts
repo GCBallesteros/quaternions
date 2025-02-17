@@ -140,7 +140,7 @@ export function setupGlobalShortcuts(
           `;
 
           item.onclick = () => {
-            editor.setValue(content);
+            editor.setValue(content.script);
             modal.classList.remove('active');
             cleanup();
           };

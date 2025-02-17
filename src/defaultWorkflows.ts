@@ -48,7 +48,7 @@ createPlot(
   'sat1-orientation', {
     title: "Satellite Orientation",
     lines: ["qw", "qx", "qy", "qz"],
-    sampleEvery: 20 // Sample every 10 frames                                        
+    sampleEvery: 20 // Sample every 10 frames
   },
   () => {
     const sat = point("hf1a");
