@@ -7,7 +7,6 @@ import {
   SavedScript,
   deleteScript,
 } from '../storage.js';
-import { cheatsheetContent } from '../cheatsheet.js';
 import { Option, None, Some } from 'ts-results';
 
 export const satelliteScript = `// %% Reset
@@ -194,46 +193,6 @@ export function setupEditor(
   const executeCellButton = document.getElementById('execute-cell')!;
   executeCellButton.innerHTML = `Execute Cell<br><span class="shortcut">(⇧+↵)</span>`;
   executeCellButton.addEventListener('click', () => executeCell());
-
-  // Setup cheatsheet functionality
-  const cheatsheetLink = document.getElementById('cheatsheet-link');
-  const cheatsheetModal = document.getElementById('cheatsheet-modal');
-  const closeCheatsheet = document.getElementById('close-cheatsheet');
-  const cheatsheetContentEl = document.getElementById('cheatsheet-content');
-
-  if (
-    cheatsheetLink &&
-    cheatsheetModal &&
-    closeCheatsheet &&
-    cheatsheetContentEl
-  ) {
-    // Load cheatsheet content
-    if (cheatsheetContent) {
-      const processedContent = cheatsheetContent.replace(
-        /⌘\/Ctrl/g,
-        isMac ? '⌘' : 'Ctrl',
-      );
-      cheatsheetContentEl.innerHTML = processedContent;
-    }
-
-    // Show cheatsheet
-    cheatsheetLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      cheatsheetModal.classList.add('active');
-    });
-
-    // Hide cheatsheet
-    closeCheatsheet.addEventListener('click', () => {
-      cheatsheetModal.classList.remove('active');
-    });
-
-    // Close on escape key
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && cheatsheetModal.classList.contains('active')) {
-        cheatsheetModal.classList.remove('active');
-      }
-    });
-  }
 
   // Update the selector placeholder to show the correct modifier key
   const savedScriptsSelect = document.getElementById(

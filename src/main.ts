@@ -1,6 +1,7 @@
 import { createAnimator, initScene, initializeCanvas } from './init.js';
 import { buildExecuteCommand } from './terminal.js';
 import { setupUI } from './ui.js';
+import { setupCheatsheet } from './ui/cheatsheet.js';
 import { getPositionOfPoint } from './utils.js';
 
 import { buildCommandClosures } from './commands.js';
@@ -54,4 +55,5 @@ log(
   'Visit quaternions.maxwellrules.com/documentation for the full documentation',
 );
 
+setupCheatsheet();
 setupUI(state, executeCommand, renderer);

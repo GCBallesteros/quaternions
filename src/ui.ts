@@ -7,6 +7,7 @@ import { setupPlotsTab } from './ui/plots.js';
 import { setupResizer } from './ui/resize.js';
 import { setupTabs } from './ui/tabs.js';
 import { setupGlobalShortcuts } from './ui/shortcuts.js';
+import { setupCheatsheet } from './ui/cheatsheet.js';
 
 export function setupUI(
   state: State,
