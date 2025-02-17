@@ -147,28 +147,6 @@ export function setupEditor(
   const isMac = /Mac/.test(navigator.userAgent);
   const modifierKey = isMac ? '⌘' : 'Ctrl';
 
-  // Render editor template first
-  render(editorTemplate(modifierKey), container);
-  initLogger();
-
-  const editorElement = document.getElementById('monaco-editor');
-  if (!editorElement) throw new Error('Monaco editor element not found');
-
-  const editor = monaco.editor.create(editorElement, {
-    value: satelliteScript,
-    language: 'javascript',
-    theme: 'vs-dark',
-    minimap: { enabled: false },
-    scrollbar: {
-      vertical: 'hidden',
-      horizontal: 'hidden',
-    },
-  });
-
-  // Setup cell highlighting
-  editor.onDidChangeModelContent(() => highlightCells(editor));
-  highlightCells(editor);
-
   function executeCell() {
     const cellContent = getCurrentCell(editor);
     executeCommand(cellContent.trim());
@@ -188,14 +166,27 @@ export function setupEditor(
     executeCommand(editor.getValue().trim());
   }
 
-  // Setup buttons
-  const executeScriptButton = document.getElementById('execute-script');
-  const executeCellButton = document.getElementById('execute-cell');
+  // Render editor template first
+  render(editorTemplate(modifierKey, executeScript, executeCell), container);
+  initLogger();
 
-  if (executeScriptButton && executeCellButton) {
-    executeScriptButton.addEventListener('click', () => executeScript());
-    executeCellButton.addEventListener('click', () => executeCell());
-  }
+  const editorElement = document.getElementById('monaco-editor');
+  if (!editorElement) throw new Error('Monaco editor element not found');
+
+  const editor = monaco.editor.create(editorElement, {
+    value: satelliteScript,
+    language: 'javascript',
+    theme: 'vs-dark',
+    minimap: { enabled: false },
+    scrollbar: {
+      vertical: 'hidden',
+      horizontal: 'hidden',
+    },
+  });
+
+  // Setup cell highlighting
+  editor.onDidChangeModelContent(() => highlightCells(editor));
+  highlightCells(editor);
 
   // Add keyboard shortcuts
   editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, executeCell);
