@@ -2,7 +2,6 @@ import * as monaco from 'monaco-editor';
 import { Option, None, Some } from 'ts-results';
 import { render } from 'lit-html';
 import { editorTemplate } from './editorTemplates.js';
-import { loadScript, updateScriptSelector } from '../storage.js';
 import { initLogger } from '../logger.js';
 
 export const satelliteScript = `// %% Reset
