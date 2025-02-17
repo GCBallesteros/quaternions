@@ -7,14 +7,13 @@ export function setupCheatsheet(): void {
   const closeCheatsheet = document.getElementById('close-cheatsheet');
   const cheatsheetContent = document.getElementById('cheatsheet-content');
 
-  if (
-    cheatsheetLink &&
-    cheatsheetModal &&
-    closeCheatsheet &&
-    cheatsheetContent
-  ) {
+  if (cheatsheetLink && cheatsheetModal && cheatsheetContent) {
+    const handleClose = () => {
+      cheatsheetModal.classList.remove('active');
+    };
+
     const isMac = /Mac/.test(navigator.userAgent);
-    render(cheatsheetTemplate(isMac), cheatsheetContent);
+    render(cheatsheetTemplate(isMac, handleClose), cheatsheetContent);
 
     // Show cheatsheet
     cheatsheetLink.addEventListener('click', (e) => {
@@ -22,15 +21,10 @@ export function setupCheatsheet(): void {
       cheatsheetModal.classList.add('active');
     });
 
-    // Hide cheatsheet
-    closeCheatsheet.addEventListener('click', () => {
-      cheatsheetModal.classList.remove('active');
-    });
-
     // Close on escape key
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && cheatsheetModal.classList.contains('active')) {
-        cheatsheetModal.classList.remove('active');
+        handleClose();
       }
     });
   }

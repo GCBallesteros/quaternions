@@ -1,6 +1,10 @@
 import { html } from 'lit-html';
 
-export const cheatsheetTemplate = (isMac: boolean) => html`
+export const cheatsheetTemplate = (isMac: boolean, onClose: () => void) => html`
+  <div class="modal-header">
+    <h3 class="modal-title">Cheatsheet</h3>
+    <button class="close-button" @click=${onClose}>&times;</button>
+  </div>
   <div class="cheatsheet-section">
     <h2>Keyboard Shortcuts</h2>
     <div class="shortcut-list">
