@@ -12,7 +12,7 @@ export const plotListTemplate = () => html`
 export const plotTemplate = (plotId: string, onDownload: () => void) => html`
   <div class=${plotStyles.container}>
     <div class=${plotStyles.header.wrapper}>
-      <h3 class=${commonStyles.sectionTitle}>Plot ${plotId}</h3>
+      <h3 class=${commonStyles.sectionTitle}>ID: ${plotId}</h3>
       <button class=${plotStyles.header.button} @click=${onDownload}>
         Download Data
       </button>
