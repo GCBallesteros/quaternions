@@ -1,7 +1,8 @@
+import { commonStyles } from './common.js';
+
 export const settingsStyles = {
-  group: 'mb-5',
-  groupTitle: 'mt-0 text-blue-500',
-  currentTime: 'font-mono',
+  group: commonStyles.sectionContainer,
+  currentTime: commonStyles.monospace,
   button:
     'w-full p-2 bg-blue-600 hover:bg-blue-700 text-white rounded cursor-pointer border-none mt-2',
   switchContainer: 'flex items-center h-[30px] my-4',

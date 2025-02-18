@@ -1,6 +1,6 @@
 import { render } from 'lit-html';
 import { State, Plot } from '../types.js';
-import { plotTemplate } from './plotsTemplates.js';
+import { plotTemplate, plotListTemplate } from './plotsTemplates.js';
 
 export const workers = new Map<string, Worker>();
 export const canvases = new Map<string, HTMLCanvasElement>();
@@ -165,12 +165,7 @@ function updatePlots(state: State): void {
 export function setupPlotsTab(state: State): void {
   const plotsContainer = document.getElementById('plots-container')!;
 
-  plotsContainer.innerHTML = `
-    <div class="settings-group">
-      <h3>Plots</h3>
-      <div id="plots-list"></div>
-    </div>
-  `;
+  render(plotListTemplate(), plotsContainer);
 
   // Setup periodic updates
   setInterval(() => updatePlots(state), 500);

@@ -3,6 +3,7 @@ import { State } from '../types.js';
 import { utcDate } from '../utils.js';
 import { createTimeInput } from './timeInput.js';
 import { settingsStyles } from './styles/settings.js';
+import { commonStyles } from './styles/common.js';
 
 function handleTimeUpdate(executeCommand: (command: string) => void) {
   const dateInput = document.getElementById('sim-date') as HTMLInputElement;
@@ -35,7 +36,7 @@ export const timeTemplate = (
   onTimeUpdate: () => void,
 ) => html`
   <div class=${settingsStyles.group}>
-    <h3 class=${settingsStyles.groupTitle}>UTC Time</h3>
+    <h3 class=${commonStyles.sectionTitle}>UTC Time</h3>
     <div id="current-time" class=${settingsStyles.currentTime}>
       ${currentTime.toISOString()}
     </div>
@@ -55,7 +56,7 @@ export const lightingTemplate = (
   ambientIntensity: number,
 ) => html`
   <div class=${settingsStyles.group}>
-    <h3 class=${settingsStyles.groupTitle}>Lighting</h3>
+    <h3 class=${commonStyles.sectionTitle}>Lighting</h3>
     <div>
       <div class=${settingsStyles.switchContainer}>
         <label class="inline-flex items-center cursor-pointer">

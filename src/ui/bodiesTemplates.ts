@@ -1,5 +1,6 @@
 import { html } from 'lit-html';
 import { bodyStyles } from './styles/bodies.js';
+import { commonStyles } from './styles/common.js';
 import { Point } from '../points/point.js';
 import { OrientedPoint } from '../points/orientedPoint.js';
 import { Satellite } from '../points/satellite.js';
@@ -22,8 +23,8 @@ export const moonTemplate = (moonPos: {
   z: number;
   angle: number;
 }) => html`
-  <div class="settings-group">
-    <h3>Moon</h3>
+  <div class=${commonStyles.sectionContainer}>
+    <h3 class=${commonStyles.sectionTitle}>Moon</h3>
     <div class="coordinate-display">
       <div>
         ECEF: <span>${moonPos.x}</span>, <span>${moonPos.y}</span>,
@@ -161,8 +162,8 @@ export const bodiesTemplate = (
     z: Math.round(state.bodies.moon.position.z),
     angle: Math.round((state.bodies.moon as any).phase || 0),
   })}
-  <div class="settings-group">
-    <h3>Points</h3>
+  <div class=${commonStyles.sectionContainer}>
+    <h3 class=${commonStyles.sectionTitle}>Points</h3>
     <div id="points-list">
       ${Object.entries(state.points).map(([name, point]) => {
         const type =
