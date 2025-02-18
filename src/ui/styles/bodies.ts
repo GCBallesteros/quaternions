@@ -7,9 +7,9 @@ export const bodyStyles = {
                     [&::-webkit-color-swatch-wrapper]:p-0 
                     [&::-webkit-color-swatch]:border-neutral-600 
                     [&::-webkit-color-swatch]:rounded`,
-      type: 'ml-auto text-sm text-neutral-400'
+      type: 'ml-auto text-sm text-neutral-400',
     },
-    details: 'mt-2 ml-5 text-sm text-neutral-400'
+    details: 'mt-2 ml-5 text-sm text-neutral-400',
   },
   trailToggle: {
     container: 'inline-flex items-center gap-1 ml-3',
@@ -21,7 +21,7 @@ export const bodyStyles = {
                peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] 
                after:start-[2px] after:bg-white after:border-neutral-600 after:border 
                after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600`,
-      icon: 'text-lg text-blue-500'
-    }
-  }
+      icon: 'text-lg text-blue-500',
+    },
+  },
 };
