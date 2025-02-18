@@ -1,16 +1,18 @@
 import { html } from 'lit-html';
 
 export const createTimeInput = (currentTime: Date) => html`
-  <div class="time-input">
+  <div class="flex flex-col gap-2.5 mt-2.5">
     <input
       type="date"
       id="sim-date"
+      class="p-1 bg-neutral-700 border border-neutral-600 text-white rounded"
       .value=${currentTime.toISOString().split('T')[0]}
     />
-    <div class="time-inputs">
+    <div class="flex items-center gap-1">
       <input
         type="number"
         id="sim-hours"
+        class="w-[50px] p-1 bg-neutral-700 border border-neutral-600 text-white rounded"
         min="0"
         max="23"
         placeholder="HH"
@@ -20,6 +22,7 @@ export const createTimeInput = (currentTime: Date) => html`
       <input
         type="number"
         id="sim-minutes"
+        class="w-[50px] p-1 bg-neutral-700 border border-neutral-600 text-white rounded"
         min="0"
         max="59"
         placeholder="MM"
@@ -29,6 +32,7 @@ export const createTimeInput = (currentTime: Date) => html`
       <input
         type="number"
         id="sim-seconds"
+        class="w-[50px] p-1 bg-neutral-700 border border-neutral-600 text-white rounded"
         min="0"
         max="59"
         placeholder="SS"

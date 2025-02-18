@@ -2,6 +2,7 @@ import { html } from 'lit-html';
 import { State } from '../types.js';
 import { utcDate } from '../utils.js';
 import { createTimeInput } from './timeInput.js';
+import { settingsStyles } from './styles/settings.js';
 
 function handleTimeUpdate(executeCommand: (command: string) => void) {
   const dateInput = document.getElementById('sim-date') as HTMLInputElement;
@@ -33,11 +34,17 @@ export const timeTemplate = (
   currentTime: Date,
   onTimeUpdate: () => void,
 ) => html`
-  <div class="settings-group">
-    <h3>UTC Time</h3>
-    <div id="current-time">${currentTime.toISOString()}</div>
+  <div class=${settingsStyles.group}>
+    <h3 class=${settingsStyles.groupTitle}>UTC Time</h3>
+    <div id="current-time" class=${settingsStyles.currentTime}>
+      ${currentTime.toISOString()}
+    </div>
     ${createTimeInput(currentTime)}
-    <button id="update-time" class="full-width-button" @click=${onTimeUpdate}>
+    <button
+      id="update-time"
+      class=${settingsStyles.button}
+      @click=${onTimeUpdate}
+    >
       Update Time
     </button>
   </div>
@@ -47,14 +54,15 @@ export const lightingTemplate = (
   sunVisible: boolean,
   ambientIntensity: number,
 ) => html`
-  <div class="settings-group">
-    <h3>Lighting</h3>
-    <div class="control-row">
-      <div class="switch-container large">
-        <label class="switch">
+  <div class=${settingsStyles.group}>
+    <h3 class=${settingsStyles.groupTitle}>Lighting</h3>
+    <div>
+      <div class=${settingsStyles.switchContainer}>
+        <label class="inline-flex items-center cursor-pointer">
           <input
             type="checkbox"
             id="sun-toggle"
+            class="sr-only peer"
             ?checked=${sunVisible}
             @change=${(e: Event) => {
               const target = e.target as HTMLInputElement;
@@ -64,20 +72,23 @@ export const lightingTemplate = (
               document.dispatchEvent(event);
             }}
           />
-          <span class="slider round"></span>
+          <div
+            class="relative w-9 h-5 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-neutral-600 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"
+          ></div>
         </label>
-        <span class="switch-label">Sun Light</span>
+        <span class=${settingsStyles.switchLabel}>Sun Light</span>
       </div>
     </div>
-    <div class="control-row">
-      <div class="range-control">
-        <div class="range-header">
+    <div>
+      <div class=${settingsStyles.rangeControl.container}>
+        <div class=${settingsStyles.rangeControl.header}>
           <label for="ambient-intensity">Ambient Light</label>
-          <span class="range-value">${ambientIntensity.toFixed(2)}</span>
+          <span>${ambientIntensity.toFixed(2)}</span>
         </div>
         <input
           type="range"
           id="ambient-intensity"
+          class=${settingsStyles.rangeControl.input}
           min="0"
           max="1"
           step="0.05"

@@ -47,15 +47,6 @@
   position: relative;
 }
 
-/* Settings Groups */
-.settings-group {
-  margin-bottom: 20px;
-}
-
-.settings-group h3 {
-  margin-top: 0;
-  color: #007bff;
-}
 
 /* Time Input */
 .time-input {
@@ -139,34 +130,6 @@ input:checked + .slider {
 }
 
 
-/* Large switch style for settings */
-.settings-group .switch {
-  width: 60px;
-  height: 30px;
-}
-
-.settings-group .slider {
-  border-radius: 30px;
-}
-
-.settings-group .slider:before {
-  height: 22px;
-  width: 22px;
-  left: 4px;
-  bottom: 4px;
-}
-
-.settings-group input:checked + .slider:before {
-  transform: translateX(30px);
-}
-
-.switch-label {
-  margin-left: 12px;
-  color: #fff;
-  font-size: 1.1em;
-  white-space: nowrap;
-  margin-top: -1px;
-}
 
 .trail-toggle {
   display: inline-flex;
