@@ -1,3 +1,4 @@
+// We are not using lit-html here for performance and simplicity
 import { STYLES, CHUNK_SIZE } from './styles.js';
 import type { ExpandableElement, LogValue } from './types.js';
 

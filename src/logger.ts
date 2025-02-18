@@ -1,3 +1,4 @@
+// We are not using lit-html here for performance and simplicity
 import { STYLES } from './logger/styles.js';
 import { createExpandableElement } from './logger/expandableElement.js';
 import type { LogContainer } from './logger/types.js';
