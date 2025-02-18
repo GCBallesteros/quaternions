@@ -34,11 +34,11 @@ export const moonTemplate = (moonPos: {
 `;
 
 const trailToggleTemplate = (satellite: Satellite) => html`
-  <div class="trail-toggle">
-    <label class="switch">
+  <div class="inline-flex items-center gap-1 ml-3">
+    <label class="inline-flex items-center cursor-pointer">
       <input
         type="checkbox"
-        class="trail-switch"
+        class="sr-only peer"
         ?checked=${satellite.hasTrail}
         @change=${(e: Event) => {
           const checked = (e.target as HTMLInputElement).checked;
@@ -49,9 +49,11 @@ const trailToggleTemplate = (satellite: Satellite) => html`
           }
         }}
       />
-      <span class="slider"></span>
+      <div
+        class="relative w-9 h-5 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-neutral-600 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"
+      ></div>
     </label>
-    <span class="camera-icon active">📷</span>
+    <span class="text-lg text-blue-500">📷</span>
   </div>
 `;
 
@@ -125,37 +127,28 @@ export const pointItemTemplate = (
   point: Point,
   isExpanded: boolean,
 ) => html`
-  <div class="point-item">
-    <div class="point-header">
-      <span
-        class="expand-button ${isExpanded ? 'expanded' : ''}"
-        @click=${(e: Event) => {
-          const target = e.target as HTMLElement;
-          const pointItem = target.closest('.point-item');
-          const details = pointItem?.querySelector('.point-details');
-          target.classList.toggle('expanded');
-          details?.classList.toggle('expanded');
-        }}
-        >▶</span
-      >
-      <input
-        type="color"
-        class="color-picker"
-        .value=${point.color}
-        title="Point color"
-        @input=${(e: Event) => {
-          point.color = (e.target as HTMLInputElement).value;
-        }}
-      />
-      <span class="point-name">${name}</span>
-      ${type === 'Satellite' && (point as OrientedPoint).camera
-        ? trailToggleTemplate(point as Satellite)
-        : ''}
-      <span class="point-type">${type}</span>
-    </div>
-    <div class="point-details ${isExpanded ? 'expanded' : ''}">
-      ${pointDetailsTemplate(type, point)}
-    </div>
+  <div class="p-2 my-1 bg-neutral-800 rounded font-mono">
+    <details ?open=${isExpanded} class="group">
+      <summary class="flex items-center gap-2 cursor-pointer list-none">
+        <input
+          type="color"
+          class="w-5 h-5 p-0 border-0 rounded cursor-pointer bg-transparent [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:border-neutral-600 [&::-webkit-color-swatch]:rounded"
+          .value=${point.color}
+          title="Point color"
+          @input=${(e: Event) => {
+            point.color = (e.target as HTMLInputElement).value;
+          }}
+        />
+        <span>${name}</span>
+        ${type === 'Satellite' && (point as OrientedPoint).camera
+          ? trailToggleTemplate(point as Satellite)
+          : ''}
+        <span class="ml-auto text-sm text-neutral-400">${type}</span>
+      </summary>
+      <div class="mt-2 ml-5 text-sm text-neutral-400">
+        ${pointDetailsTemplate(type, point)}
+      </div>
+    </details>
   </div>
 `;
 

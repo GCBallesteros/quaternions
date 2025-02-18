@@ -57,27 +57,29 @@
   margin-left: auto;
 }
 
-.expand-button {
-  width: 12px;
-  height: 12px;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  color: #888;
-  user-select: none;
+details > summary {
+  list-style: none;
 }
 
-.expand-button.expanded {
-  transform: rotate(90deg);
-}
-
-.point-details {
-  margin-left: 20px;
-  margin-top: 8px;
+details > summary::marker,
+details > summary::-webkit-details-marker {
   display: none;
-  color: #888;
-  font-size: 0.9em;
 }
 
-.point-details.expanded {
-  display: block;
+details > summary::before {
+  content: "▶";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: #888;
+  transition: transform 0.2s ease;
+  transform-origin: center;
+  position: relative;
+  top: -1px;
+}
+
+details[open] > summary::before {
+  transform: rotate(90deg);
 }
