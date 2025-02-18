@@ -1,4 +1,5 @@
 import { html } from 'lit-html';
+import { bodyStyles } from './styles/bodies.js';
 import { Point } from '../points/point.js';
 import { OrientedPoint } from '../points/orientedPoint.js';
 import { Satellite } from '../points/satellite.js';
@@ -34,11 +35,11 @@ export const moonTemplate = (moonPos: {
 `;
 
 const trailToggleTemplate = (satellite: Satellite) => html`
-  <div class="inline-flex items-center gap-1 ml-3">
-    <label class="inline-flex items-center cursor-pointer">
+  <div class=${bodyStyles.trailToggle.container}>
+    <label class=${bodyStyles.trailToggle.toggle.label}>
       <input
         type="checkbox"
-        class="sr-only peer"
+        class=${bodyStyles.trailToggle.toggle.input}
         ?checked=${satellite.hasTrail}
         @change=${(e: Event) => {
           const checked = (e.target as HTMLInputElement).checked;
@@ -49,11 +50,9 @@ const trailToggleTemplate = (satellite: Satellite) => html`
           }
         }}
       />
-      <div
-        class="relative w-9 h-5 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-neutral-600 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"
-      ></div>
+      <div class=${bodyStyles.trailToggle.toggle.slider}></div>
     </label>
-    <span class="text-lg text-blue-500">📷</span>
+    <span class=${bodyStyles.trailToggle.toggle.icon}>📷</span>
   </div>
 `;
 
@@ -127,12 +126,12 @@ export const pointItemTemplate = (
   point: Point,
   isExpanded: boolean,
 ) => html`
-  <div class="p-2 my-1 bg-neutral-800 rounded font-mono">
+  <div class=${bodyStyles.pointItem.container}>
     <details ?open=${isExpanded} class="group">
-      <summary class="flex items-center gap-2 cursor-pointer list-none">
+      <summary class=${bodyStyles.pointItem.summary.wrapper}>
         <input
           type="color"
-          class="w-5 h-5 p-0 border-0 rounded cursor-pointer bg-transparent [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:border-neutral-600 [&::-webkit-color-swatch]:rounded"
+          class=${bodyStyles.pointItem.summary.colorPicker}
           .value=${point.color}
           title="Point color"
           @input=${(e: Event) => {
@@ -143,9 +142,9 @@ export const pointItemTemplate = (
         ${type === 'Satellite' && (point as OrientedPoint).camera
           ? trailToggleTemplate(point as Satellite)
           : ''}
-        <span class="ml-auto text-sm text-neutral-400">${type}</span>
+        <span class=${bodyStyles.pointItem.summary.type}>${type}</span>
       </summary>
-      <div class="mt-2 ml-5 text-sm text-neutral-400">
+      <div class=${bodyStyles.pointItem.details}>
         ${pointDetailsTemplate(type, point)}
       </div>
     </details>
