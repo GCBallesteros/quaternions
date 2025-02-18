@@ -46,15 +46,19 @@ function createPlotElement(
   const plotElement = document.createElement('div');
   plotElement.className = 'plot-item';
 
+  // Create a container for the plot content
+  const plotContent = document.createElement('div');
   render(
     plotTemplate(plotId, () => downloadPlotData(plotId, state)),
-    plotElement,
+    plotContent,
   );
+  plotElement.appendChild(plotContent);
 
-  const canvas = document.createElement('canvas');
-  canvas.width = 800; // Set fixed size for OffscreenCanvas
-  canvas.height = 400;
-  plotElement.appendChild(canvas);
+  // Find the canvas element created by the template
+  const canvas = plotContent.querySelector('canvas');
+  if (!canvas) {
+    throw new Error('Canvas element not found in plot template');
+  }
   canvases.set(plotId, canvas);
 
   // Create worker and transfer canvas control

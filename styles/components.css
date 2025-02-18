@@ -276,58 +276,6 @@ input:checked + .slider {
   transition: background-color 0.2s;
 }
 
-.plot-item {
-  padding: 8px;
-  margin: 4px 0;
-  background: #2d2d2d;
-  border-radius: 4px;
-  position: relative;
-  width: 100%;
-  padding-top: 55%; /* Increased to accommodate header */
-}
-
-.plot-item canvas {
-  position: absolute !important;
-  top: 40px; /* Leave space for header */
-  left: 8px;
-  right: 16px;
-  bottom: 8px;
-  width: 95% !important;
-  height: calc(95% - 32px) !important; /* Adjust height to account for header */
-}
-
-.plot-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 4px 8px;
-  background: #1e1e1e;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1;
-}
-
-.plot-id {
-  font-family: monospace;
-  color: #666;
-  font-size: 0.9em;
-}
-
-.plot-download-button {
-  background: #007bff;
-  color: white;
-  border: none;
-  padding: 4px 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 12px;
-}
-
-.plot-download-button:hover {
-  background: #0056b3;
-}
 
 /* Execute Buttons */
 .execute-buttons {
