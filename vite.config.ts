@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import monacoEditorEsmPlugin from 'vite-plugin-monaco-editor-esm';
+import tailwindcss from '@tailwindcss/vite';
 
 // IMPORTANT: This configuration ensures that `terminal.ts` is kept separate
 // from the rest of the application code during the build and bundling process.
@@ -43,11 +44,11 @@ export default defineConfig({
           }
         },
       },
-      treeshake: true, // Prevent tree shaking
+      treeshake: true,
     },
   },
   optimizeDeps: {
     include: ['three'], // Include necessary dependencies
   },
-  plugins: [monacoEditorEsmPlugin({})], // Monaco Editor plugin
+  plugins: [monacoEditorEsmPlugin({}), tailwindcss()],
 });
