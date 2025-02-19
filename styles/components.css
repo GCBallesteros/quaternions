@@ -180,43 +180,6 @@ input:checked + .slider {
   z-index:1;
 }
 
-/* Range Control */
-.range-control {
-  margin-top: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.range-control label {
-  color: #fff;
-}
-
-.range-control input[type='range'] {
-  width: 100%;
-  height: 4px;
-  background: #333;
-  border-radius: 2px;
-  -webkit-appearance: none;
-}
-
-.range-control input[type='range']::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 16px;
-  height: 16px;
-  background: #007bff;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.range-control input[type='range']::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  background: #007bff;
-  border-radius: 50%;
-  cursor: pointer;
-  border: none;
-}
 
 /* Top Links */
 #top-links {

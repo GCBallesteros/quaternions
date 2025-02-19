@@ -10,11 +10,5 @@ export const settingsStyles = {
   rangeControl: {
     container: 'mt-4 flex flex-col gap-2',
     header: 'flex justify-between items-center text-white',
-    input: `w-full h-1 bg-neutral-700 rounded appearance-none cursor-pointer
-            [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 
-            [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full 
-            [&::-webkit-slider-thumb]:bg-blue-600 [&::-moz-range-thumb]:w-4 
-            [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full 
-            [&::-moz-range-thumb]:bg-blue-600 [&::-moz-range-thumb]:border-none`,
   },
 };
