@@ -3,60 +3,6 @@
 @import './styles/components.css';
 @import "tailwindcss";
 
-.full-width-button {
-  width: 100%;
-  padding: 8px;
-  margin: 8px 0;
-  font-size: 1em;
-  cursor: pointer;
-}
-
-.switch-container {
-  display: flex;
-  align-items: center;
-  height: 30px;
-  margin: 16px 0;
-}
-
-.point-item {
-  padding: 8px;
-  margin: 4px 0;
-  background: #2d2d2d;
-  border-radius: 4px;
-  font-family: monospace;
-}
-
-.point-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.color-picker {
-  width: 20px;
-  height: 20px;
-  padding: 0;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  background: none;
-}
-
-.color-picker::-webkit-color-swatch-wrapper {
-  padding: 0;
-}
-
-.color-picker::-webkit-color-swatch {
-  border: 1px solid #444;
-  border-radius: 4px;
-}
-
-.point-type {
-  color: #888;
-  font-size: 0.9em;
-  margin-left: auto;
-}
-
 details > summary {
   list-style: none;
 }

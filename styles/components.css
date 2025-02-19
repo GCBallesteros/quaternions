@@ -130,35 +130,6 @@ input:checked + .slider {
 }
 
 
-
-.trail-toggle {
-  display: inline-flex;
-  align-items: center;
-  margin-left: 12px;
-  gap: 5px;
-}
-
-.point-header {
-  display: grid;
-  grid-template-columns: minmax(100px, auto) auto 80px;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-}
-
-.point-name-container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.point-type {
-  text-align: right;
-  color: #888;
-  font-size: 0.9em;
-}
-
-
 /* Wrapper to position the marker relative to the slider */
 .slider-wrapper {
   position: relative;
