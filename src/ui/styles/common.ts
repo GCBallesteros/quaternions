@@ -3,8 +3,8 @@ export const commonStyles = {
   sectionContainer: 'mb-5',
 
   // Headings
-  sectionTitle: 'text-lg font-semibold text-white mb-2',
-  subsectionTitle: 'text-base font-medium text-white mb-2',
+  sectionTitle: 'text-2xl font-semibold text-white mb-4',
+  subsectionTitle: 'text-xl font-medium text-white mb-3',
 
   // Text styles
   monospace: 'font-mono',

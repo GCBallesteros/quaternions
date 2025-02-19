@@ -275,43 +275,6 @@ input:checked + .slider {
   color: #fff;
 }
 
-.cheatsheet-section {
-  margin-bottom: 40px;
-}
-
-.cheatsheet-section h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #fff;
-  padding: 0 20px;
-}
-
-.cheatsheet-section p {
-  font-size: 16px;
-  line-height: 1.6;
-  margin-bottom: 16px;
-  padding: 0 20px;
-}
-
-.shortcut-list {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 12px 24px;
-  align-items: center;
-  padding: 0 20px;
-}
-
-.shortcut-key {
-  font-family: monospace;
-  background: #333;
-  padding: 4px 8px;
-  border-radius: 4px;
-  color: #fff;
-}
-
-.shortcut-description {
-  color: #ccc;
-}
 
 .modal-title {
   color: #007bff;
