@@ -63,13 +63,21 @@ export class OrientedPoint extends Point {
     this.geometry.add(camera);
   }
 
+  get hasCamera(): boolean {
+    return this.geometry.children.some(
+      (child) => child instanceof THREE.Camera && child.name === '_camera',
+    );
+  }
+
   get camera(): THREE.Camera | null {
     const camera = this.geometry.children.find(
       (child) => child instanceof THREE.Camera && child.name === '_camera',
     );
 
     if (!camera) {
-      console.warn('No camera named "_camera" available in this group!');
+      if (this.hasCamera) {
+        console.warn('No camera named "_camera" available in this group!');
+      }
       return null;
     }
     return camera as THREE.Camera;
@@ -105,7 +113,6 @@ export class OrientedPoint extends Point {
     let camera_quat_body = this.camera?.quaternion;
 
     if (!camera_quat_body) {
-      console.warn('No camera named "_camera" available in this group!');
       return null;
     }
 

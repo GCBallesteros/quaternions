@@ -85,20 +85,25 @@ const satelliteOrientationTemplate = (satellite: Satellite) => html`
   </div>
 `;
 
-const cameraDetailsTemplate = (point: OrientedPoint) => html`
-  <div>
-    Camera: ${point.camera ? 'Present' : 'None'}
-    ${point.camera
-      ? html`
-          <div style="margin-left: 10px;">
-            Body Orientation:
-            [${point.camera_orientation?.map((v) => v.toFixed(3))?.join(', ') ??
-            'default'}]
-          </div>
-        `
-      : ''}
-  </div>
-`;
+const cameraDetailsTemplate = (point: OrientedPoint) => {
+  // Only check camera once
+  const hasCamera = point.camera !== null;
+  return html`
+    <div>
+      Camera: ${hasCamera ? 'Present' : 'None'}
+      ${hasCamera
+        ? html`
+            <div style="margin-left: 10px;">
+              Body Orientation:
+              [${point.camera_orientation
+                ?.map((v) => v.toFixed(3))
+                ?.join(', ') ?? 'default'}]
+            </div>
+          `
+        : ''}
+    </div>
+  `;
+};
 
 const pointDetailsTemplate = (type: string, point: Point) => html`
   <div>Position: [${point.position.map((v) => v.toFixed(2)).join(', ')}]</div>
@@ -114,9 +119,13 @@ const pointDetailsTemplate = (type: string, point: Point) => html`
         ${type === 'Satellite'
           ? html`
               ${satelliteOrientationTemplate(point as Satellite)}
-              ${cameraDetailsTemplate(point as OrientedPoint)}
+              ${point instanceof OrientedPoint && point.hasCamera
+                ? cameraDetailsTemplate(point)
+                : ''}
             `
-          : cameraDetailsTemplate(point as OrientedPoint)}
+          : point instanceof OrientedPoint && point.hasCamera
+            ? cameraDetailsTemplate(point)
+            : ''}
       `
     : ''}
 `;
@@ -140,8 +149,14 @@ export const pointItemTemplate = (
           }}
         />
         <span>${name}</span>
-        ${type === 'Satellite' && (point as OrientedPoint).camera
-          ? trailToggleTemplate(point as Satellite)
+        ${type === 'Satellite' && point instanceof Satellite
+          ? html`
+              ${point.camera
+                ? trailToggleTemplate(point)
+                : html`<span class="text-sm text-neutral-400"
+                    >(no camera)</span
+                  >`}
+            `
           : ''}
         <span class=${bodyStyles.pointItem.summary.type}>${type}</span>
       </summary>
