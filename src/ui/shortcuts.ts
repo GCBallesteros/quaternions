@@ -1,4 +1,5 @@
 import * as monaco from 'monaco-editor';
+import { render } from 'lit-html';
 import {
   deleteScript,
   getSavedScripts,
@@ -6,6 +7,8 @@ import {
   SavedScript,
 } from '../storage.js';
 import { defaultWorkflows } from '../defaultWorkflows.js';
+import { scriptListTemplate } from './shortcutsTemplates.js';
+import { shortcutStyles } from './styles/shortcuts.js';
 
 export function setupGlobalShortcuts(
   editor: monaco.editor.IStandaloneCodeEditor,
@@ -72,86 +75,56 @@ export function setupGlobalShortcuts(
         e.stopPropagation();
 
         const modal = document.querySelector('#open-dialog') as HTMLElement;
-        const scriptList = modal.querySelector('.script-list') as HTMLElement;
+        modal.classList.add('active');
+
+        // Ensure script list container exists
+        let scriptList = modal.querySelector('.script-list') as HTMLElement;
+        if (!scriptList) {
+          scriptList = document.createElement('div');
+          scriptList.className = shortcutStyles.scriptList;
+          modal.querySelector('.modal-content')?.appendChild(scriptList);
+        }
+
         const cancelBtn = document.querySelector(
           '#cancel-open',
         ) as HTMLButtonElement;
 
-        // Populate script list
-        scriptList.innerHTML = '';
-
-        // User scripts section
         const scripts = getSavedScripts();
-        if (Object.keys(scripts).length > 0) {
-          const userScriptsTitle = document.createElement('h3');
-          userScriptsTitle.textContent = 'Your Scripts';
-          userScriptsTitle.style.color = '#fff';
-          userScriptsTitle.style.padding = '0 12px 12px';
-          scriptList.appendChild(userScriptsTitle);
-
-          Object.values(scripts)
-            .sort((a: SavedScript, b: SavedScript) => b.timestamp - a.timestamp)
-            .forEach((script) => {
-              const item = document.createElement('div');
-              item.className = 'script-item';
-              item.innerHTML = `
-            <span class="script-name">${script.name}</span>
-            <div style="display: flex; align-items: center;">
-              <span class="script-date">${new Date(script.timestamp).toLocaleString()}</span>
-              <span class="delete-script" title="Delete script">🗑️</span>
-            </div>
-          `;
-              const deleteBtn = item.querySelector(
-                '.delete-script',
-              ) as HTMLElement;
-              deleteBtn.onclick = (e) => {
-                e.stopPropagation();
-                if (confirm(`Delete script "${script.name}"?`)) {
-                  deleteScript(script.name);
-                  scriptList.removeChild(item);
-                }
-              };
-
-              item.onclick = () => {
-                editor.setValue(script.content);
-                modal.classList.remove('active');
-                cleanup();
-              };
-              scriptList.appendChild(item);
-            });
-        }
-
-        // Default workflows section
-        const defaultTitle = document.createElement('h3');
-        defaultTitle.textContent = 'Example Scripts';
-        defaultTitle.style.color = '#fff';
-        defaultTitle.style.padding = '20px 12px 12px';
-        scriptList.appendChild(defaultTitle);
-
-        Object.entries(defaultWorkflows).forEach(([name, content]) => {
-          const item = document.createElement('div');
-          item.className = 'script-item';
-          item.innerHTML = `
-            <span class="script-name">${name}</span>
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <a href="${content.docLink}" target="_blank" class="script-docs">docs</a>
-            </div>
-          `;
-
-          item.onclick = () => {
-            editor.setValue(content.script);
-            modal.classList.remove('active');
-            cleanup();
-          };
-          scriptList.appendChild(item);
-        });
+        render(
+          scriptListTemplate(
+            scripts,
+            defaultWorkflows,
+            (name: string) => {
+              deleteScript(name);
+              // Re-render the list after deletion
+              render(
+                scriptListTemplate(
+                  getSavedScripts(),
+                  defaultWorkflows,
+                  (n) => deleteScript(n),
+                  (content) => {
+                    editor.setValue(content);
+                    modal.classList.remove('active');
+                    cleanup();
+                  },
+                ),
+                scriptList,
+              );
+            },
+            (content: string) => {
+              editor.setValue(content);
+              modal.classList.remove('active');
+              cleanup();
+            },
+          ),
+          scriptList,
+        );
 
         modal.classList.add('active');
 
         const cleanup = () => {
           cancelBtn.onclick = null;
           window.removeEventListener('keydown', handleKeydown);
-          scriptList.innerHTML = '';
         };
 
         const handleCancel = () => {
