@@ -11,6 +11,7 @@ export const bodyStyles = {
     },
     details: 'mt-2 ml-5 text-sm text-neutral-400',
   },
+  // AI! I dont think we need the trailToggle now since it's in the common styles
   trailToggle: {
     container: 'inline-flex items-center gap-1 ml-3',
     toggle: {
