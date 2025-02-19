@@ -89,36 +89,27 @@ export function setupGlobalShortcuts(
           '#cancel-open',
         ) as HTMLButtonElement;
 
-        const scripts = getSavedScripts();
-        render(
-          scriptListTemplate(
-            scripts,
-            defaultWorkflows,
-            (name: string) => {
-              deleteScript(name);
-              // Re-render the list after deletion
-              render(
-                scriptListTemplate(
-                  getSavedScripts(),
-                  defaultWorkflows,
-                  (n) => deleteScript(n),
-                  (content) => {
-                    editor.setValue(content);
-                    modal.classList.remove('active');
-                    cleanup();
-                  },
-                ),
-                scriptList,
-              );
-            },
-            (content: string) => {
-              editor.setValue(content);
-              modal.classList.remove('active');
-              cleanup();
-            },
-          ),
-          scriptList,
-        );
+        const renderScriptList = () => {
+          const scripts = getSavedScripts();
+          render(
+            scriptListTemplate(
+              scripts,
+              defaultWorkflows,
+              (name: string) => {
+                deleteScript(name);
+                renderScriptList(); // Re-render after deletion
+              },
+              (content: string) => {
+                editor.setValue(content);
+                modal.classList.remove('active');
+                cleanup();
+              },
+            ),
+            scriptList,
+          );
+        };
+
+        renderScriptList();
 
         modal.classList.add('active');
 
