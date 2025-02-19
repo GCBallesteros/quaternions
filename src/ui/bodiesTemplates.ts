@@ -37,10 +37,10 @@ export const moonTemplate = (moonPos: {
 
 const trailToggleTemplate = (satellite: Satellite) => html`
   <div class=${bodyStyles.trailToggle.container}>
-    <label class=${bodyStyles.trailToggle.toggle.label}>
+    <label class=${commonStyles.toggle.label}>
       <input
         type="checkbox"
-        class=${bodyStyles.trailToggle.toggle.input}
+        class=${commonStyles.toggle.input}
         ?checked=${satellite.hasTrail}
         @change=${(e: Event) => {
           const checked = (e.target as HTMLInputElement).checked;
@@ -51,7 +51,7 @@ const trailToggleTemplate = (satellite: Satellite) => html`
           }
         }}
       />
-      <div class=${bodyStyles.trailToggle.toggle.slider}></div>
+      <div class=${commonStyles.toggle.slider}></div>
     </label>
     <span class=${bodyStyles.trailToggle.toggle.icon}>📷</span>
   </div>

@@ -59,11 +59,11 @@ export const lightingTemplate = (
     <h3 class=${commonStyles.sectionTitle}>Lighting</h3>
     <div>
       <div class=${settingsStyles.switchContainer}>
-        <label class="inline-flex items-center cursor-pointer">
+        <label class=${commonStyles.toggle.label}>
           <input
             type="checkbox"
             id="sun-toggle"
-            class="sr-only peer"
+            class=${commonStyles.toggle.input}
             ?checked=${sunVisible}
             @change=${(e: Event) => {
               const target = e.target as HTMLInputElement;
@@ -73,9 +73,7 @@ export const lightingTemplate = (
               document.dispatchEvent(event);
             }}
           />
-          <div
-            class="relative w-9 h-5 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-neutral-600 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"
-          ></div>
+          <div class=${commonStyles.toggle.slider}></div>
         </label>
         <span class=${settingsStyles.switchLabel}>Sun Light</span>
       </div>
