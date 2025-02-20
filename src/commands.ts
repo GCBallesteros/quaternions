@@ -201,6 +201,18 @@ export function buildCommandClosures(
     return state.points[point];
   }
 
+  function camera(name: string): THREE.Camera {
+    if (!name || typeof name !== 'string') {
+      throw new Error('Camera name must be a non-empty string');
+    }
+
+    if (!(name in state.cameras)) {
+      throw new Error(`Camera '${name}' not found`);
+    }
+
+    return state.cameras[name];
+  }
+
   function relativeRot(
     point_name: string,
     q: [number, number, number, number],
@@ -342,6 +354,7 @@ export function buildCommandClosures(
     mov2sat,
     findBestQuaternion,
     point,
+    camera,
     reset,
     setTime,
     listPoints,
