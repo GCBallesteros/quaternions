@@ -162,7 +162,7 @@ export function _mov(
   return Ok(null);
 }
 
-export function find_best_quaternion_for_desired_attitude(
+function find_best_quaternion_for_desired_attitude(
   primary_body_vector: Vector3,
   secondary_body_vector: Vector3,
   primary_body_vector_target: Vector3,
@@ -236,6 +236,8 @@ export function find_best_quaternion_for_desired_attitude(
 
   return finalQuaternionAsArray;
 }
+
+export { find_best_quaternion_for_desired_attitude };
 
 export function _findBestQuaternion(
   state: State,
@@ -533,10 +535,13 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
     }
   }
 
-  // Update moon position and phase
+  // Update moon position, phase and orientation
   const moonData = getMoonPosition(state.currentTime);
   state.bodies.moon.position.set(...moonData.position);
   (state.bodies.moon as any).phase = moonData.phase;
+  state.bodies.moon.setRotationFromQuaternion(
+    new THREE.Quaternion(...moonData.orientation),
+  );
 
   return Ok(null);
 }

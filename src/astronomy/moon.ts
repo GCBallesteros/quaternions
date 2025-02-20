@@ -30,12 +30,15 @@ function fixangle(a: number): number {
  * @param date - JavaScript Date object (UTC)
  * @returns Position vector [x, y, z] in kilometers and phase information
  */
+import { find_best_quaternion_for_desired_attitude } from '../core.js';
+
 export function getMoonPosition(date: Date): {
   position: [number, number, number];
   phase: number;
   age: number;
   distance: number;
   angularDiameter: number;
+  orientation: [number, number, number, number];
 } {
   // Days since epoch 1980.0
   const jd = dateToJulian(date);
@@ -117,11 +120,31 @@ export function getMoonPosition(date: Date): {
   // Convert moonAge + 180 to range [-180, 180]
   const normalizedPhase = ((moonAge + 180 + 180) % 360) - 180;
 
+  // Calculate Moon's orientation
+  // We define a point on the Moon's surface (in its body frame) that should always face Earth
+  const moonFacePoint: [number, number, number] = [0, 0, -1]; // Point on the "front" of the Moon
+
+  // The Earth-to-Moon vector (normalized)
+  const earthToMoon: [number, number, number] = [
+    position[0],
+    position[1],
+    position[2],
+  ].map((x) => x / moonDistance) as [number, number, number];
+
+  // Find quaternion to align Moon's face with Earth
+  const moonOrientation = find_best_quaternion_for_desired_attitude(
+    moonFacePoint, // Primary body vector (Moon's face direction)
+    [0, 0, 1], // Secondary body vector (Moon's "up" direction)
+    earthToMoon, // Primary target vector (Earth direction)
+    [0, 0, 1], // Secondary target vector (try to keep Moon's north aligned with Earth's)
+  );
+
   return {
     position,
     phase: normalizedPhase,
     age: (SYNODIC_MONTH * fixangle(moonAge)) / 360.0,
     distance: moonDistance,
     angularDiameter: angularDiameter,
+    orientation: moonOrientation,
   };
 }
