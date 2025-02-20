@@ -53,6 +53,8 @@ export class Vector3 {
   clone(): Vector3 {
     return new Vector3(this.x, this.y, this.z);
   }
-  
-  // AI! Create a to array function
+
+  toArray(): [number, number, number] {
+    return [this.x, this.y, this.z];
+  }
 }
