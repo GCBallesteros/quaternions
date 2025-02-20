@@ -70,6 +70,7 @@ export function initScene(
     isTimeFlowing: true,
     timeSpeedMultiplier: 2,
     cameras: { main: camera },
+    activeCamera: camera,
     bodies: { moon, earth: earth_geometries.earth },
     plots: {},
   };
@@ -135,5 +136,6 @@ export function createAnimator(
     newCamera.aspect = canvas.clientWidth / canvas.clientHeight;
     newCamera.updateProjectionMatrix();
     currentCamera = newCamera;
+    state.activeCamera = newCamera;
   };
 }

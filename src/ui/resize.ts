@@ -15,8 +15,8 @@ export function setupResizer(
     const canvasWidth = canvasContainer.clientWidth;
     const canvasHeight = window.innerHeight;
     renderer.setSize(canvasWidth, canvasHeight, true);
-    state.cameras.main.aspect = canvasWidth / canvasHeight;
-    state.cameras.main.updateProjectionMatrix();
+    state.activeCamera.aspect = canvasWidth / canvasHeight;
+    state.activeCamera.updateProjectionMatrix();
 
     editor.layout({
       width: editorContainer.clientWidth,
