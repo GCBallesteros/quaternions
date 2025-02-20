@@ -527,13 +527,6 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
   // Update celestial bodies positions
   updateSunLight(state.lights.sun, newTime);
 
-  // Update orbiting satellites
-  for (const point_name in state.points) {
-    let sat = state.points[point_name];
-    if (sat instanceof Satellite) {
-      sat.update(state.currentTime, state);
-    }
-  }
 
   // Update moon position, phase and orientation
   const moonData = getMoonPosition(state.currentTime);
@@ -542,6 +535,14 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
   state.bodies.moon.setRotationFromQuaternion(
     new THREE.Quaternion(...moonData.orientation),
   );
+
+  // Update orbiting satellites
+  for (const point_name in state.points) {
+    let sat = state.points[point_name];
+    if (sat instanceof Satellite) {
+      sat.update(state.currentTime, state);
+    }
+  }
 
   return Ok(null);
 }
