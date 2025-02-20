@@ -122,7 +122,7 @@ export function getMoonPosition(date: Date): {
 
   // Calculate Moon's orientation
   // We define a point on the Moon's surface (in its body frame) that should always face Earth
-  const moonFacePoint: [number, number, number] = [0, 0, -1]; // Point on the "front" of the Moon
+  const moonFacePoint: [number, number, number] = [0, 1, 0]; // Point on the "front" of the Moon
 
   // The Earth-to-Moon vector (normalized)
   const earthToMoon: [number, number, number] = [
