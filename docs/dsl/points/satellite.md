@@ -175,24 +175,3 @@ await addSatellite(
 );
 ```
 
-## point
-
-Returns a point in the scene state.
-
-#### Arguments
-
-| Parameter  | Type     | Description                     |
-|------------|----------|---------------------------------|
-| `point`    | `string` | The name of the point.          |
-
-#### Returns
-
-A `Point`, `OrientedPoint`, or `Satellite` instance.
-
-#### Example
-
-```js
-// Calculate the angle between the x-axis of the `sat` point
-// and the nadir direction
-angle("nadir", point("sat").frame.x);
-```

@@ -1,5 +1,27 @@
 # Utility Commands
 
+## point
+
+Returns a point from the scene state by name, or null if not found.
+
+| Parameter | Type     | Description                           |
+|-----------|----------|---------------------------------------|
+| `point`   | `string` | The name of the point to retrieve     |
+
+**Returns**: A `Point`, `OrientedPoint`, or `Satellite` instance if found, null otherwise.
+
+**Example**:
+```js
+const sat = point("sat");
+if (sat) {
+  // Point exists, safe to use
+  angle("nadir", sat.frame.x);
+} else {
+  // Point not found
+  log("Satellite not found");
+}
+```
+
 ## log
 
 Prints a message to the integrated console.
