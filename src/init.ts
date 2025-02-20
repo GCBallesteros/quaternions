@@ -98,6 +98,7 @@ export function createAnimator(
   scene: THREE.Scene,
   state: State,
   initialCamera: THREE.PerspectiveCamera,
+  canvas: HTMLElement,
 ): (newCamera: THREE.PerspectiveCamera) => void {
   let currentCamera = initialCamera;
 
@@ -130,6 +131,9 @@ export function createAnimator(
         'Invalid camera: switchCamera requires a PerspectiveCamera instance',
       );
     }
-    currentCamera = newCamera; // Change the camera within the closure
+    // Update aspect ratio to match canvas
+    newCamera.aspect = canvas.clientWidth / canvas.clientHeight;
+    newCamera.updateProjectionMatrix();
+    currentCamera = newCamera;
   };
 }

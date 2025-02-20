@@ -20,7 +20,7 @@ import { log } from './logger.js';
 const { scene, canvas, renderer } = initializeCanvas();
 let state = initScene(scene, canvas, renderer);
 let camera = state.cameras.main;
-const switchCamera = createAnimator(renderer, scene, state, camera);
+const switchCamera = createAnimator(renderer, scene, state, camera, canvas);
 
 const commands = buildCommandClosures(scene, state, switchCamera);
 
