@@ -127,6 +127,25 @@ Resumes the simulation time. Time will begin advancing at the rate specified by 
 resumeSimTime() // Time begins advancing again
 ```
 
+## distance
+
+Calculates the Euclidean distance between two points in 3D space.
+
+| Parameter | Type      | Description                           |
+|-----------|-----------|---------------------------------------|
+| `point1`  | `Vector3` | First point coordinates [x, y, z]     |
+| `point2`  | `Vector3` | Second point coordinates [x, y, z]    |
+
+**Returns**: The straight-line distance between the two points in the same units as the input coordinates.
+
+**Example**:
+```js
+const p1 = [0, 0, 0];
+const p2 = [3, 4, 0];
+const dist = distance(p1, p2);  // Returns 5
+log(`Distance: ${dist}`);
+```
+
 ## haversineDistance
 
 Calculates the great circle distance between two points on Earth using the haversine formula.
