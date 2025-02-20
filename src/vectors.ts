@@ -1,5 +1,9 @@
 export class Vector3 {
-  constructor(public x: number = 0, public y: number = 0, public z: number = 0) {}
+  constructor(
+    public x: number = 0,
+    public y: number = 0,
+    public z: number = 0,
+  ) {}
 
   add(v: Vector3): Vector3 {
     return new Vector3(this.x + v.x, this.y + v.y, this.z + v.z);
@@ -42,7 +46,7 @@ export class Vector3 {
     return new Vector3(
       ix * qw + iw * -qx + iy * -qz - iz * -qy,
       iy * qw + iw * -qy + iz * -qx - ix * -qz,
-      iz * qw + iw * -qz + ix * -qy - iy * -qx
+      iz * qw + iw * -qz + ix * -qy - iy * -qx,
     );
   }
 
