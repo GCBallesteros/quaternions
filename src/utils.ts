@@ -197,10 +197,11 @@ export function haversineDistance(
   return RADIUS_EARTH * c;
 }
 
-// AI! Complete the distance function
 export function distance(point1: Vector3, point2: Vector3): number {
-  // TODO
-  // Calculates the euclidean distance between two points
+  const dx = point2[0] - point1[0];
+  const dy = point2[1] - point1[1];
+  const dz = point2[2] - point1[2];
+  return Math.sqrt(dx * dx + dy * dy + dz * dz);
 }
 
 export function disposeObject(object: THREE.Object3D): void {
