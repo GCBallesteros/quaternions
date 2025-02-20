@@ -15,8 +15,6 @@ export function setupResizer(
     const canvasWidth = canvasContainer.clientWidth;
     const canvasHeight = window.innerHeight;
     renderer.setSize(canvasWidth, canvasHeight, true);
-    // AI! This should not be for the main camera but for the camera currently
-    // associated with the renderer
     state.cameras.main.aspect = canvasWidth / canvasHeight;
     state.cameras.main.updateProjectionMatrix();
 
