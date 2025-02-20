@@ -122,10 +122,19 @@ export class Trail {
       const c = position.lengthSq() - EARTH_RADIUS * EARTH_RADIUS;
 
       const discriminant = b * b - 4 * a * c;
-      // AI! This is not enough. We only one to keep the smallest POSITIVE value of t. If it's negative discard it.
       if (discriminant >= 0) {
-        // Get closest intersection (smaller t)
-        const t = (-b - Math.sqrt(discriminant)) / (2 * a);
+        // Calculate both intersection points
+        const t1 = (-b - Math.sqrt(discriminant)) / (2 * a);
+        const t2 = (-b + Math.sqrt(discriminant)) / (2 * a);
+        
+        // Find smallest positive t value
+        let t = t1 > 0 ? t1 : t2 > 0 ? t2 : -1;
+        
+        // If no positive intersection, skip this point
+        if (t < 0) {
+          return None;
+        }
+        
         const intersectionPoint = position
           .clone()
           .add(dir.clone().multiplyScalar(t));
