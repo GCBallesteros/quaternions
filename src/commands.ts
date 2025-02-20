@@ -23,8 +23,9 @@ import {
   _removePlot,
 } from './core.js';
 import { log } from './logger.js';
-import { OrientationMode } from './points/satellite.js';
+import { OrientationMode, Satellite } from './points/satellite.js';
 import { Point } from './points/point.js';
+import { OrientedPoint } from './points/orientedPoint.js';
 import { CommandFunction, State, TleSource, Vector3 } from './types.js';
 import {
   geo2xyz,
@@ -206,11 +207,25 @@ export function buildCommandClosures(
       throw new Error('Camera name must be a non-empty string');
     }
 
-    if (!(name in state.cameras)) {
-      throw new Error(`Camera '${name}' not found`);
+    // First check built-in cameras
+    if (name in state.cameras) {
+      return state.cameras[name];
     }
 
-    return state.cameras[name];
+    // Then check points for cameras
+    for (const pointName in state.points) {
+      const point = state.points[pointName];
+      if (point instanceof OrientedPoint) {
+        if (pointName === name && point.hasCamera) {
+          const camera = point.camera;
+          if (camera) {
+            return camera;
+          }
+        }
+      }
+    }
+
+    throw new Error(`Camera '${name}' not found in cameras or points`);
   }
 
   function relativeRot(
