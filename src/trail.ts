@@ -126,15 +126,15 @@ export class Trail {
         // Calculate both intersection points
         const t1 = (-b - Math.sqrt(discriminant)) / (2 * a);
         const t2 = (-b + Math.sqrt(discriminant)) / (2 * a);
-        
+
         // Find smallest positive t value
         let t = t1 > 0 ? t1 : t2 > 0 ? t2 : -1;
-        
+
         // If no positive intersection, skip this point
         if (t < 0) {
           return None;
         }
-        
+
         const intersectionPoint = position
           .clone()
           .add(dir.clone().multiplyScalar(t));
