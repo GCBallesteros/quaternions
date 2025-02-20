@@ -22,6 +22,30 @@ if (sat) {
 }
 ```
 
+## camera
+
+Returns a camera from the scene state by name, or null if not found.
+
+| Parameter | Type     | Description                           |
+|-----------|----------|---------------------------------------|
+| `name`    | `string` | The name of the camera to retrieve    |
+
+**Returns**: A `THREE.Camera` instance if found, null otherwise. Cameras can be found in:
+- Built-in cameras (like 'main')
+- Cameras attached to OrientedPoints or Satellites
+
+**Example**:
+```js
+const cam = camera("sat1");
+if (cam) {
+  // Camera exists, safe to use
+  // ... use camera ...
+} else {
+  // Camera not found
+  log("Camera not found");
+}
+```
+
 ## log
 
 Prints a message to the integrated console.

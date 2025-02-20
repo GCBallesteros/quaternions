@@ -204,7 +204,7 @@ export function buildCommandClosures(
   }
 
   // AI! REturn null if camera is not found and create documentation for this function on docs/dsl/utility.md
-  function camera(name: string): THREE.Camera {
+  function camera(name: string): THREE.Camera | null {
     if (!name || typeof name !== 'string') {
       throw new Error('Camera name must be a non-empty string');
     }
@@ -227,7 +227,8 @@ export function buildCommandClosures(
       }
     }
 
-    throw new Error(`Camera '${name}' not found in cameras or points`);
+    log(`Camera '${name}' not found in cameras or points`);
+    return null;
   }
 
   function relativeRot(
