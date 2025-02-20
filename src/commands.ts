@@ -195,6 +195,9 @@ export function buildCommandClosures(
       throw new Error('Point name must be a non-empty string');
     }
 
+    // AI! I don't want to throw an exception here. Instead just log and return null
+    // to indicate the point is not there. Update the documentation for the point function
+    // on docs/dsl/points/satellite.md AND then move the docs of the function to docs/dsl/utility.md
     if (!(point in state.points)) {
       throw new Error(`Point '${point}' not found`);
     }
