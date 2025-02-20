@@ -203,6 +203,7 @@ export function buildCommandClosures(
     return state.points[point];
   }
 
+  // AI! REturn null if camera is not found and create documentation for this function on docs/dsl/utility.md
   function camera(name: string): THREE.Camera {
     if (!name || typeof name !== 'string') {
       throw new Error('Camera name must be a non-empty string');
