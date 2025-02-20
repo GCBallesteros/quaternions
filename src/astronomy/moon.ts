@@ -1,4 +1,6 @@
 import { toRad, dateToJulian, eci2ecef } from './sun.js';
+import { find_best_quaternion_for_desired_attitude } from '../core.js';
+import { sph2xyz } from '../utils.js';
 
 // Synodic month (new Moon to new Moon)
 const SYNODIC_MONTH = 29.53058868;
@@ -30,7 +32,6 @@ function fixangle(a: number): number {
  * @param date - JavaScript Date object (UTC)
  * @returns Position vector [x, y, z] in kilometers and phase information
  */
-import { find_best_quaternion_for_desired_attitude } from '../core.js';
 
 export function getMoonPosition(date: Date): {
   position: [number, number, number];
@@ -122,7 +123,9 @@ export function getMoonPosition(date: Date): {
 
   // Calculate Moon's orientation
   // We define a point on the Moon's surface (in its body frame) that should always face Earth
-  const moonFacePoint: [number, number, number] = [0, 1, 0]; // Point on the "front" of the Moon
+  // NOTE: Point is chosen arbitrarily to sort of look like picture of the Moon
+  // no particular rigor there
+  const moonFacePoint: [number, number, number] = sph2xyz([45, 0, 0]);
 
   // The Earth-to-Moon vector (normalized)
   const earthToMoon: [number, number, number] = [

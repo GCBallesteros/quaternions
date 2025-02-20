@@ -18,7 +18,6 @@ export function makeMoon(): THREE.Mesh {
   });
 
   const moon = new THREE.Mesh(moonGeometry, moonMaterial);
-  moon.rotation.x = Math.PI / 2;
 
   return moon;
 }
