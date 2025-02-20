@@ -12,6 +12,8 @@ export const cheatsheetTemplate = (isMac: boolean, onClose: () => void) => html`
     <div class=${cheatsheetStyles.section}>
       <h2 class=${cheatsheetStyles.sectionTitle}>Keyboard Shortcuts</h2>
       <div class=${cheatsheetStyles.shortcutList}>
+        // AI! Define the shortcuts on a separate dictionary and then use a loop to
+        // create them.
         <div class=${cheatsheetStyles.shortcutKeys}>
           <span class=${cheatsheetStyles.shortcutKey}
             >${isMac ? '⌘' : 'Ctrl'} + S</span
@@ -25,6 +27,8 @@ export const cheatsheetTemplate = (isMac: boolean, onClose: () => void) => html`
           >
           <span class=${cheatsheetStyles.shortcutKey}>ESC</span>
         </div>
+        // AI! Define the shortcuts descriptions on a separate dictionary and then use a loop to
+        // create them.
         <div class=${cheatsheetStyles.shortcutDescriptions}>
           <span class=${cheatsheetStyles.shortcutDescription}
             >Save current script</span
