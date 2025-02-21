@@ -11,30 +11,12 @@ import { makeMoon } from './moon.js';
 import { updatePlots } from './plots.js';
 import { State } from './types.js';
 
-export function initializeCanvas(): {
-  scene: THREE.Scene;
-  canvas: HTMLElement;
-  renderer: THREE.WebGLRenderer;
-  secondaryRenderer?: THREE.WebGLRenderer;
-} {
-  const canvas = document.getElementById('webgl-canvas')!;
+export function initializeCanvas(
+  canvas: HTMLCanvasElement,
+): THREE.WebGLRenderer {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-
-  const secondaryCanvas = document.getElementById(
-    'secondary-canvas',
-  ) as HTMLCanvasElement;
-  const secondaryRenderer = new THREE.WebGLRenderer({
-    canvas: secondaryCanvas,
-    antialias: true,
-  });
-  secondaryRenderer.setSize(
-    secondaryCanvas.clientWidth,
-    secondaryCanvas.clientHeight,
-  );
-
-  const scene = new THREE.Scene();
-  return { scene, canvas, renderer, secondaryRenderer };
+  return renderer;
 }
 
 export function addInitGeometries(state: State, scene: THREE.Scene): void {
@@ -110,6 +92,7 @@ export function initScene(
 
 export function createAnimator(
   renderer: THREE.WebGLRenderer,
+  secondaryRenderer: THREE.WebGLRenderer,
   scene: THREE.Scene,
   state: State,
   initialCamera: THREE.PerspectiveCamera,

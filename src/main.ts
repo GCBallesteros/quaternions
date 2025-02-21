@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { createAnimator, initScene, initializeCanvas } from './init.js';
 import { buildExecuteCommand } from './terminal.js';
 import { setupUI } from './ui.js';
@@ -17,10 +18,25 @@ import { log } from './logger.js';
 // TODO: Load workflows button
 // TODO: Transition smoothly between cameras (maybe)
 
-const { scene, canvas, renderer } = initializeCanvas();
+const canvas = document.getElementById('webgl-canvas') as HTMLCanvasElement;
+const secondaryCanvas = document.getElementById(
+  'secondary-canvas',
+) as HTMLCanvasElement;
+
+const renderer = initializeCanvas(canvas);
+const secondaryRenderer = initializeCanvas(secondaryCanvas);
+
+const scene = new THREE.Scene();
 let state = initScene(scene, canvas, renderer);
 let camera = state.cameras.main;
-const switchCamera = createAnimator(renderer, scene, state, camera, canvas);
+const switchCamera = createAnimator(
+  renderer,
+  secondaryRenderer,
+  scene,
+  state,
+  camera,
+  canvas,
+);
 
 const commands = buildCommandClosures(scene, state, switchCamera);
 
