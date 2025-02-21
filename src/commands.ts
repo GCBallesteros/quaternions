@@ -332,6 +332,16 @@ export function buildCommandClosures(
     if (!result.ok) throw new Error(result.val);
   }
 
+  function showSecondaryView(): void {
+    const result = _showSecondaryView();
+    if (!result.ok) throw new Error(result.val);
+  }
+
+  function hideSecondaryView(): void {
+    const result = _hideSecondaryView();
+    if (!result.ok) throw new Error(result.val);
+  }
+
   async function longRunning(iterations: number = 100000000): Promise<void> {
     const worker = new Worker(
       new URL('./workers/longRunningWorker.ts', import.meta.url),
@@ -385,6 +395,8 @@ export function buildCommandClosures(
     resumeTrail,
     pauseTrail,
     toggleTrail,
+    showSecondaryView,
+    hideSecondaryView,
     // Add utility functions to commands
     geo2xyz,
     getPositionOfPoint,

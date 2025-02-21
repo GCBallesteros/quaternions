@@ -527,7 +527,6 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
   // Update celestial bodies positions
   updateSunLight(state.lights.sun, newTime);
 
-
   // Update moon position, phase and orientation
   const moonData = getMoonPosition(state.currentTime);
   state.bodies.moon.position.set(...moonData.position);
@@ -728,6 +727,24 @@ export function _removePlot(state: State, id: string): Result<null, string> {
   }
 
   cleanupPlot(id, state, true);
+  return Ok(null);
+}
+
+export function _showSecondaryView(): Result<null, string> {
+  const secondaryView = document.getElementById('secondary-view');
+  if (!secondaryView) {
+    return Err('Secondary view element not found');
+  }
+  secondaryView.classList.remove('hidden');
+  return Ok(null);
+}
+
+export function _hideSecondaryView(): Result<null, string> {
+  const secondaryView = document.getElementById('secondary-view');
+  if (!secondaryView) {
+    return Err('Secondary view element not found');
+  }
+  secondaryView.classList.add('hidden');
   return Ok(null);
 }
 
