@@ -4,6 +4,7 @@ import {
   _addSatellite,
   _angle,
   _createLine,
+  _createPlot,
   _deletePoint,
   _fetchTLE,
   _findBestQuaternion,
@@ -11,21 +12,20 @@ import {
   _mov2sat,
   _pauseSimTime,
   _pauseTrail,
+  _relativeRot,
+  _removePlot,
   _reset,
   _resumeSimTime,
   _resumeTrail,
   _rot,
-  _relativeRot,
   _setTime,
   _toggleSimTime,
   _toggleTrail,
-  _createPlot,
-  _removePlot,
 } from './core.js';
 import { log } from './logger.js';
-import { OrientationMode, Satellite } from './points/satellite.js';
-import { Point } from './points/point.js';
 import { OrientedPoint } from './points/orientedPoint.js';
+import { Point } from './points/point.js';
+import { OrientationMode } from './points/satellite.js';
 import { CommandFunction, State, TleSource, Vector3 } from './types.js';
 import {
   geo2xyz,
