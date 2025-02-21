@@ -101,7 +101,7 @@ export function createAnimator(
   initialCamera: THREE.PerspectiveCamera,
   canvas: HTMLElement,
 ): (newCamera: THREE.PerspectiveCamera) => void {
-  let currentCamera = initialCamera;
+  state.activeCamera = initialCamera;
 
   const clock = new THREE.Clock();
   let frameCount = 0;
@@ -122,7 +122,7 @@ export function createAnimator(
       frameCount = frameCount % 1000; // Prevent potential overflow
     }
 
-    renderer.render(scene, currentCamera);
+    renderer.render(scene, state.activeCamera);
   }
   renderer.setAnimationLoop(animate);
 
@@ -135,7 +135,6 @@ export function createAnimator(
     // Update aspect ratio to match canvas
     newCamera.aspect = canvas.clientWidth / canvas.clientHeight;
     newCamera.updateProjectionMatrix();
-    currentCamera = newCamera;
     state.activeCamera = newCamera;
   };
 }
