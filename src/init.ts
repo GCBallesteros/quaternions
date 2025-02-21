@@ -15,13 +15,26 @@ export function initializeCanvas(): {
   scene: THREE.Scene;
   canvas: HTMLElement;
   renderer: THREE.WebGLRenderer;
+  secondaryRenderer?: THREE.WebGLRenderer;
 } {
   const canvas = document.getElementById('webgl-canvas')!;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 
+  const secondaryCanvas = document.getElementById(
+    'secondary-canvas',
+  ) as HTMLCanvasElement;
+  const secondaryRenderer = new THREE.WebGLRenderer({
+    canvas: secondaryCanvas,
+    antialias: true,
+  });
+  secondaryRenderer.setSize(
+    secondaryCanvas.clientWidth,
+    secondaryCanvas.clientHeight,
+  );
+
   const scene = new THREE.Scene();
-  return { scene, canvas, renderer };
+  return { scene, canvas, renderer, secondaryRenderer };
 }
 
 export function addInitGeometries(state: State, scene: THREE.Scene): void {
@@ -123,7 +136,17 @@ export function createAnimator(
       frameCount = frameCount % 1000; // Prevent potential overflow
     }
 
+    // Render main view
     renderer.render(scene, state.activeCamera);
+
+    // Render secondary view if camera is available
+    const secondaryView = document.getElementById('secondary-view');
+    if (
+      !secondaryView?.classList.contains('hidden') &&
+      state.secondaryCamera.some
+    ) {
+      secondaryRenderer.render(scene, state.secondaryCamera.val);
+    }
   }
   renderer.setAnimationLoop(animate);
 
