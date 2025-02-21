@@ -730,24 +730,6 @@ export function _removePlot(state: State, id: string): Result<null, string> {
   return Ok(null);
 }
 
-export function _showSecondaryView(): Result<null, string> {
-  const secondaryView = document.getElementById('secondary-view');
-  if (!secondaryView) {
-    return Err('Secondary view element not found');
-  }
-  secondaryView.classList.remove('hidden');
-  return Ok(null);
-}
-
-export function _hideSecondaryView(): Result<null, string> {
-  const secondaryView = document.getElementById('secondary-view');
-  if (!secondaryView) {
-    return Err('Secondary view element not found');
-  }
-  secondaryView.classList.add('hidden');
-  return Ok(null);
-}
-
 export function _reset(
   scene: THREE.Scene,
   state: State,

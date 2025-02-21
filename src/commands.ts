@@ -333,13 +333,19 @@ export function buildCommandClosures(
   }
 
   function showSecondaryView(): void {
-    const result = _showSecondaryView();
-    if (!result.ok) throw new Error(result.val);
+    const secondaryView = document.getElementById('secondary-view');
+    if (!secondaryView) {
+      throw new Error('Secondary view element not found');
+    }
+    secondaryView.classList.remove('hidden');
   }
 
   function hideSecondaryView(): void {
-    const result = _hideSecondaryView();
-    if (!result.ok) throw new Error(result.val);
+    const secondaryView = document.getElementById('secondary-view');
+    if (!secondaryView) {
+      throw new Error('Secondary view element not found');
+    }
+    secondaryView.classList.add('hidden');
   }
 
   async function longRunning(iterations: number = 100000000): Promise<void> {
