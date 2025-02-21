@@ -332,7 +332,7 @@ export function buildCommandClosures(
     if (!result.ok) throw new Error(result.val);
   }
 
-  function showSecondaryView(): void {
+  function showSecondaryView(camera: THREE.PerspectiveCamera): void {
     const secondaryView = document.getElementById('secondary-view');
     if (!secondaryView) {
       throw new Error('Secondary view element not found');
