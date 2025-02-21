@@ -1,6 +1,6 @@
 import * as satellite from 'satellite.js';
 import * as THREE from 'three';
-import { Err, Ok, Result } from 'ts-results';
+import { Err, Ok, Result, Some } from 'ts-results';
 import { getMoonPosition } from './astronomy/moon.js';
 import { updateSunLight } from './astronomy/sun.js';
 import {
@@ -727,6 +727,19 @@ export function _removePlot(state: State, id: string): Result<null, string> {
   }
 
   cleanupPlot(id, state, true);
+  return Ok(null);
+}
+
+export function _showSecondaryView(
+  state: State,
+  camera: THREE.PerspectiveCamera,
+): Result<null, string> {
+  const secondaryView = document.getElementById('secondary-view');
+  if (!secondaryView) {
+    return Err('Secondary view element not found');
+  }
+  state.secondaryCamera = Some(camera);
+  secondaryView.classList.remove('hidden');
   return Ok(null);
 }
 

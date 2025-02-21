@@ -128,6 +128,8 @@ export function createAnimator(
       !secondaryView?.classList.contains('hidden') &&
       state.secondaryCamera.some
     ) {
+      //const secondaryCanvas = secondaryRenderer.domElement;
+      //console.log(secondaryCanvas);
       secondaryRenderer.render(scene, state.secondaryCamera.val);
     }
   }

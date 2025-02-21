@@ -19,6 +19,7 @@ import {
   _resumeTrail,
   _rot,
   _setTime,
+  _showSecondaryView,
   _toggleSimTime,
   _toggleTrail,
 } from './core.js';
@@ -334,11 +335,10 @@ export function buildCommandClosures(
 
   // AI! Create _showSecondaryView on core.ts and use it here. The purpose of this is to be able to pass to it the state and camera to update the secondary camera.
   function showSecondaryView(camera: THREE.PerspectiveCamera): void {
-    const secondaryView = document.getElementById('secondary-view');
-    if (!secondaryView) {
-      throw new Error('Secondary view element not found');
+    const result = _showSecondaryView(state, camera);
+    if (!result.ok) {
+      throw new Error(result.val);
     }
-    secondaryView.classList.remove('hidden');
   }
 
   function hideSecondaryView(): void {
