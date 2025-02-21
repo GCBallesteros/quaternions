@@ -1,15 +1,15 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { None } from 'ts-results';
 import { getMoonPosition } from './astronomy/moon.js';
 import { updateSunLight } from './astronomy/sun.js';
 import { createFloatingPoint } from './components.js';
+import { setupTimeControls } from './components/timeControls.js';
 import { _createLine, _mov, _setTime, addFrame } from './core.js';
 import { makeEarth } from './earth.js';
 import { makeMoon } from './moon.js';
-import { State } from './types.js';
-import { setupTimeControls } from './components/timeControls.js';
-import { log } from './logger.js';
 import { updatePlots } from './plots.js';
+import { State } from './types.js';
 
 export function initializeCanvas(): {
   scene: THREE.Scene;
@@ -71,6 +71,7 @@ export function initScene(
     timeSpeedMultiplier: 2,
     cameras: { main: camera },
     activeCamera: camera,
+    secondaryCamera: None,
     bodies: { moon, earth: earth_geometries.earth },
     plots: {},
   };

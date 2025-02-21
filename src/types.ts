@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrientedPoint } from './points/orientedPoint.js';
 import { Point } from './points/point.js';
+import { Option } from 'ts-results';
 
 export type Vector3 = [number, number, number];
 export type Vector4 = [number, number, number, number];
@@ -45,6 +46,7 @@ export interface State {
   tles: Record<string, string>;
   cameras: Record<string, THREE.PerspectiveCamera>;
   activeCamera: THREE.PerspectiveCamera;
+  secondaryCamera: Option<THREE.PerspectiveCamera>;
   bodies: { moon: THREE.Mesh; earth: THREE.Mesh };
   plots: Record<string, Plot>;
 }
