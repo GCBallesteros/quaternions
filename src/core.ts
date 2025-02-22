@@ -743,6 +743,14 @@ export function _showSecondaryView(
   return Ok(null);
 }
 
+export function _hideSecondaryView(): void {
+  const secondaryView = document.getElementById('secondary-view');
+  if (!secondaryView) {
+    throw new Error('Secondary view element not found');
+  }
+  secondaryView.classList.add('hidden');
+}
+
 export function _reset(
   scene: THREE.Scene,
   state: State,

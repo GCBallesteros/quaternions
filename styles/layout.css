@@ -11,14 +11,11 @@
 #secondary-view {
   position: absolute;
   display: flex;
-  justify-content: center;
-  align-items: center;
   bottom: 20px;
   left: 20px;
   width: 200px;
   height: 200px;
-  background-color: black;
-  border: 2px solid #aaaaaa;
+  border: 2px solid #ccc;
   border-radius: 2px;
   z-index: 2;
 }
@@ -30,6 +27,22 @@
 #secondary-canvas {
   width: 100%;
   height: 100%;
+}
+
+#close-button-sec-view {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background: #ccc;
+  border: none;
+  color: black;
+  font-size: 20px;
+  cursor: pointer;
+  width: 17px;
+  height: 17px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 
 #right-panel {
@@ -60,7 +73,7 @@
 #settings-container,
 #bodies-container,
 #plots-container {
-  padding: 20px 32px 20px 20px;  /* top right bottom left */
+  padding: 20px 32px 20px 20px; /* top right bottom left */
   color: white;
   background: #1e1e1e;
 }

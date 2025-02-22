@@ -8,6 +8,7 @@ import {
   _deletePoint,
   _fetchTLE,
   _findBestQuaternion,
+  _hideSecondaryView,
   _mov,
   _mov2sat,
   _pauseSimTime,
@@ -342,11 +343,7 @@ export function buildCommandClosures(
   }
 
   function hideSecondaryView(): void {
-    const secondaryView = document.getElementById('secondary-view');
-    if (!secondaryView) {
-      throw new Error('Secondary view element not found');
-    }
-    secondaryView.classList.add('hidden');
+    _hideSecondaryView();
   }
 
   async function longRunning(iterations: number = 100000000): Promise<void> {
