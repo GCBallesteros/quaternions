@@ -122,19 +122,8 @@ export function buildCommandClosures(
     startArg: string | Array3 | Vector3,
     endArg: string | Array3 | Vector3,
   ): void {
-    let startArg_: string | Array3, endArg_: string | Array3;
-
-    if (typeof startArg === 'string') {
-      startArg_ = startArg;
-    } else {
-      startArg_ = normalizeCoordinates(startArg);
-    }
-
-    if (typeof endArg === 'string') {
-      endArg_ = endArg;
-    } else {
-      endArg_ = normalizeCoordinates(endArg);
-    }
+    let startArg_ = normalizeCoordinates(startArg, true);
+    let endArg_ = normalizeCoordinates(endArg, true);
 
     const result = _createLine(scene, state, name, startArg_, endArg_);
     if (result.ok) {
@@ -148,18 +137,8 @@ export function buildCommandClosures(
     vec1: string | Array3 | Vector3,
     vec2: string | Array3 | Vector3,
   ): number {
-    let vec1_: string | Array3, vec2_: string | Array3;
-    if (typeof vec1 === 'string') {
-      vec1_ = vec1;
-    } else {
-      vec1_ = normalizeCoordinates(vec1);
-    }
-
-    if (typeof vec2 === 'string') {
-      vec2_ = vec2;
-    } else {
-      vec2_ = normalizeCoordinates(vec2);
-    }
+    let vec1_ = normalizeCoordinates(vec1, true);
+    let vec2_ = normalizeCoordinates(vec2, true);
 
     const result = _angle(state, vec1_, vec2_);
     if (result.ok) {

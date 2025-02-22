@@ -228,12 +228,30 @@ export function disposeObject(object: THREE.Object3D): void {
   }
 }
 
-export function normalizeCoordinates(x: Array3 | Vector3): Array3 {
-  let normalized_x: Array3;
-  if (Array.isArray(x)) {
-    normalized_x = x;
-  } else {
-    normalized_x = x.toArray();
+export function normalizeCoordinates(
+  x: Array3 | Vector3,
+  canBeString?: false,
+): Array3;
+
+export function normalizeCoordinates(
+  x: Array3 | Vector3 | string,
+  canBeString: true,
+): Array3 | string;
+
+export function normalizeCoordinates(
+  x: Array3 | Vector3 | string,
+  canBeString: boolean = false,
+): Array3 | string {
+  if (canBeString && typeof x === 'string') {
+    return x;
   }
-  return normalized_x;
+
+  if (Array.isArray(x)) {
+    return x;
+  } else if (x instanceof Vector3) {
+    return x.toArray();
+  }
+
+  // This should never happen if types are respected, but we add a fallback.
+  throw new Error('Invalid input type');
 }
