@@ -40,6 +40,7 @@ export function initScene(
   camera.position.set(14000, 2000, 2000);
   camera.lookAt(0, 0, 0);
   camera.up.set(0, 0, 1);
+  camera.layers.enable(1);
 
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
   scene.add(ambientLight);
