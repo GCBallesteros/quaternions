@@ -403,7 +403,7 @@ export function buildCommandClosures(
     showSecondaryView,
     hideSecondaryView,
     // Add utility functions to commands
-    eulerToQuaternion: zyxToQuaternion,
+    zyxToQuaternion,
     geo2xyz,
     getPositionOfPoint,
     sph2xyz,
