@@ -31,6 +31,7 @@ import { OrientationMode } from './points/satellite.js';
 import { updateTrailSwitch } from './trail.js';
 import { Array3, CommandFunction, State, TleSource, Vector4 } from './types.js';
 import {
+  eulerToQuaternion,
   geo2xyz,
   getPositionOfPoint,
   normalizeCoordinates,
@@ -402,6 +403,7 @@ export function buildCommandClosures(
     showSecondaryView,
     hideSecondaryView,
     // Add utility functions to commands
+    eulerToQuaternion,
     geo2xyz,
     getPositionOfPoint,
     sph2xyz,

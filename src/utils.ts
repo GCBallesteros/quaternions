@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { Err, Ok, Result } from 'ts-results';
 import { log } from './logger.js';
-import { Array3, State } from './types.js';
+import { Array3, State, Vector4 } from './types.js';
 import { Vector3 } from './vectors.js';
 
 const RADIUS_EARTH = 6371.0;
@@ -254,4 +254,22 @@ export function normalizeCoordinates(
 
   // This should never happen if types are respected, but we add a fallback.
   throw new Error('Invalid input type');
+}
+
+type EulerAngles = { yaw: number; pitch: number; roll: number };
+
+export function eulerToQuaternion({ yaw, pitch, roll }: EulerAngles): Vector4 {
+  const cy = Math.cos(yaw * 0.5);
+  const sy = Math.sin(yaw * 0.5);
+  const cp = Math.cos(pitch * 0.5);
+  const sp = Math.sin(pitch * 0.5);
+  const cr = Math.cos(roll * 0.5);
+  const sr = Math.sin(roll * 0.5);
+
+  return [
+    sr * cp * cy - cr * sp * sy, // x
+    cr * sp * cy + sr * cp * sy, // y
+    cr * cp * sy - sr * sp * cy, // z
+    cr * cp * cy + sr * sp * sy, // w
+  ];
 }
