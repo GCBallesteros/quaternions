@@ -188,17 +188,17 @@ export function buildCommandClosures(
   }
 
   function findBestQuaternion(
-    primaryBodyVector: Array3 | string,
-    secondaryBodyVector: Array3 | string,
-    primaryTargetVector: Array3 | string,
-    secondaryTargetVector: Array3 | string,
+    primaryBodyVector: Array3 | string | Vector3,
+    secondaryBodyVector: Array3 | string | Vector3,
+    primaryTargetVector: Array3 | string | Vector3,
+    secondaryTargetVector: Array3 | string | Vector3,
   ): [number, number, number, number] {
     const result = _findBestQuaternion(
       state,
-      primaryBodyVector,
-      secondaryBodyVector,
-      primaryTargetVector,
-      secondaryTargetVector,
+      normalizeCoordinates(primaryBodyVector, true),
+      normalizeCoordinates(secondaryBodyVector, true),
+      normalizeCoordinates(primaryTargetVector, true),
+      normalizeCoordinates(secondaryTargetVector, true),
     );
     if (result.ok) {
       return result.val;
@@ -249,7 +249,7 @@ export function buildCommandClosures(
 
   function relativeRot(
     point_name: string,
-    q: [number, number, number, number],
+    q: Vector4,
   ): void {
     const result = _relativeRot(state, point_name, q);
     if (result.ok) {
