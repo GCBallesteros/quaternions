@@ -3,7 +3,7 @@ import { OrientedPoint } from './points/orientedPoint.js';
 import { Point } from './points/point.js';
 import { Option } from 'ts-results';
 
-export type Vector3 = [number, number, number];
+export type Array3 = [number, number, number];
 export type Vector4 = [number, number, number, number];
 
 export interface Plot {
@@ -29,8 +29,8 @@ export type TleSource =
 
 export interface Line {
   line: THREE.Line;
-  start: Vector3 | string;
-  end: Vector3 | string;
+  start: Array3 | string;
+  end: Array3 | string;
 }
 
 export interface State {

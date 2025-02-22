@@ -3,17 +3,17 @@ import * as THREE from 'three';
 import { _fetchTLE, _findBestQuaternion } from '../core.js';
 import { log } from '../logger.js';
 import { Trail } from '../trail.js';
-import { State, Vector3 } from '../types.js';
-import { OrientedPoint, CameraConfig } from './orientedPoint.js';
+import { Array3, State } from '../types.js';
+import { CameraConfig, OrientedPoint } from './orientedPoint.js';
 
 export type OrientationMode =
   | { type: 'fixed'; ecef_quaternion: [number, number, number, number] }
   | {
       type: 'dynamic';
-      primaryBodyVector: Vector3 | string;
-      secondaryBodyVector: Vector3 | string;
-      primaryTargetVector: Vector3 | NamedTargets;
-      secondaryTargetVector: Vector3 | NamedTargets;
+      primaryBodyVector: Array3 | string;
+      secondaryBodyVector: Array3 | string;
+      primaryTargetVector: Array3 | NamedTargets;
+      secondaryTargetVector: Array3 | NamedTargets;
       offset?: [number, number, number, number];
     };
 
@@ -22,14 +22,14 @@ export type NamedTargets =
   | { type: 'Sun' }
   | { type: 'Velocity' }
   | { type: 'Nadir' }
-  | { type: 'TargetPointing'; target: Vector3 | string };
+  | { type: 'TargetPointing'; target: Array3 | string };
 
 export namespace NamedTargets {
   export const Moon: NamedTargets = { type: 'Moon' };
   export const Sun: NamedTargets = { type: 'Sun' };
   export const Velocity: NamedTargets = { type: 'Velocity' };
   export const Nadir: NamedTargets = { type: 'Nadir' };
-  export const TargetPointing = (target: Vector3 | string): NamedTargets => ({
+  export const TargetPointing = (target: Array3 | string): NamedTargets => ({
     type: 'TargetPointing',
     target,
   });
@@ -73,7 +73,7 @@ export class Satellite extends OrientedPoint {
     position_: THREE.Vector3,
     velocity_: THREE.Vector3,
     state: State,
-  ): Vector3 {
+  ): Array3 {
     switch (namedTarget.type) {
       case 'Moon':
         return state.bodies.moon.position
@@ -206,8 +206,8 @@ export class Satellite extends OrientedPoint {
     let new_orientation: [number, number, number, number];
     switch (this.orientationMode.type) {
       case 'dynamic':
-        let primaryTargetVector: Vector3;
-        let secondaryTargetVector: Vector3;
+        let primaryTargetVector: Array3;
+        let secondaryTargetVector: Array3;
 
         primaryTargetVector = this.isNamedTarget(
           this.orientationMode.primaryTargetVector,

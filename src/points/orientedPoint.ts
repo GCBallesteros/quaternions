@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Vector3, Vector4 } from '../types.js';
+import { Array3, Vector4 } from '../types.js';
 
 export interface CameraConfig {
   orientation: Vector4;
@@ -22,7 +22,7 @@ export class OrientedPoint extends Point {
    * Returns the local coordinate frame vectors (x, y, z) of the point.
    * Each vector is returned as a tuple of numbers.
    */
-  get frame(): { x: Vector3; y: Vector3; z: Vector3 } {
+  get frame(): { x: Array3; y: Array3; z: Array3 } {
     const quaternion = this.geometry.quaternion;
 
     const basisVectors = {
@@ -83,7 +83,7 @@ export class OrientedPoint extends Point {
     return camera as THREE.Camera;
   }
 
-  get cameraEcefAxis(): Record<string, Vector3> | null {
+  get cameraEcefAxis(): Record<string, Array3> | null {
     let camera = this.camera;
 
     if (!camera) {
@@ -109,7 +109,7 @@ export class OrientedPoint extends Point {
     };
   }
 
-  get cameraBodyAxis(): Record<string, Vector3> | null {
+  get cameraBodyAxis(): Record<string, Array3> | null {
     let camera_quat_body = this.camera?.quaternion;
 
     if (!camera_quat_body) {

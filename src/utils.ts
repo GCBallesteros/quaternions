@@ -1,13 +1,13 @@
 import * as THREE from 'three';
 import { log } from './logger.js';
-import { Vector3, State } from './types.js';
+import { Array3, State } from './types.js';
 import { Result, Ok, Err } from 'ts-results';
 
 const RADIUS_EARTH = 6371.0;
 
 export function getPositionOfPoint(
   state: State,
-  pointArg: Vector3 | string,
+  pointArg: Array3 | string,
 ): THREE.Vector3 | undefined {
   if (Array.isArray(pointArg) && pointArg.length === 3) {
     return new THREE.Vector3(pointArg[0], pointArg[1], pointArg[2]);
@@ -58,7 +58,7 @@ export function validateName(name: string, state: State): boolean {
  * @returns {Array<number>} An array [x, y, z] representing the Cartesian coordinates.
  * @throws {Error} If the input is invalid.
  */
-export function sph2xyz(sph: Vector3): Vector3 {
+export function sph2xyz(sph: Array3): Array3 {
   if (!Array.isArray(sph) || sph.length !== 3) {
     throw new Error(
       'Input must be an array with three numerical values [latitude, longitude, radius].',
@@ -77,7 +77,7 @@ export function sph2xyz(sph: Vector3): Vector3 {
   return [x, y, z];
 }
 
-export function geo2xyz(geo: Vector3): Vector3 {
+export function geo2xyz(geo: Array3): Array3 {
   const [latitude, longitude, altitude] = geo;
   return sph2xyz([latitude, longitude, altitude + RADIUS_EARTH]);
 }
@@ -92,7 +92,7 @@ export function geo2xyz(geo: Vector3): Vector3 {
  *  - radius: The distance from the origin to the point.
  * @throws {Error} If the input is invalid or the radius is zero.
  */
-export function xyz2sph(point: Vector3): Vector3 {
+export function xyz2sph(point: Array3): Array3 {
   if (!Array.isArray(point) || point.length !== 3) {
     throw new Error(
       'Input must be an array with three numerical values [x, y, z].',
@@ -112,7 +112,7 @@ export function xyz2sph(point: Vector3): Vector3 {
   return [latitude, longitude, radius];
 }
 
-export function xyz2geo(xyz: Vector3): Vector3 {
+export function xyz2geo(xyz: Array3): Array3 {
   const [latitude, longitude, radius] = xyz2sph(xyz);
   return [latitude, longitude, radius - RADIUS_EARTH];
 }
@@ -197,7 +197,7 @@ export function haversineDistance(
   return RADIUS_EARTH * c;
 }
 
-export function distance(point1: Vector3, point2: Vector3): number {
+export function distance(point1: Array3, point2: Array3): number {
   const dx = point2[0] - point1[0];
   const dy = point2[1] - point1[1];
   const dz = point2[2] - point1[2];

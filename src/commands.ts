@@ -28,7 +28,7 @@ import { log } from './logger.js';
 import { OrientedPoint } from './points/orientedPoint.js';
 import { Point } from './points/point.js';
 import { OrientationMode } from './points/satellite.js';
-import { CommandFunction, State, TleSource, Vector3 } from './types.js';
+import { Array3, CommandFunction, State, TleSource } from './types.js';
 import {
   geo2xyz,
   getPositionOfPoint,
@@ -46,7 +46,7 @@ export function buildCommandClosures(
 ): Record<string, CommandFunction> {
   function mov(
     point_name: string,
-    pos: Vector3,
+    pos: Array3,
     use_geo: boolean = false,
   ): void {
     const result = _mov(state, point_name, pos, use_geo);
@@ -68,7 +68,7 @@ export function buildCommandClosures(
 
   function addPoint(
     name: string,
-    coordinates: Vector3,
+    coordinates: Array3,
     quaternion = null,
     color = '#ffffff',
   ): void {
@@ -113,8 +113,8 @@ export function buildCommandClosures(
 
   function createLine(
     name: string,
-    startArg: string | Vector3,
-    endArg: string | Vector3,
+    startArg: string | Array3,
+    endArg: string | Array3,
   ): void {
     const result = _createLine(scene, state, name, startArg, endArg);
     if (result.ok) {
@@ -124,7 +124,7 @@ export function buildCommandClosures(
     }
   }
 
-  function angle(vec1: string | Vector3, vec2: string | Vector3): number {
+  function angle(vec1: string | Array3, vec2: string | Array3): number {
     const result = _angle(state, vec1, vec2);
     if (result.ok) {
       return result.val;
@@ -173,10 +173,10 @@ export function buildCommandClosures(
   }
 
   function findBestQuaternion(
-    primaryBodyVector: Vector3 | string,
-    secondaryBodyVector: Vector3 | string,
-    primaryTargetVector: Vector3 | string,
-    secondaryTargetVector: Vector3 | string,
+    primaryBodyVector: Array3 | string,
+    secondaryBodyVector: Array3 | string,
+    primaryTargetVector: Array3 | string,
+    secondaryTargetVector: Array3 | string,
   ): [number, number, number, number] {
     const result = _findBestQuaternion(
       state,

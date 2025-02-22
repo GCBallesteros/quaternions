@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Vector3 } from '../types.js';
+import { Array3 } from '../types.js';
 import { disposeObject } from '../utils.js';
 
 export class Point {
@@ -14,12 +14,12 @@ export class Point {
     disposeObject(this.geometry);
   }
 
-  get position(): Vector3 {
+  get position(): Array3 {
     const pos = this.geometry.position.clone();
     return [pos.x, pos.y, pos.z];
   }
 
-  set position(pos: Vector3) {
+  set position(pos: Array3) {
     this.geometry.position.set(pos[0], pos[1], pos[2]);
   }
 

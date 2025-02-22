@@ -1,13 +1,12 @@
 import { html } from 'lit-html';
+import { OrientedPoint } from '../points/orientedPoint.js';
+import { Point } from '../points/point.js';
+import { NamedTargets, Satellite } from '../points/satellite.js';
+import { Array3, State } from '../types.js';
 import { bodyStyles } from './styles/bodies.js';
 import { commonStyles } from './styles/common.js';
-import { Point } from '../points/point.js';
-import { OrientedPoint } from '../points/orientedPoint.js';
-import { Satellite } from '../points/satellite.js';
-import { State, Vector3 } from '../types.js';
-import { NamedTargets } from '../points/satellite.js';
 
-function formatTargetVector(target: Vector3 | NamedTargets): string {
+function formatTargetVector(target: Array3 | NamedTargets): string {
   if (typeof target === 'object' && target !== null && 'type' in target) {
     if (target.type === 'TargetPointing') {
       return `TargetPointing(${JSON.stringify(target.target)})`;

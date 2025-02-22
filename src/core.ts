@@ -8,15 +8,15 @@ import {
   createFrame,
   createLineGeometry,
 } from './components.js';
-import { cleanupAllPlots, cleanupPlot } from './plots.js';
 import { addInitGeometries } from './init.js';
 import { log } from './logger.js';
-import { OrientedPoint, CameraConfig } from './points/orientedPoint.js';
+import { cleanupAllPlots, cleanupPlot } from './plots.js';
+import { CameraConfig, OrientedPoint } from './points/orientedPoint.js';
 import { Point } from './points/point.js';
 import { OrientationMode, Satellite } from './points/satellite.js';
-import { State, TleSource, Vector3 } from './types.js';
-import { removePointFromUI } from './ui/bodies.js';
 import { Trail } from './trail.js';
+import { Array3, State, TleSource } from './types.js';
+import { removePointFromUI } from './ui/bodies.js';
 import * as utils from './utils.js';
 
 export function _rot(
@@ -43,7 +43,7 @@ export function _rot(
 
 function resolveVector(
   state: State,
-  arg: string | Vector3,
+  arg: string | Array3,
   allowBodyVectors: boolean = false,
 ): Result<THREE.Vector3, string> {
   if (Array.isArray(arg) && arg.length === 3) {
@@ -105,8 +105,8 @@ function resolveVector(
 
 export function _angle(
   state: State,
-  vec1Arg: Vector3 | string,
-  vec2Arg: Vector3 | string,
+  vec1Arg: Array3 | string,
+  vec2Arg: Array3 | string,
 ): Result<number, string> {
   // Resolve both vectors
   const vec1Result = resolveVector(state, vec1Arg);
@@ -139,7 +139,7 @@ export function _angle(
 export function _mov(
   state: State,
   point_name: string,
-  pos: Vector3,
+  pos: Array3,
   use_geo: boolean = false,
 ): Result<null, string> {
   if (!state.points[point_name]) {
@@ -163,10 +163,10 @@ export function _mov(
 }
 
 function find_best_quaternion_for_desired_attitude(
-  primary_body_vector: Vector3,
-  secondary_body_vector: Vector3,
-  primary_body_vector_target: Vector3,
-  secondary_body_vector_target: Vector3,
+  primary_body_vector: Array3,
+  secondary_body_vector: Array3,
+  primary_body_vector_target: Array3,
+  secondary_body_vector_target: Array3,
 ): [number, number, number, number] {
   const [
     primaryVector,
@@ -241,10 +241,10 @@ export { find_best_quaternion_for_desired_attitude };
 
 export function _findBestQuaternion(
   state: State,
-  primaryVecArg: Vector3 | string,
-  secondaryVecArg: Vector3 | string,
-  primaryTargetArg: Vector3 | string,
-  secondaryTargetArg: Vector3 | string,
+  primaryVecArg: Array3 | string,
+  secondaryVecArg: Array3 | string,
+  primaryTargetArg: Array3 | string,
+  secondaryTargetArg: Array3 | string,
 ): Result<[number, number, number, number], string> {
   // Resolve all arguments
   const primaryBodyVectorResult = resolveVector(state, primaryVecArg, true);
@@ -286,8 +286,8 @@ export function _createLine(
   scene: THREE.Scene,
   state: State,
   name: string,
-  startArg: Vector3 | string,
-  endArg: Vector3 | string,
+  startArg: Array3 | string,
+  endArg: Array3 | string,
 ): Result<null, string> {
   if (!utils.validateName(name, state)) {
     return Err('Invalid line name or name already exists');
@@ -341,7 +341,7 @@ export function _addPoint(
   scene: THREE.Scene,
   state: State,
   name: string,
-  coordinates: Vector3,
+  coordinates: Array3,
   quaternion: [number, number, number, number] | null = null,
   color: string = '#ffffff',
 ): Result<null, string> {
