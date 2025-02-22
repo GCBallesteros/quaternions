@@ -28,7 +28,7 @@ import { log } from './logger.js';
 import { OrientedPoint } from './points/orientedPoint.js';
 import { Point } from './points/point.js';
 import { OrientationMode } from './points/satellite.js';
-import { Array3, CommandFunction, State, TleSource } from './types.js';
+import { Array3, CommandFunction, State, TleSource, Vector4 } from './types.js';
 import {
   geo2xyz,
   getPositionOfPoint,
@@ -38,6 +38,7 @@ import {
   xyz2geo,
   xyz2sph,
 } from './utils.js';
+import { Vector3 } from './vectors.js';
 
 export function buildCommandClosures(
   scene: THREE.Scene,
@@ -46,10 +47,17 @@ export function buildCommandClosures(
 ): Record<string, CommandFunction> {
   function mov(
     point_name: string,
-    pos: Array3,
+    pos: Array3 | Vector3,
     use_geo: boolean = false,
   ): void {
-    const result = _mov(state, point_name, pos, use_geo);
+    let normalized_pos: Array3;
+    if (Array.isArray(pos)) {
+      normalized_pos = pos;
+    } else {
+      normalized_pos = pos.toArray();
+    }
+
+    const result = _mov(state, point_name, normalized_pos, use_geo);
     if (result.ok) {
       return;
     } else {
@@ -57,7 +65,7 @@ export function buildCommandClosures(
     }
   }
 
-  function rot(point_name: string, q: [number, number, number, number]): void {
+  function rot(point_name: string, q: Vector4): void {
     const result = _rot(state, point_name, q);
     if (result.ok) {
       return;
