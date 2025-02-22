@@ -28,6 +28,7 @@ import { log } from './logger.js';
 import { OrientedPoint } from './points/orientedPoint.js';
 import { Point } from './points/point.js';
 import { OrientationMode } from './points/satellite.js';
+import { updateTrailSwitch } from './trail.js';
 import { Array3, CommandFunction, State, TleSource, Vector4 } from './types.js';
 import {
   geo2xyz,
@@ -247,10 +248,7 @@ export function buildCommandClosures(
     return null;
   }
 
-  function relativeRot(
-    point_name: string,
-    q: Vector4,
-  ): void {
+  function relativeRot(point_name: string, q: Vector4): void {
     const result = _relativeRot(state, point_name, q);
     if (result.ok) {
       return;
@@ -301,19 +299,6 @@ export function buildCommandClosures(
       return;
     } else {
       throw new Error(result.val);
-    }
-  }
-
-  function updateTrailSwitch(satelliteName: string, checked: boolean) {
-    const pointItems = document.querySelectorAll('.point-item');
-    for (const item of pointItems) {
-      if (item.querySelector('.point-name')?.textContent === satelliteName) {
-        const trailSwitch = item.querySelector(
-          '.trail-switch',
-        ) as HTMLInputElement;
-        if (trailSwitch) trailSwitch.checked = checked;
-        break;
-      }
     }
   }
 

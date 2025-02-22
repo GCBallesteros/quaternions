@@ -7,6 +7,19 @@ const NUM_CURVE_POINTS = 3;
 const MAX_SEGMENTS = 250;
 const MAX_VERTICES = (MAX_SEGMENTS + 1) * NUM_CURVE_POINTS;
 
+export function updateTrailSwitch(satelliteName: string, checked: boolean) {
+  const pointItems = document.querySelectorAll('.point-item');
+  for (const item of pointItems) {
+    if (item.querySelector('.point-name')?.textContent === satelliteName) {
+      const trailSwitch = item.querySelector(
+        '.trail-switch',
+      ) as HTMLInputElement;
+      if (trailSwitch) trailSwitch.checked = checked;
+      break;
+    }
+  }
+}
+
 export class Trail {
   private geometry: THREE.BufferGeometry;
   private material: THREE.ShaderMaterial;
