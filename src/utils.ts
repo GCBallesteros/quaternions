@@ -258,7 +258,22 @@ export function normalizeCoordinates(
 
 type EulerAngles = { yaw: number; pitch: number; roll: number };
 
-export function eulerToQuaternion({ yaw, pitch, roll }: EulerAngles): Vector4 {
+/**
+ * Converts ZYX Tait-Bryan angles (yaw, pitch, roll) into a quaternion.
+ * @param {EulerAngles} angles - The Euler angles in yaw, pitch, and roll.
+ * @param {boolean} [degrees=true] - Whether the input angles are in degrees. If true, they are converted to radians.
+ * @returns {Vector4} The resulting quaternion [x, y, z, w].
+ */
+export function eulerToQuaternion(
+  { yaw, pitch, roll }: EulerAngles,
+  degrees: boolean = true,
+): Vector4 {
+  if (degrees) {
+    yaw = (yaw * Math.PI) / 180;
+    pitch = (pitch * Math.PI) / 180;
+    roll = (roll * Math.PI) / 180;
+  }
+
   const cy = Math.cos(yaw * 0.5);
   const sy = Math.sin(yaw * 0.5);
   const cp = Math.cos(pitch * 0.5);
