@@ -144,8 +144,24 @@ export function buildCommandClosures(
     }
   }
 
-  function angle(vec1: string | Array3, vec2: string | Array3): number {
-    const result = _angle(state, vec1, vec2);
+  function angle(
+    vec1: string | Array3 | Vector3,
+    vec2: string | Array3 | Vector3,
+  ): number {
+    let vec1_: string | Array3, vec2_: string | Array3;
+    if (typeof vec1 === 'string') {
+      vec1_ = vec1;
+    } else {
+      vec1_ = normalizeCoordinates(vec1);
+    }
+
+    if (typeof vec2 === 'string') {
+      vec2_ = vec2;
+    } else {
+      vec2_ = normalizeCoordinates(vec2);
+    }
+
+    const result = _angle(state, vec1_, vec2_);
     if (result.ok) {
       return result.val;
     } else {
