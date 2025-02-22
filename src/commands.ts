@@ -119,10 +119,24 @@ export function buildCommandClosures(
 
   function createLine(
     name: string,
-    startArg: string | Array3,
-    endArg: string | Array3,
+    startArg: string | Array3 | Vector3,
+    endArg: string | Array3 | Vector3,
   ): void {
-    const result = _createLine(scene, state, name, startArg, endArg);
+    let startArg_: string | Array3, endArg_: string | Array3;
+
+    if (typeof startArg === 'string') {
+      startArg_ = startArg;
+    } else {
+      startArg_ = normalizeCoordinates(startArg);
+    }
+
+    if (typeof endArg === 'string') {
+      endArg_ = endArg;
+    } else {
+      endArg_ = normalizeCoordinates(endArg);
+    }
+
+    const result = _createLine(scene, state, name, startArg_, endArg_);
     if (result.ok) {
       return;
     } else {
