@@ -76,15 +76,22 @@ export function buildCommandClosures(
 
   function addPoint(
     name: string,
-    coordinates: Array3,
+    coordinates: Array3 | Vector3,
     quaternion = null,
     color = '#ffffff',
   ): void {
+    let normalized_coordinates: Array3;
+    if (Array.isArray(coordinates)) {
+      normalized_coordinates = coordinates;
+    } else {
+      normalized_coordinates = coordinates.toArray();
+    }
+
     const result = _addPoint(
       scene,
       state,
       name,
-      coordinates,
+      normalized_coordinates,
       quaternion,
       color,
     );
