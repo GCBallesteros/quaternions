@@ -8,14 +8,11 @@ import { getPositionOfPoint } from './utils.js';
 import { buildCommandClosures } from './commands.js';
 import { log } from './logger.js';
 
-// TODO: Distance function
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?
 // TODO: Add diagram to findBestQuaternion documentation
 // TODO: Get rid rot functions
 // TODO: Expose more options for object creation, widths, colors ...
-// TODO: Migrate to React
 // TODO: Normalize quats before applying
-// TODO: Load workflows button
 // TODO: Transition smoothly between cameras (maybe)
 
 const canvas = document.getElementById('webgl-canvas') as HTMLCanvasElement;
