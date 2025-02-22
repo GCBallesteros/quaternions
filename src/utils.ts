@@ -1,7 +1,8 @@
 import * as THREE from 'three';
+import { Err, Ok, Result } from 'ts-results';
 import { log } from './logger.js';
 import { Array3, State } from './types.js';
-import { Result, Ok, Err } from 'ts-results';
+import { Vector3 } from './vectors.js';
 
 const RADIUS_EARTH = 6371.0;
 
@@ -225,4 +226,14 @@ export function disposeObject(object: THREE.Object3D): void {
       (object as any).material.dispose();
     }
   }
+}
+
+export function normalizeCoordinates(x: Array3 | Vector3): Array3 {
+  let normalized_x: Array3;
+  if (Array.isArray(x)) {
+    normalized_x = x;
+  } else {
+    normalized_x = x.toArray();
+  }
+  return normalized_x;
 }

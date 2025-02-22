@@ -32,6 +32,7 @@ import { Array3, CommandFunction, State, TleSource, Vector4 } from './types.js';
 import {
   geo2xyz,
   getPositionOfPoint,
+  normalizeCoordinates,
   sph2xyz,
   utcDate,
   validateName,
@@ -50,12 +51,7 @@ export function buildCommandClosures(
     pos: Array3 | Vector3,
     use_geo: boolean = false,
   ): void {
-    let normalized_pos: Array3;
-    if (Array.isArray(pos)) {
-      normalized_pos = pos;
-    } else {
-      normalized_pos = pos.toArray();
-    }
+    let normalized_pos = normalizeCoordinates(pos);
 
     const result = _mov(state, point_name, normalized_pos, use_geo);
     if (result.ok) {
@@ -80,12 +76,7 @@ export function buildCommandClosures(
     quaternion = null,
     color = '#ffffff',
   ): void {
-    let normalized_coordinates: Array3;
-    if (Array.isArray(coordinates)) {
-      normalized_coordinates = coordinates;
-    } else {
-      normalized_coordinates = coordinates.toArray();
-    }
+    let normalized_coordinates = normalizeCoordinates(coordinates);
 
     const result = _addPoint(
       scene,
