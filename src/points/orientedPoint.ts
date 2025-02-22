@@ -60,6 +60,9 @@ export class OrientedPoint extends Point {
     camera.setRotationFromQuaternion(
       camera_orientation_in_body_frame.multiply(camera_to_z_quaternion),
     );
+    // Layer 1 belongs to things that should be visible from the global view
+    // but not from the satellite, e.g. the trail
+    camera.layers.disable(1);
     this.geometry.add(camera);
   }
 

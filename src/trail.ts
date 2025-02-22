@@ -78,6 +78,7 @@ export class Trail {
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     scene.add(this.mesh);
+    this.mesh.layers.set(1);
     this.prevCurve = null;
   }
 
