@@ -59,14 +59,15 @@ export function validateName(name: string, state: State): boolean {
  * @returns {Array<number>} An array [x, y, z] representing the Cartesian coordinates.
  * @throws {Error} If the input is invalid.
  */
-export function sph2xyz(sph: Array3): Array3 {
-  if (!Array.isArray(sph) || sph.length !== 3) {
+export function sph2xyz(sph: Array3 | Vector3): Array3 {
+  let sph_ = normalizeCoordinates(sph, false);
+  if (!Array.isArray(sph_) || sph_.length !== 3) {
     throw new Error(
       'Input must be an array with three numerical values [latitude, longitude, radius].',
     );
   }
 
-  const [latitude, longitude, radius] = sph;
+  const [latitude, longitude, radius] = sph_;
 
   const latRad = THREE.MathUtils.degToRad(latitude);
   const lonRad = THREE.MathUtils.degToRad(longitude);
@@ -78,8 +79,9 @@ export function sph2xyz(sph: Array3): Array3 {
   return [x, y, z];
 }
 
-export function geo2xyz(geo: Array3): Array3 {
-  const [latitude, longitude, altitude] = geo;
+export function geo2xyz(geo: Array3 | Vector3): Array3 {
+  let geo_ = normalizeCoordinates(geo, false);
+  const [latitude, longitude, altitude] = geo_;
   return sph2xyz([latitude, longitude, altitude + RADIUS_EARTH]);
 }
 
@@ -93,14 +95,15 @@ export function geo2xyz(geo: Array3): Array3 {
  *  - radius: The distance from the origin to the point.
  * @throws {Error} If the input is invalid or the radius is zero.
  */
-export function xyz2sph(point: Array3): Array3 {
-  if (!Array.isArray(point) || point.length !== 3) {
+export function xyz2sph(point: Array3 | Vector3): Array3 {
+  let point_ = normalizeCoordinates(point, false);
+  if (!Array.isArray(point_) || point_.length !== 3) {
     throw new Error(
       'Input must be an array with three numerical values [x, y, z].',
     );
   }
 
-  const [x, y, z] = point;
+  const [x, y, z] = point_;
 
   const radius = Math.sqrt(x * x + y * y + z * z);
   if (radius === 0) {
@@ -113,7 +116,7 @@ export function xyz2sph(point: Array3): Array3 {
   return [latitude, longitude, radius];
 }
 
-export function xyz2geo(xyz: Array3): Array3 {
+export function xyz2geo(xyz: Array3 | Vector3): Array3 {
   const [latitude, longitude, radius] = xyz2sph(xyz);
   return [latitude, longitude, radius - RADIUS_EARTH];
 }
@@ -198,10 +201,15 @@ export function haversineDistance(
   return RADIUS_EARTH * c;
 }
 
-export function distance(point1: Array3, point2: Array3): number {
-  const dx = point2[0] - point1[0];
-  const dy = point2[1] - point1[1];
-  const dz = point2[2] - point1[2];
+export function distance(
+  point1: Array3 | Vector3,
+  point2: Array3 | Vector3,
+): number {
+  let point1_ = normalizeCoordinates(point1);
+  let point2_ = normalizeCoordinates(point2);
+  const dx = point2_[0] - point1_[0];
+  const dy = point2_[1] - point1_[1];
+  const dz = point2_[2] - point1_[2];
   return Math.sqrt(dx * dx + dy * dy + dz * dz);
 }
 
@@ -264,7 +272,7 @@ type EulerAngles = { yaw: number; pitch: number; roll: number };
  * @param {boolean} [degrees=true] - Whether the input angles are in degrees. If true, they are converted to radians.
  * @returns {Vector4} The resulting quaternion [x, y, z, w].
  */
-export function eulerToQuaternion(
+export function zyxToQuaternion(
   { yaw, pitch, roll }: EulerAngles,
   degrees: boolean = true,
 ): Vector4 {
