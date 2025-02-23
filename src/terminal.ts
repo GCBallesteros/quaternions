@@ -28,22 +28,14 @@ export function buildExecuteCommand(
     if (!command) return;
 
     try {
-      // Create function with command declarations in its scope
       const wrappedCode = `
         ${commandDeclarations}
         return (async () => { 
-          try {
             return await (async () => { 
               ${command}
             })();
-          } catch (error) {
-            if (error instanceof Error) {
-              log(\`Error: \${error.message}\`);
-            } else {
-              log(\`Error: \${String(error)}\`);
-            }
-          }
         })();
+        //# sourceURL=evalCode.js
       `;
 
       // Create function with context parameters
@@ -57,11 +49,19 @@ export function buildExecuteCommand(
       if (result !== undefined) {
         log(`  ${result}`);
       }
-    } catch (error: unknown) {
+    } catch (error) {
+      // We need to correct for:
+      // - all the commands implicitly at the top
+      // - the extra line for the prety code
+      // - 2 lines with the returns
+      // - 2 mistery lines
+      const errorLineNumber =
+        error.lineNumber - Object.keys(commands).length - 1 - 2 - 2;
+      console.log(error);
       if (error instanceof Error) {
-        log(`Error: ${error.message}`);
+        log(`Error ${errorLineNumber}: ${error.message}`);
       } else {
-        log(`Error: ${String(error)}`);
+        log(`Error ${errorLineNumber}: ${String(error)}`);
       }
     }
   };
