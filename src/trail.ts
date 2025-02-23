@@ -101,7 +101,6 @@ export class Trail {
    */
   private computeCurrentCurve(
     position: THREE.Vector3,
-    earth: THREE.Object3D,
     cameraAxes: Record<string, Array3> | null,
   ): Option<THREE.Vector3[]> {
     if (!cameraAxes) {
@@ -238,14 +237,9 @@ export class Trail {
 
   update(
     position: THREE.Vector3,
-    earth: THREE.Object3D,
     cameraAxes: Record<string, Array3> | null,
   ) {
-    const currCurveOption = this.computeCurrentCurve(
-      position,
-      earth,
-      cameraAxes,
-    );
+    const currCurveOption = this.computeCurrentCurve(position, cameraAxes);
 
     if (!currCurveOption.some) {
       // Reset the trail if any point misses the Earth
