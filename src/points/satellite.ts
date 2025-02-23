@@ -24,14 +24,14 @@ export type NamedTargets =
   | { type: 'Sun' }
   | { type: 'Velocity' }
   | { type: 'Nadir' }
-  | { type: 'TargetPointing'; target: Array3 | string };
+  | { type: 'TargetPointing'; target: Array3 | string | Vector3 };
 
 export namespace NamedTargets {
   export const Moon: NamedTargets = { type: 'Moon' };
   export const Sun: NamedTargets = { type: 'Sun' };
   export const Velocity: NamedTargets = { type: 'Velocity' };
   export const Nadir: NamedTargets = { type: 'Nadir' };
-  export const TargetPointing = (target: Array3 | string): NamedTargets => ({
+  export const TargetPointing = (target: Array3 | string | Vector3): NamedTargets => ({
     type: 'TargetPointing',
     target,
   });
@@ -98,7 +98,7 @@ export class Satellite extends OrientedPoint {
             .normalize()
             .toArray();
         } else {
-          return new THREE.Vector3(...namedTarget.target)
+          return new THREE.Vector3(...normalizeCoordinates(namedTarget.target))
             .clone()
             .sub(position_)
             .normalize()
