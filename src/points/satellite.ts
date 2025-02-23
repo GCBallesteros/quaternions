@@ -3,17 +3,19 @@ import * as THREE from 'three';
 import { _fetchTLE, _findBestQuaternion } from '../core.js';
 import { log } from '../logger.js';
 import { Trail } from '../trail.js';
-import { Array3, State } from '../types.js';
+import { Array3, State, Vector4 } from '../types.js';
+import { Vector3 } from '../vectors.js';
 import { CameraConfig, OrientedPoint } from './orientedPoint.js';
+import { normalizeCoordinates } from '../utils.js';
 
 export type OrientationMode =
-  | { type: 'fixed'; ecef_quaternion: [number, number, number, number] }
+  | { type: 'fixed'; ecef_quaternion: Vector4 }
   | {
       type: 'dynamic';
       primaryBodyVector: Array3 | string;
       secondaryBodyVector: Array3 | string;
-      primaryTargetVector: Array3 | NamedTargets;
-      secondaryTargetVector: Array3 | NamedTargets;
+      primaryTargetVector: Array3 | NamedTargets | Vector3;
+      secondaryTargetVector: Array3 | NamedTargets | Vector3;
       offset?: [number, number, number, number];
     };
 
@@ -203,7 +205,7 @@ export class Satellite extends OrientedPoint {
       velocity__.z,
     );
 
-    let new_orientation: [number, number, number, number];
+    let new_orientation: Vector4;
     switch (this.orientationMode.type) {
       case 'dynamic':
         let primaryTargetVector: Array3;
@@ -218,7 +220,7 @@ export class Satellite extends OrientedPoint {
               velocity_,
               state,
             )
-          : this.orientationMode.primaryTargetVector;
+          : normalizeCoordinates(this.orientationMode.primaryTargetVector);
 
         secondaryTargetVector = this.isNamedTarget(
           this.orientationMode.secondaryTargetVector,
@@ -229,7 +231,7 @@ export class Satellite extends OrientedPoint {
               velocity_,
               state,
             )
-          : this.orientationMode.secondaryTargetVector;
+          : normalizeCoordinates(this.orientationMode.secondaryTargetVector);
 
         const new_orientation_result = _findBestQuaternion(
           state,
@@ -264,10 +266,7 @@ export class Satellite extends OrientedPoint {
 
     // Update trail if it exists
     if (this.trail) {
-      this.trail.update(
-        this.geometry.position,
-        this.cameraEcefAxis,
-      );
+      this.trail.update(this.geometry.position, this.cameraEcefAxis);
     }
   }
 }
