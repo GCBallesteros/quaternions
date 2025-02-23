@@ -31,7 +31,9 @@ export namespace NamedTargets {
   export const Sun: NamedTargets = { type: 'Sun' };
   export const Velocity: NamedTargets = { type: 'Velocity' };
   export const Nadir: NamedTargets = { type: 'Nadir' };
-  export const TargetPointing = (target: Array3 | string | Vector3): NamedTargets => ({
+  export const TargetPointing = (
+    target: Array3 | string | Vector3,
+  ): NamedTargets => ({
     type: 'TargetPointing',
     target,
   });
