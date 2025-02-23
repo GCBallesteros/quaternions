@@ -55,13 +55,25 @@ export function buildExecuteCommand(
       // - the extra line for the prety code
       // - 2 lines with the returns
       // - 2 mistery lines
-      const errorLineNumber =
-        error.lineNumber - Object.keys(commands).length - 1 - 2 - 2;
-      console.log(error);
+      const errorOffset = Object.keys(commands).length + 1 + 2 + 2;
       if (error instanceof Error) {
-        log(`Error ${errorLineNumber}: ${error.message}`);
+        const firstErrorLine = error.stack?.split('\n')[0];
+        let lineNumber: number | null = null;
+
+        if (firstErrorLine) {
+          const match = firstErrorLine.match(/evalCode\.js:(\d+):(\d+)/);
+
+          if (match) {
+            lineNumber = parseInt(match[1], 10) - errorOffset;
+            log(`Error : ${error.message} (line ${lineNumber})`);
+          } else {
+            log(`Error : ${error.message}`);
+          }
+        } else {
+          log(`Error : ${error.message}`);
+        }
       } else {
-        log(`Error ${errorLineNumber}: ${String(error)}`);
+        log(`Error: ${String(error)}`);
       }
     }
   };
