@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 import { createFrame } from './components.js';
 
-const textureLevels = ['LR', 'MR', 'HR'].map((resolution) =>
+const textureLevels = ['LR', 'MR'].map((resolution) =>
   import.meta.env.VITE_LOCAL_DEV === 'true'
     ? `/earth_texture_${resolution}.jpg`
     : `https://whatoneaerth.s3.eu-west-1.amazonaws.com/earth_texture_${resolution}.jpg`,
