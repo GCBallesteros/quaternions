@@ -14,7 +14,10 @@ import { State } from './types.js';
 export function initializeCanvas(
   canvas: HTMLCanvasElement,
 ): THREE.WebGLRenderer {
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  const renderer = new THREE.WebGLRenderer({
+    canvas,
+    antialias: true,
+  });
   renderer.setSize(canvas.clientWidth, canvas.clientHeight);
   return renderer;
 }
@@ -34,8 +37,8 @@ export function initScene(
   const camera = new THREE.PerspectiveCamera(
     75,
     canvas.clientWidth / canvas.clientHeight,
-    0.1,
-    100000,
+    1,
+    30000,
   );
   camera.position.set(14000, 2000, 2000);
   camera.lookAt(0, 0, 0);

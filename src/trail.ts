@@ -85,7 +85,10 @@ export class Trail {
       transparent: true,
       depthWrite: false,
       depthTest: true,
+      polygonOffset:true,
+      polygonOffsetFactor: -5,
       blending: THREE.AdditiveBlending,
+      precision: "highp",
       side: THREE.DoubleSide,
     });
 
@@ -151,7 +154,7 @@ export class Trail {
         const intersectionPoint = position
           .clone()
           .add(dir.clone().multiplyScalar(t));
-        const surfPt = intersectionPoint.clone().multiplyScalar(1.003);
+        const surfPt = intersectionPoint.clone().multiplyScalar(1.01);
         curvePoints.push(surfPt);
       } else {
         return None;
@@ -235,10 +238,7 @@ export class Trail {
     this.geometry.computeVertexNormals();
   }
 
-  update(
-    position: THREE.Vector3,
-    cameraAxes: Record<string, Array3> | null,
-  ) {
+  update(position: THREE.Vector3, cameraAxes: Record<string, Array3> | null) {
     const currCurveOption = this.computeCurrentCurve(position, cameraAxes);
 
     if (!currCurveOption.some) {
