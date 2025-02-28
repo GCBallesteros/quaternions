@@ -1,6 +1,30 @@
 import * as THREE from 'three';
 
-// WebMercator Details
+// What?
+// ====
+// Find what Web Mercator tiles are visible from the POV of a camera
+//
+// Why?
+// ====
+// A single high resolution texture of the Earth occupies 100 of MPx
+// which is obviously inviable. Instead we will just fetch the tiles
+// that are visible from a camera.
+//
+// How?
+// ====
+// In a nutshell we check every pixel seen by the camera to see if
+// the Earth is visible and in that case find its lat/long and from
+// there what WebMercator tile covers it at a given zoom level.
+//
+// Trick
+// =====
+// We precompute a texture of the Earth where the B and G channels
+// correspond to the x/y coordinates of the WebMercator tile under it.
+// Then we run an offscreen render of this sphere as seen from the
+// camera of interest and bring it out as a buffer. The final
+// step is to find all the unique values in said render. Easy!
+
+// WebMercator Texture Details
 const mercatorTileTexture =
   import.meta.env.VITE_LOCAL_DEV === 'true'
     ? '/mercator_texture_zoom_4.png'
@@ -64,6 +88,8 @@ export function findMercatorTilesInPOV(camera: THREE.PerspectiveCamera) {
 
       // Skip invalid tiles
       if (tileX >= 0 && tileY >= 0) {
+        // Translate to a linear index that correspoind to the WebMercator
+        // grid because js Sets don't support tuples of numbers.
         const linearIndex = tileY * n + tileX; // Flattened 2D index
         visibleTiles.add(linearIndex);
       }
