@@ -24,6 +24,7 @@ import {
   _toggleSimTime,
   _toggleTrail,
 } from './core.js';
+import { findMercatorTilesInPOV } from './findMercatorTiles.js';
 import { log } from './logger.js';
 import { OrientedPoint } from './points/orientedPoint.js';
 import { Point } from './points/point.js';
@@ -31,7 +32,6 @@ import { OrientationMode } from './points/satellite.js';
 import { updateTrailSwitch } from './trail.js';
 import { Array3, CommandFunction, State, TleSource, Vector4 } from './types.js';
 import {
-  zyxToQuaternion,
   geo2xyz,
   getPositionOfPoint,
   normalizeCoordinates,
@@ -40,6 +40,7 @@ import {
   validateName,
   xyz2geo,
   xyz2sph,
+  zyxToQuaternion,
 } from './utils.js';
 import { Vector3 } from './vectors.js';
 
@@ -417,5 +418,7 @@ export function buildCommandClosures(
       }
       return result.val;
     },
+    // Other functions
+    runTileReduction: findMercatorTilesInPOV,
   };
 }
