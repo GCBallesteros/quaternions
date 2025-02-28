@@ -24,7 +24,7 @@ import * as THREE from 'three';
 // camera of interest and bring it out as a buffer. The final
 // step is to find all the unique values in said render. Easy!
 
-// WebMercator Texture Details
+// WebMercator Details
 const mercatorTileTexture =
   import.meta.env.VITE_LOCAL_DEV === 'true'
     ? '/mercator_texture_zoom_4.png'

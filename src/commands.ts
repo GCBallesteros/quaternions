@@ -25,6 +25,7 @@ import {
   _toggleTrail,
 } from './core.js';
 import { findMercatorTilesInPOV } from './findMercatorTiles.js';
+import { addWebMercatorTile as _addWebMercatorTile } from './addMercatorTiles.js';
 import { log } from './logger.js';
 import { OrientedPoint } from './points/orientedPoint.js';
 import { Point } from './points/point.js';
@@ -348,6 +349,10 @@ export function buildCommandClosures(
     _hideSecondaryView();
   }
 
+  function addWebMercatorTile(x: number, y: number, z: number): void {
+    _addWebMercatorTile(x, y, z, scene);
+  }
+
   async function longRunning(iterations: number = 100000000): Promise<void> {
     const worker = new Worker(
       new URL('./workers/longRunningWorker.ts', import.meta.url),
@@ -419,6 +424,7 @@ export function buildCommandClosures(
       return result.val;
     },
     // Other functions
-    runTileReduction: findMercatorTilesInPOV,
+    findMercatorTilesInPOV,
+    addWebMercatorTile,
   };
 }
