@@ -120,7 +120,7 @@ export function addWebMercatorTile(
     return Err('x/y coordinate to large for zoom level');
   }
 
-  const tileKey = `${x},${y}`;
+  const tileKey = `${x},${y},${z}`;
   if (state._webmercatorTiles.has(tileKey)) {
     return Ok(null);
   }
