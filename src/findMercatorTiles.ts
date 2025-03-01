@@ -29,7 +29,7 @@ const mercatorTileTexture =
   import.meta.env.VITE_LOCAL_DEV === 'true'
     ? '/mercator_texture_zoom_4.png'
     : 'https://whatoneaerth.s3.eu-west-1.amazonaws.com/mercator_texture.png';
-const zoom = 4;
+const zoom = 8;
 const n = Math.pow(2, zoom);
 
 const renderer = new THREE.WebGLRenderer();
