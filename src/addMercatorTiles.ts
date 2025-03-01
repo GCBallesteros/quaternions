@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { Err, Ok, Result, Some } from 'ts-results';
 
 const RADIUS_EARTH = 6371.0;
 
@@ -111,7 +112,11 @@ export function addWebMercatorTile(
   y: number,
   z: number,
   scene: THREE.Scene,
-) {
+): Result<THREE.Mesh, string> {
+  const maxTileIndex = Math.pow(z, 2) - 1;
+  if (x > maxTileIndex || y > maxTileIndex) {
+    return Err('x/y coordinate to large for zoom level');
+  }
   // Construct the URL dynamically:
   const tileUrl = `https://www.google.com/maps/vt?lyrs=s@189&gl=cn&x=${x}&y=${y}&z=${z}`;
   const patchTexture = textureLoader.load(tileUrl);
@@ -134,5 +139,5 @@ export function addWebMercatorTile(
   );
   scene.add(newPatch);
 
-  return newPatch;
+  return Ok(newPatch);
 }

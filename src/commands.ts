@@ -350,7 +350,11 @@ export function buildCommandClosures(
   }
 
   function addWebMercatorTile(x: number, y: number, z: number): void {
-    _addWebMercatorTile(x, y, z, scene);
+    const result = _addWebMercatorTile(x, y, z, scene);
+
+    if (!result.ok) {
+      throw new Error(result.val);
+    }
   }
 
   async function longRunning(iterations: number = 100000000): Promise<void> {
