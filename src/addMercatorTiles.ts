@@ -115,7 +115,7 @@ export function addWebMercatorTile(
   scene: THREE.Scene,
   state: State,
 ): Result<null, string> {
-  const maxTileIndex = Math.pow(z, 2) - 1;
+  const maxTileIndex = Math.pow(2, z) - 1;
   if (x > maxTileIndex || y > maxTileIndex) {
     return Err('x/y coordinate to large for zoom level');
   }
