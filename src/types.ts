@@ -49,4 +49,5 @@ export interface State {
   secondaryCamera: Option<THREE.PerspectiveCamera>;
   bodies: { moon: THREE.Mesh; earth: THREE.Mesh };
   plots: Record<string, Plot>;
+  _webmercatorTiles: Set<string>;
 }

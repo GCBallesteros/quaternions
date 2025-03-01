@@ -350,7 +350,7 @@ export function buildCommandClosures(
   }
 
   function addWebMercatorTile(x: number, y: number, z: number): void {
-    const result = _addWebMercatorTile(x, y, z, scene);
+    const result = _addWebMercatorTile(x, y, z, scene, state);
 
     if (!result.ok) {
       throw new Error(result.val);
