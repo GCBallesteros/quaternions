@@ -1,3 +1,4 @@
+// AI
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { None } from 'ts-results';
@@ -10,6 +11,26 @@ import { makeEarth } from './earth.js';
 import { makeMoon } from './moon.js';
 import { updatePlots } from './plots.js';
 import { State } from './types.js';
+
+/**
+ * Determines if a camera other than the main camera is currently rendering the scene
+ * @param state The current application state
+ * @returns True if a non-main camera is active in either main or secondary view, false otherwise
+ */
+export function isNonMainCameraActive(state: State): boolean {
+  // Check if the active camera is different from the main camera
+  const isMainViewUsingNonMainCamera =
+    state.activeCamera !== state.cameras.main;
+
+  // Check if secondary view is visible and using a non-main camera
+  const secondaryView = document.getElementById('secondary-view');
+  const isSecondaryViewActive =
+    !secondaryView?.classList.contains('hidden') &&
+    state.secondaryCamera.some &&
+    state.secondaryCamera.val !== state.cameras.main;
+
+  return isMainViewUsingNonMainCamera || isSecondaryViewActive;
+}
 
 export function initializeCanvas(
   canvas: HTMLCanvasElement,
