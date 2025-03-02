@@ -25,11 +25,11 @@ import * as THREE from 'three';
 // step is to find all the unique values in said render. Easy!
 
 // WebMercator Details
+const zoom = 8;
 const mercatorTileTexture =
   import.meta.env.VITE_LOCAL_DEV === 'true'
-    ? '/mercator_texture_zoom_4.png'
+    ? `/mercator_texture_zoom_${zoom}.png`
     : 'https://whatoneaerth.s3.eu-west-1.amazonaws.com/mercator_texture.png';
-const zoom = 8;
 const n = Math.pow(2, zoom);
 
 const renderer = new THREE.WebGLRenderer();

@@ -1,4 +1,3 @@
-// AI
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { None } from 'ts-results';
@@ -11,6 +10,8 @@ import { makeEarth } from './earth.js';
 import { makeMoon } from './moon.js';
 import { updatePlots } from './plots.js';
 import { State } from './types.js';
+import { findMercatorTilesInPOV } from './findMercatorTiles.js';
+import { addWebMercatorTile } from './addMercatorTiles.js';
 
 /**
  * Determines if a camera other than the main camera is currently rendering the scene
@@ -136,6 +137,32 @@ export function createAnimator(
           elapsed * state.timeSpeedMultiplier * 1000,
       );
       _setTime(state, simulatedTime);
+    }
+
+    // Handle high-resolution tile loading when non-main cameras are active and time is not flowing
+    if (isNonMainCameraActive(state) && !state.isTimeFlowing) {
+      // Process main view camera if it's not the main camera
+      if (state.activeCamera !== state.cameras.main) {
+        const visibleTiles = findMercatorTilesInPOV(state.activeCamera);
+        for (const [x, y] of visibleTiles) {
+          // Use zoom level 8 as specified in findMercatorTiles.ts
+          addWebMercatorTile(x, y, 8, scene, state);
+        }
+      }
+
+      // Process secondary view camera if it exists, is visible, and is not the main camera
+      const secondaryView = document.getElementById('secondary-view');
+      if (
+        !secondaryView?.classList.contains('hidden') &&
+        state.secondaryCamera.some &&
+        state.secondaryCamera.val !== state.cameras.main
+      ) {
+        const visibleTiles = findMercatorTilesInPOV(state.secondaryCamera.val);
+        for (const [x, y] of visibleTiles) {
+          // Use zoom level 8 as specified in findMercatorTiles.ts
+          addWebMercatorTile(x, y, 8, scene, state);
+        }
+      }
     }
 
     // Update all plots when time is flowing
