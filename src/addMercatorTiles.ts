@@ -105,6 +105,10 @@ function createWebMercatorPatch(
   });
 
   const patch = new THREE.Mesh(patchGeometry, patchMaterial);
+
+  // Set the patch to layer 2 - only visible from non-main cameras
+  patch.layers.set(2);
+
   return patch;
 }
 

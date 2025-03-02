@@ -143,6 +143,9 @@ export function createAnimator(
     if (isNonMainCameraActive(state) && !state.isTimeFlowing) {
       // Process main view camera if it's not the main camera
       if (state.activeCamera !== state.cameras.main) {
+        // Enable layer 2 for non-main cameras
+        state.activeCamera.layers.enable(2);
+
         const visibleTiles = findMercatorTilesInPOV(state.activeCamera);
         for (const [x, y] of visibleTiles) {
           // Use zoom level 8 as specified in findMercatorTiles.ts
@@ -157,6 +160,9 @@ export function createAnimator(
         state.secondaryCamera.some &&
         state.secondaryCamera.val !== state.cameras.main
       ) {
+        // Enable layer 2 for non-main cameras
+        state.secondaryCamera.val.layers.enable(2);
+
         const visibleTiles = findMercatorTilesInPOV(state.secondaryCamera.val);
         for (const [x, y] of visibleTiles) {
           // Use zoom level 8 as specified in findMercatorTiles.ts
@@ -195,6 +201,13 @@ export function createAnimator(
     // Update aspect ratio to match canvas
     newCamera.aspect = canvas.clientWidth / canvas.clientHeight;
     newCamera.updateProjectionMatrix();
+
+    // Configure layers for the camera
+    if (newCamera !== state.cameras.main) {
+      // Enable layer 2 for non-main cameras
+      newCamera.layers.enable(2);
+    }
+
     state.activeCamera = newCamera;
   };
 }
