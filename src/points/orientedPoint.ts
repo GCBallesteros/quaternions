@@ -63,6 +63,9 @@ export class OrientedPoint extends Point {
     // Layer 1 belongs to things that should be visible from the global view
     // but not from the satellite, e.g. the trail
     camera.layers.disable(1);
+    // Layer 2 belongs to things that should only be visible from non-main cameras
+    // like high-resolution Earth tiles
+    camera.layers.enable(2);
     this.geometry.add(camera);
   }
 
