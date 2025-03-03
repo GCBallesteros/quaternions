@@ -178,7 +178,6 @@ export function createAnimator(
     }
 
     // Increment frame counters
-    frameCount++;
     tileUpdateCounter++;
 
     // Handle high-resolution tile loading (throttled to every 5 frames)
@@ -195,6 +194,7 @@ export function createAnimator(
 
     // Update all plots when time is flowing
     if (state.isTimeFlowing) {
+      frameCount++;
       updatePlots(state, frameCount);
       frameCount = frameCount % 1000; // Prevent potential overflow
     }
