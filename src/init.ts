@@ -166,7 +166,7 @@ export function createAnimator(
   let frameCount = 0;
   let tileUpdateCounter = 0;
   const TILE_UPDATE_FREQUENCY = 5; // Update tiles every 5 frames
-  
+
   function animate() {
     const elapsed = clock.getDelta();
     if (state.isTimeFlowing) {
@@ -180,7 +180,7 @@ export function createAnimator(
     // Increment frame counters
     frameCount++;
     tileUpdateCounter++;
-    
+
     // Handle high-resolution tile loading (throttled to every 5 frames)
     if (tileUpdateCounter >= TILE_UPDATE_FREQUENCY) {
       const visibleTiles = getVisibleMercatorTiles(state);
