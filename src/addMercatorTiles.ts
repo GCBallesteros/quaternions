@@ -15,9 +15,8 @@ function webMercatorToLatLon(x: number, y: number, z: number) {
   return { lat, lon };
 }
 
-// AI! Give a name argument to this function that will be used to quickly retrieve the relevant patch from the scene if required.
-// pass this name to this function and change the only call site that lives within this same file
 function createWebMercatorPatch(
+  name: string,
   lonLeft: number,
   lonRight: number,
   latTop: number,
@@ -105,6 +104,7 @@ function createWebMercatorPatch(
   });
 
   const patch = new THREE.Mesh(patchGeometry, patchMaterial);
+  patch.name = name;
 
   // Set the patch to layer 2 - only visible from non-main cameras
   patch.layers.set(2);
@@ -142,6 +142,7 @@ export function addWebMercatorTile(
 
   // Create the patch and add it to the scene:
   const newPatch = createWebMercatorPatch(
+    `mercator_tile_${tileKey}`,
     lonLeft,
     lonRight,
     latTop,
