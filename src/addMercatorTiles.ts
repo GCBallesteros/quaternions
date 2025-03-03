@@ -1,12 +1,17 @@
 import * as THREE from 'three';
 import { Err, Ok, Result } from 'ts-results';
-import { ECC_EARTH, RADIUS_EARTH, SEMI_MINOR_EARTH_AXIS } from './constants.js';
+
+import { RADIUS_EARTH, SEMI_MINOR_EARTH_AXIS } from './constants.js';
 import { State } from './types.js';
 import { disposeObject } from './utils.js';
 
 const textureLoader = new THREE.TextureLoader();
 
-function webMercatorToLatLon(x: number, y: number, z: number) {
+function webMercatorToLatLon(
+  x: number,
+  y: number,
+  z: number,
+): { lat: number; lon: number } {
   const n = Math.pow(2, z);
 
   const sinh_arg = Math.PI * (1 - (2 * y) / n);
@@ -23,7 +28,7 @@ function createWebMercatorPatch(
   latTop: number,
   latBottom: number,
   texture: THREE.Texture,
-) {
+): THREE.Mesh {
   const rows = 15,
     cols = 15;
   const patchGeometry = new THREE.BufferGeometry();
