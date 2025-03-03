@@ -15,6 +15,8 @@ function webMercatorToLatLon(x: number, y: number, z: number) {
   return { lat, lon };
 }
 
+// AI! Give a name argument to this function that will be used to quickly retrieve the relevant patch from the scene if required.
+// pass this name to this function and change the only call site that lives within this same file
 function createWebMercatorPatch(
   lonLeft: number,
   lonRight: number,
