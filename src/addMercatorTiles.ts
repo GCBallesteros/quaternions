@@ -52,7 +52,7 @@ function createWebMercatorPatch(
       const phi = lat * (Math.PI / 180);
 
       // 4. Compute the 3D ellipsoidal coordinates.
-      const eps = 1.005;
+      const eps = 1.002;
       const a = RADIUS_EARTH * eps; // Equatorial radius
       const N = a / Math.sqrt(1 - Math.pow(ECC_EARTH * Math.sin(phi), 2));
 
