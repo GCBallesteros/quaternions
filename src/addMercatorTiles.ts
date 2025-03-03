@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Err, Ok, Result } from 'ts-results';
-import { ECC_EARTH, RADIUS_EARTH } from './constants.js';
+import { ECC_EARTH, RADIUS_EARTH, SEMI_MINOR_EARTH_AXIS } from './constants.js';
 import { State } from './types.js';
 import { disposeObject } from './utils.js';
 
@@ -39,7 +39,6 @@ function createWebMercatorPatch(
     for (let j = 0; j <= cols; j++) {
       // 1. Compute longitude (linear interpolation is fine)
       // Positions based on:
-      // https://gssc.esa.int/navipedia/index.php/Ellipsoidal_and_Cartesian_Coordinates_Conversion
       const lon = lonLeft + (j / cols) * (lonRight - lonLeft);
 
       // 2. Interpolate in Mercator space and convert back to geodetic latitude (in degrees)
@@ -53,15 +52,14 @@ function createWebMercatorPatch(
       const theta = lon * (Math.PI / 180);
       const phi = lat * (Math.PI / 180);
 
-      // 4. Compute the 3D ellipsoidal coordinates.
-      // AI! Try to use here just simple ellipsoid earth coordinates. In constants we also have the semi-minor axis
-      const eps = 1.002;
-      const a = RADIUS_EARTH * eps; // Equatorial radius
-      const N = a / Math.sqrt(1 - Math.pow(ECC_EARTH * Math.sin(phi), 2));
+      // 4. Compute the 3D ellipsoidal coordinates using Earth constants
+      const a = RADIUS_EARTH; // Semi-major axis (equatorial radius)
+      const b = SEMI_MINOR_EARTH_AXIS; // Semi-minor axis
 
-      const x = N * Math.cos(phi) * Math.cos(theta);
-      const y = N * Math.cos(phi) * Math.sin(theta);
-      const z = (1 - ECC_EARTH * ECC_EARTH) * N * Math.sin(phi);
+      // Calculate position on ellipsoid
+      const x = a * Math.cos(phi) * Math.cos(theta);
+      const y = a * Math.cos(phi) * Math.sin(theta);
+      const z = b * Math.sin(phi);
 
       positions.push(x, y, z);
 
