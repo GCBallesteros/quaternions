@@ -52,7 +52,7 @@ export default defineConfig({
     include: ['three'], // Include necessary dependencies
   },
   plugins: [
-    monacoEditorEsmPlugin({}), 
+    monacoEditorEsmPlugin({}),
     tailwindcss(),
     eslint({
       include: ['src/**/*.ts', 'src/**/*.tsx'],

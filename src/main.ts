@@ -16,7 +16,7 @@ import { getPositionOfPoint } from './utils.js';
 
 const canvas = document.getElementById('webgl-canvas') as HTMLCanvasElement;
 const secondaryCanvas = document.getElementById(
-  'secondary-canvas'
+  'secondary-canvas',
 ) as HTMLCanvasElement;
 
 const renderer = initializeCanvas(canvas);
@@ -31,7 +31,7 @@ const switchCamera = createAnimator(
   scene,
   state,
   camera,
-  canvas
+  canvas,
 );
 
 const commands = buildCommandClosures(scene, state, switchCamera);
@@ -52,7 +52,7 @@ function updateAllLines(): void {
         0,
         startPos.x,
         startPos.y,
-        startPos.z
+        startPos.z,
       );
       line.geometry.attributes.position.setXYZ(1, endPos.x, endPos.y, endPos.z);
       line.geometry.attributes.position.needsUpdate = true; // Ensure the update is rendered
@@ -67,5 +67,5 @@ setupCheatsheet();
 setupUI(state, executeCommand, renderer);
 
 log(
-  'Visit quaternions.maxwellrules.com/documentation for the full documentation'
+  'Visit quaternions.maxwellrules.com/documentation for the full documentation',
 );
