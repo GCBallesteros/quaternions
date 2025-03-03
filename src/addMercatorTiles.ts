@@ -54,6 +54,7 @@ function createWebMercatorPatch(
       const phi = lat * (Math.PI / 180);
 
       // 4. Compute the 3D ellipsoidal coordinates.
+      // AI! Try to use here just simple ellipsoid earth coordinates. In constants we also have the semi-minor axis
       const eps = 1.002;
       const a = RADIUS_EARTH * eps; // Equatorial radius
       const N = a / Math.sqrt(1 - Math.pow(ECC_EARTH * Math.sin(phi), 2));
