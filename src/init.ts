@@ -1,24 +1,24 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { None } from 'ts-results';
+import { None, Option, Some } from 'ts-results';
+import { addWebMercatorTile } from './addMercatorTiles.js';
 import { getMoonPosition } from './astronomy/moon.js';
 import { updateSunLight } from './astronomy/sun.js';
 import { createFloatingPoint } from './components.js';
 import { setupTimeControls } from './components/timeControls.js';
 import { _createLine, _mov, _setTime, addFrame } from './core.js';
 import { makeEarth } from './earth.js';
+import { findMercatorTilesInPOV } from './findMercatorTiles.js';
 import { makeMoon } from './moon.js';
 import { updatePlots } from './plots.js';
-import { State } from './types.js';
-import { findMercatorTilesInPOV } from './findMercatorTiles.js';
-import { addWebMercatorTile } from './addMercatorTiles.js';
+import { State, TileCoordinate } from './types.js';
 
 /**
  * Determines if a camera other than the main camera is currently rendering the scene
  * @param state The current application state
  * @returns True if a non-main camera is active in either main or secondary view, false otherwise
  */
-export function isNonMainCameraActive(state: State): boolean {
+function isNonMainCameraActive(state: State): boolean {
   // Check if the active camera is different from the main camera
   const isMainViewUsingNonMainCamera =
     state.activeCamera !== state.cameras.main;
@@ -31,6 +31,41 @@ export function isNonMainCameraActive(state: State): boolean {
     state.secondaryCamera.val !== state.cameras.main;
 
   return isMainViewUsingNonMainCamera || isSecondaryViewActive;
+}
+
+/**
+ * Gets visible mercator tiles for active non-main cameras
+ * @param state The current application state
+ * @returns Option containing array of [x,y] tile coordinates or None if no tiles should be loaded
+ */
+function getVisibleMercatorTiles(state: State): Option<TileCoordinate[]> {
+  // Only load tiles when non-main cameras are active and time is not flowing
+  if (!isNonMainCameraActive(state) || state.isTimeFlowing) {
+    return None;
+  }
+
+  const visibleTiles: TileCoordinate[] = [];
+
+  // Process main view camera if it's not the main camera
+  if (state.activeCamera !== state.cameras.main) {
+    const mainViewTiles = findMercatorTilesInPOV(state.activeCamera);
+    visibleTiles.push(...mainViewTiles);
+  }
+
+  // Process secondary view camera if it exists, is visible, and is not the main camera
+  const secondaryView = document.getElementById('secondary-view');
+  if (
+    !secondaryView?.classList.contains('hidden') &&
+    state.secondaryCamera.some &&
+    state.secondaryCamera.val !== state.cameras.main
+  ) {
+    const secondaryViewTiles = findMercatorTilesInPOV(
+      state.secondaryCamera.val,
+    );
+    visibleTiles.push(...secondaryViewTiles);
+  }
+
+  return visibleTiles.length > 0 ? Some(visibleTiles) : None;
 }
 
 export function initializeCanvas(
@@ -139,35 +174,12 @@ export function createAnimator(
       _setTime(state, simulatedTime);
     }
 
-    // AI! All this if clause should be refactored into a function in this same
-    // file inspect the clause to see exactly what woul need to get passed into it.
-    // The ouput of the function should be an Option from ts-results containing a
-    // list of xy pairs or nothing. Which can then be passed into the loop that
-    // does the addWebMercatorTile
-
-    // Handle high-resolution tile loading when non-main cameras are active and time is not flowing
-    if (isNonMainCameraActive(state) && !state.isTimeFlowing) {
-      // Process main view camera if it's not the main camera
-      if (state.activeCamera !== state.cameras.main) {
-        const visibleTiles = findMercatorTilesInPOV(state.activeCamera);
-        for (const [x, y] of visibleTiles) {
-          // Use zoom level 8 as specified in findMercatorTiles.ts
-          addWebMercatorTile(x, y, 8, scene, state);
-        }
-      }
-
-      // Process secondary view camera if it exists, is visible, and is not the main camera
-      const secondaryView = document.getElementById('secondary-view');
-      if (
-        !secondaryView?.classList.contains('hidden') &&
-        state.secondaryCamera.some &&
-        state.secondaryCamera.val !== state.cameras.main
-      ) {
-        const visibleTiles = findMercatorTilesInPOV(state.secondaryCamera.val);
-        for (const [x, y] of visibleTiles) {
-          // Use zoom level 8 as specified in findMercatorTiles.ts
-          addWebMercatorTile(x, y, 8, scene, state);
-        }
+    // Handle high-resolution tile loading
+    const visibleTiles = getVisibleMercatorTiles(state);
+    if (visibleTiles.some) {
+      for (const [x, y] of visibleTiles.val) {
+        // Use zoom level 8 as specified in findMercatorTiles.ts
+        addWebMercatorTile(x, y, 8, scene, state);
       }
     }
 

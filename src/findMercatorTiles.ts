@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { TileCoordinate } from './types.js';
 
 // What?
 // ====
@@ -67,7 +68,9 @@ const auxRT = new THREE.WebGLRenderTarget(n_, m_, {
   stencilBuffer: false,
 });
 
-export function findMercatorTilesInPOV(camera: THREE.PerspectiveCamera) {
+export function findMercatorTilesInPOV(
+  camera: THREE.PerspectiveCamera,
+): TileCoordinate[] {
   // Step 1: Render the Mercator tile globe from current camera
   renderer.setRenderTarget(auxRT);
   renderer.render(scene, camera);
@@ -97,11 +100,13 @@ export function findMercatorTilesInPOV(camera: THREE.PerspectiveCamera) {
   }
 
   // Step 4: Turn the linear indices into xy tile coords again
-  const visibleTileList = Array.from(visibleTiles).map((index) => {
-    const tileX = index % n;
-    const tileY = Math.floor(index / n);
-    return [tileX, tileY];
-  });
+  const visibleTileList: TileCoordinate[] = Array.from(visibleTiles).map(
+    (index) => {
+      const tileX = index % n;
+      const tileY = Math.floor(index / n);
+      return [tileX, tileY];
+    },
+  );
 
   return visibleTileList;
 }

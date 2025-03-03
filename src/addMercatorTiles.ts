@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Err, Ok, Result } from 'ts-results';
-import { State } from './types.js';
+import { State, TileCoordinate } from './types.js';
 
 const RADIUS_EARTH = 6371.0;
 

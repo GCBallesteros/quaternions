@@ -5,6 +5,7 @@ import { Option } from 'ts-results';
 
 export type Array3 = [number, number, number];
 export type Vector4 = [number, number, number, number];
+export type TileCoordinate = [number, number];
 
 export interface Plot {
   title: string;
