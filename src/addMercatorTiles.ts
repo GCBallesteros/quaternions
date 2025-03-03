@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { Err, Ok, Result } from 'ts-results';
 import { ECC_EARTH, RADIUS_EARTH } from './constants.js';
 import { State } from './types.js';
+import { disposeObject } from './utils.js';
 
 const textureLoader = new THREE.TextureLoader();
 
@@ -110,6 +111,41 @@ function createWebMercatorPatch(
   patch.layers.set(2);
 
   return patch;
+}
+
+/**
+ * Removes a mercator tile from the scene and properly disposes of its resources
+ * @param tileKey The key of the tile to remove (format: "x,y,z")
+ * @param scene The THREE.Scene containing the tile
+ * @param state The application state
+ * @returns Result indicating success or failure
+ */
+export function removeWebMercatorTile(
+  tileKey: string,
+  scene: THREE.Scene,
+  state: State,
+): Result<null, string> {
+  if (!state._webmercatorTiles.has(tileKey)) {
+    return Err(`Tile ${tileKey} not found in state`);
+  }
+
+  const patchName = `mercator_tile_${tileKey}`;
+  const patch = scene.getObjectByName(patchName);
+
+  if (!patch) {
+    // Remove from state even if not found in scene
+    state._webmercatorTiles.delete(tileKey);
+    return Err(`Tile mesh ${patchName} not found in scene`);
+  }
+
+  // Remove from scene and dispose resources
+  scene.remove(patch);
+  disposeObject(patch);
+
+  // Remove from state
+  state._webmercatorTiles.delete(tileKey);
+
+  return Ok(null);
 }
 
 export function addWebMercatorTile(
