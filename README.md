@@ -1,6 +1,7 @@
 # 🛰️ What on Earth? 🛰️
 
-A browser-based tool for visualizing and debugging satellite orientations using quaternions. It provides an interactive 3D environment for simulating satellite positions, analyzing geometric relationships, and optimizing quaternion-based attitude control.
+A script-driven interactive environment for simulating and analyzing satellite
+orientation and system dynamics.
 
 ## Quick Links
 
