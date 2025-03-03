@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { TileCoordinate } from './types.js';
+import { RADIUS_EARTH } from './constants.js';
 
 // What?
 // ====
@@ -35,8 +36,6 @@ const n = Math.pow(2, zoom);
 
 const renderer = new THREE.WebGLRenderer();
 const scene = new THREE.Scene();
-
-const RADIUS_EARTH = 6371.0;
 
 // Load Precomputed Tile Texture
 const textureLoader = new THREE.TextureLoader();

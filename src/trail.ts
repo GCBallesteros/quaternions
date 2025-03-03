@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { None, Option, Some } from 'ts-results';
 import { Array3 } from './types.js';
 import { disposeObject } from './utils.js';
+import { RADIUS_EARTH } from './constants.js';
 
 const NUM_CURVE_POINTS = 3;
 const MAX_SEGMENTS = 250;
@@ -85,10 +86,10 @@ export class Trail {
       transparent: true,
       depthWrite: false,
       depthTest: true,
-      polygonOffset:true,
+      polygonOffset: true,
       polygonOffsetFactor: -5,
       blending: THREE.AdditiveBlending,
-      precision: "highp",
+      precision: 'highp',
       side: THREE.DoubleSide,
     });
 
@@ -134,8 +135,7 @@ export class Trail {
       // Solving quadratic equation: at^2 + bt + c = 0
       const a = dir.lengthSq();
       const b = 2.0 * position.dot(dir);
-      const EARTH_RADIUS = 6371.0;
-      const c = position.lengthSq() - EARTH_RADIUS * EARTH_RADIUS;
+      const c = position.lengthSq() - RADIUS_EARTH * RADIUS_EARTH;
 
       const discriminant = b * b - 4 * a * c;
       if (discriminant >= 0) {

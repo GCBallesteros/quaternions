@@ -1,8 +1,7 @@
 import * as THREE from 'three';
 import { Err, Ok, Result } from 'ts-results';
 import { State, TileCoordinate } from './types.js';
-
-const RADIUS_EARTH = 6371.0;
+import { RADIUS_EARTH } from './constants.js';
 
 const textureLoader = new THREE.TextureLoader();
 

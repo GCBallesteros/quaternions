@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-
+import { RADIUS_EARTH } from './constants.js';
 import { createFrame } from './components.js';
 
 const textureLevels = ['LR', 'MR'].map((resolution) =>
@@ -12,8 +12,6 @@ const normalMapUrl =
   import.meta.env.VITE_LOCAL_DEV === 'true'
     ? '/earth_normals.jpg'
     : 'https://whatoneaerth.s3.eu-west-1.amazonaws.com/earth_normals.jpg';
-
-const RADIUS_EARTH = 6371.0;
 
 export function makeEarth(): { earth: THREE.Mesh; earth_frame: THREE.Group } {
   const earthGeometry = new THREE.SphereGeometry(RADIUS_EARTH, 64, 64);

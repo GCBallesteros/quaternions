@@ -3,8 +3,7 @@ import { Err, Ok, Result } from 'ts-results';
 import { log } from './logger.js';
 import { Array3, State, Vector4 } from './types.js';
 import { Vector3 } from './vectors.js';
-
-const RADIUS_EARTH = 6371.0;
+import { RADIUS_EARTH } from './constants.js';
 
 export function getPositionOfPoint(
   state: State,
