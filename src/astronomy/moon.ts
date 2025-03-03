@@ -1,6 +1,7 @@
-import { toRad, dateToJulian, eci2ecef } from './sun.js';
 import { find_best_quaternion_for_desired_attitude } from '../core.js';
 import { sph2xyz } from '../utils.js';
+
+import { dateToJulian, eci2ecef, toRad } from './sun.js';
 
 // Synodic month (new Moon to new Moon)
 const SYNODIC_MONTH = 29.53058868;
@@ -16,12 +17,12 @@ const MOON_INCLINATION = 5.145396; // Inclination of Moon's orbit
 const MOON_ECCENTRICITY = 0.0549; // Eccentricity of Moon's orbit
 const MOON_ANGULAR_SIZE = 0.5181; // Moon's angular size at distance a
 const MOON_SEMI_MAJOR_AXIS = 384401.0; // Semi-major axis of Moon's orbit in km
-const MOON_PARALLAX = 0.9507; // Parallax at distance a from Earth
+// const MOON_PARALLAX = 0.9507; // Parallax at distance a from Earth
 
 // Constants for the Sun's apparent orbit
 const SUN_ECLIPTIC_LONGITUDE_EPOCH = 278.83354; // Ecliptic longitude of Sun at epoch
 const SUN_ECLIPTIC_LONGITUDE_PERIGEE = 282.596403; // Ecliptic longitude at perigee
-const SUN_ORBIT_ECCENTRICITY = 0.016718; // Eccentricity of Earth's orbit
+// const SUN_ORBIT_ECCENTRICITY = 0.016718; // Eccentricity of Earth's orbit
 
 function fixangle(a: number): number {
   return a - 360.0 * Math.floor(a / 360.0);
