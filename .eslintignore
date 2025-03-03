@@ -1,0 +1,6 @@
+node_modules
+dist
+documentation
+*.js
+*.cjs
+vite.config.ts
