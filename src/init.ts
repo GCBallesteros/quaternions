@@ -164,6 +164,9 @@ export function createAnimator(
 
   const clock = new THREE.Clock();
   let frameCount = 0;
+  let tileUpdateCounter = 0;
+  const TILE_UPDATE_FREQUENCY = 5; // Update tiles every 5 frames
+  
   function animate() {
     const elapsed = clock.getDelta();
     if (state.isTimeFlowing) {
@@ -174,20 +177,24 @@ export function createAnimator(
       _setTime(state, simulatedTime);
     }
 
-    // Handle high-resolution tile loading
-    // AI! I would like to throttle the getVisibleMercatorTiles and addittion of tiles
-    // to only happen every 5 frames.
-    const visibleTiles = getVisibleMercatorTiles(state);
-    if (visibleTiles.some) {
-      for (const [x, y] of visibleTiles.val) {
-        // Use zoom level 8 as specified in findMercatorTiles.ts
-        addWebMercatorTile(x, y, 8, scene, state);
+    // Increment frame counters
+    frameCount++;
+    tileUpdateCounter++;
+    
+    // Handle high-resolution tile loading (throttled to every 5 frames)
+    if (tileUpdateCounter >= TILE_UPDATE_FREQUENCY) {
+      const visibleTiles = getVisibleMercatorTiles(state);
+      if (visibleTiles.some) {
+        for (const [x, y] of visibleTiles.val) {
+          // Use zoom level 8 as specified in findMercatorTiles.ts
+          addWebMercatorTile(x, y, 8, scene, state);
+        }
       }
+      tileUpdateCounter = 0; // Reset the counter after updating
     }
 
     // Update all plots when time is flowing
     if (state.isTimeFlowing) {
-      frameCount++;
       updatePlots(state, frameCount);
       frameCount = frameCount % 1000; // Prevent potential overflow
     }
