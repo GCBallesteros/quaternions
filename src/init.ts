@@ -139,6 +139,12 @@ export function createAnimator(
       _setTime(state, simulatedTime);
     }
 
+    // AI! All this if clause should be refactored into a function in this same
+    // file inspect the clause to see exactly what woul need to get passed into it.
+    // The ouput of the function should be an Option from ts-results containing a
+    // list of xy pairs or nothing. Which can then be passed into the loop that
+    // does the addWebMercatorTile
+
     // Handle high-resolution tile loading when non-main cameras are active and time is not flowing
     if (isNonMainCameraActive(state) && !state.isTimeFlowing) {
       // Process main view camera if it's not the main camera
