@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { Err, Ok, Result } from 'ts-results';
-import { State, TileCoordinate } from './types.js';
-import { RADIUS_EARTH } from './constants.js';
+import { ECC_EARTH, RADIUS_EARTH } from './constants.js';
+import { State } from './types.js';
 
 const textureLoader = new THREE.TextureLoader();
 
@@ -54,12 +54,11 @@ function createWebMercatorPatch(
       // 4. Compute the 3D ellipsoidal coordinates.
       const eps = 1.005;
       const a = RADIUS_EARTH * eps; // Equatorial radius
-      const e = 0.08181919; // Earth's eccentricity (for WGS84)
-      const N = a / Math.sqrt(1 - Math.pow(e * Math.sin(phi), 2));
+      const N = a / Math.sqrt(1 - Math.pow(ECC_EARTH * Math.sin(phi), 2));
 
       const x = N * Math.cos(phi) * Math.cos(theta);
       const y = N * Math.cos(phi) * Math.sin(theta);
-      const z = (1 - e * e) * N * Math.sin(phi);
+      const z = (1 - ECC_EARTH * ECC_EARTH) * N * Math.sin(phi);
 
       positions.push(x, y, z);
 
