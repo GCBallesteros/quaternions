@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { RADIUS_EARTH } from './constants.js';
+import { RADIUS_EARTH, SEMI_MINOR_EARTH_AXIS } from './constants.js';
 import { createFrame } from './components.js';
 
 const textureLevels = ['LR', 'MR'].map((resolution) =>
@@ -21,6 +21,7 @@ export function makeEarth(): { earth: THREE.Mesh; earth_frame: THREE.Group } {
     metalness: 0.1, // Low metalness for a more matte look
   });
   const earth = new THREE.Mesh(earthGeometry, earthMaterial);
+  earth.scale.set(1, SEMI_MINOR_EARTH_AXIS / RADIUS_EARTH, 1);
 
   const textureLoader = new THREE.TextureLoader();
 
