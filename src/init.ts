@@ -175,6 +175,8 @@ export function createAnimator(
     }
 
     // Handle high-resolution tile loading
+    // AI! I would like to throttle the getVisibleMercatorTiles and addittion of tiles
+    // to only happen every 5 frames.
     const visibleTiles = getVisibleMercatorTiles(state);
     if (visibleTiles.some) {
       for (const [x, y] of visibleTiles.val) {
