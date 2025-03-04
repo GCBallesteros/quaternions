@@ -4,9 +4,9 @@ import { commonStyles } from './styles/common.js';
 import { plotStyles } from './styles/plots.js';
 
 export const plotListTemplate = (): TemplateResult<1> => html`
-  <div class=${commonStyles.sectionContainer}>
+  <div class="mb-5 h-full">
     <h3 class=${commonStyles.sectionTitle}>Plots</h3>
-    <div id="plots-list"></div>
+    <div id="plots-list" class="overflow-auto h-full"></div>
   </div>
 `;
 
