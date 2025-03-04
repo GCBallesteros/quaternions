@@ -9,16 +9,17 @@ const NUM_CURVE_POINTS = 3;
 const MAX_SEGMENTS = 250;
 const MAX_VERTICES = (MAX_SEGMENTS + 1) * NUM_CURVE_POINTS;
 
-export function updateTrailSwitch(satelliteName: string, checked: boolean) {
+export function updateTrailSwitch(
+  satelliteName: string,
+  checked: boolean,
+): void {
   const pointItems = document.querySelectorAll('.point-item');
   for (const item of pointItems) {
     if (item.querySelector('.point-name')?.textContent === satelliteName) {
       const trailSwitch = item.querySelector(
         '.trail-switch',
       ) as HTMLInputElement;
-      if (trailSwitch) {
-        trailSwitch.checked = checked;
-      }
+      trailSwitch.checked = checked;
       break;
     }
   }
@@ -62,7 +63,7 @@ export class Trail {
     );
 
     const sphere = pointGroup.getObjectByName('point-sphere');
-    // @ts-ignore `point-sphere` is a THREE.Mesh
+    // @ts-ignore: `point-sphere` is a THREE.Mesh
     this.color = sphere!.material.color;
 
     this.material = new THREE.ShaderMaterial({

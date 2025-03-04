@@ -54,10 +54,10 @@ export default defineConfig({
   plugins: [
     monacoEditorEsmPlugin({}),
     tailwindcss(),
-    eslint({
-      include: ['src/**/*.ts', 'src/**/*.tsx'],
-      exclude: ['**/node_modules/**', 'dist/**'],
-      cache: false,
-    }),
+    //eslint({
+    //  include: ['src/**/*.ts', 'src/**/*.tsx'],
+    //  exclude: ['**/node_modules/**', 'dist/**'],
+    //  cache: false,
+    //}),
   ],
 });
