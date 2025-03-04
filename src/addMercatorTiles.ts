@@ -169,6 +169,14 @@ export function addWebMercatorTile(
     return Ok(null);
   }
 
+  // If we've reached capacity, remove the oldest tile
+  if (state._webmercatorTilesQueue.isFull) {
+    const oldestTileKey = state._webmercatorTilesQueue.shift();
+    if (oldestTileKey.some) {
+      removeWebMercatorTile(oldestTileKey.val, scene, state);
+    }
+  }
+
   const tileUrl = `https://www.google.com/maps/vt?lyrs=s@189&gl=cn&x=${x}&y=${y}&z=${z}`;
   const patchTexture = textureLoader.load(tileUrl);
 
@@ -191,7 +199,9 @@ export function addWebMercatorTile(
   );
   scene.add(newPatch);
 
+  // Add to the set and queue
   state._webmercatorTiles.add(tileKey);
+  state._webmercatorTilesQueue.push(tileKey);
 
   return Ok(null);
 }

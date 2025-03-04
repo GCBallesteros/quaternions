@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { Option } from 'ts-results';
 
+import { CircularBuffer } from './circularBuffer.js';
 import { OrientedPoint } from './points/orientedPoint.js';
 import { Point } from './points/point.js';
 
@@ -52,4 +53,5 @@ export interface State {
   bodies: { moon: THREE.Mesh; earth: THREE.Mesh };
   plots: Record<string, Plot>;
   _webmercatorTiles: Set<string>;
+  _webmercatorTilesQueue: CircularBuffer<string>;
 }

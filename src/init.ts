@@ -132,6 +132,7 @@ export function initScene(
     bodies: { moon, earth: earth_geometries.earth },
     plots: {},
     _webmercatorTiles: new Set(),
+    _webmercatorTilesInsertion: [],
   };
 
   const moonPos = getMoonPosition(state.currentTime);
