@@ -1,5 +1,7 @@
 import { render } from 'lit-html';
+
 import { State, Plot } from '../types.js';
+
 import { plotTemplate, plotListTemplate } from './plotsTemplates.js';
 
 export const workers = new Map<string, Worker>();
@@ -7,7 +9,9 @@ export const canvases = new Map<string, HTMLCanvasElement>();
 
 function downloadPlotData(plotId: string, state: State) {
   const plot = state.plots[plotId];
-  if (!plot) return;
+  if (!plot) {
+    return;
+  }
 
   // Create CSV content
   const headers = ['Timestamp', ...plot.lines];
@@ -88,7 +92,9 @@ function createPlotElement(
 
 function updatePlots(state: State): void {
   // Early return if time is not flowing since there's no new data to display
-  if (!state.isTimeFlowing) return;
+  if (!state.isTimeFlowing) {
+    return;
+  }
 
   const plotsList = document.getElementById('plots-list')!;
   const currentPlots = new Set(Object.keys(state.plots));

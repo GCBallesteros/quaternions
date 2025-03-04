@@ -38,7 +38,9 @@ export function updateScriptSelector(): void {
   const selector = document.getElementById(
     'saved-scripts',
   ) as HTMLSelectElement;
-  if (!selector) return;
+  if (!selector) {
+    return;
+  }
 
   // Clear existing options except the first one
   while (selector.options.length > 1) {

@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import { None, Option, Some } from 'ts-results';
+
+import { RADIUS_EARTH } from './constants.js';
 import { Array3 } from './types.js';
 import { disposeObject } from './utils.js';
-import { RADIUS_EARTH } from './constants.js';
 
 const NUM_CURVE_POINTS = 3;
 const MAX_SEGMENTS = 250;
@@ -15,7 +16,9 @@ export function updateTrailSwitch(satelliteName: string, checked: boolean) {
       const trailSwitch = item.querySelector(
         '.trail-switch',
       ) as HTMLInputElement;
-      if (trailSwitch) trailSwitch.checked = checked;
+      if (trailSwitch) {
+        trailSwitch.checked = checked;
+      }
       break;
     }
   }
@@ -144,7 +147,7 @@ export class Trail {
         const t2 = (-b + Math.sqrt(discriminant)) / (2 * a);
 
         // Find smallest positive t value
-        let t = t1 > 0 ? t1 : t2 > 0 ? t2 : -1;
+        const t = t1 > 0 ? t1 : t2 > 0 ? t2 : -1;
 
         // If no positive intersection, skip this point
         if (t < 0) {
@@ -168,13 +171,13 @@ export class Trail {
     prevCurve: THREE.Vector3[] | null,
     currCurve: THREE.Vector3[],
   ) {
-    let startIndex = this.currentCurveIndex * NUM_CURVE_POINTS * 3;
+    const startIndex = this.currentCurveIndex * NUM_CURVE_POINTS * 3;
     let indexOffset = this.currentSegmentIndex * (NUM_CURVE_POINTS - 1) * 6;
 
     for (let i = 0; i < NUM_CURVE_POINTS; i++) {
       const pt = currCurve[i];
-      let index = startIndex + i * 3;
-      let alphaIndex = startIndex / 3 + i;
+      const index = startIndex + i * 3;
+      const alphaIndex = startIndex / 3 + i;
 
       this.trailVertices[index] = pt.x;
       this.trailVertices[index + 1] = pt.y;
@@ -189,10 +192,10 @@ export class Trail {
     }
 
     for (let i = 0; i < NUM_CURVE_POINTS - 1; i++) {
-      let i0 = (startIndex / 3 + i) % MAX_VERTICES;
-      let i1 = (i0 - NUM_CURVE_POINTS + MAX_VERTICES) % MAX_VERTICES;
-      let i2 = (i1 + 1) % MAX_VERTICES;
-      let i3 = (i0 + 1) % MAX_VERTICES;
+      const i0 = (startIndex / 3 + i) % MAX_VERTICES;
+      const i1 = (i0 - NUM_CURVE_POINTS + MAX_VERTICES) % MAX_VERTICES;
+      const i2 = (i1 + 1) % MAX_VERTICES;
+      const i3 = (i0 + 1) % MAX_VERTICES;
 
       this.trailIndices[indexOffset++] = i0;
       this.trailIndices[indexOffset++] = i1;
@@ -217,13 +220,13 @@ export class Trail {
     const fadeThreshold = 0.9;
 
     for (let i = 0; i < MAX_VERTICES; i++) {
-      let alpha = this.trailAlpha[i];
+      const alpha = this.trailAlpha[i];
       let fadeFactor: number;
 
       if (alpha > fadeThreshold) {
         fadeFactor = minFade;
       } else {
-        let t = alpha / fadeThreshold;
+        const t = alpha / fadeThreshold;
         fadeFactor = minFade + (maxFade - minFade) * (1 - t * t);
       }
 

@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+
 import { Point } from './points/point.js';
 
 // Object Frames

@@ -1,6 +1,7 @@
 import * as THREE from 'three';
-import { RADIUS_EARTH, SEMI_MINOR_EARTH_AXIS } from './constants.js';
+
 import { createFrame } from './components.js';
+import { RADIUS_EARTH, SEMI_MINOR_EARTH_AXIS } from './constants.js';
 
 const textureLevels = ['LR', 'MR'].map((resolution) =>
   import.meta.env.VITE_LOCAL_DEV === 'true'

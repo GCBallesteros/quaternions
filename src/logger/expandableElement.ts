@@ -158,10 +158,13 @@ function processObjectEntries(
  * If the value is an object, it creates a nested structure and queues it for
  * BFS processing. If the value is a primitive, it creates a leaf node.
  */
-function createObjectEntry( key: string, value: any, queue: Array<{ parent:
-  HTMLElement; obj: object }>,): HTMLElement { const entry =
-  document.createElement('div'); const keySpan =
-  document.createElement('strong');
+function createObjectEntry(
+  key: string,
+  value: any,
+  queue: Array<{ parent: HTMLElement; obj: object }>,
+): HTMLElement {
+  const entry = document.createElement('div');
+  const keySpan = document.createElement('strong');
 
   keySpan.textContent = `${key}: `;
   keySpan.style.color = STYLES.colors.key;

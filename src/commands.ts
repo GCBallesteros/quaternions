@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+
+import { addWebMercatorTile as _addWebMercatorTile } from './addMercatorTiles.js';
 import {
   _addPoint,
   _addSatellite,
@@ -25,7 +27,6 @@ import {
   _toggleTrail,
 } from './core.js';
 import { findMercatorTilesInPOV } from './findMercatorTiles.js';
-import { addWebMercatorTile as _addWebMercatorTile } from './addMercatorTiles.js';
 import { log } from './logger.js';
 import { OrientedPoint } from './points/orientedPoint.js';
 import { Point } from './points/point.js';
@@ -55,7 +56,7 @@ export function buildCommandClosures(
     pos: Array3 | Vector3,
     use_geo: boolean = false,
   ): void {
-    let normalized_pos = normalizeCoordinates(pos);
+    const normalized_pos = normalizeCoordinates(pos);
 
     const result = _mov(state, point_name, normalized_pos, use_geo);
     if (result.ok) {
@@ -80,7 +81,7 @@ export function buildCommandClosures(
     quaternion = null,
     color = '#ffffff',
   ): void {
-    let normalized_coordinates = normalizeCoordinates(coordinates);
+    const normalized_coordinates = normalizeCoordinates(coordinates);
 
     const result = _addPoint(
       scene,
@@ -126,8 +127,8 @@ export function buildCommandClosures(
     startArg: string | Array3 | Vector3,
     endArg: string | Array3 | Vector3,
   ): void {
-    let startArg_ = normalizeCoordinates(startArg, true);
-    let endArg_ = normalizeCoordinates(endArg, true);
+    const startArg_ = normalizeCoordinates(startArg, true);
+    const endArg_ = normalizeCoordinates(endArg, true);
 
     const result = _createLine(scene, state, name, startArg_, endArg_);
     if (result.ok) {
@@ -141,8 +142,8 @@ export function buildCommandClosures(
     vec1: string | Array3 | Vector3,
     vec2: string | Array3 | Vector3,
   ): number {
-    let vec1_ = normalizeCoordinates(vec1, true);
-    let vec2_ = normalizeCoordinates(vec2, true);
+    const vec1_ = normalizeCoordinates(vec1, true);
+    const vec2_ = normalizeCoordinates(vec2, true);
 
     const result = _angle(state, vec1_, vec2_);
     if (result.ok) {
@@ -307,19 +308,25 @@ export function buildCommandClosures(
 
   function resumeTrail(satelliteName: string): void {
     const result = _resumeTrail(state, satelliteName);
-    if (!result.ok) throw new Error(result.val);
+    if (!result.ok) {
+      throw new Error(result.val);
+    }
     updateTrailSwitch(satelliteName, true);
   }
 
   function pauseTrail(satelliteName: string): void {
     const result = _pauseTrail(state, satelliteName);
-    if (!result.ok) throw new Error(result.val);
+    if (!result.ok) {
+      throw new Error(result.val);
+    }
     updateTrailSwitch(satelliteName, false);
   }
 
   function toggleTrail(satelliteName: string): void {
     const result = _toggleTrail(state, satelliteName);
-    if (!result.ok) throw new Error(result.val);
+    if (!result.ok) {
+      throw new Error(result.val);
+    }
     updateTrailSwitch(satelliteName, result.val);
   }
 
@@ -329,12 +336,16 @@ export function buildCommandClosures(
     callback: () => number[],
   ): void {
     const result = _createPlot(state, id, config, callback);
-    if (!result.ok) throw new Error(result.val);
+    if (!result.ok) {
+      throw new Error(result.val);
+    }
   }
 
   function removePlot(id: string): void {
     const result = _removePlot(state, id);
-    if (!result.ok) throw new Error(result.val);
+    if (!result.ok) {
+      throw new Error(result.val);
+    }
   }
 
   // AI! Create _showSecondaryView on core.ts and use it here. The purpose of this is to be able to pass to it the state and camera to update the secondary camera.

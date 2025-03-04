@@ -1,9 +1,11 @@
-import { html } from 'lit-html';
+import { html, TemplateResult } from 'lit-html';
+
 import { State } from '../types.js';
 import { utcDate } from '../utils.js';
-import { createTimeInput } from './timeInput.js';
-import { settingsStyles } from './styles/settings.js';
+
 import { commonStyles } from './styles/common.js';
+import { settingsStyles } from './styles/settings.js';
+import { createTimeInput } from './timeInput.js';
 
 function handleTimeUpdate(executeCommand: (command: string) => void) {
   const dateInput = document.getElementById('sim-date') as HTMLInputElement;
@@ -34,7 +36,7 @@ function handleTimeUpdate(executeCommand: (command: string) => void) {
 export const timeTemplate = (
   currentTime: Date,
   onTimeUpdate: () => void,
-) => html`
+): TemplateResult<1> => html`
   <div class=${settingsStyles.group}>
     <h3 class=${commonStyles.sectionTitle}>UTC Time</h3>
     <div id="current-time" class=${settingsStyles.currentTime}>
@@ -54,7 +56,7 @@ export const timeTemplate = (
 export const lightingTemplate = (
   sunVisible: boolean,
   ambientIntensity: number,
-) => html`
+): TemplateResult<1> => html`
   <div class=${settingsStyles.group}>
     <h3 class=${commonStyles.sectionTitle}>Lighting</h3>
     <div>
@@ -108,7 +110,7 @@ export const lightingTemplate = (
 export const settingsTemplate = (
   state: State,
   executeCommand: (command: string) => void,
-) => html`
+): TemplateResult<1> => html`
   ${timeTemplate(state.currentTime, () => handleTimeUpdate(executeCommand))}
   ${lightingTemplate(state.lights.sun.visible, state.lights.ambient.intensity)}
 `;

@@ -1,4 +1,5 @@
 import { WebGLRenderer } from 'three';
+
 import { _hideSecondaryView } from './core.js';
 import { State } from './types.js';
 import { setupBodiesTab } from './ui/bodies.js';

@@ -1,9 +1,10 @@
 import * as THREE from 'three';
 import { Err, Ok, Result } from 'ts-results';
+
+import { RADIUS_EARTH } from './constants.js';
 import { log } from './logger.js';
 import { Array3, State, Vector4 } from './types.js';
 import { Vector3 } from './vectors.js';
-import { RADIUS_EARTH } from './constants.js';
 
 export function getPositionOfPoint(
   state: State,
@@ -11,8 +12,8 @@ export function getPositionOfPoint(
 ): THREE.Vector3 | undefined {
   if (Array.isArray(pointArg) && pointArg.length === 3) {
     return new THREE.Vector3(pointArg[0], pointArg[1], pointArg[2]);
-  } else if (typeof pointArg === 'string' && state.points[pointArg]) {
-    let pos = state.points[pointArg].position;
+  } else if (typeof pointArg === 'string' && pointArg in state.points) {
+    const pos = state.points[pointArg].position;
     return new THREE.Vector3(pos[0], pos[1], pos[2]);
   } else {
     console.error(
@@ -38,7 +39,7 @@ export function validateName(name: string, state: State): boolean {
     return false;
   }
 
-  if (state.points[name] || state.lines[name]) {
+  if (name in state.points || name in state.lines) {
     log(`Error: Name '${name}' is already in use.`);
     return false;
   }
@@ -59,7 +60,7 @@ export function validateName(name: string, state: State): boolean {
  * @throws {Error} If the input is invalid.
  */
 export function sph2xyz(sph: Array3 | Vector3): Array3 {
-  let sph_ = normalizeCoordinates(sph, false);
+  const sph_ = normalizeCoordinates(sph, false);
   if (!Array.isArray(sph_) || sph_.length !== 3) {
     throw new Error(
       'Input must be an array with three numerical values [latitude, longitude, radius].',
@@ -79,7 +80,7 @@ export function sph2xyz(sph: Array3 | Vector3): Array3 {
 }
 
 export function geo2xyz(geo: Array3 | Vector3): Array3 {
-  let geo_ = normalizeCoordinates(geo, false);
+  const geo_ = normalizeCoordinates(geo, false);
   const [latitude, longitude, altitude] = geo_;
   return sph2xyz([latitude, longitude, altitude + RADIUS_EARTH]);
 }
@@ -95,7 +96,7 @@ export function geo2xyz(geo: Array3 | Vector3): Array3 {
  * @throws {Error} If the input is invalid or the radius is zero.
  */
 export function xyz2sph(point: Array3 | Vector3): Array3 {
-  let point_ = normalizeCoordinates(point, false);
+  const point_ = normalizeCoordinates(point, false);
   if (!Array.isArray(point_) || point_.length !== 3) {
     throw new Error(
       'Input must be an array with three numerical values [x, y, z].',
@@ -204,8 +205,8 @@ export function distance(
   point1: Array3 | Vector3,
   point2: Array3 | Vector3,
 ): number {
-  let point1_ = normalizeCoordinates(point1);
-  let point2_ = normalizeCoordinates(point2);
+  const point1_ = normalizeCoordinates(point1);
+  const point2_ = normalizeCoordinates(point2);
   const dx = point2_[0] - point1_[0];
   const dy = point2_[1] - point1_[1];
   const dz = point2_[2] - point1_[2];
@@ -218,19 +219,26 @@ export function disposeObject(object: THREE.Object3D): void {
     object.remove(object.children[0]);
   }
 
-  if ((object as any).geometry) {
-    (object as any).geometry.dispose();
+  if ('geometry' in object && object.geometry instanceof THREE.BufferGeometry) {
+    object.geometry.dispose();
   }
 
-  if ((object as any).material) {
-    if (Array.isArray((object as any).material)) {
-      (object as any).material.forEach((material: THREE.Material) => {
-        if ((material as any).map) (material as any).map.dispose();
-        material.dispose();
+  if ('material' in object) {
+    const material = object.material;
+    if (Array.isArray(material)) {
+      material.forEach((mat) => {
+        if (mat instanceof THREE.Material) {
+          if ((mat as any).map instanceof THREE.Texture) {
+            (mat as any).map.dispose();
+          }
+          mat.dispose();
+        }
       });
-    } else {
-      if ((object as any).material.map) (object as any).material.map.dispose();
-      (object as any).material.dispose();
+    } else if (material instanceof THREE.Material) {
+      if ((material as any).map instanceof THREE.Texture) {
+        (material as any).map.dispose();
+      }
+      material.dispose();
     }
   }
 }

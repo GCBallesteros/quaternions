@@ -56,7 +56,6 @@ createPlot(
   }
 );`;
 
-
 export const defaultWorkflows: Record<string, WorkflowExample> = {
   'Quaternion Debugging': {
     script: debugQuaternions,

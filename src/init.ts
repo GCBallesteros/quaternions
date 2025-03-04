@@ -1,11 +1,12 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { None, Option, Some } from 'ts-results';
+
 import { addWebMercatorTile } from './addMercatorTiles.js';
 import { getMoonPosition } from './astronomy/moon.js';
 import { updateSunLight } from './astronomy/sun.js';
-import { createFloatingPoint } from './components.js';
 import { setupTimeControls } from './components/timeControls.js';
+import { createFloatingPoint } from './components.js';
 import { _createLine, _mov, _setTime, addFrame } from './core.js';
 import { makeEarth } from './earth.js';
 import { findMercatorTilesInPOV } from './findMercatorTiles.js';
@@ -113,11 +114,11 @@ export function initScene(
   scene.add(moon);
 
   // Initialize Earth
-  let earth_geometries = makeEarth();
+  const earth_geometries = makeEarth();
   scene.add(earth_geometries.earth);
   scene.add(earth_geometries.earth_frame);
 
-  let state: State = {
+  const state: State = {
     points: {},
     lines: {},
     lights: { ambient: ambientLight, sun: sunLight },

@@ -32,7 +32,7 @@ type WorkerMessage = InitMessage | UpdateMessage | DestroyMessage;
 
 const MAX_POINTS = 1000;
 
-let charts = new Map<
+const charts = new Map<
   string,
   {
     chart: Chart;

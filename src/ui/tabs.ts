@@ -1,12 +1,15 @@
 import { render } from 'lit-html';
 import * as monaco from 'monaco-editor';
+
 import { tabs, tabsTemplate } from './tabTemplates.js';
 
 export function setupTabs(editor: monaco.editor.IStandaloneCodeEditor): void {
   const tabsContainer = document.querySelector('#tab-container') as HTMLElement;
-  if (!tabsContainer) return;
+  if (!tabsContainer) {
+    return;
+  }
 
-  const handleTabClick = (tabId: string) => {
+  const handleTabClick = (tabId: string): void => {
     // Update tab contents
     document.querySelectorAll('.tab-content').forEach((content) => {
       content.classList.remove('active');

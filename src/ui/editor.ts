@@ -1,8 +1,10 @@
+import { render } from 'lit-html';
 import * as monaco from 'monaco-editor';
 import { Option, None, Some } from 'ts-results';
-import { render } from 'lit-html';
-import { editorTemplate } from './editorTemplates.js';
+
 import { initLogger } from '../logger.js';
+
+import { editorTemplate } from './editorTemplates.js';
 
 export const satelliteScript = `// %% Reset
 // Reset scene so that we can hit execute repeatedly
@@ -62,7 +64,9 @@ let cellDecorations: monaco.editor.IEditorDecorationsCollection;
 
 function highlightCells(editor: monaco.editor.IStandaloneCodeEditor) {
   const model = editor.getModel();
-  if (!model) return;
+  if (!model) {
+    return;
+  }
 
   const decorations: monaco.editor.IModelDeltaDecoration[] = [];
   const lines = model.getLinesContent();
@@ -91,7 +95,9 @@ function findNextCellLine(
   currentLine: number,
 ): Option<number> {
   const model = editor.getModel();
-  if (!model) return None;
+  if (!model) {
+    return None;
+  }
 
   const lines = model.getLinesContent();
 
@@ -114,23 +120,31 @@ function findNextCellLine(
 
 function getCurrentCell(editor: monaco.editor.IStandaloneCodeEditor): string {
   const model = editor.getModel();
-  if (!model) return '';
+  if (!model) {
+    return '';
+  }
 
   const position = editor.getPosition();
-  if (!position) return '';
+  if (!position) {
+    return '';
+  }
 
   const lines = model.getLinesContent();
-  let currentCell: string[] = [];
+  const currentCell: string[] = [];
 
   // Search backwards for cell boundary or start of file
   for (let i = position.lineNumber - 1; i >= 0; i--) {
-    if (lines[i].trim().startsWith('// %%')) break;
+    if (lines[i].trim().startsWith('// %%')) {
+      break;
+    }
     currentCell.unshift(lines[i]);
   }
 
   // Search forwards for cell boundary or end of file
   for (let i = position.lineNumber; i < lines.length; i++) {
-    if (lines[i].trim().startsWith('// %%')) break;
+    if (lines[i].trim().startsWith('// %%')) {
+      break;
+    }
     currentCell.push(lines[i]);
   }
 
@@ -141,7 +155,9 @@ export function setupEditor(
   executeCommand: (command: string) => void,
 ): monaco.editor.IStandaloneCodeEditor {
   const container = document.getElementById('editor-container');
-  if (!container) throw new Error('Editor container not found');
+  if (!container) {
+    throw new Error('Editor container not found');
+  }
 
   const isMac = /Mac/.test(navigator.userAgent);
   const modifierKey = isMac ? '⌘' : 'Ctrl';
@@ -170,7 +186,9 @@ export function setupEditor(
   initLogger();
 
   const editorElement = document.getElementById('monaco-editor');
-  if (!editorElement) throw new Error('Monaco editor element not found');
+  if (!editorElement) {
+    throw new Error('Monaco editor element not found');
+  }
 
   const editor = monaco.editor.create(editorElement, {
     value: satelliteScript,

@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+
 import { Array3 } from '../types.js';
 import { disposeObject } from '../utils.js';
 
@@ -28,7 +29,10 @@ export class Point {
       (child) => child instanceof THREE.Mesh && child.name === 'point-sphere',
     ) as THREE.Mesh;
 
-    if (sphere && sphere.material instanceof THREE.MeshBasicMaterial) {
+    if (
+      sphere !== undefined &&
+      sphere.material instanceof THREE.MeshBasicMaterial
+    ) {
       return '#' + sphere.material.color.getHexString();
     }
     return '#ffffff';
@@ -39,7 +43,10 @@ export class Point {
       (child) => child instanceof THREE.Mesh && child.name === 'point-sphere',
     ) as THREE.Mesh;
 
-    if (sphere && sphere.material instanceof THREE.MeshBasicMaterial) {
+    if (
+      sphere !== undefined &&
+      sphere.material instanceof THREE.MeshBasicMaterial
+    ) {
       sphere.material.color.set(color);
     }
   }

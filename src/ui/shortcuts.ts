@@ -1,12 +1,9 @@
-import * as monaco from 'monaco-editor';
 import { render } from 'lit-html';
-import {
-  deleteScript,
-  getSavedScripts,
-  saveScript,
-  SavedScript,
-} from '../storage.js';
+import * as monaco from 'monaco-editor';
+
 import { defaultWorkflows } from '../defaultWorkflows.js';
+import { deleteScript, getSavedScripts, saveScript } from '../storage.js';
+
 import { scriptListTemplate } from './shortcutsTemplates.js';
 import { shortcutStyles } from './styles/shortcuts.js';
 
@@ -36,7 +33,7 @@ export function setupGlobalShortcuts(
         input.value = '';
         input.focus();
 
-        const cleanup = () => {
+        const cleanup = (): void => {
           confirmBtn.onclick = null;
           cancelBtn.onclick = null;
           input.onkeydown = null;
@@ -51,12 +48,12 @@ export function setupGlobalShortcuts(
           }
         };
 
-        const handleCancel = () => {
+        const handleCancel = (): void => {
           modal.classList.remove('active');
           cleanup();
         };
 
-        const handleKeydown = (e: KeyboardEvent) => {
+        const handleKeydown = (e: KeyboardEvent): void => {
           if (e.key === 'Enter') {
             handleSave();
           } else if (e.key === 'Escape') {
@@ -113,17 +110,17 @@ export function setupGlobalShortcuts(
 
         modal.classList.add('active');
 
-        const cleanup = () => {
+        const cleanup = (): void => {
           cancelBtn.onclick = null;
           window.removeEventListener('keydown', handleKeydown);
         };
 
-        const handleCancel = () => {
+        const handleCancel = (): void => {
           modal.classList.remove('active');
           cleanup();
         };
 
-        const handleKeydown = (e: KeyboardEvent) => {
+        const handleKeydown = (e: KeyboardEvent): void => {
           if (e.key === 'Escape') {
             handleCancel();
           }

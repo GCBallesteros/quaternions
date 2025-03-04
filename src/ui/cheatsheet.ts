@@ -1,4 +1,5 @@
 import { render } from 'lit-html';
+
 import { cheatsheetTemplate } from './cheatsheetTemplates.js';
 
 export function setupCheatsheet(): void {

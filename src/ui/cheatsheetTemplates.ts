@@ -1,4 +1,5 @@
 import { html } from 'lit-html';
+
 import { cheatsheetStyles } from './styles/cheatsheet.js';
 
 interface Shortcut {

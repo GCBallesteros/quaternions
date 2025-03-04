@@ -1,12 +1,14 @@
-import { html } from 'lit-html';
+import { html, TemplateResult } from 'lit-html';
+
 import { SavedScript } from '../storage.js';
+
 import { shortcutStyles } from './styles/shortcuts.js';
 
 export const userScriptTemplate = (
   script: SavedScript,
   onDelete: (name: string) => void,
   onSelect: (content: string) => void,
-) => html`
+): TemplateResult<1> => html`
   <div
     class=${shortcutStyles.scriptItem}
     @click=${() => onSelect(script.content)}
@@ -36,7 +38,7 @@ export const exampleScriptTemplate = (
   name: string,
   content: { script: string; docLink: string },
   onSelect: (content: string) => void,
-) => html`
+): TemplateResult<1> => html`
   <div
     class=${shortcutStyles.scriptItem}
     @click=${() => onSelect(content.script)}
@@ -60,7 +62,7 @@ export const scriptListTemplate = (
   defaultWorkflows: Record<string, { script: string; docLink: string }>,
   onDelete: (name: string) => void,
   onSelect: (content: string) => void,
-) => html`
+): TemplateResult<1> => html`
   ${Object.keys(scripts).length > 0
     ? html`
         <h3 class="text-white px-3 pb-3">Your Scripts</h3>

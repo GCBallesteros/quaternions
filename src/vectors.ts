@@ -23,7 +23,9 @@ export class Vector3 {
 
   normalize(): Vector3 {
     const len = this.length();
-    if (len === 0) return new Vector3();
+    if (len === 0) {
+      return new Vector3();
+    }
     return this.scale(1 / len);
   }
 

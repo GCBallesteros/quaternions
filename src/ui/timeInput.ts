@@ -1,6 +1,6 @@
-import { html } from 'lit-html';
+import { html, TemplateResult } from 'lit-html';
 
-export const createTimeInput = (currentTime: Date) => html`
+export const createTimeInput = (currentTime: Date): TemplateResult<1> => html`
   <div class="flex flex-col gap-2.5 mt-2.5">
     <input
       type="date"

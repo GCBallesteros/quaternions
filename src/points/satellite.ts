@@ -1,12 +1,14 @@
 import * as satellite from 'satellite.js';
 import * as THREE from 'three';
+
 import { _fetchTLE, _findBestQuaternion } from '../core.js';
 import { log } from '../logger.js';
 import { Trail } from '../trail.js';
 import { Array3, State, Vector4 } from '../types.js';
-import { Vector3 } from '../vectors.js';
-import { CameraConfig, OrientedPoint } from './orientedPoint.js';
 import { normalizeCoordinates } from '../utils.js';
+import { Vector3 } from '../vectors.js';
+
+import { CameraConfig, OrientedPoint } from './orientedPoint.js';
 
 export type OrientationMode =
   | { type: 'fixed'; ecef_quaternion: Vector4 }
@@ -210,10 +212,7 @@ export class Satellite extends OrientedPoint {
     let new_orientation: Vector4;
     switch (this.orientationMode.type) {
       case 'dynamic':
-        let primaryTargetVector: Array3;
-        let secondaryTargetVector: Array3;
-
-        primaryTargetVector = this.isNamedTarget(
+        const primaryTargetVector = this.isNamedTarget(
           this.orientationMode.primaryTargetVector,
         )
           ? this.getTargetVector(
@@ -224,7 +223,7 @@ export class Satellite extends OrientedPoint {
             )
           : normalizeCoordinates(this.orientationMode.primaryTargetVector);
 
-        secondaryTargetVector = this.isNamedTarget(
+        const secondaryTargetVector = this.isNamedTarget(
           this.orientationMode.secondaryTargetVector,
         )
           ? this.getTargetVector(

@@ -1,10 +1,11 @@
 import * as THREE from 'three';
+
 import { buildCommandClosures } from './commands.js';
 import { createAnimator, initScene, initializeCanvas } from './init.js';
 import { log } from './logger.js';
 import { buildExecuteCommand } from './terminal.js';
-import { setupUI } from './ui.js';
 import { setupCheatsheet } from './ui/cheatsheet.js';
+import { setupUI } from './ui.js';
 import { getPositionOfPoint } from './utils.js';
 
 // TODO: Better names spec findBestQuaternion computeOptimalQuaternion?

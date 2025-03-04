@@ -1,6 +1,7 @@
 import * as THREE from 'three';
-import { TileCoordinate } from './types.js';
+
 import { RADIUS_EARTH } from './constants.js';
+import { TileCoordinate } from './types.js';
 
 // What?
 // ====

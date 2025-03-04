@@ -1,8 +1,10 @@
-import { html } from 'lit-html';
+import { html, TemplateResult } from 'lit-html';
+
 import { OrientedPoint } from '../points/orientedPoint.js';
 import { Point } from '../points/point.js';
 import { NamedTargets, Satellite } from '../points/satellite.js';
 import { Array3, State } from '../types.js';
+
 import { bodyStyles } from './styles/bodies.js';
 import { commonStyles } from './styles/common.js';
 
@@ -21,7 +23,7 @@ export const moonTemplate = (moonPos: {
   y: number;
   z: number;
   angle: number;
-}) => html`
+}): TemplateResult<1> => html`
   <div class=${commonStyles.sectionContainer}>
     <h3 class=${commonStyles.sectionTitle}>Moon</h3>
     <div class="coordinate-display">
@@ -34,7 +36,7 @@ export const moonTemplate = (moonPos: {
   </div>
 `;
 
-const trailToggleTemplate = (satellite: Satellite) => html`
+const trailToggleTemplate = (satellite: Satellite): TemplateResult<1> => html`
   <div class=${commonStyles.toggle.container}>
     <label class=${commonStyles.toggle.label}>
       <input
@@ -56,27 +58,29 @@ const trailToggleTemplate = (satellite: Satellite) => html`
   </div>
 `;
 
-const satelliteOrientationTemplate = (satellite: Satellite) => html`
+const satelliteOrientationTemplate = (
+  satellite: Satellite,
+): TemplateResult<1> => html`
   <div>
     Orientation Mode: ${satellite.orientationMode.type}
     ${satellite.orientationMode.type === 'dynamic'
       ? html`
           <div style="margin-left: 10px;">
-            Primary: ${(satellite.orientationMode as any).primaryBodyVector} →
+            Primary: ${satellite.orientationMode.primaryBodyVector} →
             ${formatTargetVector(
-              (satellite.orientationMode as any).primaryTargetVector,
+              satellite.orientationMode.primaryTargetVector as any,
             )}<br />
             Secondary: ${(satellite.orientationMode as any).secondaryBodyVector}
             →
             ${formatTargetVector(
-              (satellite.orientationMode as any).secondaryTargetVector,
+              satellite.orientationMode.secondaryTargetVector as any,
             )}
           </div>
         `
       : html`
           <div style="margin-left: 10px;">
             Fixed quaternion:
-            [${(satellite.orientationMode as any).ecef_quaternion
+            [${satellite.orientationMode.ecef_quaternion
               .map((v) => v.toFixed(3))
               .join(', ')}]
           </div>
@@ -84,7 +88,7 @@ const satelliteOrientationTemplate = (satellite: Satellite) => html`
   </div>
 `;
 
-const cameraDetailsTemplate = (point: OrientedPoint) => {
+const cameraDetailsTemplate = (point: OrientedPoint): TemplateResult<1> => {
   // Only check camera once
   const hasCamera = point.camera !== null;
   return html`
@@ -104,7 +108,10 @@ const cameraDetailsTemplate = (point: OrientedPoint) => {
   `;
 };
 
-const pointDetailsTemplate = (type: string, point: Point) => html`
+const pointDetailsTemplate = (
+  type: string,
+  point: Point,
+): TemplateResult<1> => html`
   <div>Position: [${point.position.map((v) => v.toFixed(2)).join(', ')}]</div>
   ${type !== 'Point'
     ? html`
@@ -134,7 +141,7 @@ export const pointItemTemplate = (
   type: string,
   point: Point,
   isExpanded: boolean,
-) => html`
+): TemplateResult<1> => html`
   <div class=${bodyStyles.pointItem.container}>
     <details ?open=${isExpanded} class="group">
       <summary class=${bodyStyles.pointItem.summary.wrapper}>
@@ -169,7 +176,7 @@ export const pointItemTemplate = (
 export const bodiesTemplate = (
   state: State,
   expandedPoints: Set<string>,
-) => html`
+): TemplateResult<1> => html`
   ${moonTemplate({
     x: Math.round(state.bodies.moon.position.x),
     y: Math.round(state.bodies.moon.position.y),

@@ -1,12 +1,19 @@
-import { html, render } from 'lit-html';
+import { html, render, TemplateResult } from 'lit-html';
+
 import { _toggleSimTime } from '../core.js';
 import { State } from '../types.js';
 
 function formatSpeed(timeSpeedMultiplier: number): string {
   const absSpeed = Math.abs(timeSpeedMultiplier);
-  if (absSpeed === 0) return 'Paused';
-  if (absSpeed < 1) return `${timeSpeedMultiplier.toFixed(2)}x`;
-  if (absSpeed < 10) return `${timeSpeedMultiplier.toFixed(1)}x`;
+  if (absSpeed === 0) {
+    return 'Paused';
+  }
+  if (absSpeed < 1) {
+    return `${timeSpeedMultiplier.toFixed(2)}x`;
+  }
+  if (absSpeed < 10) {
+    return `${timeSpeedMultiplier.toFixed(1)}x`;
+  }
   return `${Math.round(timeSpeedMultiplier)}x`;
 }
 
@@ -14,7 +21,7 @@ function timeControlsTemplate(
   state: State,
   handleTimeToggle: () => void,
   handleSpeedChange: (e: Event) => void,
-) {
+): TemplateResult<1> {
   return html`
     <button
       class="play-pause-btn ${state.isTimeFlowing ? 'playing' : ''}"
@@ -39,9 +46,11 @@ function timeControlsTemplate(
 
 export function setupTimeControls(state: State): void {
   const container = document.getElementById('time-controls');
-  if (!container) return;
+  if (!container) {
+    return;
+  }
 
-  function handleTimeToggle() {
+  function handleTimeToggle(): void {
     const result = _toggleSimTime(state);
     if (result.ok) {
       renderTimeControls();
@@ -53,7 +62,7 @@ export function setupTimeControls(state: State): void {
     renderTimeControls();
   });
 
-  function handleSpeedChange(e: Event) {
+  function handleSpeedChange(e: Event): void {
     const value = parseInt((e.target as HTMLInputElement).value);
     if (value === 0) {
       state.timeSpeedMultiplier = 0;
@@ -66,8 +75,10 @@ export function setupTimeControls(state: State): void {
     renderTimeControls();
   }
 
-  function renderTimeControls() {
-    if (!container) return;
+  function renderTimeControls(): void {
+    if (!container) {
+      return;
+    }
     render(
       timeControlsTemplate(state, handleTimeToggle, handleSpeedChange),
       container,

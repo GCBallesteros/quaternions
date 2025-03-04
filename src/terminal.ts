@@ -25,7 +25,9 @@ export function buildExecuteCommand(
     .join('\n');
 
   return async (command: string): Promise<void> => {
-    if (!command) return;
+    if (!command) {
+      return;
+    }
 
     try {
       const wrappedCode = `

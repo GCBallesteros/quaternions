@@ -1,5 +1,7 @@
 import { render } from 'lit-html';
+
 import { State } from '../types.js';
+
 import { bodiesTemplate } from './bodiesTemplates.js';
 
 // Track expanded state of points

@@ -1,7 +1,8 @@
 import { render } from 'lit-html';
+
 import { State } from '../types.js';
+
 import { settingsTemplate } from './settingsTemplates.js';
-import { utcDate } from '../utils.js';
 
 export function setupLighting(
   state: State,
@@ -18,7 +19,7 @@ export function setupLighting(
     state.lights.ambient.intensity = e.detail.value;
   }) as EventListener);
 
-  function updateSettings() {
+  function updateSettings(): void {
     render(settingsTemplate(state, executeCommand), settingsContainer);
   }
 

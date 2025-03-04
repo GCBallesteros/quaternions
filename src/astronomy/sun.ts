@@ -10,7 +10,7 @@ export function toRad(deg: number): number {
 }
 
 function geomMeanLongSun(t: number): number {
-  let l0 = 280.46646 + t * (36000.76983 + 0.0003032 * t);
+  const l0 = 280.46646 + t * (36000.76983 + 0.0003032 * t);
   return ((l0 % 360.0) + 360.0) % 360.0;
 }
 

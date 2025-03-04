@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+
 import { Array3, Vector4 } from '../types.js';
 
 export interface CameraConfig {
@@ -43,7 +44,7 @@ export class OrientedPoint extends Point {
     }
     this.camera_orientation = config.orientation;
 
-    let camera_orientation_in_body_frame = new THREE.Quaternion(
+    const camera_orientation_in_body_frame = new THREE.Quaternion(
       config.orientation[0],
       config.orientation[1],
       config.orientation[2],
@@ -52,7 +53,7 @@ export class OrientedPoint extends Point {
 
     const camera = new THREE.PerspectiveCamera(config.fov, 1, 400, 500000);
     camera.name = '_camera';
-    let camera_to_z_quaternion = new THREE.Quaternion();
+    const camera_to_z_quaternion = new THREE.Quaternion();
     camera_to_z_quaternion.setFromAxisAngle(
       new THREE.Vector3(1, 0, 0),
       Math.PI,
@@ -90,7 +91,7 @@ export class OrientedPoint extends Point {
   }
 
   get cameraEcefAxis(): Record<string, Array3> | null {
-    let camera = this.camera;
+    const camera = this.camera;
 
     if (!camera) {
       console.warn('No camera named "_camera" available in this group!');
@@ -116,7 +117,7 @@ export class OrientedPoint extends Point {
   }
 
   get cameraBodyAxis(): Record<string, Array3> | null {
-    let camera_quat_body = this.camera?.quaternion;
+    const camera_quat_body = this.camera?.quaternion;
 
     if (!camera_quat_body) {
       return null;

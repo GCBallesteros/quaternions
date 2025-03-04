@@ -1,7 +1,8 @@
 import * as THREE from 'three';
+import { Option } from 'ts-results';
+
 import { OrientedPoint } from './points/orientedPoint.js';
 import { Point } from './points/point.js';
-import { Option } from 'ts-results';
 
 export type Array3 = [number, number, number];
 export type Vector4 = [number, number, number, number];

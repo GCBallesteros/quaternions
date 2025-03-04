@@ -1,6 +1,7 @@
 import * as satellite from 'satellite.js';
 import * as THREE from 'three';
 import { Err, Ok, Result, Some } from 'ts-results';
+
 import { getMoonPosition } from './astronomy/moon.js';
 import { updateSunLight } from './astronomy/sun.js';
 import {
@@ -27,7 +28,7 @@ export function _rot(
   // q is xyzw
   const pt = state.points[point_name];
 
-  if (!pt) {
+  if (!(point_name in state.points)) {
     return Err(`Point '${point_name}' does not exist.`);
   }
 
@@ -81,7 +82,7 @@ function resolveVector(
       } else {
         return Ok(endPos.clone().sub(startPos));
       }
-    } else if (state.lines[arg]) {
+    } else if (arg in state.lines) {
       const line = state.lines[arg];
       const startPos = utils.getPositionOfPoint(state, line.start);
       const endPos = utils.getPositionOfPoint(state, line.end);
@@ -112,8 +113,12 @@ export function _angle(
   const vec1Result = resolveVector(state, vec1Arg);
   const vec2Result = resolveVector(state, vec2Arg);
 
-  if (!vec1Result.ok) return Err(vec1Result.val);
-  if (!vec2Result.ok) return Err(vec2Result.val);
+  if (!vec1Result.ok) {
+    return Err(vec1Result.val);
+  }
+  if (!vec2Result.ok) {
+    return Err(vec2Result.val);
+  }
 
   const vec1 = vec1Result.val;
   const vec2 = vec2Result.val;
@@ -142,10 +147,10 @@ export function _mov(
   pos: Array3,
   use_geo: boolean = false,
 ): Result<null, string> {
-  if (!state.points[point_name]) {
+  if (!(point_name in state.points)) {
     return Err(`Point '${point_name}' does not exist.`);
   }
-  let point = state.points[point_name];
+  const point = state.points[point_name];
 
   if (pos.length !== 3) {
     return Err('Position vector must have exactly 3 components');
@@ -260,11 +265,18 @@ export function _findBestQuaternion(
     false,
   );
 
-  if (!primaryBodyVectorResult.ok) return Err(primaryBodyVectorResult.val);
-  if (!secondaryBodyVectorResult.ok) return Err(secondaryBodyVectorResult.val);
-  if (!primaryTargetVectorResult.ok) return Err(primaryTargetVectorResult.val);
-  if (!secondaryTargetVectorResult.ok)
+  if (!primaryBodyVectorResult.ok) {
+    return Err(primaryBodyVectorResult.val);
+  }
+  if (!secondaryBodyVectorResult.ok) {
+    return Err(secondaryBodyVectorResult.val);
+  }
+  if (!primaryTargetVectorResult.ok) {
+    return Err(primaryTargetVectorResult.val);
+  }
+  if (!secondaryTargetVectorResult.ok) {
     return Err(secondaryTargetVectorResult.val);
+  }
 
   const primaryBodyVector = primaryBodyVectorResult.val;
   const secondaryBodyVector = secondaryBodyVectorResult.val;
@@ -331,7 +343,7 @@ export function addFrame(point: Point): OrientedPoint {
     { x: point.position[0], y: point.position[1], z: point.position[2] },
     350,
   );
-  let point_geo = point.geometry.clone();
+  const point_geo = point.geometry.clone();
   point_geo.add(coordinate_frame);
 
   return new OrientedPoint(point_geo);
@@ -355,13 +367,13 @@ export function _addPoint(
     );
   }
 
-  var new_point: Point | OrientedPoint;
+  let new_point: Point | OrientedPoint;
   if (quaternion !== null) {
     if (quaternion.length !== 4) {
       return Err('Invalid quaternion: must have exactly 4 components');
     }
 
-    let new_point_: Point = createFloatingPoint(color);
+    const new_point_: Point = createFloatingPoint(color);
     new_point_.geometry.position.set(
       coordinates[0],
       coordinates[1],
@@ -394,7 +406,7 @@ export async function _addSatellite(
     return Err('Invalid point name or name already exists');
   }
 
-  let new_point_: Point = createFloatingPoint();
+  const new_point_: Point = createFloatingPoint();
   const coordinate_frame = createFrame(
     {
       x: new_point_.position[0],
@@ -403,7 +415,7 @@ export async function _addSatellite(
     },
     350,
   );
-  let point_geo = new_point_.geometry.clone();
+  const point_geo = new_point_.geometry.clone();
   point_geo.add(coordinate_frame);
 
   let newSatellite: Satellite;
@@ -465,6 +477,7 @@ export async function _mov2sat(
     tle.split('\n')[2],
   );
 
+  // @ts-ignore: The return type from twoline2satrec is incomplete
   if (!satrec) {
     return Err('Failed to parse TLE data');
   }
@@ -484,10 +497,11 @@ export async function _mov2sat(
   const { x, y, z } = satellite.eciToEcf(position, gmst);
 
   // Step 5: Update the position of the referenced point in the scene
-  const point = state.points[name];
-  if (!point) {
+  if (!(name in state.points)) {
     return Err(`Point with name '${name}' not found`);
   }
+
+  const point = state.points[name];
 
   point.position = [x, y, z];
   log(`Point ${name} moved to satellite position at ${timestamp}`);
@@ -537,7 +551,7 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
 
   // Update orbiting satellites
   for (const point_name in state.points) {
-    let sat = state.points[point_name];
+    const sat = state.points[point_name];
     if (sat instanceof Satellite) {
       sat.update(state.currentTime, state);
     }
@@ -575,10 +589,10 @@ export function _deletePoint(
   state: State,
   pointName: string,
 ): Result<null, string> {
-  const point = state.points[pointName];
-  if (!point) {
+  if (!(pointName in state.points)) {
     return Err(`Point '${pointName}' does not exist`);
   }
+  const point = state.points[pointName];
 
   if (point instanceof Satellite) {
     point.dispose(scene);
@@ -605,11 +619,11 @@ export function _relativeRot(
   point_name: string,
   q: [number, number, number, number],
 ): Result<null, string> {
-  const pt = state.points[point_name];
-
-  if (!pt) {
+  if (!(point_name in state.points)) {
     return Err(`Point '${point_name}' does not exist.`);
   }
+
+  const pt = state.points[point_name];
 
   if (!(pt instanceof OrientedPoint)) {
     return Err(`Only instances of OrientedPoint can be rotated`);
@@ -647,11 +661,14 @@ export function _resumeTrail(
   satelliteName: string,
 ): Result<boolean, string> {
   const satResult = getSatellite(state, satelliteName);
-  if (!satResult.ok) return satResult;
+  if (!satResult.ok) {
+    return satResult;
+  }
   const satellite = satResult.val;
 
-  if (!satellite.camera)
+  if (!satellite.camera) {
     return Err(`${satelliteName} does not have a camera attached`);
+  }
   if (!satellite.trail) {
     satellite.trail = new Trail(
       satellite.geometry,
@@ -668,7 +685,9 @@ export function _pauseTrail(
   satelliteName: string,
 ): Result<boolean, string> {
   const satResult = getSatellite(state, satelliteName);
-  if (!satResult.ok) return satResult;
+  if (!satResult.ok) {
+    return satResult;
+  }
   const satellite = satResult.val;
 
   if (satellite.trail) {
@@ -684,7 +703,9 @@ export function _toggleTrail(
   satelliteName: string,
 ): Result<boolean, string> {
   const satResult = getSatellite(state, satelliteName);
-  if (!satResult.ok) return satResult;
+  if (!satResult.ok) {
+    return satResult;
+  }
   return satResult.val.hasTrail
     ? _pauseTrail(state, satelliteName)
     : _resumeTrail(state, satelliteName);
@@ -696,7 +717,7 @@ export function _createPlot(
   config: { title: string; lines: string[]; sampleEvery?: number },
   callback: () => number[],
 ): Result<null, string> {
-  if (state.plots[id]) {
+  if (id in state.plots) {
     return Err(`Plot with id '${id}' already exists`);
   }
 
@@ -704,7 +725,7 @@ export function _createPlot(
     title: config.title,
     lines: config.lines,
     data: {
-      timestamps: new Array(1000).fill(0),
+      timestamps: new Array<number>(1000).fill(0),
       values: Object.fromEntries(
         config.lines.map((line) => [line, new Array(1000).fill(0)]),
       ),
@@ -722,7 +743,7 @@ export function _createPlot(
 
 // TODO: Check if this enough for proper cleanup
 export function _removePlot(state: State, id: string): Result<null, string> {
-  if (!state.plots[id]) {
+  if (!(id in state.plots)) {
     return Err(`Plot with id '${id}' does not exist`);
   }
 

@@ -1,10 +1,10 @@
+import { log } from './logger.js';
 import { State } from './types.js';
 import { workers, canvases } from './ui/plots.js';
-import { log } from './logger.js';
 
 export function updatePlots(state: State, frameCount: number): void {
   Object.entries(state.plots).forEach(([plotId, plot]) => {
-    if (frameCount % plot.sampleEvery == 0) {
+    if (frameCount % plot.sampleEvery === 0) {
       try {
         const values = plot.callback();
         if (!Array.isArray(values) || values.length !== plot.lines.length) {

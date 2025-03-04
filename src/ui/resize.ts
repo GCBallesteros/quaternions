@@ -1,5 +1,6 @@
 import * as monaco from 'monaco-editor';
 import { WebGLRenderer } from 'three';
+
 import { State } from '../types.js';
 
 export function setupResizer(
