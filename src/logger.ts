@@ -10,8 +10,8 @@ export function initLogger(): void {
 }
 
 function logToDiv(logDivId: string, ...args: any[]): void {
-  const logContainer = document.getElementById(logDivId) as LogContainer;
-  if (!logContainer) {
+  const logContainer = document.getElementById(logDivId) as LogContainer | null;
+  if (logContainer === null) {
     console.warn(`Log container with ID '${logDivId}' not found.`);
     return;
   }

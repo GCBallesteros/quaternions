@@ -48,7 +48,7 @@ const precomputedTileTexture = textureLoader.load(mercatorTileTexture, () => {
   addEarthSphere(precomputedTileTexture, scene);
 });
 
-function addEarthSphere(texture: THREE.Texture, scene: THREE.Scene) {
+function addEarthSphere(texture: THREE.Texture, scene: THREE.Scene): void {
   const sphereGeometry = new THREE.SphereGeometry(RADIUS_EARTH, 64, 64);
   const sphereMaterial = new THREE.MeshBasicMaterial({ map: texture });
   const sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);

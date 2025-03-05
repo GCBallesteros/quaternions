@@ -361,7 +361,7 @@ export function _addPoint(
     return Err('Invalid point name or name already exists');
   }
 
-  if (!name || !coordinates || coordinates.length !== 3) {
+  if (coordinates.length !== 3) {
     return Err(
       "'name' must be a string and 'coordinates' must be an array of 3 numbers",
     );
@@ -478,6 +478,7 @@ export async function _mov2sat(
   );
 
   // @ts-ignore: The return type from twoline2satrec is incomplete
+  // eslint-disable-next-line
   if (!satrec) {
     return Err('Failed to parse TLE data');
   }
@@ -649,9 +650,13 @@ function getSatellite(
   state: State,
   satelliteName: string,
 ): Result<Satellite, string> {
-  const satellite = state.points[satelliteName];
-  if (!satellite || !(satellite instanceof Satellite)) {
+  if (!(satelliteName in state.points)) {
     return Err(`${satelliteName} is not a valid satellite`);
+  }
+  const satellite = state.points[satelliteName];
+
+  if (!(satellite instanceof Satellite)) {
+    return Err(`${satelliteName} is not a satellite!!!`);
   }
   return Ok(satellite);
 }

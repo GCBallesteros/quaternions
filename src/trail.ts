@@ -62,9 +62,17 @@ export class Trail {
       new THREE.BufferAttribute(this.trailAlpha, 1),
     );
 
-    const sphere = pointGroup.getObjectByName('point-sphere');
-    // @ts-ignore: `point-sphere` is a THREE.Mesh
-    this.color = sphere!.material.color;
+    const sphere = pointGroup.getObjectByName('point-sphere') as
+      | THREE.Mesh
+      | undefined;
+
+    if (sphere === undefined) {
+      console.error('Point sphere could not be retrieved');
+      throw Error('We should never reach here.');
+    } else {
+      const mat = sphere.material as THREE.MeshBasicMaterial;
+      this.color = mat.color;
+    }
 
     this.material = new THREE.ShaderMaterial({
       vertexShader: `

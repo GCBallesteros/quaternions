@@ -6,6 +6,7 @@ import { addWebMercatorTile } from './addMercatorTiles.js';
 import { getMoonPosition } from './astronomy/moon.js';
 import { updateSunLight } from './astronomy/sun.js';
 import { setupTimeControls } from './components/timeControls.js';
+import { CircularBuffer } from './circularBuffer.js';
 import { createFloatingPoint } from './components.js';
 import { _createLine, _mov, _setTime, addFrame } from './core.js';
 import { makeEarth } from './earth.js';
@@ -132,7 +133,7 @@ export function initScene(
     bodies: { moon, earth: earth_geometries.earth },
     plots: {},
     _webmercatorTiles: new Set(),
-    _webmercatorTilesInsertion: [],
+    _webmercatorTilesQueue: new CircularBuffer<string>(512),
   };
 
   const moonPos = getMoonPosition(state.currentTime);

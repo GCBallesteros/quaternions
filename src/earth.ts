@@ -28,7 +28,7 @@ export function makeEarth(): { earth: THREE.Mesh; earth_frame: THREE.Group } {
 
   let currentLevel = 0;
 
-  const loadNextTexture = () => {
+  const loadNextTexture = (): void => {
     if (currentLevel >= textureLevels.length) {
       // After all textures are loaded, load the normal map
       textureLoader.load(
@@ -37,7 +37,6 @@ export function makeEarth(): { earth: THREE.Mesh; earth_frame: THREE.Group } {
           earth.material.normalMap = normalMap;
           earth.material.normalScale.set(1, 1);
           earth.material.needsUpdate = true;
-          console.log('Normal map loaded');
         },
         undefined,
         (error) => {
@@ -53,7 +52,6 @@ export function makeEarth(): { earth: THREE.Mesh; earth_frame: THREE.Group } {
       (texture) => {
         earth.material.map = texture;
         earth.material.needsUpdate = true;
-        console.log(`Texture level ${currentLevel + 1} loaded`);
         if (currentLevel !== 0) {
           setTimeout(loadNextTexture, 2000);
         } else {
