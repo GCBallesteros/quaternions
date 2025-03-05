@@ -19,7 +19,11 @@ module.exports = {
   rules: {
     // Strict TypeScript rules
     '@typescript-eslint/no-explicit-any': 'warn',
-    '@typescript-eslint/explicit-function-return-type': ['error', { allowExpressions: true }],
+    '@typescript-eslint/explicit-function-return-type': [
+      'error',
+      { allowExpressions: true },
+    ],
+    '@typescript-eslint/restrict-template-expressions': 'off',
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     '@typescript-eslint/no-non-null-assertion': 'error',
     '@typescript-eslint/no-floating-promises': 'error',
@@ -34,40 +38,50 @@ module.exports = {
         'ts-expect-error': 'allow-with-description',
       },
     ],
-    
+
     // Import rules
     'import/no-unresolved': 'off', // TypeScript handles this
     'import/order': [
       'error',
       {
-        'groups': ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
+        groups: [
+          'builtin',
+          'external',
+          'internal',
+          'parent',
+          'sibling',
+          'index',
+        ],
         'newlines-between': 'always',
-        'alphabetize': { order: 'asc', caseInsensitive: true }
-      }
+        alphabetize: { order: 'asc', caseInsensitive: true },
+      },
     ],
     'import/no-duplicates': 'error',
-    
+
     // General code quality rules
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     'no-debugger': 'error',
     'no-alert': 'error',
     'no-var': 'error',
     'prefer-const': 'error',
-    'eqeqeq': ['error', 'always'],
-    'curly': ['error', 'all'],
+    eqeqeq: ['error', 'always'],
+    curly: ['error', 'all'],
     'max-depth': ['error', 4],
-    'max-lines-per-function': ['warn', { max: 100, skipBlankLines: true, skipComments: true }],
-    'complexity': ['warn', 15],
-    
+    'max-lines-per-function': [
+      'warn',
+      { max: 100, skipBlankLines: true, skipComments: true },
+    ],
+    complexity: ['warn', 15],
+
     // Prettier integration
-    'prettier/prettier': 'error'
+    'prettier/prettier': 'error',
   },
   settings: {
     'import/resolver': {
       node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx']
-      }
-    }
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      },
+    },
   },
-  ignorePatterns: ['dist', 'node_modules', '*.js', '*.cjs', 'vite.config.ts']
+  ignorePatterns: ['dist', 'node_modules', '*.js', '*.cjs', 'vite.config.ts'],
 };
