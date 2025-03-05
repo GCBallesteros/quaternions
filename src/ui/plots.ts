@@ -96,6 +96,7 @@ function updatePlots(state: State): void {
     return;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const plotsList = document.getElementById('plots-list')!;
   const currentPlots = new Set(Object.keys(state.plots));
 
@@ -169,6 +170,7 @@ function updatePlots(state: State): void {
 }
 
 export function setupPlotsTab(state: State): void {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const plotsContainer = document.getElementById('plots-container')!;
 
   render(plotListTemplate(), plotsContainer);

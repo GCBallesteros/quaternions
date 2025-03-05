@@ -1,6 +1,6 @@
 import { render } from 'lit-html';
 import * as monaco from 'monaco-editor';
-import { Option, None, Some } from 'ts-results';
+import { None, Option, Some } from 'ts-results';
 
 import { initLogger } from '../logger.js';
 
@@ -62,7 +62,7 @@ log(angle_between_pointing_and_target);
 // Store the decorations collection at module level so we can clear it between updates
 let cellDecorations: monaco.editor.IEditorDecorationsCollection;
 
-function highlightCells(editor: monaco.editor.IStandaloneCodeEditor) {
+function highlightCells(editor: monaco.editor.IStandaloneCodeEditor): void {
   const model = editor.getModel();
   if (!model) {
     return;
@@ -84,6 +84,7 @@ function highlightCells(editor: monaco.editor.IStandaloneCodeEditor) {
   });
 
   // Clear previous decorations and set new ones
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
   if (cellDecorations) {
     cellDecorations.clear();
   }
@@ -162,7 +163,7 @@ export function setupEditor(
   const isMac = /Mac/.test(navigator.userAgent);
   const modifierKey = isMac ? '⌘' : 'Ctrl';
 
-  function executeCell() {
+  function executeCell(): void {
     const cellContent = getCurrentCell(editor);
     executeCommand(cellContent.trim());
 
@@ -177,7 +178,7 @@ export function setupEditor(
     }
   }
 
-  function executeScript() {
+  function executeScript(): void {
     executeCommand(editor.getValue().trim());
   }
 

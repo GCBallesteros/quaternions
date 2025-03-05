@@ -128,10 +128,10 @@ export class Trail {
     const columns = new THREE.Vector3(...cameraAxes.columns);
 
     // Get the camera's FOV for the trail width
-    const camera = this.mesh.parent?.getObjectByName(
-      '_camera',
-    ) as THREE.PerspectiveCamera;
-    if (!camera) {
+    const camera = this.mesh.parent?.getObjectByName('_camera') as
+      | THREE.PerspectiveCamera
+      | undefined;
+    if (camera === undefined) {
       return None;
     }
     const fovRadians = (camera.fov * Math.PI) / 180;
@@ -221,6 +221,7 @@ export class Trail {
 
   private updateMesh() {
     this.geometry.attributes.position.needsUpdate = true;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     // Index is guaranteed to exist by the setIndex in the constructor
     this.geometry.index!.needsUpdate = true;
 

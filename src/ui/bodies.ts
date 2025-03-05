@@ -13,6 +13,7 @@ export function removePointFromUI(pointName: string): void {
 }
 
 export function setupBodiesTab(state: State): void {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const bodiesContainer = document.getElementById('bodies-container')!;
 
   function updateBodiesContent() {

@@ -117,6 +117,8 @@ function handleObjectContent(obj: object, parent: HTMLElement): void {
 
   while (queue.length > 0) {
     // Process next item in queue (BFS order)
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    // Guaranteed because length > 0
     const current = queue.shift()!;
 
     // Check for circular references
