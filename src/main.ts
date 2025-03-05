@@ -39,6 +39,9 @@ const commands = buildCommandClosures(scene, state, switchCamera);
 
 const executeCommand = buildExecuteCommand(commands, state, switchCamera);
 
+// Make commands available for intellisense
+const commandsForIntellisense = commands;
+
 // Update all lines in the registry before each render
 function updateAllLines(): void {
   for (const lineName in state.lines) {
@@ -65,7 +68,7 @@ function updateAllLines(): void {
 scene.onBeforeRender = updateAllLines;
 
 setupCheatsheet();
-setupUI(state, executeCommand, renderer);
+setupUI(state, executeCommand, renderer, commandsForIntellisense);
 
 log(
   'Visit quaternions.maxwellrules.com/documentation for the full documentation',

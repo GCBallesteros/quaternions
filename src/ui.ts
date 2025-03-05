@@ -1,7 +1,7 @@
 import { WebGLRenderer } from 'three';
 
 import { _hideSecondaryView } from './core.js';
-import { State } from './types.js';
+import { CommandFunction, State } from './types.js';
 import { setupBodiesTab } from './ui/bodies.js';
 import { setupEditor } from './ui/editor.js';
 import { setupPlotsTab } from './ui/plots.js';
@@ -14,8 +14,9 @@ export function setupUI(
   state: State,
   executeCommand: (command: string) => void,
   renderer: WebGLRenderer,
+  commands?: Record<string, CommandFunction>,
 ): void {
-  const editor = setupEditor(executeCommand);
+  const editor = setupEditor(executeCommand, commands);
   setupGlobalShortcuts(editor);
   setupTabs(editor);
   setupSettings(state, executeCommand);

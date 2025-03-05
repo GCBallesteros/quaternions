@@ -3,8 +3,10 @@ import * as monaco from 'monaco-editor';
 import { None, Option, Some } from 'ts-results';
 
 import { initLogger } from '../logger.js';
-
+import { CommandFunction } from '../types.js';
+import { commandDocs } from './commandDocs.js';
 import { editorTemplate } from './editorTemplates.js';
+import { registerCommandCompletions } from './monacoConfig.js';
 
 export const satelliteScript = `// %% Reset
 // Reset scene so that we can hit execute repeatedly
@@ -154,6 +156,7 @@ function getCurrentCell(editor: monaco.editor.IStandaloneCodeEditor): string {
 
 export function setupEditor(
   executeCommand: (command: string) => void,
+  commands?: Record<string, CommandFunction>,
 ): monaco.editor.IStandaloneCodeEditor {
   const container = document.getElementById('editor-container');
   if (!container) {
@@ -191,6 +194,13 @@ export function setupEditor(
     throw new Error('Monaco editor element not found');
   }
 
+  // Configure Monaco editor
+  monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+    target: monaco.languages.typescript.ScriptTarget.ES2020,
+    allowNonTsExtensions: true,
+  });
+
+  // Create editor with parameter hints enabled
   const editor = monaco.editor.create(editorElement, {
     value: satelliteScript,
     language: 'javascript',
@@ -199,6 +209,30 @@ export function setupEditor(
     scrollbar: {
       vertical: 'hidden',
       horizontal: 'hidden',
+    },
+    parameterHints: {
+      enabled: true,
+      cycle: true,
+    },
+    inlayHints: {
+      enabled: 'on',
+    },
+    // Add hover support
+    hover: {
+      enabled: true,
+      delay: 300,
+    },
+    // Add quick suggestions
+    quickSuggestions: {
+      other: true,
+      comments: false,
+      strings: false,
+    },
+    suggestOnTriggerCharacters: true,
+    // Disable snippets
+    suggest: {
+      snippetsPreventQuickSuggestions: false,
+      showSnippets: false,
     },
   });
 
@@ -215,6 +249,11 @@ export function setupEditor(
       monaco.KeyCode.Enter,
     executeScript,
   );
+
+  // Register command completions if commands are provided
+  if (commands) {
+    registerCommandCompletions(commands);
+  }
 
   return editor;
 }
