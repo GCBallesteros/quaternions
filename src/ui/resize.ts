@@ -8,9 +8,12 @@ export function setupResizer(
   renderer: WebGLRenderer,
   state: State,
 ): void {
+  // The following HTML elements always exist in index.html
+  /* eslint-disable @typescript-eslint/no-non-null-assertion */
   const resizer = document.getElementById('resizer')!;
   const canvasContainer = document.getElementById('canvas-container')!;
   const editorContainer = document.getElementById('editor-container')!;
+  /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
   function resizeCanvas(): void {
     const canvasWidth = canvasContainer.clientWidth;
