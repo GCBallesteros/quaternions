@@ -30,6 +30,9 @@ export default defineConfig({
               { text: 'Point', link: '/dsl/classes/point' },
               { text: 'OrientedPoint', link: '/dsl/classes/orientedPoint' },
               { text: 'Satellite', link: '/dsl/classes/satellite' },
+              { text: 'CameraConfig', link: '/dsl/classes/cameraConfig' },
+              { text: 'OrientationMode', link: '/dsl/classes/orientationMode' },
+              { text: 'NamedTargets', link: '/dsl/classes/namedTargets' },
             ],
           },
           {
