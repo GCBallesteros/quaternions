@@ -4,6 +4,8 @@ The `Point` class provides basic functionality for positioning a point in 3D spa
 
 ::: warning
 Points should be created using the [`addPoint`](/dsl/commands/addPoint) function, not by directly instantiating the `Point` class. Manipulating the internal properties directly might lead to inconsistent application state.
+
+Additional methods not documented below are available  like `constructor` and `dispose` that are used by the application but should not be called directly by users.
 :::
 
 ## Properties
@@ -55,8 +57,3 @@ myPoint.position = [6371, 1000, 0];
 // Or use the mov command
 mov("myPoint", [6371, 1000, 0]);
 ```
-
-::: note
-The `Point` class has additional internal methods like `constructor` and `dispose` that are used by the application but should not be called directly by users.
-:::
-
