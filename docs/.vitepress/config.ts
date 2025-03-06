@@ -41,7 +41,7 @@ export default defineConfig({
               { text: 'rot', link: '/dsl/commands/rot' },
               { text: 'relativeRot', link: '/dsl/commands/relativeRot' },
               { text: 'mov2sat', link: '/dsl/commands/mov2sat' },
-              
+
               // Points & Geometry
               { text: 'addPoint', link: '/dsl/commands/addPoint' },
               { text: 'deletePoint', link: '/dsl/commands/deletePoint' },
@@ -49,34 +49,46 @@ export default defineConfig({
               { text: 'point', link: '/dsl/commands/point' },
               { text: 'createLine', link: '/dsl/commands/createLine' },
               { text: 'angle', link: '/dsl/commands/angle' },
-              
+
               // Satellite Operations
               { text: 'addSatellite', link: '/dsl/commands/addSatellite' },
               { text: 'fetchTLE', link: '/dsl/commands/fetchTLE' },
-              { text: 'findBestQuaternion', link: '/dsl/commands/findBestQuaternion' },
-              
+              {
+                text: 'findBestQuaternion',
+                link: '/dsl/commands/findBestQuaternion',
+              },
+
               // Camera Controls
               { text: 'camera', link: '/dsl/commands/camera' },
               { text: 'switchCamera', link: '/dsl/commands/switchCamera' },
-              { text: 'showSecondaryView', link: '/dsl/commands/showSecondaryView' },
-              { text: 'hideSecondaryView', link: '/dsl/commands/hideSecondaryView' },
-              
+              {
+                text: 'showSecondaryView',
+                link: '/dsl/commands/showSecondaryView',
+              },
+              {
+                text: 'hideSecondaryView',
+                link: '/dsl/commands/hideSecondaryView',
+              },
+
               // Time Controls
               { text: 'setTime', link: '/dsl/commands/setTime' },
               { text: 'pauseSimTime', link: '/dsl/commands/pauseSimTime' },
               { text: 'resumeSimTime', link: '/dsl/commands/resumeSimTime' },
               { text: 'toggleSimTime', link: '/dsl/commands/toggleSimTime' },
-              
+
               // Trail Controls
               { text: 'resumeTrail', link: '/dsl/commands/resumeTrail' },
               { text: 'pauseTrail', link: '/dsl/commands/pauseTrail' },
               { text: 'toggleTrail', link: '/dsl/commands/toggleTrail' },
-              
+
               // Plotting & Visualization
               { text: 'createPlot', link: '/dsl/commands/createPlot' },
               { text: 'removePlot', link: '/dsl/commands/removePlot' },
-              { text: 'addWebMercatorTile', link: '/dsl/commands/addWebMercatorTile' },
-              
+              {
+                text: 'addWebMercatorTile',
+                link: '/dsl/commands/addWebMercatorTile',
+              },
+
               // Utility Functions
               { text: 'reset', link: '/dsl/commands/reset' },
               { text: 'log', link: '/dsl/commands/log' },
@@ -87,7 +99,10 @@ export default defineConfig({
               { text: 'sph2xyz', link: '/dsl/commands/sph2xyz' },
               { text: 'xyz2sph', link: '/dsl/commands/xyz2sph' },
               { text: 'utcDate', link: '/dsl/commands/utcDate' },
-              { text: 'zyxToQuaternion', link: '/dsl/commands/zyxToQuaternion' },
+              {
+                text: 'zyxToQuaternion',
+                link: '/dsl/commands/zyxToQuaternion',
+              },
               { text: 'longRunning', link: '/dsl/commands/longRunning' },
             ],
           },
@@ -103,7 +118,7 @@ export default defineConfig({
             link: '/workflows/debugging-quaternions',
           },
           {
-            text: 'Finding a satellite\'s position',
+            text: "Finding a satellite's position",
             link: '/workflows/check-current-position-of-a-satellite',
           },
           {
