@@ -81,7 +81,7 @@ createLine("sat2KS", "sat", "KS");
 1. Apply a quaternion rotation (`rotationQuaternion`) to simulate an incorrect
 satellite orientation using the [`rot`](/dsl/movement-and-attitude/#rot) function.
 2. Calculate the angle between the satellite's z-axis and the line `sat2KS`.
-The [`point`](/dsl/points/#point) function retrieves the **OrientedPoint** registered as `sat`. This
+The [`point`](/dsl/commands/point) function retrieves the **OrientedPoint** registered as `sat`. This
 object provides access to the `frame` property, which describes the local axes
 of the satellite.
 3. Log it to the integrated console using the [`log`](/dsl/utility/#log) function.
@@ -102,3 +102,10 @@ special notation `point_name_start->point_name_end`, which in this case
 would've resulted on `sat->ks`. Like this we would have defined the vector for
 the angle calculation without having to explicitly create a line. We did the
 latter so that an actual line would be drawn on the scene.
+
+## Related
+
+- [`addPoint`](/dsl/commands/addPoint) - Adds a new point to the scene
+- [`mov`](/dsl/commands/mov) - Moves a point to a specific position
+- [`rot`](/dsl/commands/rot) - Rotates a point to match a specific orientation
+- [`angle`](/dsl/commands/angle) - Calculates the angle between two vectors

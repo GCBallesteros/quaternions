@@ -66,7 +66,7 @@ transformations.
 
 ## DSL Overview
 
-### 1. [**Point Types**](/dsl/points)  
+### 1. [**Point Types**](/dsl/classes/overview)  
 
 Learn about the `Point` and `OrientedPoint` classes, which are the building
 blocks for representing objects in 3D space. The `OrientedPoint` extends

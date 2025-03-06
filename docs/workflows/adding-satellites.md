@@ -127,7 +127,7 @@ this will create a new cell that now can be run with (Shift+Enter). Finally
 adjust the playback speed to around 20x and hit play.
 
 
-## Understanding the sattelite configuration
+## Understanding the satellite configuration
 
 The `addSatellite` function takes three main arguments:
 
@@ -169,6 +169,12 @@ Here's a list of some notable Earth observation satellites you can track:
 | Sentinel-2C  | 60989    | Next generation Sentinel-2 satellite |
 | PRISMA      | 44072    | Italian hyperspectral imaging satellite |
 | Landsat 9   | 49260    | Latest in the Landsat series, provides medium-resolution multispectral imagery |
+
+## Related
+
+- [`addSatellite`](/dsl/commands/addSatellite) - Adds a satellite to the scene
+- [`Satellite`](/dsl/classes/satellite) - Satellite class documentation
+- [`OrientedPoint`](/dsl/classes/orientedPoint) - OrientedPoint class documentation
 
 
 ## Tips

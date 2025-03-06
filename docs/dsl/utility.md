@@ -22,6 +22,8 @@ if (sat) {
 }
 ```
 
+**See Also**: [Point Class Documentation](/dsl/classes/point)
+
 ## camera
 
 Returns a camera from the scene state by name, or null if not found.
@@ -61,6 +63,8 @@ log(42);
 log([1, 2, 3]);
 ```
 
+**See Also**: [Detailed documentation](/dsl/commands/log)
+
 ## deg2rad
 
  Converts degrees to radians.
@@ -99,6 +103,8 @@ satellite positions.
  ```js
  setTime(new Date('2024-01-24T12:00:00Z'))
  ```
+
+**See Also**: [Detailed documentation](/dsl/commands/setTime)
 
 ## toggleSimTime
 

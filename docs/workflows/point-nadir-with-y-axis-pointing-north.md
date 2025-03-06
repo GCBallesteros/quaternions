@@ -81,6 +81,7 @@ Quaternions](/workflows/debugging-quaternions) workflow.
 2. **OrientedPoints** may have a _camera_ that by default is pointed in the
 direction of the z-axis of the body frame. We can access the pointing direction
 (if a camera has been added to the point) via the `cameraBodyAxis` getter.
+See the [OrientedPoint class documentation](/dsl/classes/orientedPoint) for more details.
 
 
 ## 3. Visualizing the Results

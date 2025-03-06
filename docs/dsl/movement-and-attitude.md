@@ -14,6 +14,8 @@ Rotates the point to match the orientation implied by the passed in quaternion.
 rot("sat", [0, 0, 0, 1]);
 ```
 
+**See Also**: [Detailed documentation](/dsl/commands/rot)
+
 ## `mov`
 
 Moves a named point to a specific latitude, longitude, and altitude.
@@ -26,8 +28,10 @@ Moves a named point to a specific latitude, longitude, and altitude.
 
 **Example**:
 ```js
-mov("satellite1", 45.0, -93.0, 500);
+mov("satellite1", [45.0, -93.0, 500], true);
 ```
+
+**See Also**: [Detailed documentation](/dsl/commands/mov)
 
 ## `mov2sat`
 
@@ -51,6 +55,8 @@ Remember `mov2sat` must always be `await`ed in user scripts.
 await mov2sat("sat", "60562", new Date());
 ```
 
+**See Also**: [Detailed documentation](/dsl/commands/mov2sat)
+
 ## `findBestQuaternion`
 
 Computes the optimal quaternion to align two pairs of vectors. The primary
@@ -73,10 +79,11 @@ simulation.
 
 ```javascript
 const quaternion = findBestQuaternion(
-  state,
   "x",
   [0, 1, 0],
   "A->B",
   [0, 0, 1],
 );
 ```
+
+**See Also**: [Detailed documentation](/dsl/commands/findBestQuaternion)

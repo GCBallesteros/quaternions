@@ -10,14 +10,17 @@ a basis frame attached to it with the orientation implied by the quaternion.
 | `name`       | `string` | Name of the point                                    |
 | `coordinates`| `array`  | Cartesian coordinates `[x, y, z]`                    |
 | `quaternion` | `array`  | (Optional) Initial rotation as quaternion `[x, y, z, w]` |
+| `color`      | `string` | (Optional) Color of the point in hex format. Default is white. |
 
 
 **Example**
 ```js
-// Add a point named `point`` at NULL Island with the same orientation of the
+// Add a point named `point` at NULL Island with the same orientation of the
 // global ECEF frame.
 addPoint("point1", [6371, 0, 0], [0, 0, 0, 1]);
 ```
+
+**See Also**: [Detailed documentation](/dsl/commands/addPoint)
 
 ## createLine
 
@@ -28,6 +31,8 @@ Creates a line between two points or coordinates.
 | `name`    | `string`        | Name of the line                      |
 | `startArg`| `array\|string` | Starting point or coordinates         |
 | `endArg`  | `array\|string` | Ending point or coordinates          |
+
+**See Also**: [Detailed documentation](/dsl/commands/createLine)
 
 ## deletePoint
 
@@ -65,6 +70,8 @@ Calculates the angle between two vectors.
 | `vec2Arg` | `array\|string` | Second vector. See valid input options [here](/dsl/overview/#supplying-vectors-and-positions-by-name-or-value) |
 
 Returns the angle in degrees.
+
+**See Also**: [Detailed documentation](/dsl/commands/angle)
 
 ## xyz2geo
 

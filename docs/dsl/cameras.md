@@ -14,10 +14,12 @@ Switches the active camera in the scene to a different perspective.
 **Example**:
 ```js
 // Get a point with a camera attached
-let point = point("sat");
+let sat = point("sat");
 // Switch to viewing from that point's camera                                              
-switchCamera(point.camera);
+switchCamera(sat.camera);
 ```
+
+**See Also**: [Detailed documentation](/dsl/commands/switchCamera)
 
 Notes:
 
