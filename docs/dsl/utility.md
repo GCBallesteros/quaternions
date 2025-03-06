@@ -115,6 +115,8 @@ Toggles the simulation time between running and paused states. When running, tim
 toggleSimTime() // If time was running, it will pause. If it was paused, it will resume.
 ```
 
+**See Also**: [Detailed documentation](/dsl/commands/toggleSimTime)
+
 ## pauseSimTime
 
 Pauses the simulation time. The simulation time will stop advancing until resumed.
@@ -124,6 +126,8 @@ Pauses the simulation time. The simulation time will stop advancing until resume
 pauseSimTime() // Time stops advancing
 ```
 
+**See Also**: [Detailed documentation](/dsl/commands/pauseSimTime)
+
 ## resumeSimTime
 
 Resumes the simulation time. Time will begin advancing at the rate specified by the time multiplier.
@@ -132,6 +136,8 @@ Resumes the simulation time. Time will begin advancing at the rate specified by 
 ```js
 resumeSimTime() // Time begins advancing again
 ```
+
+**See Also**: [Detailed documentation](/dsl/commands/resumeSimTime)
 
 ## distance
 
