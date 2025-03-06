@@ -1,22 +1,22 @@
-import { html } from 'lit-html';
+import { html, TemplateResult } from 'lit-html';
 
 export interface Tab {
   id: string;
   label: string;
-  active?: boolean;
+  active: boolean;
 }
 
 export const tabs: Tab[] = [
   { id: 'editor', label: 'Editor', active: true },
-  { id: 'settings', label: 'Settings' },
-  { id: 'bodies', label: 'Bodies' },
-  { id: 'plots', label: 'Plots' },
+  { id: 'settings', label: 'Settings', active: false },
+  { id: 'bodies', label: 'Bodies', active: false },
+  { id: 'plots', label: 'Plots', active: false },
 ];
 
 export const tabsTemplate = (
   tabs: Tab[],
   onTabClick: (tabId: string) => void,
-) => html`
+): TemplateResult<1> => html`
   <div id="tabs" class="tabs">
     ${tabs.map(
       (tab) => html`

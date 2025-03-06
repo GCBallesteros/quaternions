@@ -5,9 +5,6 @@ import { tabs, tabsTemplate } from './tabTemplates.js';
 
 export function setupTabs(editor: monaco.editor.IStandaloneCodeEditor): void {
   const tabsContainer = document.querySelector('#tab-container') as HTMLElement;
-  if (!tabsContainer) {
-    return;
-  }
 
   const handleTabClick = (tabId: string): void => {
     // Update tab contents
@@ -25,7 +22,7 @@ export function setupTabs(editor: monaco.editor.IStandaloneCodeEditor): void {
     updateTabs(tabId);
   };
 
-  const updateTabs = (activeTabId: string) => {
+  const updateTabs = (activeTabId: string): void => {
     const updatedTabs = tabs.map((tab) => ({
       ...tab,
       active: tab.id === activeTabId,
