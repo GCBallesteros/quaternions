@@ -10,13 +10,13 @@ The `Point`, `OrientedPoint`, and `Satellite` classes represent points in 3D spa
 
 - **[`Satellite`](/dsl/classes/satellite)** extends `OrientedPoint` and adds a description of the satellite motion along its orbit through the use of a TLE and includes instructions on how the satellite should be oriented as a function of time.
 
-## Supporting Interfaces and Types
+## Related Interfaces and Types
 
-- **[`CameraConfig`](/dsl/classes/cameraConfig)** defines the configuration options for cameras attached to points, including orientation and field of view.
+These classes use several interfaces and types that are documented in the [Interfaces & Types](/dsl/types/overview) section:
 
-- **[`OrientationMode`](/dsl/classes/orientationMode)** defines how a satellite's orientation is determined (fixed or dynamic).
-
-- **[`NamedTargets`](/dsl/classes/namedTargets)** defines special target vectors for satellite orientation, such as the Moon, Sun, or Nadir.
+- **[`CameraConfig`](/dsl/types/cameraConfig)** - Used by OrientedPoint for camera configuration
+- **[`OrientationMode`](/dsl/types/orientationMode)** - Used by Satellite for orientation control
+- **[`NamedTargets`](/dsl/types/namedTargets)** - Used by Satellite for dynamic orientation targets
 
 ## Usage
 

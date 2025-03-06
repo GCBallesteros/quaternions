@@ -30,9 +30,16 @@ export default defineConfig({
               { text: 'Point', link: '/dsl/classes/point' },
               { text: 'OrientedPoint', link: '/dsl/classes/orientedPoint' },
               { text: 'Satellite', link: '/dsl/classes/satellite' },
-              { text: 'CameraConfig', link: '/dsl/classes/cameraConfig' },
-              { text: 'OrientationMode', link: '/dsl/classes/orientationMode' },
-              { text: 'NamedTargets', link: '/dsl/classes/namedTargets' },
+            ],
+          },
+          {
+            text: 'Interfaces & Types',
+            collapsed: true,
+            items: [
+              { text: 'Overview', link: '/dsl/types/overview' },
+              { text: 'CameraConfig', link: '/dsl/types/cameraConfig' },
+              { text: 'OrientationMode', link: '/dsl/types/orientationMode' },
+              { text: 'NamedTargets', link: '/dsl/types/namedTargets' },
             ],
           },
           {

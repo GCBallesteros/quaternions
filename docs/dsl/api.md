@@ -1,6 +1,22 @@
 # API Reference
 
-This page serves as a comprehensive index of all available commands in the What on Earth? DSL. Each command links to its detailed documentation page.
+This page serves as a comprehensive index of all available commands, classes, interfaces, and types in the What on Earth? DSL.
+
+## Classes
+
+| Class | Description |
+|-------|-------------|
+| [`Point`](/dsl/classes/point) | Base class for points in 3D space |
+| [`OrientedPoint`](/dsl/classes/orientedPoint) | Point with orientation information |
+| [`Satellite`](/dsl/classes/satellite) | Satellite with orbital and attitude control |
+
+## Interfaces & Types
+
+| Interface/Type | Description |
+|----------------|-------------|
+| [`CameraConfig`](/dsl/types/cameraConfig) | Configuration for cameras attached to points |
+| [`OrientationMode`](/dsl/types/orientationMode) | Defines how a satellite's orientation is determined |
+| [`NamedTargets`](/dsl/types/namedTargets) | Special target vectors for satellite orientation |
 
 ## Movement & Positioning
 

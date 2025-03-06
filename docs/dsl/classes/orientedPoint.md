@@ -60,7 +60,7 @@ Adds a THREE.PerspectiveCamera to the point's group using the provided configura
 
 The camera will be oriented according to the configuration's orientation quaternion and use the specified field of view. Throws an error if a camera named "_camera" already exists in the group.
 
-See the [`CameraConfig`](/dsl/classes/cameraConfig) documentation for details on the configuration options.
+See the [`CameraConfig`](/dsl/types/cameraConfig) documentation for details on the configuration options.
 
 ## Usage
 

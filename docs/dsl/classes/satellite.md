@@ -37,8 +37,8 @@ Disables the satellite's trail visualization.
 
 The `Satellite` class uses two important types to configure its orientation:
 
-- [`OrientationMode`](/dsl/classes/orientationMode) - Defines how the satellite maintains its orientation (fixed or dynamic)
-- [`NamedTargets`](/dsl/classes/namedTargets) - Defines special target vectors for dynamic orientation
+- [`OrientationMode`](/dsl/types/orientationMode) - Defines how the satellite maintains its orientation (fixed or dynamic)
+- [`NamedTargets`](/dsl/types/namedTargets) - Defines special target vectors for dynamic orientation
 
 See their respective documentation pages for detailed information.
 
