@@ -2,36 +2,8 @@
 
 The `Satellite` class extends `OrientedPoint` to represent satellites in orbit. It adds TLE (Two-Line Element) data management and automatic position/orientation updates based on time.
 
-## Constructor
-
-```typescript
-constructor(geometry: THREE.Group, tle: string, orientationMode?: OrientationMode, cameraConfig?: CameraConfig)
-```
-
-| Parameter         | Type             | Description                                                    |
-|-------------------|------------------|----------------------------------------------------------------|
-| `geometry`        | `THREE.Group`    | A THREE.Group object representing the satellite in 3D space    |
-| `tle`             | `string`         | The Two-Line Element (TLE) data for the satellite              |
-| `orientationMode` | `OrientationMode`| Defines how the satellite's orientation is determined          |
-| `cameraConfig`    | `CameraConfig`   | (Optional) Configuration for the satellite's camera            |
-
-## Static Methods
-
-### fromNoradId
-
-```typescript
-static async fromNoradId(
-  geometry: THREE.Group,
-  noradId: string,
-  orientationMode: OrientationMode,
-  camera_orientation?: [number, number, number, number]
-): Promise<Satellite>
-```
-
-Creates a new Satellite instance by fetching TLE data using a NORAD ID.
-
-::: tip
-Remember `fromNoradId` must always be `await`ed in user scripts.
+::: warning
+Satellites should be created using the [`addSatellite`](/dsl/commands/addSatellite) command, not by directly instantiating the `Satellite` class. Manipulating the internal properties directly might lead to inconsistent application state.
 :::
 
 ## Properties
@@ -44,21 +16,6 @@ Inherits all properties from [`OrientedPoint`](/dsl/classes/orientedPoint).
 | `hasTrail`  | `boolean`      | Whether the satellite has a trail enabled                      |
 
 ## Methods
-
-### update
-
-```typescript
-update(timestamp: Date, state: State): void
-```
-
-Updates the satellite's position and orientation based on its TLE data for a given timestamp.
-
-| Parameter    | Type     | Description                                     |
-|--------------|----------|-------------------------------------------------|
-| `timestamp`  | `Date`   | The time for which to calculate the position    |
-| `state`      | `State`  | Application state containing required scene data |
-
-Throws an error if TLE data cannot be parsed or if position calculation fails.
 
 ### enableTrail
 
@@ -76,52 +33,14 @@ disableTrail(): void
 
 Disables the satellite's trail visualization.
 
-## OrientationMode
+## Orientation Configuration
 
-The `OrientationMode` type defines how a satellite's orientation is determined. It can be either:
+The `Satellite` class uses two important types to configure its orientation:
 
-### Fixed Orientation
+- [`OrientationMode`](/dsl/classes/orientationMode) - Defines how the satellite maintains its orientation (fixed or dynamic)
+- [`NamedTargets`](/dsl/classes/namedTargets) - Defines special target vectors for dynamic orientation
 
-```typescript
-{ 
-  type: 'fixed';
-  ecef_quaternion: [number, number, number, number] 
-}
-```
-
-Maintains a constant orientation in ECEF coordinates specified by a quaternion.
-
-### Dynamic Orientation
-
-```typescript
-{
-  type: 'dynamic';
-  primaryBodyVector: Vector3 | string;
-  secondaryBodyVector: Vector3 | string;
-  primaryTargetVector: Vector3 | NamedTargets;
-  secondaryTargetVector: Vector3 | NamedTargets;
-  offset?: [number, number, number, number]; // Optional quaternion offset
-}
-```
-
-Continuously updates orientation to align body vectors with target vectors:
-- `primaryBodyVector`: Body frame vector to align (typically 'x', 'y', or 'z')
-- `secondaryBodyVector`: Secondary body frame vector for full attitude determination
-- `primaryTargetVector`: Target direction for primary alignment
-- `secondaryTargetVector`: Target direction for secondary alignment
-- `offset`: Optional quaternion offset to apply after the main alignment
-
-## NamedTargets
-
-The following named targets are available for dynamic orientation:
-
-| Target           | Description                                                                 |
-|------------------|-----------------------------------------------------------------------------|
-| `Moon`           | Direction to the Moon                                                       |
-| `Sun`            | Direction to the Sun                                                        |
-| `Velocity`       | Satellite's velocity vector                                                 |
-| `Nadir`          | Direction to Earth's center (pointing down)                                 |
-| `TargetPointing` | Points towards a specific target (point name or ECEF coordinates)           |
+See their respective documentation pages for detailed information.
 
 ## Usage
 
@@ -159,4 +78,8 @@ sat.addCamera({
 });
 switchCamera(sat.camera);
 ```
+
+::: note
+The `Satellite` class has additional internal methods like `constructor`, `update`, and `fromNoradId` that are used by the application but should not be called directly by users.
+:::
 
