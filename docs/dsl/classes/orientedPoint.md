@@ -2,18 +2,9 @@
 
 The `OrientedPoint` class extends `Point` and introduces orientation in 3D space using quaternions. It also supports adding a camera to the point.
 
-## Constructor
-
-```typescript
-constructor(geometry: THREE.Group, cameraConfig?: CameraConfig)
-```
-
-| Parameter      | Type           | Description                                                    |
-|----------------|----------------|----------------------------------------------------------------|
-| `geometry`     | `THREE.Group`  | A THREE.Group object representing the point in 3D space        |
-| `cameraConfig` | `CameraConfig` | (Optional) Configuration for the attached camera               |
-
-If a camera configuration is provided, a camera will be added to the point's THREE.Group and named `_camera` for identification. The camera will be oriented according to the provided configuration.
+::: warning
+OrientedPoints should be created using the [`addPoint`](/dsl/commands/addPoint) function with a quaternion parameter, not by directly instantiating the `OrientedPoint` class. Manipulating the internal properties directly might lead to inconsistent application state.
+:::
 
 ## Camera Configuration
 
