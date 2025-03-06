@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 import { log } from './logger.js';
 import { NamedTargets } from './points/satellite.js';
 import { CommandFunction, State } from './types.js';
@@ -5,8 +7,8 @@ import { CommandFunction, State } from './types.js';
 export function buildExecuteCommand(
   commands: Record<string, CommandFunction>,
   state: State,
-  switchCamera: any,
-): (command: string) => void {
+  switchCamera: (newCamera: THREE.PerspectiveCamera) => void,
+): (command: string) => Promise<void> {
   // Context object to maintain state between executions
   const context = {
     console,
@@ -43,9 +45,11 @@ export function buildExecuteCommand(
       // Create function with context parameters
       const contextKeys = Object.keys(context);
       const contextValues = Object.values(context);
+      // eslint-disable-next-line @typescript-eslint/no-implied-eval
       const executeFunction = new Function(...contextKeys, wrappedCode);
 
       // Execute with context
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const result = await executeFunction(...contextValues);
 
       if (result !== undefined) {
@@ -62,7 +66,7 @@ export function buildExecuteCommand(
         const firstErrorLine = error.stack?.split('\n')[0];
         let lineNumber: number | null = null;
 
-        if (firstErrorLine) {
+        if (firstErrorLine !== undefined) {
           const match = firstErrorLine.match(/evalCode\.js:(\d+):(\d+)/);
 
           if (match) {

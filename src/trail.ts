@@ -179,7 +179,7 @@ export class Trail {
   private addSegment(
     prevCurve: THREE.Vector3[] | null,
     currCurve: THREE.Vector3[],
-  ) {
+  ): void {
     const startIndex = this.currentCurveIndex * NUM_CURVE_POINTS * 3;
     let indexOffset = this.currentSegmentIndex * (NUM_CURVE_POINTS - 1) * 6;
 
@@ -219,10 +219,10 @@ export class Trail {
     this.totalSegments = Math.min(this.totalSegments + 1, MAX_SEGMENTS);
   }
 
-  private updateMesh() {
+  private updateMesh(): void {
     this.geometry.attributes.position.needsUpdate = true;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     // Index is guaranteed to exist by the setIndex in the constructor
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.geometry.index!.needsUpdate = true;
 
     const minFade = 0.002;
@@ -251,7 +251,10 @@ export class Trail {
     this.geometry.computeVertexNormals();
   }
 
-  update(position: THREE.Vector3, cameraAxes: Record<string, Array3> | null) {
+  update(
+    position: THREE.Vector3,
+    cameraAxes: Record<string, Array3> | null,
+  ): void {
     const currCurveOption = this.computeCurrentCurve(position, cameraAxes);
 
     if (!currCurveOption.some) {
@@ -274,7 +277,7 @@ export class Trail {
     this.lastPosition.copy(position);
   }
 
-  dispose() {
+  dispose(): void {
     if (this.mesh.parent) {
       this.mesh.parent.remove(this.mesh);
     }

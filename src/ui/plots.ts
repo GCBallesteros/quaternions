@@ -7,9 +7,10 @@ import { plotTemplate, plotListTemplate } from './plotsTemplates.js';
 export const workers = new Map<string, Worker>();
 export const canvases = new Map<string, HTMLCanvasElement>();
 
-function downloadPlotData(plotId: string, state: State) {
+function downloadPlotData(plotId: string, state: State): void {
   const plot = state.plots[plotId];
-  if (!plot) {
+  if (plot === undefined) {
+    console.error("Plot wasn't available");
     return;
   }
 
@@ -33,6 +34,7 @@ function downloadPlotData(plotId: string, state: State) {
   // Create and trigger download
   const blob = new Blob([csvContent], { type: 'text/csv' });
   const url = window.URL.createObjectURL(blob);
+  // TODO: THIS LOOKS SILLY
   const a = document.createElement('a');
   a.href = url;
   a.download = `${plot.title.replace(/\s+/g, '_')}_${new Date().toISOString()}.csv`;
@@ -103,7 +105,7 @@ function updatePlots(state: State): void {
   // Remove charts for plots that no longer exist
   Array.from(plotsList.children).forEach((element) => {
     const plotId = element.getAttribute('data-plot-id');
-    if (plotId && !currentPlots.has(plotId)) {
+    if (plotId !== null && !currentPlots.has(plotId)) {
       const worker = workers.get(plotId);
       if (worker) {
         worker.postMessage({ type: 'DESTROY', plotId });
@@ -119,12 +121,15 @@ function updatePlots(state: State): void {
   Object.entries(state.plots).forEach(([plotId, plot]) => {
     let plotElement = Array.from(plotsList.children).find(
       (el) => el.getAttribute('data-plot-id') === plotId,
-    ) as HTMLElement;
+    ) as HTMLElement | undefined;
 
-    if (!plotElement) {
+    if (plotElement) {
       plotElement = createPlotElement(plotId, plot, state);
       plotElement.setAttribute('data-plot-id', plotId);
       plotsList.appendChild(plotElement);
+    } else {
+      console.error('Could not find plot to update', plotId);
+      return;
     }
 
     // Update worker with all new data points since last update
