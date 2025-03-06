@@ -1,13 +1,17 @@
 import * as monaco from 'monaco-editor';
+
 import { CommandFunction } from '../types.js';
-import { commandDocs } from './commandDocs.js';
+
+import { CommandDoc, commandDocs } from './commandDocs.js';
 
 /**
  * Extracts parameter information from a function
  */
 function extractFunctionParams(
+  // We really want to take in any function
+  // eslint-disable-next-line @typescript-eslint/ban-types
   func: Function,
-  name: string,
+  doc: CommandDoc,
 ): {
   params: string[];
   paramDocs: string;
@@ -22,9 +26,6 @@ function extractFunctionParams(
         .filter((p) => p)
     : [];
 
-  // Get documentation if available
-  const doc = commandDocs[name];
-
   // Create documentation with parameter info
   let paramDocs = '';
 
@@ -33,16 +34,36 @@ function extractFunctionParams(
     signatures: [
       {
         label: `(${params.join(', ')})`,
-        documentation: doc?.description || '',
+        documentation: doc.description,
         parameters: params.map((p, index) => {
           const [paramName, defaultValue] = p.split('=').map((s) => s.trim());
-          const paramDoc = doc?.parameters?.[index];
+          const paramDoc = doc.parameters[index];
+
+          const paramLabel = defaultValue
+            ? `${paramName} = ${defaultValue}`
+            : paramName;
+          let paramDocumentation: string;
+
+          if (paramDoc !== null) {
+            let defaultValueText = '';
+            if (
+              paramDoc.defaultValue !== undefined &&
+              paramDoc.defaultValue !== ''
+            ) {
+              defaultValueText = `\n\nDefault: \`${paramDoc.defaultValue}\``;
+            }
+            paramDocumentation = `**${paramDoc.type}**\n\n${paramDoc.description}${defaultValueText}`;
+          } else {
+            let defaultValueText = '';
+            if (defaultValue !== undefined && defaultValue !== '') {
+              defaultValueText = ` (default: ${defaultValue})`;
+            }
+            paramDocumentation = `Parameter: ${paramName}${defaultValueText}`;
+          }
 
           return {
-            label: defaultValue ? `${paramName} = ${defaultValue}` : paramName,
-            documentation: paramDoc
-              ? `**${paramDoc.type}**\n\n${paramDoc.description}${paramDoc.defaultValue ? `\n\nDefault: \`${paramDoc.defaultValue}\`` : ''}`
-              : `Parameter: ${paramName}${defaultValue ? ` (default: ${defaultValue})` : ''}`,
+            label: paramLabel,
+            documentation: paramDocumentation,
           };
         }),
       },
@@ -51,26 +72,15 @@ function extractFunctionParams(
     activeParameter: 0,
   };
 
-  // If we have documentation, use it for the parameter docs
-  if (doc) {
-    paramDocs = doc.parameters
-      .map(
-        (p) =>
-          `@param {${p.type}} ${p.name}${p.optional ? ' (optional)' : ''} - ${p.description}`,
-      )
-      .join('\n');
+  paramDocs = doc.parameters
+    .map(
+      (p) =>
+        `@param {${p.type}} ${p.name}${p.optional ? ' (optional)' : ''} - ${p.description}`,
+    )
+    .join('\n');
 
-    if (doc.returns) {
-      paramDocs += `\n@returns {${doc.returns.type}} ${doc.returns.description}`;
-    }
-  } else {
-    // Fallback to extracted parameter info
-    paramDocs = params
-      .map((p) => {
-        const [paramName, defaultValue] = p.split('=').map((s) => s.trim());
-        return `@param ${paramName}${defaultValue ? ` (default: ${defaultValue})` : ''}`;
-      })
-      .join('\n');
+  if (doc.returns !== undefined) {
+    paramDocs += `\n@returns {${doc.returns.type}} ${doc.returns.description}`;
   }
 
   return { params, paramDocs, signatureHelp };
@@ -91,7 +101,7 @@ export function registerCommandCompletions(
     // Extract parameter information
     const { params, paramDocs, signatureHelp } = extractFunctionParams(
       func,
-      name,
+      commandDocs[name],
     );
 
     // Store signature help for this command
@@ -101,24 +111,24 @@ export function registerCommandCompletions(
     const doc = commandDocs[name];
 
     // Create documentation markdown
-    let docMarkdown = [`**${name}**`];
+    const docMarkdown = [`**${name}**`];
 
-    if (doc?.description) {
+    if (doc?.description !== undefined && doc.description !== '') {
       docMarkdown.push('', doc.description);
     }
 
-    if (doc?.documentationUrl) {
+    if (doc?.documentationUrl !== undefined && doc.documentationUrl !== '') {
       docMarkdown.push(
         '',
         `[📖 View Documentation](https://${doc.documentationUrl})`,
       );
     }
 
-    if (paramDocs) {
+    if (paramDocs !== '') {
       docMarkdown.push('', '```typescript', paramDocs, '```');
     }
 
-    if (doc?.example) {
+    if (doc?.example !== undefined && doc.example !== '') {
       docMarkdown.push('', '**Example:**', '```typescript', doc.example, '```');
     }
 
@@ -181,7 +191,7 @@ export function registerCommandCompletions(
       const functionName = functionCallMatch[1];
       const signatureHelp = commandSignatures[functionName];
 
-      if (!signatureHelp) {
+      if (signatureHelp === null) {
         return null;
       }
 
@@ -198,19 +208,44 @@ export function registerCommandCompletions(
           {
             label: `${functionName}(${signatureHelp.signatures[0].parameters.map((p) => p.label).join(', ')})`,
             documentation: {
-              value: doc?.description || `Function: ${functionName}`,
+              value:
+                doc?.description !== undefined && doc.description !== ''
+                  ? doc.description
+                  : `Function: ${functionName}`,
               isTrusted: true,
               supportThemeIcons: true,
             },
             parameters: signatureHelp.signatures[0].parameters.map(
               (param, index) => {
                 const paramDoc = doc?.parameters[index];
+                let docValue: string;
+
+                if (paramDoc !== undefined) {
+                  let defaultValueText = '';
+                  if (
+                    paramDoc.defaultValue !== undefined &&
+                    paramDoc.defaultValue !== ''
+                  ) {
+                    defaultValueText = `\n\nDefault: \`${paramDoc.defaultValue}\``;
+                  }
+
+                  let docLinkText = '';
+                  if (
+                    doc?.documentationUrl !== undefined &&
+                    doc.documentationUrl !== ''
+                  ) {
+                    docLinkText = `\n\n[📖 Documentation](https://${doc.documentationUrl})`;
+                  }
+
+                  docValue = `**${paramDoc.type}**\n\n${paramDoc.description}${defaultValueText}${docLinkText}`;
+                } else {
+                  docValue = `Parameter: ${param.label}`;
+                }
+
                 return {
                   label: param.label,
                   documentation: {
-                    value: paramDoc
-                      ? `**${paramDoc.type}**\n\n${paramDoc.description}${paramDoc.defaultValue ? `\n\nDefault: \`${paramDoc.defaultValue}\`` : ''}${doc?.documentationUrl ? `\n\n[📖 Documentation](https://${doc.documentationUrl})` : ''}`
-                      : `Parameter: ${param.label}`,
+                    value: docValue,
                     isTrusted: true,
                     supportThemeIcons: true,
                   },

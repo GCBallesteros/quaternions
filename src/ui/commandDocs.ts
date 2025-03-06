@@ -7,7 +7,7 @@ export interface ParameterDoc {
   name: string;
   description: string;
   type: string;
-  optional?: boolean;
+  optional: boolean;
   defaultValue?: string;
 }
 
@@ -30,11 +30,13 @@ export const commandDocs: Record<string, CommandDoc> = {
         name: 'point_name',
         description: 'Name of the point to move',
         type: 'string',
+        optional: false,
       },
       {
         name: 'pos',
         description: 'New position as [x, y, z] array or Vector3',
         type: 'Array3 | Vector3',
+        optional: false,
       },
       {
         name: 'use_geo',
@@ -57,14 +59,17 @@ export const commandDocs: Record<string, CommandDoc> = {
         name: 'point_name',
         description: 'Name of the point to rotate',
         type: 'string',
+        optional: false,
       },
       {
         name: 'q',
         description: 'Quaternion as [x, y, z, w] array',
         type: 'Vector4',
+        optional: false,
       },
     ],
     example: 'rot("sat", [0, 0, 0, 1]); // Identity quaternion',
+    documentationUrl: undefined,
   },
 
   addPoint: {
@@ -74,11 +79,13 @@ export const commandDocs: Record<string, CommandDoc> = {
         name: 'name',
         description: 'Unique name for the new point',
         type: 'string',
+        optional: false,
       },
       {
         name: 'coordinates',
         description: 'Position as [x, y, z] array or Vector3',
         type: 'Array3 | Vector3',
+        optional: false,
       },
       {
         name: 'quaternion',
