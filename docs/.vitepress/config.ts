@@ -17,7 +17,84 @@ export default defineConfig({
         link: '/documentation',
       },
       {
-        text: 'Example Workflows',
+        text: 'API Reference',
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/dsl/overview' },
+          { text: 'API Index', link: '/dsl/api' },
+          {
+            text: 'Classes',
+            collapsed: true,
+            items: [
+              { text: 'Overview', link: '/dsl/classes/overview' },
+              { text: 'Point', link: '/dsl/classes/point' },
+              { text: 'OrientedPoint', link: '/dsl/classes/orientedPoint' },
+              { text: 'Satellite', link: '/dsl/classes/satellite' },
+            ],
+          },
+          {
+            text: 'Commands',
+            collapsed: true,
+            items: [
+              // Movement & Positioning
+              { text: 'mov', link: '/dsl/commands/mov' },
+              { text: 'rot', link: '/dsl/commands/rot' },
+              { text: 'relativeRot', link: '/dsl/commands/relativeRot' },
+              { text: 'mov2sat', link: '/dsl/commands/mov2sat' },
+              
+              // Points & Geometry
+              { text: 'addPoint', link: '/dsl/commands/addPoint' },
+              { text: 'deletePoint', link: '/dsl/commands/deletePoint' },
+              { text: 'listPoints', link: '/dsl/commands/listPoints' },
+              { text: 'point', link: '/dsl/commands/point' },
+              { text: 'createLine', link: '/dsl/commands/createLine' },
+              { text: 'angle', link: '/dsl/commands/angle' },
+              
+              // Satellite Operations
+              { text: 'addSatellite', link: '/dsl/commands/addSatellite' },
+              { text: 'fetchTLE', link: '/dsl/commands/fetchTLE' },
+              { text: 'findBestQuaternion', link: '/dsl/commands/findBestQuaternion' },
+              
+              // Camera Controls
+              { text: 'camera', link: '/dsl/commands/camera' },
+              { text: 'switchCamera', link: '/dsl/commands/switchCamera' },
+              { text: 'showSecondaryView', link: '/dsl/commands/showSecondaryView' },
+              { text: 'hideSecondaryView', link: '/dsl/commands/hideSecondaryView' },
+              
+              // Time Controls
+              { text: 'setTime', link: '/dsl/commands/setTime' },
+              { text: 'pauseSimTime', link: '/dsl/commands/pauseSimTime' },
+              { text: 'resumeSimTime', link: '/dsl/commands/resumeSimTime' },
+              { text: 'toggleSimTime', link: '/dsl/commands/toggleSimTime' },
+              
+              // Trail Controls
+              { text: 'resumeTrail', link: '/dsl/commands/resumeTrail' },
+              { text: 'pauseTrail', link: '/dsl/commands/pauseTrail' },
+              { text: 'toggleTrail', link: '/dsl/commands/toggleTrail' },
+              
+              // Plotting & Visualization
+              { text: 'createPlot', link: '/dsl/commands/createPlot' },
+              { text: 'removePlot', link: '/dsl/commands/removePlot' },
+              { text: 'addWebMercatorTile', link: '/dsl/commands/addWebMercatorTile' },
+              
+              // Utility Functions
+              { text: 'reset', link: '/dsl/commands/reset' },
+              { text: 'log', link: '/dsl/commands/log' },
+              { text: 'rad2deg', link: '/dsl/commands/rad2deg' },
+              { text: 'deg2rad', link: '/dsl/commands/deg2rad' },
+              { text: 'geo2xyz', link: '/dsl/commands/geo2xyz' },
+              { text: 'xyz2geo', link: '/dsl/commands/xyz2geo' },
+              { text: 'sph2xyz', link: '/dsl/commands/sph2xyz' },
+              { text: 'xyz2sph', link: '/dsl/commands/xyz2sph' },
+              { text: 'utcDate', link: '/dsl/commands/utcDate' },
+              { text: 'zyxToQuaternion', link: '/dsl/commands/zyxToQuaternion' },
+              { text: 'longRunning', link: '/dsl/commands/longRunning' },
+            ],
+          },
+        ],
+      },
+      {
+        text: 'Workflows',
         collapsed: true,
         items: [
           { text: 'Overview', link: '/workflows/overview' },
@@ -26,7 +103,7 @@ export default defineConfig({
             link: '/workflows/debugging-quaternions',
           },
           {
-            text: 'Finding a satellites position',
+            text: 'Finding a satellite\'s position',
             link: '/workflows/check-current-position-of-a-satellite',
           },
           {
@@ -34,29 +111,9 @@ export default defineConfig({
             link: '/workflows/point-nadir-with-y-axis-pointing-north',
           },
           {
-            text: 'Adding Satellitess',
+            text: 'Adding Satellites',
             link: '/workflows/adding-satellites',
           },
-        ],
-      },
-      {
-        text: 'Command Description',
-        collapsed: true,
-        items: [
-          { text: 'Overview', link: '/dsl/overview' },
-          {
-            text: 'Point Geometries',
-            link: '/dsl/points/overview',
-            items: [
-              { text: 'Point', link: '/dsl/points/point' },
-              { text: 'OrientedPoint', link: '/dsl/points/orientedPoint' },
-              { text: 'Satellite', link: '/dsl/points/satellite' },
-            ],
-          },
-          { text: 'Movement & Attitude', link: '/dsl/movement-and-attitude' },
-          { text: 'Geometry Commands', link: '/dsl/geometry-commands' },
-          { text: 'Utility', link: '/dsl/utility' },
-          { text: 'Camera Work', link: '/dsl/cameras' },
         ],
       },
       {
