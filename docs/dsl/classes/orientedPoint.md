@@ -6,17 +6,6 @@ The `OrientedPoint` class extends `Point` and introduces orientation in 3D space
 OrientedPoints should be created using the [`addPoint`](/dsl/commands/addPoint) function with a quaternion parameter, not by directly instantiating the `OrientedPoint` class. Manipulating the internal properties directly might lead to inconsistent application state.
 :::
 
-## Camera Configuration
-
-The `CameraConfig` interface defines the configuration for cameras attached to points:
-
-```typescript
-interface CameraConfig {
-  orientation: Vector4;  // Quaternion defining camera orientation [x, y, z, w]
-  fov: number;           // Field of view in degrees
-}
-```
-
 ## Properties
 
 Inherits all properties from [`Point`](/dsl/classes/point).
@@ -70,6 +59,8 @@ Adds a THREE.PerspectiveCamera to the point's group using the provided configura
 | `config`  | `CameraConfig` | Configuration object containing camera orientation and FOV      |
 
 The camera will be oriented according to the configuration's orientation quaternion and use the specified field of view. Throws an error if a camera named "_camera" already exists in the group.
+
+See the [`CameraConfig`](/dsl/classes/cameraConfig) documentation for details on the configuration options.
 
 ## Usage
 

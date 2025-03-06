@@ -10,6 +10,10 @@ The `Point`, `OrientedPoint`, and `Satellite` classes represent points in 3D spa
 
 - **[`Satellite`](/dsl/classes/satellite)** extends `OrientedPoint` and adds a description of the satellite motion along its orbit through the use of a TLE and includes instructions on how the satellite should be oriented as a function of time.
 
+## Supporting Interfaces
+
+- **[`CameraConfig`](/dsl/classes/cameraConfig)** defines the configuration options for cameras attached to points, including orientation and field of view.
+
 ## Usage
 
 Points can be retrieved from the scene via the [`point`](/dsl/commands/point) function. These classes are seldom interacted with directly except through this function. When we do retrieve them, it is mostly to use the getter methods. For example, when we want the basis vector for the reference frame of an `OrientedPoint`.
