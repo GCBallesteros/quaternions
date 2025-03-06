@@ -2,15 +2,9 @@
 
 The `Point` class provides basic functionality for positioning a point in 3D space using a `THREE.Group` object.
 
-## Constructor
-
-```typescript
-constructor(geometry: THREE.Group)
-```
-
-| Parameter  | Type          | Description                                                    |
-|------------|---------------|----------------------------------------------------------------|
-| `geometry` | `THREE.Group` | A THREE.Group object representing the point in 3D space        |
+::: warning
+Points should be created using the [`addPoint`](/dsl/commands/addPoint) function, not by directly instantiating the `Point` class. Manipulating the internal properties directly might lead to inconsistent application state.
+:::
 
 ## Properties
 
@@ -38,20 +32,6 @@ set color(color: string)
 
 Gets or sets the point's color as a hex string (e.g., "#ff0000").
 
-## Methods
-
-### dispose
-
-```typescript
-dispose(scene: THREE.Scene): void
-```
-
-Removes the point from the scene and disposes of its resources.
-
-| Parameter | Type          | Description                                |
-|-----------|---------------|--------------------------------------------|
-| `scene`   | `THREE.Scene` | The scene from which to remove the point   |
-
 ## Usage
 
 Points are typically created using the [`addPoint`](/dsl/commands/addPoint) function and accessed using the [`point`](/dsl/commands/point) function:
@@ -75,4 +55,8 @@ myPoint.position = [6371, 1000, 0];
 // Or use the mov command
 mov("myPoint", [6371, 1000, 0]);
 ```
+
+::: note
+The `Point` class has additional internal methods like `constructor` and `dispose` that are used by the application but should not be called directly by users.
+:::
 
