@@ -14,7 +14,7 @@ iterate through all points.
 ## Syntax
 
 ```javascript
-listPoints()
+listPoints(): string[]
 ```
 
 ## Parameters
