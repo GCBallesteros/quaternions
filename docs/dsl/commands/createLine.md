@@ -2,29 +2,34 @@
 
 Creates a line between two points or coordinates.
 
+The `createLine` function creates a visible line between two points in the
+scene. Both the start and end points can be specified either as the name of an
+existing point or as explicit coordinates.
+
+Lines created with this function can be referenced by name in other commands,
+such as the `angle` function.
+
 ## Syntax
 
 ```javascript
-createLine(name, start, end)
+createLine(
+  name: string,
+  start: string | Array3 | Vector3,
+  end: string | Array3 | Vector3,
+)
 ```
 
 ## Parameters
 
-| Parameter | Type                | Description                           |
-|-----------|---------------------|---------------------------------------|
-| `name`    | `string`            | Name of the line                      |
-| `start`   | `string` or `Array3` | Starting point name or coordinates    |
-| `end`     | `string` or `Array3` | Ending point name or coordinates      |
+| Parameter | Description                           |
+|-----------|---------------------------------------|
+| `name`    | Name of the line                      |
+| `start`   | Starting point name or coordinates    |
+| `end`     | Ending point name or coordinates      |
 
 ## Returns
 
-`void` - This function doesn't return a value.
-
-## Description
-
-The `createLine` function creates a visible line between two points in the scene. Both the start and end points can be specified either as the name of an existing point or as explicit coordinates.
-
-Lines created with this function can be referenced by name in other commands, such as the `angle` function.
+`void`
 
 ## Examples
 
