@@ -20,7 +20,10 @@ export default defineConfig({
         text: 'Getting Started',
         collapsed: true,
         items: [
-          { text: 'Working with Time', link: '/getting-started/working-with-time' },
+          {
+            text: 'Working with Time',
+            link: '/getting-started/working-with-time',
+          },
         ],
       },
       {
