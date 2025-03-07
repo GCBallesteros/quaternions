@@ -4,11 +4,12 @@ import { OrientedPoint } from '../points/orientedPoint.js';
 import { Point } from '../points/point.js';
 import { NamedTargets, Satellite } from '../points/satellite.js';
 import { Array3, State } from '../types.js';
+import { Vector3 } from '../vectors.js';
 
 import { bodyStyles } from './styles/bodies.js';
 import { commonStyles } from './styles/common.js';
 
-function formatTargetVector(target: Array3 | NamedTargets): string {
+function formatTargetVector(target: Array3 | Vector3 | NamedTargets): string {
   if (typeof target === 'object' && target !== null && 'type' in target) {
     if (target.type === 'TargetPointing') {
       return `TargetPointing(${JSON.stringify(target.target)})`;
@@ -68,12 +69,11 @@ const satelliteOrientationTemplate = (
           <div style="margin-left: 10px;">
             Primary: ${satellite.orientationMode.primaryBodyVector} →
             ${formatTargetVector(
-              satellite.orientationMode.primaryTargetVector as any,
+              satellite.orientationMode.primaryTargetVector,
             )}<br />
-            Secondary: ${(satellite.orientationMode as any).secondaryBodyVector}
-            →
+            Secondary: ${satellite.orientationMode.secondaryBodyVector} →
             ${formatTargetVector(
-              satellite.orientationMode.secondaryTargetVector as any,
+              satellite.orientationMode.secondaryTargetVector,
             )}
           </div>
         `

@@ -24,6 +24,7 @@ export interface Plot {
   lastSentIndex: number; // Last index sent to worker
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type CommandFunction = (...args: any[]) => any;
 
 export type TleSource =

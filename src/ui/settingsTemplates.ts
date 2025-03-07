@@ -7,7 +7,7 @@ import { commonStyles } from './styles/common.js';
 import { settingsStyles } from './styles/settings.js';
 import { createTimeInput } from './timeInput.js';
 
-function handleTimeUpdate(executeCommand: (command: string) => void) {
+function handleTimeUpdate(executeCommand: (command: string) => void): void {
   const dateInput = document.getElementById('sim-date') as HTMLInputElement;
   const hoursInput = document.getElementById('sim-hours') as HTMLInputElement;
   const minutesInput = document.getElementById(
@@ -29,7 +29,7 @@ function handleTimeUpdate(executeCommand: (command: string) => void) {
   if (dateResult.ok) {
     executeCommand(`setTime(new Date("${dateResult.val.toISOString()}"))`);
   } else {
-    console.log(dateResult.val);
+    console.error(dateResult.val);
   }
 }
 
@@ -69,9 +69,12 @@ export const lightingTemplate = (
             ?checked=${sunVisible}
             @change=${(e: Event) => {
               const target = e.target as HTMLInputElement;
-              const event = new CustomEvent('sun-toggle-change', {
-                detail: { checked: target.checked },
-              });
+              const event = new CustomEvent<{ checked: boolean }>(
+                'sun-toggle-change',
+                {
+                  detail: { checked: target.checked },
+                },
+              );
               document.dispatchEvent(event);
             }}
           />
@@ -96,9 +99,12 @@ export const lightingTemplate = (
           .value=${ambientIntensity.toString()}
           @input=${(e: Event) => {
             const target = e.target as HTMLInputElement;
-            const event = new CustomEvent('ambient-intensity-change', {
-              detail: { value: parseFloat(target.value) },
-            });
+            const event = new CustomEvent<{ value: number }>(
+              'ambient-intensity-change',
+              {
+                detail: { value: parseFloat(target.value) },
+              },
+            );
             document.dispatchEvent(event);
           }}
         />

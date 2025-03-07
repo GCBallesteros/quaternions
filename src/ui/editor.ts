@@ -4,7 +4,7 @@ import { None, Option, Some } from 'ts-results';
 
 import { initLogger } from '../logger.js';
 import { CommandFunction } from '../types.js';
-import { commandDocs } from './commandDocs.js';
+
 import { editorTemplate } from './editorTemplates.js';
 import { registerCommandCompletions } from './monacoConfig.js';
 
