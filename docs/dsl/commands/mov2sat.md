@@ -2,29 +2,27 @@
 
 Moves a point to the position of a satellite at a given timestamp.
 
+The `mov2sat` function moves a point to the position of a satellite at a specified time. It uses the satellite's Two-Line Element (TLE) data to calculate its position at the given timestamp.
+
+This function is asynchronous and must be awaited, as it may need to fetch TLE data from external sources if it's not already cached.
+
 ## Syntax
 
-```javascript
-async mov2sat(name, cosparId, timestamp)
+```typescript
+async mov2sat(name: string, cosparId: string, timestamp: Date): Promise<void>
 ```
 
 ## Parameters
 
-| Parameter   | Type     | Description                                                                 |
-|-------------|----------|-----------------------------------------------------------------------------|
-| `name`      | `string` | The name of the point to move.                                              |
-| `cosparId`  | `string` | COSPAR ID (NORAD catalog number) of the satellite.                          |
-| `timestamp` | `Date`   | The time for which the position is computed.                                |
+| Parameter   | Description                                                                 |
+|-------------|-----------------------------------------------------------------------------|
+| `name`      | The name of the point to move.                                              |
+| `cosparId`  | COSPAR ID (NORAD catalog number) of the satellite.                          |
+| `timestamp` | The time for which the position is computed.                                |
 
 ## Returns
 
 `Promise<void>` - This function must be awaited.
-
-## Description
-
-The `mov2sat` function moves a point to the position of a satellite at a specified time. It uses the satellite's Two-Line Element (TLE) data to calculate its position at the given timestamp.
-
-This function is asynchronous and must be awaited, as it may need to fetch TLE data from external sources if it's not already cached.
 
 ## Examples
 
