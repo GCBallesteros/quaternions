@@ -30,7 +30,7 @@ import { findMercatorTilesInPOV } from './findMercatorTiles.js';
 import { log } from './logger.js';
 import { OrientedPoint } from './points/orientedPoint.js';
 import { Point } from './points/point.js';
-import { OrientationMode } from './points/satellite.js';
+import { OrientationMode, Satellite } from './points/satellite.js';
 import { updateTrailSwitch } from './trail.js';
 import { Array3, CommandFunction, State, TleSource, Vector4 } from './types.js';
 import {
@@ -106,7 +106,7 @@ export function buildCommandClosures(
       orientation: [number, number, number, number];
       fov: number;
     },
-  ): Promise<void> {
+  ): Promise<Satellite> {
     const result = await _addSatellite(
       scene,
       state,
@@ -116,7 +116,7 @@ export function buildCommandClosures(
       cameraConfig,
     );
     if (result.ok) {
-      return;
+      return result.val;
     } else {
       throw new Error(result.val);
     }

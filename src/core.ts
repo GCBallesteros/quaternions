@@ -399,7 +399,7 @@ export async function _addSatellite(
   tleSource: TleSource,
   orientationMode: OrientationMode,
   cameraConfig?: CameraConfig,
-): Promise<Result<null, string>> {
+): Promise<Result<Satellite, string>> {
   // Satellites don't get passed coordinates because their location is determined
   // by their TLE and the simulation time
   if (!utils.validateName(name, state)) {
@@ -447,7 +447,7 @@ export async function _addSatellite(
   // Initialize satellite position immediately
   newSatellite.update(state.currentTime, state);
 
-  return Ok(null);
+  return Ok(newSatellite);
 }
 
 export async function _mov2sat(
