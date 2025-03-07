@@ -2,30 +2,28 @@
 
 Adds a new point to the scene at specified coordinates.
 
+The `addPoint` function creates a new point in the scene at the specified coordinates. If a quaternion is provided, the point will be created as an `OrientedPoint` with the specified orientation, which includes a basis frame.
+
+Points created with this function can be referenced by name in other commands, such as `mov`, `rot`, or `createLine`.
+
 ## Syntax
 
-```javascript
-addPoint(name, coordinates, quaternion = null, color = '#ffffff')
+```typescript
+addPoint(name: string, coordinates: Array3 | Vector3, quaternion: Vector4 | null = null, color: string = '#ffffff')
 ```
 
 ## Parameters
 
-| Parameter     | Type                | Description                                          |
-|---------------|---------------------|------------------------------------------------------|
-| `name`        | `string`            | Name of the point                                    |
-| `coordinates` | `Array3` or `Vector3` | Cartesian coordinates `[x, y, z]`                    |
-| `quaternion`  | `Vector4` or `null` | (Optional) Initial rotation as quaternion `[x, y, z, w]`. Default is null. |
-| `color`       | `string`            | (Optional) Color of the point in hex format. Default is white. |
+| Parameter     | Description                                                                 |
+|---------------|-----------------------------------------------------------------------------|
+| `name`        | The name of the point to create.                                            |
+| `coordinates` | The position as a 3-element array `[x, y, z]` or Vector3 object.            |
+| `quaternion`  | (Optional) Initial rotation as quaternion `[x, y, z, w]`. Default is null.  |
+| `color`       | (Optional) Color of the point in hex format. Default is white.              |
 
 ## Returns
 
-`void` - This function doesn't return a value.
-
-## Description
-
-The `addPoint` function creates a new point in the scene at the specified coordinates. If a quaternion is provided, the point will be created as an `OrientedPoint` with the specified orientation, which includes a basis frame.
-
-Points created with this function can be referenced by name in other commands, such as `mov`, `rot`, or `createLine`.
+`void`
 
 ## Examples
 
