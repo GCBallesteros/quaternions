@@ -32,16 +32,6 @@ and can interpret the string as UTC or local time depending on the format.
    Universal Time (UTC), ensuring consistent time representation regardless of
 where the code runs.
 
-2. **Clear Parameter Order**: The function uses a clear parameter order (year,
-   month, day, hours, minutes, seconds) with proper 1-indexed months (January
-is 1, December is 12).
-
-3. **Default Time Components**: Time components (hours, minutes, seconds)
-   default to 0 if not specified, making it easy to create dates at midnight
-UTC.
-
-4. **Error Handling**: The implementation includes validation and error
-   handling for invalid date components.
 
 ## Example Comparison
 
