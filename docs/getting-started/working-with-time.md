@@ -1,67 +1,39 @@
 # Working with Time
 
-When working with satellite positions, astronomical calculations, and
-time-dependent simulations in What on Earth?, using consistent and unambiguous
-time representations is critical.
+When working with time in What on Earth?, using consistent time representations is essential for reliable results.
 
 ## Why Use `utcDate`
 
-The What on Earth? application provides the `utcDate` function specifically
-designed to create dates in a consistent and reliable way. Here's why you
-should always use `utcDate` instead of JavaScript's native `Date` constructor:
+The `utcDate` function creates dates in Coordinated Universal Time (UTC), ensuring consistent behavior across all environments. This is the primary benefit - all calculations will work the same way regardless of where your code runs.
 
-### Problems with JavaScript's `new Date()`
-
-1. **Local Time Zone Confusion**: `new Date()` uses the local time zone of the
-user's computer, which can lead to inconsistent results when:
-   - Your code runs on different machines in different time zones
-   - Users share scripts across different geographic locations
-   - Deployments happen on servers with different time zone settings
-
-2. **Ambiguous String Parsing**: When creating dates from strings like `new
-   Date('2025-01-01')`, JavaScript's behavior is inconsistent across browsers
-and can interpret the string as UTC or local time depending on the format.
-
-3. **Month Indexing Confusion**: JavaScript's `Date` uses zero-indexed months
-   (0-11), which is counterintuitive and error-prone (January is 0, December is
-11).
-
-### Benefits of Using `utcDate`
-
-1. **Consistent UTC Time**: `utcDate` always creates dates in Coordinated
-   Universal Time (UTC), ensuring consistent time representation regardless of
-where the code runs.
-
-
-## Example Comparison
+JavaScript's built-in `Date` constructor has several issues that make it problematic for simulation work:
 
 ```javascript
-// ❌ Problematic: Depends on local time zone, uses zero-indexed months
-const localDate = new Date(2025, 0, 1); // January 1, 2025 in local time zone
+// ❌ Problematic: Uses local time zone and zero-indexed months (January = 0)
+const localDate = new Date(2025, 0, 1); 
 
-// ❌ Ambiguous: Different browsers might interpret differently
+// ❌ Ambiguous: Browser-dependent interpretation
 const stringDate = new Date('2025-01-01T12:00:00');
 
 // ✅ Clear and consistent: Always January 1, 2025 at 12:00:00 UTC
 const utcDate1 = utcDate(2025, 1, 1, 12, 0, 0);
 ```
 
-## When Working with Satellites
+With `utcDate`:
+- Months are 1-indexed (January = 1, December = 12)
+- Time is always in UTC
+- Parameter order is intuitive (year, month, day, hours, minutes, seconds)
+- Optional time components default to 0
 
-For satellite position calculations, using UTC time is especially important because:
+## Example Usage
 
-1. TLE (Two-Line Element) data uses UTC time references
-2. Orbital mechanics calculations expect standardized time inputs
-3. International space operations coordinate using UTC
+```javascript
+// Set simulation time to noon UTC on January 1, 2025
+setTime(utcDate(2025, 1, 1, 12, 0, 0));
 
-## Best Practices
-
-- Always use `utcDate` for creating dates in your scripts
-- When displaying times to users, explicitly convert to their local time zone if needed
-- Document all time-related functions with clear timezone expectations
-- Use ISO string format (`date.toISOString()`) when logging dates for debugging
-
-By consistently using `utcDate`, you ensure that your simulations and calculations will produce the same results regardless of where they run, making your scripts more reliable and shareable.
+// Calculate satellite position at a specific time
+await mov2sat("sat", "60562", utcDate(2025, 1, 1, 12, 0, 0));
+```
 
 ## Related
 
