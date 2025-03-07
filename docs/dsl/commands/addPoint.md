@@ -9,7 +9,12 @@ Points created with this function can be referenced by name in other commands, s
 ## Syntax
 
 ```typescript
-addPoint(name: string, coordinates: Array3 | Vector3, quaternion: Vector4 | null = null, color: string = '#ffffff')
+addPoint(
+  name: string,
+  coordinates: Array3 | Vector3,
+  quaternion: Vector4 | null = null,
+  color: string = '#ffffff'
+): Point | OrientedPoint
 ```
 
 ## Parameters
@@ -23,7 +28,7 @@ addPoint(name: string, coordinates: Array3 | Vector3, quaternion: Vector4 | null
 
 ## Returns
 
-`void`
+`Point | OrientedPoint` - The newly created point.
 
 ## Examples
 
@@ -47,7 +52,18 @@ addPoint("oriented_point", [6371, 0, 0], [0, 0, 0, 1], '#ff0000');
 // Convert geographic coordinates to Cartesian
 const position = geo2xyz([60.17, 24.94, 0]);
 // Add a point at Helsinki, Finland
-addPoint("helsinki", position);
+const helsinki = addPoint("helsinki", position);
+```
+
+### Storing the returned point
+
+```javascript
+// Create a point and store the reference
+const myPoint = addPoint("myPoint", [6371, 0, 0]);
+
+// Now you can directly work with the point object
+log(`Position: ${myPoint.position}`);
+myPoint.color = "#00ff00";
 ```
 
 ## Related

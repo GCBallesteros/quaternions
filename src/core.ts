@@ -356,7 +356,7 @@ export function _addPoint(
   coordinates: Array3,
   quaternion: [number, number, number, number] | null = null,
   color: string = '#ffffff',
-): Result<null, string> {
+): Result<Point | OrientedPoint, string> {
   if (!utils.validateName(name, state)) {
     return Err('Invalid point name or name already exists');
   }
@@ -389,7 +389,7 @@ export function _addPoint(
 
   state.points[name] = new_point;
   scene.add(new_point.geometry);
-  return Ok(null);
+  return Ok(new_point);
 }
 
 export async function _addSatellite(

@@ -80,7 +80,7 @@ export function buildCommandClosures(
     coordinates: Array3 | Vector3,
     quaternion = null,
     color = '#ffffff',
-  ): void {
+  ): Point | OrientedPoint {
     const normalized_coordinates = normalizeCoordinates(coordinates);
 
     const result = _addPoint(
@@ -92,7 +92,7 @@ export function buildCommandClosures(
       color,
     );
     if (result.ok) {
-      return;
+      return result.val;
     } else {
       throw new Error(result.val);
     }
