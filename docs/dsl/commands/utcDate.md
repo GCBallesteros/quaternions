@@ -7,7 +7,14 @@ The `utcDate` function creates a JavaScript Date object set to the specified UTC
 ## Syntax
 
 ```typescript
-utcDate(year: number, month: number, day: number, hours: number = 0, minutes: number = 0, seconds: number = 0): Date
+utcDate(
+  year: number,
+  month: number,
+  day: number,
+  hours: number = 0,
+  minutes: number = 0,
+  seconds: number = 0,
+): Date
 ```
 
 ## Parameters
