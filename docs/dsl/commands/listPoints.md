@@ -1,6 +1,15 @@
 # listPoints
 
-Returns a list of all point names in the scene.
+Returns a list of all point names in the scene
+
+The `listPoints` function returns an array containing the names of all points
+currently in the scene.  This includes regular points, oriented points, and
+satellite
+
+This function is useful for discovering what points are available in the
+current scene, especially whe working with a complex scene or when you need to
+iterate through all points.
+
 
 ## Syntax
 
@@ -16,11 +25,6 @@ None
 
 `string[]` - An array of strings containing the names of all points in the scene.
 
-## Description
-
-The `listPoints` function returns an array containing the names of all points currently in the scene. This includes regular points, oriented points, and satellites.
-
-This function is useful for discovering what points are available in the current scene, especially when working with a complex scene or when you need to iterate through all points.
 
 ## Examples
 
