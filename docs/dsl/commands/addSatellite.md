@@ -2,20 +2,38 @@
 
 Adds a new satellite to the scene with specified TLE data and orientation mode.
 
+The `addSatellite` function creates a new satellite in the scene using the
+specified TLE data and orientation configuration. The satellite's position is
+determined by its TLE data and the current simulation time, while its
+orientation is controlled by the provided orientation mode.
+
+If a [`CameraConfig`](/dsl/types/CameraConfig) is passed to it the satellite will have a camera attached to
+it without having to use the `addCamera` method.
+
+::: info
+This function is asynchronous and must be awaited, as it may need to fetch TLE
+data from external sources.
+:::
+
 ## Syntax
 
 ```javascript
-async addSatellite(name, tleSource, orientationMode, cameraConfig?)
+async addSatellite(
+  name: string,
+  tleSource: TleSource, 
+  orientationMode: OrientationMode,
+  cameraConfig?: CameraConfig
+)
 ```
 
 ## Parameters
 
-| Parameter        | Type             | Description                                                    |
-|------------------|------------------|----------------------------------------------------------------|
-| `name`           | `string`         | Unique identifier for the satellite                            |
-| `tleSource`      | `TleSource`      | Source of TLE data (either direct TLE or NORAD ID)            |
-| `orientationMode`| `OrientationMode`| Configuration for how the satellite maintains its orientation  |
-| `cameraConfig`   | `CameraConfig`   | (Optional) Configuration for the satellite's camera            |
+| Parameter        | Description                                                    |
+|------------------|----------------------------------------------------------------|
+| `name`           | Unique identifier for the satellite                            |
+| `tleSource`      | Source of TLE data (either direct TLE or NORAD ID)            |
+| `orientationMode`| Configuration for how the satellite maintains its orientation  |
+| `cameraConfig`   | (Optional) Configuration for the satellite's camera            |
 
 ### TleSource
 
@@ -49,23 +67,10 @@ Can be either:
 }
 ```
 
-### CameraConfig
-```typescript
-{
-  orientation: [number, number, number, number]; // Quaternion
-  fov: number; // Field of view in degrees
-}
-```
-
 ## Returns
 
 `Promise<void>` - This function must be awaited.
 
-## Description
-
-The `addSatellite` function creates a new satellite in the scene using the specified TLE data and orientation configuration. The satellite's position is determined by its TLE data and the current simulation time, while its orientation is controlled by the provided orientation mode.
-
-This function is asynchronous and must be awaited, as it may need to fetch TLE data from external sources.
 
 ## Examples
 

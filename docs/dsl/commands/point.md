@@ -2,10 +2,18 @@
 
 Retrieves a point from the scene by name.
 
+The `point` function retrieves a point from the scene by its name. It returns
+the point object, which can be a `Point`, `OrientedPoint`, or `Satellite`
+instance depending on how the point was created. If no point with the given
+name exists, it returns null.
+
+This function is useful for accessing properties and methods of points, such as
+their position, orientation, or frame vectors.
+
 ## Syntax
 
 ```javascript
-point(name)
+point(name: string): Point | OrientedPoint | Satellite | null
 ```
 
 ## Parameters
@@ -18,11 +26,6 @@ point(name)
 
 `Point | OrientedPoint | Satellite | null` - The point object if found, or null if not found.
 
-## Description
-
-The `point` function retrieves a point from the scene by its name. It returns the point object, which can be a `Point`, `OrientedPoint`, or `Satellite` instance depending on how the point was created. If no point with the given name exists, it returns null.
-
-This function is useful for accessing properties and methods of points, such as their position, orientation, or frame vectors.
 
 ## Examples
 
