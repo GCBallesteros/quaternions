@@ -10,21 +10,22 @@ This interface is used internally by the application when adding cameras to poin
 
 ```typescript
 interface CameraConfig {
-  orientation: Vector4;  // Quaternion defining camera orientation [x, y, z, w]
-  fov: number;           // Field of view in degrees
+  orientation: Vector4;
+  fov: number;           // in degrees
 }
 ```
 
 ## Properties
 
-| Property      | Type      | Description                                                    |
-|---------------|-----------|----------------------------------------------------------------|
-| `orientation` | `Vector4` | Quaternion defining camera orientation as `[x, y, z, w]`       |
-| `fov`         | `number`  | Field of view in degrees                                       |
+| Property      | Description                                                    |
+|---------------|----------------------------------------------------------------|
+| `orientation` | Quaternion defining camera orientation as `[x, y, z, w]` with respect to the body frame      |
+| `fov`         | Field of view in degrees                                       |
 
 ## Usage
 
-The `CameraConfig` interface is used when adding a camera to an `OrientedPoint`:
+The `CameraConfig` interface is used when adding a camera to an `OrientedPoint`
+or calling [`addSatellite`](/dsl/commands/addSatellite):
 
 ```javascript
 // Get an oriented point
