@@ -37,7 +37,7 @@ await mov2sat("sat", "60562", new Date());
 
 ```javascript
 // Move the point "sat" to the position of satellite 60562 on January 1, 2025
-const specificDate = new Date('2025-01-01T12:00:00Z');
+const specificDate = utcDate(2025, 1, 1, 12, 0, 0);
 await mov2sat("sat", "60562", specificDate);
 ```
 
@@ -45,7 +45,7 @@ await mov2sat("sat", "60562", specificDate);
 
 ```javascript
 // Set the simulation time to a specific date
-const date = new Date('2025-01-01T12:00:00Z');
+const date = utcDate(2025, 1, 1, 12, 0, 0);
 setTime(date);
 
 // Move the point to the satellite's position at that time
