@@ -2,7 +2,7 @@
 
 Creates a UTC date object for a specified date and time.
 
-The `utcDate` function creates a JavaScript Date object set to the specified UTC date and time. This is particularly useful for setting simulation times and calculating satellite positions at specific times.
+When working with time-dependent simulations, it's important to use consistent time representations. The `utcDate` function creates a JavaScript Date object set to the specified UTC date and time, ensuring reliable results across different environments. This is particularly useful for setting simulation times and calculating satellite positions at specific times.
 
 ::: info
 For a detailed explanation of why you should always use `utcDate` instead of JavaScript's native `Date` constructor, see the [Working with Time](/getting-started/working-with-time) guide.
