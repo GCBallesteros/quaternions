@@ -17,6 +17,13 @@ export default defineConfig({
         link: '/documentation',
       },
       {
+        text: 'Getting Started',
+        collapsed: true,
+        items: [
+          { text: 'Working with Time', link: '/getting-started/working-with-time' },
+        ],
+      },
+      {
         text: 'API Reference',
         collapsed: true,
         items: [
