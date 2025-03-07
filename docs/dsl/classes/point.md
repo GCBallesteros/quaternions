@@ -23,7 +23,17 @@ get position(): Array3
 set position(pos: Array3)
 ```
 
-Gets or sets the point's position in 3D space as a tuple `[x, y, z]`.
+Gets or sets the point's position in ECEF coordinates as a tuple `[x, y, z]`. If
+you need to provide your coordinates in other units you might one of the following
+as an intermdiate step:
+- [`geo2xyz`](/dsl/commands/geo2xyz)
+- [`sph2xyz`](/dsl/commands/sph2xyz)
+
+For example:
+
+```javascript
+myPoint.position = geo2xyz([30, 40, 100]);
+```
 
 ### color
 
