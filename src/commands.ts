@@ -212,39 +212,17 @@ export function buildCommandClosures(
     }
   }
 
-  function point(
-    pointName: string,
-    filter: 'Point',
-  ): Point | OrientedPoint | Satellite;
-  function point(pointName: string, filter: 'OrientedPoint'): OrientedPoint;
-  function point(pointName: string, filter: 'Satellite'): Satellite;
-  function point(
-    pointName: string,
-    filter: 'Point' | 'OrientedPoint' | 'Satellite' = 'Point',
-  ): Point | OrientedPoint | Satellite {
-    if (!pointName || typeof pointName !== 'string') {
+  function point(point: string): Point | null {
+    if (!point || typeof point !== 'string') {
       throw new Error('Point name must be a non-empty string');
     }
 
-    if (!(pointName in state.points)) {
-      throw new Error(`Point '${pointName}' not found`);
+    if (!(point in state.points)) {
+      log(`Point '${point}' not found`);
+      return null;
     }
 
-    const point = state.points[pointName];
-
-    switch (filter) {
-      case 'Point':
-        return point;
-      case 'OrientedPoint':
-        if (point instanceof OrientedPoint && !(point instanceof Satellite)) {
-          return point;
-        }
-      case 'Satellite':
-        if (point instanceof Satellite) {
-          return point;
-        }
-    }
-    throw new Error(`Point '${pointName}' does not match filter '${filter}'`);
+    return state.points[point];
   }
 
   function camera(name: string): THREE.Camera | null {

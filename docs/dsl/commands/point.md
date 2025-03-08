@@ -12,18 +12,10 @@ their position, orientation, or frame vectors.
 
 ## Syntax
 
-```javascript
-point(
-  name: string,
-  filter: 'Point' | 'OrientedPoint' | 'Satellite' = 'Point',
-): Point | OrientedPoint | Satellite | null
+```typecript
+point(name: string): Point | null
 ```
 
-::: info
-When provided with a filter the point will only be return if it matches. Remember
-that `Satellite` are `OrientedPoint` and `OrientedPoint` are `Point`. Therefore
-passing `Point`, the default, is equivalent to performing no filtering.
-:::
 
 ## Parameters
 
