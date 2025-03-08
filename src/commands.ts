@@ -215,16 +215,13 @@ export function buildCommandClosures(
   function point(
     pointName: string,
     filter: 'Point',
-  ): Point | OrientedPoint | Satellite | null;
-  function point(
-    pointName: string,
-    filter: 'OrientedPoint',
-  ): OrientedPoint | Satellite | null;
-  function point(pointName: string, filter: 'Satellite'): Satellite | null;
+  ): Point | OrientedPoint | Satellite;
+  function point(pointName: string, filter: 'OrientedPoint'): OrientedPoint;
+  function point(pointName: string, filter: 'Satellite'): Satellite;
   function point(
     pointName: string,
     filter: 'Point' | 'OrientedPoint' | 'Satellite' = 'Point',
-  ): Point | OrientedPoint | Satellite | null {
+  ): Point | OrientedPoint | Satellite {
     if (!pointName || typeof pointName !== 'string') {
       throw new Error('Point name must be a non-empty string');
     }
@@ -243,8 +240,11 @@ export function buildCommandClosures(
           return point;
         }
       case 'Satellite':
-        return point;
+        if (point instanceof Satellite) {
+          return point;
+        }
     }
+    throw new Error(`Point '${pointName}' does not match filter '${filter}'`);
   }
 
   function camera(name: string): THREE.Camera | null {
@@ -315,8 +315,29 @@ export function buildCommandClosures(
     }
   }
 
-  function listPoints(): string[] {
-    return Object.keys(state.points);
+  function listPoints(filter: 'Point'): string[];
+  function listPoints(filter: 'OrientedPoint'): string[];
+  function listPoints(filter: 'Satellite'): string[];
+  function listPoints(
+    filter?: 'Point' | 'OrientedPoint' | 'Satellite',
+  ): string[] {
+    const allPoints = Object.entries(state.points);
+    const filteredPoints = allPoints.filter(([, point]) => {
+      if (filter === undefined) {
+        return true; // Return all points
+      }
+      switch (filter) {
+        case 'Point':
+          return point instanceof Point && !(point instanceof OrientedPoint);
+        case 'OrientedPoint':
+          return (
+            point instanceof OrientedPoint && !(point instanceof Satellite)
+          );
+        case 'Satellite':
+          return point instanceof Satellite;
+      }
+    });
+    return filteredPoints.map(([name]) => name);
   }
 
   function deletePoint(name: string): void {
