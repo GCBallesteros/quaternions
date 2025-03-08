@@ -2,6 +2,15 @@
 
 Sets the current simulation time.
 
+The `setTime` function sets the current simulation time. This affects
+time-dependent calculations like satellite positions, Sun and Moon positions,
+and other time-based visualizations.
+
+Setting the time does not automatically update the positions of satellites in
+the scene. To update a satellite's position after changing the time, you need
+to use the satellite's `update` method or recreate the satellite.
+TODO
+
 ## Syntax
 
 ```javascript
@@ -16,13 +25,8 @@ setTime(newTime)
 
 ## Returns
 
-`void` - This function doesn't return a value.
+`void`
 
-## Description
-
-The `setTime` function sets the current simulation time. This affects time-dependent calculations like satellite positions, Sun and Moon positions, and other time-based visualizations.
-
-Setting the time does not automatically update the positions of satellites in the scene. To update a satellite's position after changing the time, you need to use the satellite's `update` method or recreate the satellite.
 
 ## Examples
 
