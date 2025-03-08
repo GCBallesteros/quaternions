@@ -22,6 +22,9 @@ export default defineConfig({
         items: [
           { text: 'mov', link: '/dsl/commands/mov' },
           { text: 'camera', link: '/dsl/commands/camera' },
+          { text: 'switchCamera', link: '/dsl/commands/switchCamera' },
+          { text: 'showSecondaryView', link: '/dsl/commands/showSecondaryView' },
+          { text: 'hideSecondaryView', link: '/dsl/commands/hideSecondaryView' },
         ],
       },
     ],
@@ -90,7 +93,7 @@ export default defineConfig({
 //          { text: 'Markdown Examples', link: '/markdown-examples' },
 //          { text: 'Runtime API Examples', link: '/api-examples' },
 //        ],
-//      },
+      },
 //    ],
 //
 //    socialLinks: [
@@ -98,4 +101,4 @@ export default defineConfig({
 //    ],
 //  },
 //});
-//
+
