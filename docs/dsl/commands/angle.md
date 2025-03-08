@@ -2,33 +2,37 @@
 
 Calculates the angle between two vectors.
 
-## Syntax
-
-```javascript
-angle(vector1, vector2)
-```
-
-## Parameters
-
-| Parameter | Type                | Description                           |
-|-----------|---------------------|---------------------------------------|
-| `vector1` | `string` or `Array3` | First vector                          |
-| `vector2` | `string` or `Array3` | Second vector                         |
-
-## Returns
-
-`number` - The angle between the vectors in degrees.
-
-## Description
-
-The `angle` function calculates the angle between two vectors in 3D space. The vectors can be specified in several ways:
+The `angle` function calculates the angle between two vectors in 3D space. The
+vectors can be specified in several ways:
 
 1. A 3-element array representing the vector: `[x, y, z]`
 2. The name of a previously created line
 3. A string of the form `"pointA->pointB"` to define a vector between two points
 4. For oriented points, you can access their frame vectors (e.g., `point("sat").frame.z`)
 
-The function returns the angle in degrees, with a range from 0° (vectors are parallel) to 180° (vectors are antiparallel).
+The function returns the angle in degrees, with a range from 0° (vectors are
+parallel) to 180° (vectors are antiparallel).
+
+## Syntax
+
+```javascript
+angle(
+  vector1: string | Array3 | Vector3,
+  vector2: string | Array3 | Vector3,
+): number
+```
+
+## Parameters
+
+| Parameter | Description      |
+|-----------|------------------|
+| `vector1` | First vector     |
+| `vector2` | Second vector    |
+
+## Returns
+
+`number` - The angle between the vectors in degrees.
+
 
 ## Examples
 
