@@ -14,12 +14,16 @@ iterate through all points.
 ## Syntax
 
 ```javascript
-listPoints(): string[]
+listPoints(
+  filter?: 'Point' | 'OrientedPoint' | 'Satellite',
+): string[]
 ```
 
 ## Parameters
 
-None
+| Parameter   | Description                       |
+|-------------|-----------------------------------|
+| `filter`    | What kind of points to return     |
 
 ## Returns
 
