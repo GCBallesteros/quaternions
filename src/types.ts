@@ -38,7 +38,7 @@ export interface Line {
 }
 
 export interface State {
-  points: Record<string, Point | OrientedPoint>;
+  points: Record<string, Point>;
   lines: Record<string, Line>;
   lights: {
     ambient: THREE.AmbientLight;
