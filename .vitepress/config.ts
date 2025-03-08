@@ -23,7 +23,7 @@ export default defineConfig({
           { text: 'mov', link: '/dsl/commands/mov' },
           { text: 'camera', link: '/dsl/commands/camera' },
         ],
-      }
+      },
     ],
   },
   head: [
