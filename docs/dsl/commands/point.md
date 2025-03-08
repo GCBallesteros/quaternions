@@ -13,18 +13,29 @@ their position, orientation, or frame vectors.
 ## Syntax
 
 ```javascript
-point(name: string): Point | OrientedPoint | Satellite | null
+point(
+  name: string,
+  filter: 'Point' | 'OrientedPoint' | 'Satellite' = 'Point',
+): Point | OrientedPoint | Satellite | null
 ```
+
+::: info
+When provided with a filter the point will only be return if it matches. Remember
+that `Satellite` are `OrientedPoint` and `OrientedPoint` are `Point`. Therefore
+passing `Point`, the default, is equivalent to performing no filtering.
+:::
 
 ## Parameters
 
-| Parameter | Type     | Description                           |
-|-----------|----------|---------------------------------------|
-| `name`    | `string` | The name of the point to retrieve     |
+| Parameter | Description                           |
+|-----------|---------------------------------------|
+| `name`    | The name of the point to retrieve     |
 
 ## Returns
 
-`Point | OrientedPoint | Satellite | null` - The point object if found, or null if not found.
+`Point | OrientedPoint | Satellite | null`
+
+The point object if found, or null if not found.
 
 
 ## Examples
