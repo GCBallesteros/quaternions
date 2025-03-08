@@ -212,25 +212,39 @@ export function buildCommandClosures(
     }
   }
 
-  // AI! `point` should make it possible to filter by point type. We have the following:
-  // - Point
-  // - OrientedPoint
-  // - Satellite
-  //
-  // The function should take an additional filter argument of type list[enumeration] or value of enumeration
-  // Where the enumeration selects what kind of points we want to get back. You somehow must make
-  // it (via overloads?) so that the return type matches whatever comes fromt he filtering.
-  function point(point: string): Point | null {
-    if (!point || typeof point !== 'string') {
+  function point(
+    pointName: string,
+    filter: 'Point',
+  ): Point | OrientedPoint | Satellite | null;
+  function point(
+    pointName: string,
+    filter: 'OrientedPoint',
+  ): OrientedPoint | Satellite | null;
+  function point(pointName: string, filter: 'Satellite'): Satellite | null;
+  function point(
+    pointName: string,
+    filter: 'Point' | 'OrientedPoint' | 'Satellite' = 'Point',
+  ): Point | OrientedPoint | Satellite | null {
+    if (!pointName || typeof pointName !== 'string') {
       throw new Error('Point name must be a non-empty string');
     }
 
-    if (!(point in state.points)) {
-      log(`Point '${point}' not found`);
-      return null;
+    if (!(pointName in state.points)) {
+      throw new Error(`Point '${pointName}' not found`);
     }
 
-    return state.points[point];
+    const point = state.points[pointName];
+
+    switch (filter) {
+      case 'Point':
+        return point;
+      case 'OrientedPoint':
+        if (point instanceof OrientedPoint && !(point instanceof Satellite)) {
+          return point;
+        }
+      case 'Satellite':
+        return point;
+    }
   }
 
   function camera(name: string): THREE.Camera | null {
