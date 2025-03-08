@@ -17,6 +17,13 @@ export default defineConfig({
         text: 'DSL Documentation',
         link: '/dsl-documentation',
       },
+      {
+        text: 'Commands',
+        items: [
+          { text: 'mov', link: '/dsl/commands/mov' },
+          { text: 'camera', link: '/dsl/commands/camera' },
+        ],
+      }
     ],
   },
   head: [
