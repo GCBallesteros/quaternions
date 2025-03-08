@@ -179,6 +179,8 @@ export class Satellite extends OrientedPoint {
     const tleLines = this.tle.split('\n');
     const satrec = satellite.twoline2satrec(tleLines[1], tleLines[2]);
 
+    // Typing on  satellite.js is broken
+    // eslint-disable-next-line
     if (!satrec) {
       throw new Error('Failed to parse TLE data');
     }

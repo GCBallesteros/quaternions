@@ -5,9 +5,9 @@ import { None, Option, Some } from 'ts-results';
 import { addWebMercatorTile } from './addMercatorTiles.js';
 import { getMoonPosition } from './astronomy/moon.js';
 import { updateSunLight } from './astronomy/sun.js';
-import { setupTimeControls } from './components/timeControls.js';
 import { CircularBuffer } from './circularBuffer.js';
 import { createFloatingPoint } from './components.js';
+import { setupTimeControls } from './components/timeControls.js';
 import { _createLine, _mov, _setTime, addFrame } from './core.js';
 import { makeEarth } from './earth.js';
 import { findMercatorTilesInPOV } from './findMercatorTiles.js';
@@ -26,7 +26,8 @@ function isNonMainCameraActive(state: State): boolean {
     state.activeCamera !== state.cameras.main;
 
   // Check if secondary view is visible and using a non-main camera
-  const secondaryView = document.getElementById('secondary-view');
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const secondaryView = document.getElementById('secondary-view')!;
   const isSecondaryViewActive =
     !secondaryView?.classList.contains('hidden') &&
     state.secondaryCamera.some &&
@@ -55,7 +56,8 @@ function getVisibleMercatorTiles(state: State): Option<TileCoordinate[]> {
   }
 
   // Process secondary view camera if it exists, is visible, and is not the main camera
-  const secondaryView = document.getElementById('secondary-view');
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const secondaryView = document.getElementById('secondary-view')!;
   if (
     !secondaryView?.classList.contains('hidden') &&
     state.secondaryCamera.some &&
@@ -170,7 +172,7 @@ export function createAnimator(
   let tileUpdateCounter = 0;
   const TILE_UPDATE_FREQUENCY = 5; // Update tiles every 5 frames
 
-  function animate() {
+  function animate(): void {
     const elapsed = clock.getDelta();
     if (state.isTimeFlowing) {
       const simulatedTime = new Date(
@@ -206,7 +208,8 @@ export function createAnimator(
     renderer.render(scene, state.activeCamera);
 
     // Render secondary view if camera is available
-    const secondaryView = document.getElementById('secondary-view');
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const secondaryView = document.getElementById('secondary-view')!;
     if (
       !secondaryView?.classList.contains('hidden') &&
       state.secondaryCamera.some

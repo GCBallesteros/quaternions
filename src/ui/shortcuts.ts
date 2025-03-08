@@ -39,7 +39,7 @@ export function setupGlobalShortcuts(
           input.onkeydown = null;
         };
 
-        const handleSave = () => {
+        const handleSave = (): void => {
           const name = input.value.trim();
           if (name) {
             saveScript(name, editor.getValue());
@@ -75,18 +75,20 @@ export function setupGlobalShortcuts(
         modal.classList.add('active');
 
         // Ensure script list container exists
-        let scriptList = modal.querySelector('.script-list') as HTMLElement;
+        let scriptList = modal.querySelector('.script-list');
         if (!scriptList) {
           scriptList = document.createElement('div');
           scriptList.className = shortcutStyles.scriptList;
           modal.querySelector('.modal-content')?.appendChild(scriptList);
+        } else {
+          console.error('Where did script-list go?');
         }
 
         const cancelBtn = document.querySelector(
           '#cancel-open',
         ) as HTMLButtonElement;
 
-        const renderScriptList = () => {
+        const renderScriptList = (): void => {
           const scripts = getSavedScripts();
           render(
             scriptListTemplate(

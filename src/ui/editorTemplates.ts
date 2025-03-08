@@ -1,10 +1,10 @@
-import { html } from 'lit-html';
+import { html, TemplateResult } from 'lit-html';
 
 export const editorTemplate = (
   modifierKey: string,
   executeScript: () => void,
   executeCell: () => void,
-) => html`
+): TemplateResult<1> => html`
   <div id="monaco-editor"></div>
   <div class="execute-buttons">
     <button id="execute-script" @click=${executeScript}>
