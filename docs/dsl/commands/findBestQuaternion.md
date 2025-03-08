@@ -2,40 +2,51 @@
 
 Computes the optimal quaternion to align two pairs of vectors.
 
+The `findBestQuaternion` function computes the optimal quaternion to align two
+pairs of vectors. The primary vector (defined in the body frame) will be
+exactly aligned with its target, while the secondary vector (also in body
+frame) will be aligned as closely as possible with its target while maintaining
+the primary alignment.
+
+This function is particularly useful for determining the correct orientation
+for satellites and other objects that need to point in specific directions.
+
+
 ## Syntax
 
 ```javascript
-findBestQuaternion(primaryBodyVector, secondaryBodyVector, primaryTargetVector, secondaryTargetVector)
+findBestQuaternion(
+  primaryBodyVector: string | Array3 | Vector3,
+  secondaryBodyVector: string | Array3 | Vector3,
+  primaryTargetVector: string | Array3 | Vector3,
+  secondaryTargetVector: string | Array3 | Vector3,
+): Vector4
 ```
 
 ## Parameters
 
-| Parameter             | Type                | Description                                                                 |
-|-----------------------|---------------------|-----------------------------------------------------------------------------|
-| `primaryBodyVector`   | `Array3` or `string` | Primary body vector as a 3-element array or string (`"x"`, `"y"`, or `"z"`).|
-| `secondaryBodyVector` | `Array3` or `string` | Secondary body vector as a 3-element array or string (`"x"`, `"y"`, or `"z"`).|
-| `primaryTargetVector` | `Array3` or `string` | Target vector for the primary vector. Can use special notation for vectors. |
-| `secondaryTargetVector`| `Array3` or `string` | Target vector for the secondary vector. Can use special notation for vectors. |
+| Parameter               | Description                                                                   |
+|-------------------------|-------------------------------------------------------------------------------|
+| `primaryBodyVector`     | Primary body vector as a 3-element array or string (`"x"`, `"y"`, or `"z"`).  |
+| `secondaryBodyVector`   | Secondary body vector as a 3-element array or string (`"x"`, `"y"`, or `"z"`).|
+| `primaryTargetVector`   | Target vector for the primary vector. Can use special notation for vectors.   |
+| `secondaryTargetVector` | Target vector for the secondary vector. Can use special notation for vectors. |
 
-## Returns
-
-`Vector4` - A quaternion `[x, y, z, w]` representing the optimal orientation.
-
-## Description
-
-The `findBestQuaternion` function computes the optimal quaternion to align two pairs of vectors. The primary vector (defined in the body frame) will be exactly aligned with its target, while the secondary vector (also in body frame) will be aligned as closely as possible with its target while maintaining the primary alignment.
-
-This function is particularly useful for determining the correct orientation for satellites and other objects that need to point in specific directions.
-
-### Vector Input Options
-
-For all vector parameters, you can use:
+The following are allowed forms for the parameters:
 
 1. A 3-element array representing the vector: `[x, y, z]`
-2. A string representing a body axis: `"x"`, `"y"`, or `"z"`
+2. A string representing a body axis: `"x"`, `"y"`, or `"z"` (only for BodyVector)
 3. A string of the form `"pointA->pointB"` to define a vector between two points
 4. The name of a previously created line
 5. Special named targets like `"Moon"`, `"Sun"`, `"Nadir"`, or `"Velocity"`
+
+## Returns
+
+`Vector4`
+
+A quaternion `[x, y, z, w]` representing the optimal orientation.
+
+
 
 ## Examples
 
