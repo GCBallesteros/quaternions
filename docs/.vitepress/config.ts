@@ -77,6 +77,9 @@ export default defineConfig({
                 text: 'findBestQuaternion',
                 link: '/dsl/commands/findBestQuaternion',
               },
+              { text: 'resumeTrail', link: '/dsl/commands/resumeTrail' },
+              { text: 'pauseTrail', link: '/dsl/commands/pauseTrail' },
+              { text: 'toggleTrail', link: '/dsl/commands/toggleTrail' },
 
               // Camera Controls
               { text: 'camera', link: '/dsl/commands/camera' },
@@ -95,11 +98,6 @@ export default defineConfig({
               { text: 'pauseSimTime', link: '/dsl/commands/pauseSimTime' },
               { text: 'resumeSimTime', link: '/dsl/commands/resumeSimTime' },
               { text: 'toggleSimTime', link: '/dsl/commands/toggleSimTime' },
-
-              // Trail Controls
-              { text: 'resumeTrail', link: '/dsl/commands/resumeTrail' },
-              { text: 'pauseTrail', link: '/dsl/commands/pauseTrail' },
-              { text: 'toggleTrail', link: '/dsl/commands/toggleTrail' },
 
               // Plotting & Visualization
               { text: 'createPlot', link: '/dsl/commands/createPlot' },
