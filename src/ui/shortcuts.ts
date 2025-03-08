@@ -104,7 +104,7 @@ export function setupGlobalShortcuts(
                 cleanup();
               },
             ),
-            scriptList,
+            scriptList as HTMLElement,
           );
         };
 
