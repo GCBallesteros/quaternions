@@ -212,6 +212,14 @@ export function buildCommandClosures(
     }
   }
 
+  // AI! `point` should make it possible to filter by point type. We have the following:
+  // - Point
+  // - OrientedPoint
+  // - Satellite
+  //
+  // The function should take an additional filter argument of type list[enumeration] or value of enumeration
+  // Where the enumeration selects what kind of points we want to get back. You somehow must make
+  // it (via overloads?) so that the return type matches whatever comes fromt he filtering.
   function point(point: string): Point | null {
     if (!point || typeof point !== 'string') {
       throw new Error('Point name must be a non-empty string');
