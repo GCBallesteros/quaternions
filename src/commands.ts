@@ -315,9 +315,6 @@ export function buildCommandClosures(
     }
   }
 
-  function listPoints(filter: 'Point'): string[];
-  function listPoints(filter: 'OrientedPoint'): string[];
-  function listPoints(filter: 'Satellite'): string[];
   function listPoints(
     filter?: 'Point' | 'OrientedPoint' | 'Satellite',
   ): string[] {
