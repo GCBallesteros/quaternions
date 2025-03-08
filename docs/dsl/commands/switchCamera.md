@@ -1,62 +1,36 @@
 # switchCamera
 
-Switches the active camera in the scene to a different perspective.
+Changes the active camera in the main viewport.
+
 
 ## Syntax
 
-```javascript
-switchCamera(camera)
+```typescript
+switchCamera(newCamera: THREE.PerspectiveCamera): void
 ```
 
 ## Parameters
 
-| Parameter | Type                      | Description                           |
-|-----------|---------------------------|---------------------------------------|
-| `camera`  | `THREE.PerspectiveCamera` | The camera to switch to               |
+| Parameter   | Description                                      |
+| ----------- | ------------------------------------------------ |
+| `newCamera` | The `THREE.PerspectiveCamera` to set as active. |
 
 ## Returns
 
-`void` - This function doesn't return a value.
+`void`
 
-## Description
-
-The `switchCamera` function changes the active camera in the scene, allowing you to view the scene from different perspectives. This is particularly useful for switching between the main scene camera and cameras attached to points or satellites.
 
 ## Examples
 
-### Switching to a point's camera
+This function is not intended for direct use in DSL scripts. It is used internally by other commands.  Here's how it might be used *internally*:
 
-```javascript
-// Get a point with a camera attached
-const sat = point("sat");
-if (sat && sat.camera) {
-  // Switch to viewing from that point's camera
-  switchCamera(sat.camera);
+```typescript
+// Switch the main view to the camera on the my-satellite point
+switchCamera(camera("my-satellite"));
 }
-```
-
-### Switching back to the main camera
-
-```javascript
-// Switch back to the main scene camera
-switchCamera(camera("main"));
-```
-
-### Adding a camera to a point and switching to it
-
-```javascript
-// Add a camera to a point
-point("sat").addCamera({
-  orientation: [0, 0, 0, 1],
-  fov: 45
-});
-
-// Switch to the newly added camera
-switchCamera(point("sat").camera);
 ```
 
 ## Related
 
-- [`camera`](/dsl/commands/camera) - Retrieves a camera by name
-- [`showSecondaryView`](/dsl/commands/showSecondaryView) - Shows a secondary camera view
-- [`hideSecondaryView`](/dsl/commands/hideSecondaryView) - Hides the secondary camera view
+- [camera](/dsl/commands/camera) - Retrieves a camera by name.
+
