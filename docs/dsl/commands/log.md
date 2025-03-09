@@ -2,27 +2,27 @@
 
 Logs a message to the integrated console.
 
+The `log` function prints a message to the integrated console in the application interface. 
+It can accept any type of value, which will be converted to a string representation for display.
+
+This function is useful for debugging, displaying calculation results, or providing status 
+updates during script execution.
+
 ## Syntax
 
-```javascript
-log(message)
+```typescript
+log(message: any): void
 ```
 
 ## Parameters
 
-| Parameter | Type  | Description                           |
-|-----------|-------|---------------------------------------|
-| `message` | `any` | The message or value to be displayed  |
+| Parameter | Description                                                |
+|-----------|------------------------------------------------------------|
+| `message` | The message or value to be displayed in the console output |
 
 ## Returns
 
-`void` - This function doesn't return a value.
-
-## Description
-
-The `log` function prints a message to the integrated console in the application interface. It can accept any type of value, which will be converted to a string representation for display.
-
-This function is useful for debugging, displaying calculation results, or providing status updates during script execution.
+`void`
 
 ## Examples
 
@@ -56,7 +56,3 @@ for (let i = 0; i < 5; i++) {
 }
 log("Processing complete!");
 ```
-
-## Related
-
-- None

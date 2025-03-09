@@ -2,32 +2,30 @@
 
 Resets the scene to its initial state.
 
-## Syntax
-
-```javascript
-reset(cleanupPlots = false)
-```
-
-## Parameters
-
-| Parameter      | Type      | Description                                                    |
-|----------------|-----------|----------------------------------------------------------------|
-| `cleanupPlots` | `boolean` | (Optional) Whether to also remove plots. Default is false.     |
-
-## Returns
-
-`void` - This function doesn't return a value.
-
-## Description
-
 The `reset` function clears the scene and returns it to its initial state. This includes:
 
 - Removing all user-added points, lines, and satellites
 - Resetting the camera to its default position
-- Restoring the default "sat" point and "nadir" line
+- Restoring the default Earth and reference objects
 - Optionally removing all plots if `cleanupPlots` is set to true
 
 This function is particularly useful at the beginning of scripts to ensure a clean starting state.
+
+## Syntax
+
+```typescript
+reset(cleanupPlots: boolean = false): void
+```
+
+## Parameters
+
+| Parameter      | Description                                                    |
+|----------------|----------------------------------------------------------------|
+| `cleanupPlots` | (Optional) Whether to also remove plots. Default is false.     |
+
+## Returns
+
+`void`
 
 ## Examples
 
