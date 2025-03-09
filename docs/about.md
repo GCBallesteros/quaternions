@@ -9,9 +9,9 @@ mathematics quickly grew into something bigger... and then it just got out of
 hand :shrug:
 
 
-If you'd like to connect:
-- [GitHub](https://github.com/GCBallesteros)
-- [Maxwell Rules](https://maxwellrules.com) (my personal site)
+If you'd like to know a bit more about me you can check [GitHub
+profile](https://github.com/GCBallesteros) and my blog [Maxwell
+Rules](https://maxwellrules.com).
 
 If you find any of this useful or cool please consider starring the project on GitHub. No
 tracking, no ads - just a tool that I hope others might find helpful
