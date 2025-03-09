@@ -35,9 +35,9 @@ createPlot(
 
 ### Config Object
 
-| Property      | Description                                                                 |
-|---------------|-----------------------------------------------------------------------------|
-| `title`       | The title displayed at the top of the plot.                                 |
+| Property      | Description                                                                    |
+|---------------|--------------------------------------------------------------------------------|
+| `title`       | The title displayed at the top of the plot.                                    |
 | `lines`       | Array of string labels for each line in the plot. The number of lines must match the number of values returned by the callback. |
 | `sampleEvery` | (Optional) Number of frames to wait between samples. Higher values result in less frequent updates but better performance. Default is 10. |
 
@@ -75,12 +75,13 @@ createPlot(
   () => {
     const earth = point("earth");
     const sat = point("satellite1");
-    
-    if (!earth || !sat) return [0];
-    
+
+    if (!earth || !sat) {
+      return [0]
+    };
     const earthPos = new THREE.Vector3(...earth.position);
     const satPos = new THREE.Vector3(...sat.position);
-    
+
     return [earthPos.distanceTo(satPos)];
   }
 );
