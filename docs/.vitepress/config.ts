@@ -21,6 +21,10 @@ export default defineConfig({
         collapsed: true,
         items: [
           {
+            text: 'User Interface',
+            link: '/getting-started/user-interface',
+          },
+          {
             text: 'Working with Time',
             link: '/getting-started/working-with-time',
           },
