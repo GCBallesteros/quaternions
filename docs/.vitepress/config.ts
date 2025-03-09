@@ -150,7 +150,7 @@ export default defineConfig({
         ],
       },
       {
-        text: 'About',
+        text: 'About the Author',
         link: '/about',
       },
     ],
