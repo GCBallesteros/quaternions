@@ -519,31 +519,6 @@ export const commandDocs: Record<string, CommandDoc> = {
     example: 'hideSecondaryView();',
   },
 
-  addWebMercatorTile: {
-    description: 'Adds a Web Mercator tile to the scene.',
-    parameters: [
-      {
-        name: 'x',
-        description: 'X coordinate of the tile',
-        type: 'number',
-        optional: false,
-      },
-      {
-        name: 'y',
-        description: 'Y coordinate of the tile',
-        type: 'number',
-        optional: false,
-      },
-      {
-        name: 'z',
-        description: 'Zoom level of the tile',
-        type: 'number',
-        optional: false,
-      },
-    ],
-    example: 'addWebMercatorTile(1, 1, 2);',
-  },
-
   longRunning: {
     description:
       'Runs a long calculation in a web worker to avoid blocking the UI.',

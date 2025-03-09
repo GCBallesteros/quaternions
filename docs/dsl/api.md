@@ -78,7 +78,6 @@ This page serves as a comprehensive index of all available commands, classes, in
 |---------|-------------|
 | [`createPlot`](/dsl/commands/createPlot) | Creates a data plot |
 | [`removePlot`](/dsl/commands/removePlot) | Removes a data plot |
-| [`addWebMercatorTile`](/dsl/commands/addWebMercatorTile) | Adds a web mercator tile to the scene |
 
 ## Utility Functions
 

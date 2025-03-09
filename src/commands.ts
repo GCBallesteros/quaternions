@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 
-import { addWebMercatorTile as _addWebMercatorTile } from './addMercatorTiles.js';
 import {
   _addPoint,
   _addSatellite,
@@ -377,14 +376,6 @@ export function buildCommandClosures(
     _hideSecondaryView();
   }
 
-  function addWebMercatorTile(x: number, y: number, z: number): void {
-    const result = _addWebMercatorTile(x, y, z, scene, state);
-
-    if (!result.ok) {
-      throw new Error(result.val);
-    }
-  }
-
   async function longRunning(iterations: number = 100000000): Promise<void> {
     const worker = new Worker(
       new URL('./workers/longRunningWorker.ts', import.meta.url),
@@ -457,6 +448,5 @@ export function buildCommandClosures(
     },
     // Other functions
     findMercatorTilesInPOV,
-    addWebMercatorTile,
   };
 }

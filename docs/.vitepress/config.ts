@@ -102,10 +102,6 @@ export default defineConfig({
               // Plotting & Visualization
               { text: 'createPlot', link: '/dsl/commands/createPlot' },
               { text: 'removePlot', link: '/dsl/commands/removePlot' },
-              {
-                text: 'addWebMercatorTile',
-                link: '/dsl/commands/addWebMercatorTile',
-              },
 
               // Utility Functions
               { text: 'reset', link: '/dsl/commands/reset' },
