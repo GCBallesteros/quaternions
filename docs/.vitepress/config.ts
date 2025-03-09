@@ -50,6 +50,7 @@ export default defineConfig({
               { text: 'CameraConfig', link: '/dsl/types/cameraConfig' },
               { text: 'OrientationMode', link: '/dsl/types/orientationMode' },
               { text: 'NamedTargets', link: '/dsl/types/namedTargets' },
+              { text: 'Vector3', link: '/dsl/types/vector3' },
             ],
           },
           {

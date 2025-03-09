@@ -17,6 +17,7 @@ This page serves as a comprehensive index of all available commands, classes, in
 | [`CameraConfig`](/dsl/types/cameraConfig) | Configuration for cameras attached to points |
 | [`OrientationMode`](/dsl/types/orientationMode) | Defines how a satellite's orientation is determined |
 | [`NamedTargets`](/dsl/types/namedTargets) | Special target vectors for satellite orientation |
+| [`Vector3`](/dsl/types/vector3) | 3D vector with various mathematical operations |
 
 ## Movement & Positioning
 
