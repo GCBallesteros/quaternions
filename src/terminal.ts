@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { log } from './logger.js';
 import { NamedTargets } from './points/satellite.js';
 import { CommandFunction, State } from './types.js';
+import { Vector3 } from './vectors.js';
 
 export function buildExecuteCommand(
   commands: Record<string, CommandFunction>,
@@ -19,6 +20,7 @@ export function buildExecuteCommand(
     switchCamera,
     log,
     NamedTargets,
+    Vector3,
   };
 
   // Pre-declare command variables
