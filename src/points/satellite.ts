@@ -213,7 +213,7 @@ export class Satellite extends OrientedPoint {
 
     let new_orientation: Vector4;
     switch (this.orientationMode.type) {
-      case 'dynamic':
+      case 'dynamic': {
         const primaryTargetVector = this.isNamedTarget(
           this.orientationMode.primaryTargetVector,
         )
@@ -249,8 +249,11 @@ export class Satellite extends OrientedPoint {
           throw Error('Something went wrong during quaternion calculation');
         }
         break;
-      case 'fixed':
+      }
+      case 'fixed': {
         new_orientation = this.orientationMode.ecef_quaternion;
+        break;
+      }
     }
 
     this.position = [position_.x, position_.y, position_.z];
