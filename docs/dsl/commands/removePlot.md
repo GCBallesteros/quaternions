@@ -2,7 +2,8 @@
 
 Removes a plot from the display.
 
-The `removePlot` function removes a previously created plot from the display and cleans up associated resources.
+The `removePlot` function removes a previously created plot from the display
+and cleans up associated resources.
 
 ## Syntax
 
@@ -51,9 +52,6 @@ function cleanupVisualization() {
   // Remove specific plots
   removePlot('orientation-plot');
   removePlot('altitude-plot');
-  
-  // Reset the scene
-  reset(true); // true means also clean up all plots
 }
 ```
 
