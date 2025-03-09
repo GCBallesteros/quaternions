@@ -1,4 +1,9 @@
 // We are not using lit-html here for performance and simplicity
+// We want this functions to work almost over everything hence the very
+// liberal use of `any`
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { STYLES, CHUNK_SIZE } from './styles.js';
 import type { ExpandableElement, LogValue } from './types.js';
 
@@ -117,8 +122,8 @@ function handleObjectContent(obj: object, parent: HTMLElement): void {
 
   while (queue.length > 0) {
     // Process next item in queue (BFS order)
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     // Guaranteed because length > 0
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const current = queue.shift()!;
 
     // Check for circular references

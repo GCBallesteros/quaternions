@@ -519,25 +519,6 @@ export const commandDocs: Record<string, CommandDoc> = {
     example: 'hideSecondaryView();',
   },
 
-  longRunning: {
-    description:
-      'Runs a long calculation in a web worker to avoid blocking the UI.',
-    parameters: [
-      {
-        name: 'iterations',
-        description: 'Number of iterations to run',
-        type: 'number',
-        optional: true,
-        defaultValue: '100000000',
-      },
-    ],
-    returns: {
-      type: 'Promise<void>',
-      description: 'Promise that resolves when the calculation is complete',
-    },
-    example: 'await longRunning(1000000);',
-  },
-
   zyxToQuaternion: {
     description: 'Converts ZYX Euler angles to a quaternion.',
     parameters: [

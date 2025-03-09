@@ -94,4 +94,3 @@ This page serves as a comprehensive index of all available commands, classes, in
 | [`xyz2sph`](/dsl/commands/xyz2sph) | Converts Cartesian to spherical coordinates |
 | [`utcDate`](/dsl/commands/utcDate) | Creates a UTC date |
 | [`zyxToQuaternion`](/dsl/commands/zyxToQuaternion) | Converts Euler angles to quaternion |
-| [`longRunning`](/dsl/commands/longRunning) | Executes a long-running calculation |

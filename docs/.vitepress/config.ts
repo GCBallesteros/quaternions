@@ -118,7 +118,6 @@ export default defineConfig({
                 text: 'zyxToQuaternion',
                 link: '/dsl/commands/zyxToQuaternion',
               },
-              { text: 'longRunning', link: '/dsl/commands/longRunning' },
             ],
           },
         ],
