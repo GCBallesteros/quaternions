@@ -31,29 +31,6 @@ zyxToQuaternion(
 
 A quaternion as a 4-element array `[x, y, z, w]` representing the rotation.
 
-## Implementation
-
-The function uses THREE.js to perform the conversion:
-
-```typescript
-function zyxToQuaternion(
-  { yaw, pitch, roll }: { yaw: number; pitch: number; roll: number },
-  degrees: boolean = true
-): [number, number, number, number] {
-  // Convert degrees to radians if necessary
-  const yawRad = degrees ? (yaw * Math.PI) / 180 : yaw;
-  const pitchRad = degrees ? (pitch * Math.PI) / 180 : pitch;
-  const rollRad = degrees ? (roll * Math.PI) / 180 : roll;
-
-  // Create a quaternion from Euler angles in ZYX order
-  const quaternion = new THREE.Quaternion();
-  const euler = new THREE.Euler(rollRad, pitchRad, yawRad, 'ZYX');
-  quaternion.setFromEuler(euler);
-
-  // Return as [x, y, z, w] array
-  return [quaternion.x, quaternion.y, quaternion.z, quaternion.w];
-}
-```
 
 ## Examples
 
