@@ -34,7 +34,6 @@ import { updateTrailSwitch } from './trail.js';
 import { Array3, CommandFunction, State, TleSource, Vector4 } from './types.js';
 import {
   geo2xyz,
-  getPositionOfPoint,
   normalizeCoordinates,
   sph2xyz,
   utcDate,
@@ -434,7 +433,6 @@ export function buildCommandClosures(
     // Add utility functions to commands
     zyxToQuaternion,
     geo2xyz,
-    getPositionOfPoint,
     sph2xyz,
     validateName,
     xyz2geo,
