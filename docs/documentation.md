@@ -1,10 +1,10 @@
 # What on Earth?
 
-**What on Earth?** is a tool for exploring quaternions, geometry, and satellite
-perspectives—all from the comfort of your browser. It provides an interactive
-3D environemtn  to perform complex geometric calculations, visualize scenes
-from a satellite’s viewpoint, and optimize quaternions under various
-constraints.
+
+A script-driven interactive environment for simulating and analyzing satellite
+orientation and system dynamics. It provides an interactive 3D environment to
+perform complex geometric calculations, visualize scenes from a satellite’s
+viewpoint, and optimize quaternions under various constraints.
 
 
 ## Key Features
@@ -29,10 +29,10 @@ built-in editor using a custom API or DSL, enabling:
 
 ## Getting Started
 
-### User Interface                                  
+### User Interface
 
 
-![User Interface](/assets/main_ui.png)                                                     
+![User Interface](/assets/main_ui.png)
 
 The application interface is divided into the following areas:
 
