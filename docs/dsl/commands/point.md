@@ -12,7 +12,7 @@ their position, orientation, or frame vectors.
 
 ## Syntax
 
-```typecript
+```typescript
 point(name: string): Point | null
 ```
 
