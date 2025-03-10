@@ -123,13 +123,11 @@ function updatePlots(state: State): void {
       (el) => el.getAttribute('data-plot-id') === plotId,
     ) as HTMLElement | undefined;
 
-    if (plotElement) {
+    if (!plotElement) {
+      console.log("only once?")
       plotElement = createPlotElement(plotId, plot, state);
       plotElement.setAttribute('data-plot-id', plotId);
       plotsList.appendChild(plotElement);
-    } else {
-      console.error('Could not find plot to update', plotId);
-      return;
     }
 
     // Update worker with all new data points since last update
