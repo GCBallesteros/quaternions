@@ -2,9 +2,12 @@
 
 Applies a relative rotation to a point.
 
-The `relativeRot` function rotates a point by applying a quaternion relative to its current orientation. This is different from `rot`, which sets the absolute orientation.
+The `relativeRot` function rotates a point by applying a quaternion relative to
+its current orientation. This is different from `rot`, which sets the absolute
+orientation.
 
-This function is particularly useful when you want to incrementally adjust a point's orientation rather than setting it to a specific absolute orientation.
+This function is particularly useful when you want to incrementally adjust a
+point's orientation rather than setting it to a specific absolute orientation.
 
 ## Syntax
 
