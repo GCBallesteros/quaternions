@@ -401,7 +401,14 @@ export const commandDocs: Record<string, CommandDoc> = {
 
   listPoints: {
     description: 'Lists all points in the scene.',
-    parameters: [],
+    parameters: [
+      {
+        name: 'filter',
+        description: 'Class filter',
+        type: 'string',
+        optional: true,
+      },
+    ],
     returns: {
       type: 'string[]',
       description: 'Array of point names',
@@ -539,6 +546,12 @@ export const commandDocs: Record<string, CommandDoc> = {
         description: 'X rotation in radians',
         type: 'number',
         optional: false,
+      },
+      {
+        name: 'degrees',
+        description: 'If true (default) angles are provided in degrees',
+        type: 'number',
+        optional: true,
       },
     ],
     returns: {
