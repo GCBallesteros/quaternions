@@ -76,7 +76,7 @@ export function setupGlobalShortcuts(
 
         // Ensure script list container exists
         let scriptList = modal.querySelector('.script-list');
-        if (!scriptList) {
+        if (scriptList !== null) {
           scriptList = document.createElement('div');
           scriptList.className = shortcutStyles.scriptList;
           modal.querySelector('.modal-content')?.appendChild(scriptList);
