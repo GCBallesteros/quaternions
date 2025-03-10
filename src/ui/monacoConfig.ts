@@ -1,4 +1,5 @@
 import * as monaco from 'monaco-editor';
+import { Ok, Err, Result } from 'ts-results';
 
 import { CommandFunction } from '../types.js';
 
@@ -11,12 +12,19 @@ function extractFunctionParams(
   // We really want to take in any function
   // eslint-disable-next-line @typescript-eslint/ban-types
   func: Function,
-  doc: CommandDoc,
-): {
-  params: string[];
-  paramDocs: string;
-  signatureHelp: monaco.languages.SignatureHelp;
-} {
+  doc?: CommandDoc,
+): Result<
+  {
+    params: string[];
+    paramDocs: string;
+    signatureHelp: monaco.languages.SignatureHelp;
+  },
+  string
+> {
+  if (!doc) {
+    return Err('Documentation not available for this command');
+  }
+
   const funcStr = func.toString();
   const paramMatch = funcStr.match(/\(([^)]*)\)/);
   const params = paramMatch
@@ -37,7 +45,8 @@ function extractFunctionParams(
         documentation: doc.description,
         parameters: params.map((p, index) => {
           const [paramName, defaultValue] = p.split('=').map((s) => s.trim());
-          const paramDoc = doc.parameters[index];
+          const paramDoc =
+            index < doc.parameters.length ? doc.parameters[index] : null;
 
           const paramLabel = defaultValue
             ? `${paramName} = ${defaultValue}`
@@ -83,7 +92,7 @@ function extractFunctionParams(
     paramDocs += `\n@returns {${doc.returns.type}} ${doc.returns.description}`;
   }
 
-  return { params, paramDocs, signatureHelp };
+  return Ok({ params, paramDocs, signatureHelp });
 }
 
 /**
@@ -97,59 +106,71 @@ export function registerCommandCompletions(
   const commandSignatures: Record<string, monaco.languages.SignatureHelp> = {};
 
   // Get all command names and their function signatures
-  const commandItems = Object.entries(commands).map(([name, func]) => {
-    // Extract parameter information
-    const { params, paramDocs, signatureHelp } = extractFunctionParams(
-      func,
-      commandDocs[name],
-    );
+  const commandItems = Object.entries(commands)
+    .map(([name, func]) => {
+      // Extract parameter information
+      const result = extractFunctionParams(func, commandDocs[name]);
 
-    // Store signature help for this command
-    commandSignatures[name] = signatureHelp;
+      if (result.err) {
+        console.warn(`Could not extract parameters for ${name}: ${result.val}`);
+        return null;
+      }
 
-    // Get documentation if available
-    const doc = commandDocs[name];
+      const { params, paramDocs, signatureHelp } = result.val;
 
-    // Create documentation markdown
-    const docMarkdown = [`**${name}**`];
+      // Store signature help for this command
+      commandSignatures[name] = signatureHelp;
 
-    if (doc?.description !== undefined && doc.description !== '') {
-      docMarkdown.push('', doc.description);
-    }
+      // Get documentation if available
+      const doc = commandDocs[name];
 
-    if (doc?.documentationUrl !== undefined && doc.documentationUrl !== '') {
-      docMarkdown.push(
-        '',
-        `[📖 View Documentation](https://${doc.documentationUrl})`,
-      );
-    }
+      // Create documentation markdown
+      const docMarkdown = [`**${name}**`];
 
-    if (paramDocs !== '') {
-      docMarkdown.push('', '```typescript', paramDocs, '```');
-    }
+      if (doc?.description !== undefined && doc.description !== '') {
+        docMarkdown.push('', doc.description);
+      }
 
-    if (doc?.example !== undefined && doc.example !== '') {
-      docMarkdown.push('', '**Example:**', '```typescript', doc.example, '```');
-    }
+      if (doc?.documentationUrl !== undefined && doc.documentationUrl !== '') {
+        docMarkdown.push(
+          '',
+          `[📖 View Documentation](https://${doc.documentationUrl})`,
+        );
+      }
 
-    return {
-      label: name,
-      kind: monaco.languages.CompletionItemKind.Function,
-      insertText: `${name}($0)`,
-      insertTextRules:
-        monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-      detail: `${name}(${params.join(', ')})`,
-      documentation: {
-        value: docMarkdown.join('\n'),
-        isTrusted: true,
-        supportThemeIcons: true,
-      },
-      command: {
-        id: 'editor.action.triggerParameterHints',
-        title: 'triggerParameterHints',
-      },
-    };
-  });
+      if (paramDocs !== '') {
+        docMarkdown.push('', '```typescript', paramDocs, '```');
+      }
+
+      if (doc?.example !== undefined && doc.example !== '') {
+        docMarkdown.push(
+          '',
+          '**Example:**',
+          '```typescript',
+          doc.example,
+          '```',
+        );
+      }
+
+      return {
+        label: name,
+        kind: monaco.languages.CompletionItemKind.Function,
+        insertText: `${name}($0)`,
+        insertTextRules:
+          monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+        detail: `${name}(${params.join(', ')})`,
+        documentation: {
+          value: docMarkdown.join('\n'),
+          isTrusted: true,
+          supportThemeIcons: true,
+        },
+        command: {
+          id: 'editor.action.triggerParameterHints',
+          title: 'triggerParameterHints',
+        },
+      };
+    })
+    .filter((item): item is NonNullable<typeof item> => item !== null);
 
   // Register completion provider
   monaco.languages.registerCompletionItemProvider('javascript', {
@@ -191,7 +212,7 @@ export function registerCommandCompletions(
       const functionName = functionCallMatch[1];
       const signatureHelp = commandSignatures[functionName];
 
-      if (signatureHelp === null) {
+      if (!signatureHelp) {
         return null;
       }
 
