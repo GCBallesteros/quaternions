@@ -76,12 +76,10 @@ export function setupGlobalShortcuts(
 
         // Ensure script list container exists
         let scriptList = modal.querySelector('.script-list');
-        if (scriptList !== null) {
+        if (scriptList === null) {
           scriptList = document.createElement('div');
           scriptList.className = shortcutStyles.scriptList;
           modal.querySelector('.modal-content')?.appendChild(scriptList);
-        } else {
-          console.error('Where did script-list go?');
         }
 
         const cancelBtn = document.querySelector(
@@ -91,9 +89,6 @@ export function setupGlobalShortcuts(
         const renderScriptList = (): void => {
           const scripts = getSavedScripts();
 
-          // AI! list is not rendering any results despite me having verified that
-          // both scripts and defaultWorkflows contain correct information. Something
-          // must be wrong with scriptListTemplate
           render(
             scriptListTemplate(
               scripts,
