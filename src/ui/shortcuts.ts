@@ -90,6 +90,10 @@ export function setupGlobalShortcuts(
 
         const renderScriptList = (): void => {
           const scripts = getSavedScripts();
+
+          // AI! list is not rendering any results despite me having verified that
+          // both scripts and defaultWorkflows contain correct information. Something
+          // must be wrong with scriptListTemplate
           render(
             scriptListTemplate(
               scripts,
