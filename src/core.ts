@@ -637,9 +637,7 @@ export function _relativeRot(
   pt.geometry.getWorldQuaternion(currentRotation);
 
   // Multiply quaternions to combine rotations (order matters!)
-  // additionalRotation * currentRotation means "apply current rotation first,
-  // then additional"
-  const newRotation = additionalRotation.multiply(currentRotation);
+  const newRotation = currentRotation.multiply(additionalRotation);
 
   pt.geometry.setRotationFromQuaternion(newRotation);
 
