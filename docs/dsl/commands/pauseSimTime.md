@@ -29,5 +29,3 @@ pauseSimTime();
 
 - [resumeSimTime](/dsl/commands/resumeSimTime) - Resumes the flow of time.
 - [toggleSimTime](/dsl/commands/toggleSimTime) - Toggles the time flow state.
-- [setTime](/dsl/commands/setTime) - Sets the simulation time to a specific value.
-- [Working with Time](/getting-started/working-with-time) - Guidance on consistent time handling.
