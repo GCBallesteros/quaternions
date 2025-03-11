@@ -56,13 +56,29 @@ createPlot(
   }
 );`;
 
+const hotInHerre = `reset(true);
+
+`;
+
+const flyMeToTheMoon = `reset(true);
+
+`;
+
 export const defaultWorkflows: Record<string, WorkflowExample> = {
-  'Quaternion Debugging': {
+  'Spinning Around': {
     script: debugQuaternions,
     docLink: 'documentation/workflows/debugging-quaternions.html',
   },
   'Adding Satellites': {
     script: addSatellites,
+    docLink: 'documentation/workflows/adding-satellites.html',
+  },
+  'Hot In Herre': {
+    script: hotInHerre,
+    docLink: 'documentation/workflows/adding-satellites.html',
+  },
+  'Fly Me To The Moon': {
+    script: flyMeToTheMoon,
     docLink: 'documentation/workflows/adding-satellites.html',
   },
 };
