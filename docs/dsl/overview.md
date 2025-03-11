@@ -62,35 +62,3 @@ variable. While you can manipulate the `state` object directly, be cautious
 when doing so, as improper changes can cause unexpected behavior. Most of the
 time, it's better to use the provided commands for managing points, lines, and
 transformations.
-
-
-## DSL Overview
-
-### 1. [**Point Types**](/dsl/classes/overview)  
-
-Learn about the `Point` and `OrientedPoint` classes, which are the building
-blocks for representing objects in 3D space. The `OrientedPoint` extends
-`Point` to include orientation, enabling operations like attitude control and
-visualization.
-
-### 2. [**Movement & Attitude Commands**](/dsl/movement-and-attitude)  
-
-Discover commands to manipulate points' positions and orientations, such as
-`mov`, `rot`, and `mov2sat`. Tools for quaternion-based attitude adjustment are
-also introduced.
-
-### 4. [**Geometry Commands**](/dsl/geometry-commands)  
-
-Explore tools for creating and managing points, lines, and angles in the scene.
-Examples include `addPoint`, `createLine`, and `angle`.
-
-### 5. [**Camera Commands**](/dsl/cameras)
-
-Learn how to manage multiple cameras in the scene, switch between different views,
-and work with cameras attached to points.
-
-### 6. [**Utility Commands**](/dsl/utility)  
-
-Access helpful mathematical and satellite-related utilities, including
-coordinate conversions (`geo2xyz`, `xyz2geo`) and fetching Two-Line Elements
-(TLE) with `fetchTLE`.
