@@ -2,6 +2,11 @@
 
 Changes the active camera in the main viewport.
 
+The provided camera is usually either the global scene camera that can be
+retrieved via `camera("main")` or a camera associated with an `OrientedPoint`
+or `Satellite`. This can be retrieved either like `camera("my-satellite")` or
+directly as `point("my-satellite").camera`.
+
 
 ## Syntax
 
@@ -21,8 +26,6 @@ switchCamera(newCamera: THREE.PerspectiveCamera): void
 
 
 ## Examples
-
-This function is not intended for direct use in DSL scripts. It is used internally by other commands.  Here's how it might be used *internally*:
 
 ```typescript
 // Switch the main view to the camera on the my-satellite point

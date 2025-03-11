@@ -18,8 +18,9 @@ camera(name: string): THREE.Camera | null
 
 ## Returns
 
-- `THREE.Camera`: The camera object if found.
-- `null`: If no camera with the given name is found.
+`THREE.Camera | null`
+
+The camera object if found or `null` if no camera with the given name is found.
 
 ## Examples
 
