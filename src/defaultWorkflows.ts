@@ -62,6 +62,34 @@ const hotInHerre = `reset(true);
 
 const flyMeToTheMoon = `reset(true);
 
+let date = utcDate(2025, 3, 14, 8, 25, 0);
+setTime(date);
+
+const moonRadius = 1738.0;
+
+let moonPos = new Vector3(
+  state.bodies.moon.position.x,
+  state.bodies.moon.position.y,
+  state.bodies.moon.position.z,
+).scale(1.01);
+
+
+let earthPointingQuat = findBestQuaternion(
+  "z",
+  "y",
+  moonPos.scale(-1)
+  .normalize()
+  .toArray(),
+  [0, 0, 1]
+);
+
+let moonBase = addPoint("MoonBase", moonPos, earthPointingQuat, "#ff0000");
+moonBase.addCamera({
+  fov: 10,
+  orientation: [0, 0, 0, 1]
+});
+
+switchCamera(camera("MoonBase"));
 `;
 
 export const defaultWorkflows: Record<string, WorkflowExample> = {
