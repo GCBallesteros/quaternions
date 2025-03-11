@@ -47,6 +47,15 @@ function getVisibleMercatorTiles(state: State): Option<TileCoordinate[]> {
     return None;
   }
 
+  // Only fetch tiles if camera is close enough to Earth (within 20000 units)
+  const cameraPos = new THREE.Vector3();
+  state.activeCamera.getWorldPosition(cameraPos);
+  const cameraDistance = cameraPos.length();
+
+  if (cameraDistance >= 20000) {
+    return None;
+  }
+
   const visibleTiles: TileCoordinate[] = [];
 
   // Process main view camera if it's not the main camera
