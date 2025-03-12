@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 import { log } from './logger.js';
-import { NamedTargets } from './points/satellite.js';
+import { NamedTargets } from './types/orientation.js';
 import { CommandFunction, State } from './types.js';
 import { Vector3 } from './vectors.js';
 

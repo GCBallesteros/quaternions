@@ -2,7 +2,8 @@ import { html, TemplateResult } from 'lit-html';
 
 import { OrientedPoint } from '../points/orientedPoint.js';
 import { Point } from '../points/point.js';
-import { NamedTargets, Satellite } from '../points/satellite.js';
+import { Satellite } from '../points/satellite.js';
+import { NamedTargets, OrientationMode } from '../types/orientation.js';
 import { Array3, State } from '../types.js';
 import { Vector3 } from '../vectors.js';
 
@@ -63,8 +64,8 @@ const satelliteOrientationTemplate = (
   satellite: Satellite,
 ): TemplateResult<1> => html`
   <div>
-    Orientation Mode: ${satellite.orientationMode.type}
-    ${satellite.orientationMode.type === 'dynamic'
+    Orientation Mode: ${satellite.orientationMode?.type || 'undefined'}
+    ${satellite.orientationMode?.type === 'dynamic'
       ? html`
           <div style="margin-left: 10px;">
             Primary: ${satellite.orientationMode.primaryBodyVector} →
@@ -77,14 +78,18 @@ const satelliteOrientationTemplate = (
             )}
           </div>
         `
-      : html`
-          <div style="margin-left: 10px;">
-            Fixed quaternion:
-            [${satellite.orientationMode.ecef_quaternion
-              .map((v) => v.toFixed(3))
-              .join(', ')}]
-          </div>
-        `}
+      : satellite.orientationMode?.type === 'fixed'
+        ? html`
+            <div style="margin-left: 10px;">
+              Fixed quaternion:
+              [${satellite.orientationMode.ecef_quaternion
+                .map((v) => v.toFixed(3))
+                .join(', ')}]
+            </div>
+          `
+        : html`<div style="margin-left: 10px;">
+            No orientation mode defined
+          </div>`}
   </div>
 `;
 
