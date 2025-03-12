@@ -411,7 +411,7 @@ export function _addPoint(
 
     // Set orientation mode if provided
     if (orientationMode) {
-      new_point.orientationMode = orientationMode;
+      (new_point as OrientedPoint).orientationMode = orientationMode;
     }
   } else {
     new_point = createFloatingPoint(color);
