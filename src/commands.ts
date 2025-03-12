@@ -80,6 +80,7 @@ export function buildCommandClosures(
     quaternion = null,
     relativeTo: Point,
     color = '#ffffff',
+    orientationMode?,
   ): Point | OrientedPoint {
     const normalized_coordinates = normalizeCoordinates(coordinates);
 
@@ -91,6 +92,7 @@ export function buildCommandClosures(
       quaternion,
       relativeTo,
       color,
+      orientationMode,
     );
     if (result.ok) {
       return result.val;

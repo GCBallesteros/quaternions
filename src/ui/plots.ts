@@ -124,7 +124,6 @@ function updatePlots(state: State): void {
     ) as HTMLElement | undefined;
 
     if (!plotElement) {
-      console.log("only once?")
       plotElement = createPlotElement(plotId, plot, state);
       plotElement.setAttribute('data-plot-id', plotId);
       plotsList.appendChild(plotElement);

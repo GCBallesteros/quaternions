@@ -68,7 +68,8 @@ export class OrientedPoint extends Point {
         }
         return velocity_.clone().normalize().toArray();
       case 'Nadir':
-        return position_.clone().normalize().negate().toArray();
+        const pos = position_.clone().normalize().negate().toArray();
+        return pos;
       case 'TargetPointing':
         if (typeof namedTarget.target === 'string') {
           return new THREE.Vector3(...state.points[namedTarget.target].position)
