@@ -580,6 +580,7 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
   );
 
   // Update orbiting satellites
+  // AI
   for (const point_name in state.points) {
     const sat = state.points[point_name];
     if (sat instanceof Satellite) {

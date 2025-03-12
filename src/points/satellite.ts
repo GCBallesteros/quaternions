@@ -21,6 +21,7 @@ export type OrientationMode =
       offset?: [number, number, number, number];
     };
 
+// AI
 export type NamedTargets =
   | { type: 'Moon' }
   | { type: 'Sun' }
