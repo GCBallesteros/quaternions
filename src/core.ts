@@ -354,7 +354,28 @@ export function _addPoint(
   state: State,
   name: string,
   coordinates: Array3,
+  quaternion: [number, number, number, number],
+  relativeTo?: Point,
+  color?: string,
+): Result<OrientedPoint, string>;
+
+export function _addPoint(
+  scene: THREE.Scene,
+  state: State,
+  name: string,
+  coordinates: Array3,
+  quaternion: null,
+  relativeTo?: Point,
+  color?: string,
+): Result<Point, string>;
+
+export function _addPoint(
+  scene: THREE.Scene,
+  state: State,
+  name: string,
+  coordinates: Array3,
   quaternion: [number, number, number, number] | null = null,
+  relativeTo?: Point,
   color: string = '#ffffff',
 ): Result<Point | OrientedPoint, string> {
   if (!utils.validateName(name, state)) {
