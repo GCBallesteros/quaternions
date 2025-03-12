@@ -409,7 +409,11 @@ export function _addPoint(
   }
 
   state.points[name] = new_point;
-  scene.add(new_point.geometry);
+  if (relativeTo) {
+    relativeTo.geometry.add(new_point.geometry);
+  } else {
+    scene.add(new_point.geometry);
+  }
   return Ok(new_point);
 }
 

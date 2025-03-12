@@ -1,29 +1,29 @@
 import * as THREE from 'three';
 
 import {
-  _addPoint,
-  _addSatellite,
-  _angle,
-  _createLine,
-  _createPlot,
-  _deletePoint,
-  _fetchTLE,
-  _findBestQuaternion,
-  _hideSecondaryView,
-  _mov,
-  _mov2sat,
-  _pauseSimTime,
-  _pauseTrail,
-  _relativeRot,
-  _removePlot,
-  _reset,
-  _resumeSimTime,
-  _resumeTrail,
-  _rot,
-  _setTime,
-  _showSecondaryView,
-  _toggleSimTime,
-  _toggleTrail,
+    _addPoint,
+    _addSatellite,
+    _angle,
+    _createLine,
+    _createPlot,
+    _deletePoint,
+    _fetchTLE,
+    _findBestQuaternion,
+    _hideSecondaryView,
+    _mov,
+    _mov2sat,
+    _pauseSimTime,
+    _pauseTrail,
+    _relativeRot,
+    _removePlot,
+    _reset,
+    _resumeSimTime,
+    _resumeTrail,
+    _rot,
+    _setTime,
+    _showSecondaryView,
+    _toggleSimTime,
+    _toggleTrail,
 } from './core.js';
 import { findMercatorTilesInPOV } from './findMercatorTiles.js';
 import { log } from './logger.js';
@@ -33,14 +33,14 @@ import { OrientationMode, Satellite } from './points/satellite.js';
 import { updateTrailSwitch } from './trail.js';
 import { Array3, CommandFunction, State, TleSource, Vector4 } from './types.js';
 import {
-  geo2xyz,
-  normalizeCoordinates,
-  sph2xyz,
-  utcDate,
-  validateName,
-  xyz2geo,
-  xyz2sph,
-  zyxToQuaternion,
+    geo2xyz,
+    normalizeCoordinates,
+    sph2xyz,
+    utcDate,
+    validateName,
+    xyz2geo,
+    xyz2sph,
+    zyxToQuaternion,
 } from './utils.js';
 import { Vector3 } from './vectors.js';
 
@@ -77,6 +77,7 @@ export function buildCommandClosures(
     name: string,
     coordinates: Array3 | Vector3,
     quaternion = null,
+    relativeTo: Point,
     color = '#ffffff',
   ): Point | OrientedPoint {
     const normalized_coordinates = normalizeCoordinates(coordinates);
@@ -87,6 +88,7 @@ export function buildCommandClosures(
       name,
       normalized_coordinates,
       quaternion,
+      relativeTo,
       color,
     );
     if (result.ok) {
