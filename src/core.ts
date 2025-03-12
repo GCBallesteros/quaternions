@@ -375,7 +375,7 @@ export function _addPoint(
   name: string,
   coordinates: Array3,
   quaternion: [number, number, number, number] | null = null,
-  relativeTo?: Point,
+  relativeTo?: Point | 'Moon',
   color: string = '#ffffff',
 ): Result<Point | OrientedPoint, string> {
   if (!utils.validateName(name, state)) {
@@ -410,7 +410,11 @@ export function _addPoint(
 
   state.points[name] = new_point;
   if (relativeTo) {
-    relativeTo.geometry.add(new_point.geometry);
+    if (relativeTo === 'Moon') {
+      state.bodies.moon.add(new_point.geometry);
+    } else {
+      relativeTo.geometry.add(new_point.geometry);
+    }
   } else {
     scene.add(new_point.geometry);
   }

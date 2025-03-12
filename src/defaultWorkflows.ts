@@ -71,25 +71,24 @@ let moonPos = new Vector3(
   state.bodies.moon.position.x,
   state.bodies.moon.position.y,
   state.bodies.moon.position.z,
-).scale(1.01);
+);
 
+let moonBasePos = new Vector3(-moonRadius, -moonRadius, -moonRadius);
 
 let earthPointingQuat = findBestQuaternion(
   "z",
   "y",
-  moonPos.scale(-1)
-  .normalize()
-  .toArray(),
+  moonPos.scale(-1).toArray(),
   [0, 0, 1]
 );
 
-let moonBase = addPoint("MoonBase", moonPos, earthPointingQuat, "#ff0000");
+let moonBase = addPoint("MoonBase", moonBasePos, earthPointingQuat, "Moon","#ff0000");
 moonBase.addCamera({
-  fov: 10,
+  fov: 6,
   orientation: [0, 0, 0, 1]
 });
 
-switchCamera(camera("MoonBase"));
+switchCamera(moonBase.camera);
 `;
 
 export const defaultWorkflows: Record<string, WorkflowExample> = {
