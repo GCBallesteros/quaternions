@@ -14,7 +14,8 @@ import { log } from './logger.js';
 import { cleanupAllPlots, cleanupPlot } from './plots.js';
 import { CameraConfig, OrientedPoint } from './points/orientedPoint.js';
 import { Point } from './points/point.js';
-import { OrientationMode, Satellite } from './points/satellite.js';
+import { Satellite } from './points/satellite.js';
+import { OrientationMode } from './types/orientation.js';
 import { Trail } from './trail.js';
 import { Array3, State, TleSource } from './types.js';
 import { removePointFromUI } from './ui/bodies.js';
@@ -355,8 +356,9 @@ export function _addPoint(
   name: string,
   coordinates: Array3,
   quaternion: [number, number, number, number],
-  relativeTo?: Point,
+  relativeTo?: Point | 'Moon',
   color?: string,
+  orientationMode?: OrientationMode,
 ): Result<OrientedPoint, string>;
 
 export function _addPoint(
@@ -365,7 +367,7 @@ export function _addPoint(
   name: string,
   coordinates: Array3,
   quaternion: null,
-  relativeTo?: Point,
+  relativeTo?: Point | 'Moon',
   color?: string,
 ): Result<Point, string>;
 
@@ -377,6 +379,7 @@ export function _addPoint(
   quaternion: [number, number, number, number] | null = null,
   relativeTo?: Point | 'Moon',
   color: string = '#ffffff',
+  orientationMode?: OrientationMode,
 ): Result<Point | OrientedPoint, string> {
   if (!utils.validateName(name, state)) {
     return Err('Invalid point name or name already exists');
@@ -401,8 +404,15 @@ export function _addPoint(
       coordinates[2],
     );
     new_point = addFrame(new_point_);
+
+    // Set initial orientation from quaternion
     const q = new THREE.Quaternion(...quaternion); // xyzw
     new_point.geometry.setRotationFromQuaternion(q);
+
+    // Set orientation mode if provided
+    if (orientationMode) {
+      new_point.orientationMode = orientationMode;
+    }
   } else {
     new_point = createFloatingPoint(color);
     new_point.geometry.position.set(...coordinates);
@@ -579,12 +589,17 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
     new THREE.Quaternion(...moonData.orientation),
   );
 
-  // Update orbiting satellites
-  // AI
+  // Update all oriented points
   for (const point_name in state.points) {
-    const sat = state.points[point_name];
-    if (sat instanceof Satellite) {
-      sat.update(state.currentTime, state);
+    const point = state.points[point_name];
+
+    // Update satellites (position and orientation)
+    if (point instanceof Satellite) {
+      point.update(state.currentTime, state);
+    }
+    // Update orientation for other oriented points
+    else if (point instanceof OrientedPoint && point.orientationMode) {
+      point.updateOrientation(state);
     }
   }
 

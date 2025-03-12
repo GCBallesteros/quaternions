@@ -1,6 +1,11 @@
 import * as THREE from 'three';
 
+import { _findBestQuaternion } from '../core.js';
+import { State } from '../types.js';
 import { Array3, Vector4 } from '../types.js';
+import { NamedTargets, OrientationMode } from '../types/orientation.js';
+import { normalizeCoordinates } from '../utils.js';
+import { Vector3 } from '../vectors.js';
 
 export interface CameraConfig {
   orientation: Vector4;
@@ -10,13 +15,144 @@ import { Point } from './point.js';
 
 export class OrientedPoint extends Point {
   public camera_orientation?: Vector4;
-  constructor(geometry: THREE.Group, cameraConfig?: CameraConfig) {
+  protected _orientationMode?: OrientationMode;
+
+  constructor(
+    geometry: THREE.Group,
+    cameraConfig?: CameraConfig,
+    orientationMode?: OrientationMode,
+  ) {
     super(geometry);
 
     if (cameraConfig !== undefined) {
       this.camera_orientation = cameraConfig.orientation;
       this.addCamera(cameraConfig);
     }
+
+    this._orientationMode = orientationMode;
+  }
+
+  get orientationMode(): OrientationMode | undefined {
+    return this._orientationMode;
+  }
+
+  set orientationMode(mode: OrientationMode | undefined) {
+    this._orientationMode = mode;
+  }
+
+  protected isNamedTarget(value: any): value is NamedTargets {
+    return typeof value === 'object' && value !== null && 'type' in value;
+  }
+
+  protected getTargetVector(
+    namedTarget: NamedTargets,
+    position_: THREE.Vector3,
+    velocity_: THREE.Vector3 | null,
+    state: State,
+  ): Array3 {
+    switch (namedTarget.type) {
+      case 'Moon':
+        return state.bodies.moon.position
+          .clone()
+          .sub(position_)
+          .normalize()
+          .toArray();
+      case 'Sun':
+        // Sun light position is already the direction vector
+        return state.lights.sun.position.toArray();
+      case 'Velocity':
+        if (!velocity_) {
+          throw new Error(
+            'Velocity target is only valid for objects with velocity data',
+          );
+        }
+        return velocity_.clone().normalize().toArray();
+      case 'Nadir':
+        return position_.clone().normalize().negate().toArray();
+      case 'TargetPointing':
+        if (typeof namedTarget.target === 'string') {
+          return new THREE.Vector3(...state.points[namedTarget.target].position)
+            .clone()
+            .sub(position_)
+            .normalize()
+            .toArray();
+        } else {
+          return new THREE.Vector3(...normalizeCoordinates(namedTarget.target))
+            .clone()
+            .sub(position_)
+            .normalize()
+            .toArray();
+        }
+    }
+  }
+
+  updateOrientation(
+    state: State,
+    velocity_: THREE.Vector3 | null = null,
+  ): void {
+    if (!this._orientationMode) {
+      return;
+    }
+
+    const position_ = new THREE.Vector3(...this.position);
+    let new_orientation: Vector4;
+
+    switch (this._orientationMode.type) {
+      case 'dynamic': {
+        const primaryTargetVector = this.isNamedTarget(
+          this._orientationMode.primaryTargetVector,
+        )
+          ? this.getTargetVector(
+              this._orientationMode.primaryTargetVector,
+              position_,
+              velocity_,
+              state,
+            )
+          : normalizeCoordinates(this._orientationMode.primaryTargetVector);
+
+        const secondaryTargetVector = this.isNamedTarget(
+          this._orientationMode.secondaryTargetVector,
+        )
+          ? this.getTargetVector(
+              this._orientationMode.secondaryTargetVector,
+              position_,
+              velocity_,
+              state,
+            )
+          : normalizeCoordinates(this._orientationMode.secondaryTargetVector);
+
+        const new_orientation_result = _findBestQuaternion(
+          state,
+          this._orientationMode.primaryBodyVector,
+          this._orientationMode.secondaryBodyVector,
+          primaryTargetVector,
+          secondaryTargetVector,
+        );
+        if (new_orientation_result.ok) {
+          new_orientation = new_orientation_result.val;
+        } else {
+          throw Error('Something went wrong during quaternion calculation');
+        }
+        break;
+      }
+      case 'fixed': {
+        new_orientation = this._orientationMode.ecef_quaternion;
+        break;
+      }
+    }
+
+    let q = new THREE.Quaternion(...new_orientation); // xyzw
+
+    // Apply additional rotation if specified in dynamic mode
+    if (
+      this._orientationMode.type === 'dynamic' &&
+      this._orientationMode.offset
+    ) {
+      const offsetQ = new THREE.Quaternion(...this._orientationMode.offset);
+      q = q.multiply(offsetQ);
+    }
+
+    this.geometry.setRotationFromQuaternion(q);
   }
 
   /**
