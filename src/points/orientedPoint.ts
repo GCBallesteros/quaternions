@@ -94,7 +94,10 @@ export class OrientedPoint extends Point {
       return;
     }
 
-    const position_ = new THREE.Vector3(...this.position);
+    // Get world position instead of local position
+    const worldPosition = new THREE.Vector3();
+    this.geometry.getWorldPosition(worldPosition);
+    const position_ = worldPosition;
     let new_orientation: Vector4;
 
     switch (this._orientationMode.type) {
