@@ -356,7 +356,6 @@ export function _addPoint(
   color: string = '#ffffff',
   pointOrientationMode?: OrientationMode,
   cameraOrientationMode?: OrientationMode,
-  initialQuaternion?: [number, number, number, number],
 ): Result<Point | OrientedPoint, string> {
   if (!utils.validateName(name, state)) {
     return Err('Invalid point name or name already exists');
@@ -380,8 +379,7 @@ export function _addPoint(
     );
   }
 
-  const needsOrientedPoint =
-    pointOrientationMode !== undefined || cameraOrientationMode !== undefined;
+  const needsOrientedPoint = pointOrientationMode !== undefined;
 
   if (needsOrientedPoint) {
     // Create an OrientedPoint
@@ -392,15 +390,6 @@ export function _addPoint(
       coordinates[2],
     );
     new_point = addFrame(new_point_);
-
-    // Set initial orientation from quaternion if provided
-    if (initialQuaternion) {
-      if (initialQuaternion.length !== 4) {
-        return Err('Invalid quaternion: must have exactly 4 components');
-      }
-      const q = new THREE.Quaternion(...initialQuaternion); // xyzw
-      new_point.geometry.setRotationFromQuaternion(q);
-    }
 
     // Set orientation modes
     if (pointOrientationMode) {
