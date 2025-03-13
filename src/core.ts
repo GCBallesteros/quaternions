@@ -367,6 +367,8 @@ export function _addPoint(
   quaternion: null,
   relativeTo?: Point | 'Moon',
   color?: string,
+  pointOrientationMode?: OrientationMode,
+  cameraOrientationMode?: OrientationMode,
 ): Result<Point, string>;
 
 export function _addPoint(
@@ -391,6 +393,9 @@ export function _addPoint(
   }
 
   let new_point: Point | OrientedPoint;
+  // AI! Now that we have a pointOrientationMode that should be what determines if we have
+  // a Point or an OrientedPoint. We should probably call _setTime to the current time
+  // to make sure that everything gets updated.
   if (quaternion !== null) {
     if (quaternion.length !== 4) {
       return Err('Invalid quaternion: must have exactly 4 components');
