@@ -64,25 +64,25 @@ const satelliteOrientationTemplate = (
   satellite: Satellite,
 ): TemplateResult<1> => html`
   <div>
-    Orientation Mode: ${satellite.orientationMode?.type || 'undefined'}
-    ${satellite.orientationMode?.type === 'dynamic'
+    Orientation Mode: ${satellite.pointOrientationMode?.type || 'undefined'}
+    ${satellite.pointOrientationMode?.type === 'dynamic'
       ? html`
           <div style="margin-left: 10px;">
-            Primary: ${satellite.orientationMode.primaryBodyVector} →
+            Primary: ${satellite.pointOrientationMode.primaryBodyVector} →
             ${formatTargetVector(
-              satellite.orientationMode.primaryTargetVector,
+              satellite.pointOrientationMode.primaryTargetVector,
             )}<br />
-            Secondary: ${satellite.orientationMode.secondaryBodyVector} →
+            Secondary: ${satellite.pointOrientationMode.secondaryBodyVector} →
             ${formatTargetVector(
-              satellite.orientationMode.secondaryTargetVector,
+              satellite.pointOrientationMode.secondaryTargetVector,
             )}
           </div>
         `
-      : satellite.orientationMode?.type === 'fixed'
+      : satellite.pointOrientationMode?.type === 'fixed'
         ? html`
             <div style="margin-left: 10px;">
               Fixed quaternion:
-              [${satellite.orientationMode.ecef_quaternion
+              [${satellite.pointOrientationMode.ecef_quaternion
                 .map((v) => v.toFixed(3))
                 .join(', ')}]
             </div>

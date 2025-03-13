@@ -46,7 +46,7 @@ export class Satellite extends OrientedPoint {
     },
     cameraConfig?: CameraConfig,
   ) {
-    super(geometry, cameraConfig, orientationMode, null);
+    super(geometry, cameraConfig, orientationMode, undefined);
     this.tle = tle;
 
     // Initialize trail state if we have a camera
