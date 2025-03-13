@@ -77,11 +77,10 @@ export function buildCommandClosures(
   function addPoint(
     name: string,
     coordinates: Array3 | Vector3,
-    relativeTo?: Point,
+    relativeTo: Point | 'Moon' | undefined,
     color = '#ffffff',
     pointOrientationMode?: OrientationMode,
     cameraOrientationMode?: OrientationMode,
-    initialQuaternion?: [number, number, number, number],
   ): Point | OrientedPoint {
     const normalized_coordinates = normalizeCoordinates(coordinates);
 
@@ -94,7 +93,6 @@ export function buildCommandClosures(
       color,
       pointOrientationMode,
       cameraOrientationMode,
-      initialQuaternion,
     );
     if (result.ok) {
       return result.val;

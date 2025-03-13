@@ -352,7 +352,7 @@ export function _addPoint(
   state: State,
   name: string,
   coordinates: Array3,
-  relativeTo?: Point | 'Moon',
+  relativeTo: Point | 'Moon' | undefined = undefined,
   color: string = '#ffffff',
   pointOrientationMode?: OrientationMode,
   cameraOrientationMode?: OrientationMode,
