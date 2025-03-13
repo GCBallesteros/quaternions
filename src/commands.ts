@@ -85,26 +85,27 @@ export function buildCommandClosures(
     const normalized_coordinates = normalizeCoordinates(coordinates);
 
     // Handle the quaternion parameter correctly based on its value
-    const result = quaternion !== null
-      ? _addPoint(
-          scene,
-          state,
-          name,
-          normalized_coordinates,
-          quaternion as [number, number, number, number],
-          relativeTo,
-          color,
-          orientationMode,
-        )
-      : _addPoint(
-          scene,
-          state,
-          name,
-          normalized_coordinates,
-          null,
-          relativeTo,
-          color,
-        );
+    const result =
+      quaternion !== null
+        ? _addPoint(
+            scene,
+            state,
+            name,
+            normalized_coordinates,
+            quaternion as [number, number, number, number],
+            relativeTo,
+            color,
+            orientationMode,
+          )
+        : _addPoint(
+            scene,
+            state,
+            name,
+            normalized_coordinates,
+            null,
+            relativeTo,
+            color,
+          );
     if (result.ok) {
       return result.val;
     } else {
