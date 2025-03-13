@@ -371,6 +371,8 @@ export function _addPoint(
   let new_point: Point | OrientedPoint;
 
   // Determine if we need an OrientedPoint based on orientation mode
+  // AI! Passing a cameraOrientationMode but not a pointOrientationMode should be an
+  // error.
   const needsOrientedPoint =
     pointOrientationMode !== undefined || cameraOrientationMode !== undefined;
 
