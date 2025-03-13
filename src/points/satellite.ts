@@ -45,8 +45,14 @@ export class Satellite extends OrientedPoint {
       secondaryTargetVector: { type: 'Velocity' },
     },
     cameraConfig?: CameraConfig,
+    cameraOrientationMode?: OrientationMode,
   ) {
-    super(geometry, cameraConfig, orientationMode);
+    super(
+      geometry, 
+      cameraConfig, 
+      orientationMode, 
+      cameraOrientationMode || orientationMode
+    );
     this.tle = tle;
 
     // Initialize trail state if we have a camera
@@ -75,6 +81,7 @@ export class Satellite extends OrientedPoint {
       secondaryTargetVector: { type: 'Velocity' },
     },
     cameraConfig?: CameraConfig,
+    cameraOrientationMode?: OrientationMode,
   ): Promise<Satellite> {
     const result = await _fetchTLE(noradId);
     let tle: string;
@@ -84,12 +91,12 @@ export class Satellite extends OrientedPoint {
     } else {
       throw new Error(result.val);
     }
-    return new Satellite(scene, geometry, tle, orientationMode, cameraConfig);
+    return new Satellite(scene, geometry, tle, orientationMode, cameraConfig, cameraOrientationMode);
   }
 
   set offset(offset: [number, number, number, number]) {
-    if (this._orientationMode?.type === 'dynamic') {
-      this._orientationMode.offset = offset;
+    if (this._pointOrientationMode?.type === 'dynamic') {
+      this._pointOrientationMode.offset = offset;
     } else {
       log('Trying to set orientation offset on non-dynamic mode.');
     }

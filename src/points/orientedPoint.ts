@@ -15,12 +15,14 @@ import { Point } from './point.js';
 
 export class OrientedPoint extends Point {
   public camera_orientation?: Vector4;
-  protected _orientationMode?: OrientationMode;
+  protected _pointOrientationMode?: OrientationMode;
+  protected _cameraOrientationMode?: OrientationMode;
 
   constructor(
     geometry: THREE.Group,
     cameraConfig?: CameraConfig,
-    orientationMode?: OrientationMode,
+    pointOrientationMode?: OrientationMode,
+    cameraOrientationMode?: OrientationMode,
   ) {
     super(geometry);
 
@@ -29,15 +31,33 @@ export class OrientedPoint extends Point {
       this.addCamera(cameraConfig);
     }
 
-    this._orientationMode = orientationMode;
+    this._pointOrientationMode = pointOrientationMode;
+    this._cameraOrientationMode = cameraOrientationMode;
   }
 
+  get pointOrientationMode(): OrientationMode | undefined {
+    return this._pointOrientationMode;
+  }
+
+  set pointOrientationMode(mode: OrientationMode | undefined) {
+    this._pointOrientationMode = mode;
+  }
+
+  get cameraOrientationMode(): OrientationMode | undefined {
+    return this._cameraOrientationMode;
+  }
+
+  set cameraOrientationMode(mode: OrientationMode | undefined) {
+    this._cameraOrientationMode = mode;
+  }
+
+  // For backward compatibility
   get orientationMode(): OrientationMode | undefined {
-    return this._orientationMode;
+    return this._pointOrientationMode;
   }
 
   set orientationMode(mode: OrientationMode | undefined) {
-    this._orientationMode = mode;
+    this._pointOrientationMode = mode;
   }
 
   protected isNamedTarget(value: any): value is NamedTargets {
@@ -88,53 +108,51 @@ export class OrientedPoint extends Point {
   }
 
   /**
-   * Calculates the orientation quaternion based on the orientation mode
+   * Calculates the orientation quaternion based on the specified orientation mode
    * @param state Application state
+   * @param orientationMode The orientation mode to use for calculation
    * @param velocity_ Optional velocity vector (needed for Velocity target)
    * @returns Quaternion as Vector4 [x, y, z, w]
    */
   protected calculateOrientation(
     state: State,
+    orientationMode: OrientationMode,
     velocity_: THREE.Vector3 | null = null,
   ): Vector4 {
-    if (!this._orientationMode) {
-      throw new Error('No orientation mode defined');
-    }
-
     // Get world position instead of local position
     const worldPosition = new THREE.Vector3();
     this.geometry.getWorldPosition(worldPosition);
     const position_ = worldPosition;
     let new_orientation: Vector4;
 
-    switch (this._orientationMode.type) {
+    switch (orientationMode.type) {
       case 'dynamic': {
         const primaryTargetVector = this.isNamedTarget(
-          this._orientationMode.primaryTargetVector,
+          orientationMode.primaryTargetVector,
         )
           ? this.getTargetVector(
-              this._orientationMode.primaryTargetVector,
+              orientationMode.primaryTargetVector,
               position_,
               velocity_,
               state,
             )
-          : normalizeCoordinates(this._orientationMode.primaryTargetVector);
+          : normalizeCoordinates(orientationMode.primaryTargetVector);
 
         const secondaryTargetVector = this.isNamedTarget(
-          this._orientationMode.secondaryTargetVector,
+          orientationMode.secondaryTargetVector,
         )
           ? this.getTargetVector(
-              this._orientationMode.secondaryTargetVector,
+              orientationMode.secondaryTargetVector,
               position_,
               velocity_,
               state,
             )
-          : normalizeCoordinates(this._orientationMode.secondaryTargetVector);
+          : normalizeCoordinates(orientationMode.secondaryTargetVector);
 
         const new_orientation_result = _findBestQuaternion(
           state,
-          this._orientationMode.primaryBodyVector,
-          this._orientationMode.secondaryBodyVector,
+          orientationMode.primaryBodyVector,
+          orientationMode.secondaryBodyVector,
           primaryTargetVector,
           secondaryTargetVector,
         );
@@ -146,18 +164,18 @@ export class OrientedPoint extends Point {
         break;
       }
       case 'fixed': {
-        new_orientation = this._orientationMode.ecef_quaternion;
+        new_orientation = orientationMode.ecef_quaternion;
         break;
       }
     }
 
     // Apply additional rotation if specified in dynamic mode
     if (
-      this._orientationMode.type === 'dynamic' &&
-      this._orientationMode.offset
+      orientationMode.type === 'dynamic' &&
+      orientationMode.offset
     ) {
       const q = new THREE.Quaternion(...new_orientation);
-      const offsetQ = new THREE.Quaternion(...this._orientationMode.offset);
+      const offsetQ = new THREE.Quaternion(...orientationMode.offset);
       q.multiply(offsetQ);
       new_orientation = [q.x, q.y, q.z, q.w];
     }
@@ -166,7 +184,7 @@ export class OrientedPoint extends Point {
   }
 
   /**
-   * Updates the camera orientation based on the orientation mode
+   * Updates the camera orientation based on the camera orientation mode
    * For OrientedPoint, this updates the camera if one exists, but not the point itself
    * @param state Application state
    * @param velocity_ Optional velocity vector (needed for Velocity target)
@@ -175,12 +193,12 @@ export class OrientedPoint extends Point {
     state: State,
     velocity_: THREE.Vector3 | null = null,
   ): void {
-    if (!this._orientationMode || !this.camera) {
+    if (!this._cameraOrientationMode || !this.camera) {
       return;
     }
 
     try {
-      const new_orientation = this.calculateOrientation(state, velocity_);
+      const new_orientation = this.calculateOrientation(state, this._cameraOrientationMode, velocity_);
 
       // Get the camera
       const camera = this.camera as THREE.Camera;
@@ -203,7 +221,7 @@ export class OrientedPoint extends Point {
   }
 
   /**
-   * Updates the point's own orientation based on the orientation mode
+   * Updates the point's own orientation based on the point orientation mode
    * This is used by subclasses like Satellite that need to orient the entire object
    * @param state Application state
    * @param velocity_ Optional velocity vector (needed for Velocity target)
@@ -212,12 +230,12 @@ export class OrientedPoint extends Point {
     state: State,
     velocity_: THREE.Vector3 | null = null,
   ): void {
-    if (!this._orientationMode) {
+    if (!this._pointOrientationMode) {
       return;
     }
 
     try {
-      const new_orientation = this.calculateOrientation(state, velocity_);
+      const new_orientation = this.calculateOrientation(state, this._pointOrientationMode, velocity_);
       const q = new THREE.Quaternion(...new_orientation); // xyzw
       this.geometry.setRotationFromQuaternion(q);
     } catch (error) {

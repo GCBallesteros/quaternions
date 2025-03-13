@@ -80,7 +80,8 @@ export function buildCommandClosures(
     quaternion = null,
     relativeTo?: Point,
     color = '#ffffff',
-    orientationMode?: OrientationMode,
+    pointOrientationMode?: OrientationMode,
+    cameraOrientationMode?: OrientationMode,
   ): Point | OrientedPoint {
     const normalized_coordinates = normalizeCoordinates(coordinates);
 
@@ -95,7 +96,8 @@ export function buildCommandClosures(
             quaternion as [number, number, number, number],
             relativeTo,
             color,
-            orientationMode,
+            pointOrientationMode,
+            cameraOrientationMode,
           )
         : _addPoint(
             scene,
@@ -121,6 +123,7 @@ export function buildCommandClosures(
       orientation: [number, number, number, number];
       fov: number;
     },
+    cameraOrientationMode?: OrientationMode,
   ): Promise<Satellite> {
     const result = await _addSatellite(
       scene,
@@ -129,6 +132,7 @@ export function buildCommandClosures(
       tleSource,
       orientationMode,
       cameraConfig,
+      cameraOrientationMode,
     );
     if (result.ok) {
       return result.val;

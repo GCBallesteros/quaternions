@@ -355,7 +355,8 @@ export function _addPoint(
   quaternion: [number, number, number, number],
   relativeTo?: Point | 'Moon',
   color?: string,
-  orientationMode?: OrientationMode,
+  pointOrientationMode?: OrientationMode,
+  cameraOrientationMode?: OrientationMode,
 ): Result<OrientedPoint, string>;
 
 export function _addPoint(
@@ -376,7 +377,8 @@ export function _addPoint(
   quaternion: [number, number, number, number] | null = null,
   relativeTo?: Point | 'Moon',
   color: string = '#ffffff',
-  orientationMode?: OrientationMode,
+  pointOrientationMode?: OrientationMode,
+  cameraOrientationMode?: OrientationMode,
 ): Result<Point | OrientedPoint, string> {
   if (!utils.validateName(name, state)) {
     return Err('Invalid point name or name already exists');
@@ -406,9 +408,12 @@ export function _addPoint(
     const q = new THREE.Quaternion(...quaternion); // xyzw
     new_point.geometry.setRotationFromQuaternion(q);
 
-    // Set orientation mode if provided
-    if (orientationMode) {
-      (new_point as OrientedPoint).orientationMode = orientationMode;
+    // Set orientation modes if provided
+    if (pointOrientationMode) {
+      (new_point as OrientedPoint).pointOrientationMode = pointOrientationMode;
+    }
+    if (cameraOrientationMode) {
+      (new_point as OrientedPoint).cameraOrientationMode = cameraOrientationMode;
     }
   } else {
     new_point = createFloatingPoint(color);
@@ -435,6 +440,7 @@ export async function _addSatellite(
   tleSource: TleSource,
   orientationMode: OrientationMode,
   cameraConfig?: CameraConfig,
+  cameraOrientationMode?: OrientationMode,
 ): Promise<Result<Satellite, string>> {
   // Satellites don't get passed coordinates because their location is determined
   // by their TLE and the simulation time
@@ -463,6 +469,7 @@ export async function _addSatellite(
         tleSource.tle,
         orientationMode,
         cameraConfig,
+        cameraOrientationMode,
       );
       break;
 
@@ -473,6 +480,7 @@ export async function _addSatellite(
         tleSource.noradId,
         orientationMode,
         cameraConfig,
+        cameraOrientationMode,
       );
       break;
   }
@@ -589,15 +597,22 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
   // Update all oriented points
   for (const point_name in state.points) {
     const point = state.points[point_name];
-
+    
     // Update satellites (position and orientation)
     if (point instanceof Satellite) {
       point.update(state.currentTime, state);
     }
     // Update camera orientation for other oriented points
-    else if (point instanceof OrientedPoint && point.orientationMode) {
-      // Only update camera orientation, not the point itself
-      point.updateOrientation(state);
+    else if (point instanceof OrientedPoint) {
+      // Update point orientation if it has a point orientation mode
+      if (point.pointOrientationMode) {
+        point.updatePointOrientation(state);
+      }
+      
+      // Update camera orientation if it has a camera orientation mode
+      if (point.cameraOrientationMode) {
+        point.updateOrientation(state);
+      }
     }
   }
 
