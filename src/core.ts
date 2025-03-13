@@ -369,10 +369,11 @@ export function _addPoint(
   }
 
   let new_point: Point | OrientedPoint;
-  
+
   // Determine if we need an OrientedPoint based on orientation mode
-  const needsOrientedPoint = pointOrientationMode !== undefined || cameraOrientationMode !== undefined;
-  
+  const needsOrientedPoint =
+    pointOrientationMode !== undefined || cameraOrientationMode !== undefined;
+
   if (needsOrientedPoint) {
     // Create an OrientedPoint
     const new_point_: Point = createFloatingPoint(color);
@@ -397,7 +398,8 @@ export function _addPoint(
       (new_point as OrientedPoint).pointOrientationMode = pointOrientationMode;
     }
     if (cameraOrientationMode) {
-      (new_point as OrientedPoint).cameraOrientationMode = cameraOrientationMode;
+      (new_point as OrientedPoint).cameraOrientationMode =
+        cameraOrientationMode;
     }
   } else {
     // Create a regular Point
