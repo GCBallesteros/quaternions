@@ -46,12 +46,7 @@ export class Satellite extends OrientedPoint {
     },
     cameraConfig?: CameraConfig,
   ) {
-    super(
-      geometry,
-      cameraConfig,
-      orientationMode,
-      null,
-    );
+    super(geometry, cameraConfig, orientationMode, null);
     this.tle = tle;
 
     // Initialize trail state if we have a camera
@@ -89,13 +84,7 @@ export class Satellite extends OrientedPoint {
     } else {
       throw new Error(result.val);
     }
-    return new Satellite(
-      scene,
-      geometry,
-      tle,
-      orientationMode,
-      cameraConfig,
-    );
+    return new Satellite(scene, geometry, tle, orientationMode, cameraConfig);
   }
 
   set offset(offset: [number, number, number, number]) {
