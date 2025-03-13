@@ -371,10 +371,15 @@ export function _addPoint(
   let new_point: Point | OrientedPoint;
 
   // Determine if we need an OrientedPoint based on orientation mode
-  if (cameraOrientationMode !== undefined && pointOrientationMode === undefined) {
-    return Err('Cannot specify cameraOrientationMode without pointOrientationMode');
+  if (
+    cameraOrientationMode !== undefined &&
+    pointOrientationMode === undefined
+  ) {
+    return Err(
+      'Cannot specify cameraOrientationMode without pointOrientationMode',
+    );
   }
-  
+
   const needsOrientedPoint =
     pointOrientationMode !== undefined || cameraOrientationMode !== undefined;
 
