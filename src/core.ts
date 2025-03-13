@@ -340,10 +340,7 @@ export function _createLine(
 }
 
 export function addFrame(point: Point): OrientedPoint {
-  const coordinate_frame = createFrame(
-    { x: 0, y: 0, z: 0 },
-    350,
-  );
+  const coordinate_frame = createFrame({ x: 0, y: 0, z: 0 }, 350);
   const point_geo = point.geometry.clone();
   point_geo.add(coordinate_frame);
 
@@ -592,7 +589,7 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
   // Update all oriented points
   for (const point_name in state.points) {
     const point = state.points[point_name];
-    
+
     // Update satellites (position and orientation)
     if (point instanceof Satellite) {
       point.update(state.currentTime, state);

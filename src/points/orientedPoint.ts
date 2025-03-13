@@ -181,27 +181,27 @@ export class OrientedPoint extends Point {
 
     try {
       const new_orientation = this.calculateOrientation(state, velocity_);
-      
+
       // Get the camera
       const camera = this.camera as THREE.Camera;
-      
+
       // Create quaternion from the calculated orientation
       const q = new THREE.Quaternion(...new_orientation); // xyzw
-      
+
       // Apply camera-specific rotation (to align with camera's coordinate system)
       const camera_to_z_quaternion = new THREE.Quaternion();
       camera_to_z_quaternion.setFromAxisAngle(
         new THREE.Vector3(1, 0, 0),
         Math.PI,
       );
-      
+
       // Set the camera's rotation
       camera.setRotationFromQuaternion(q.multiply(camera_to_z_quaternion));
     } catch (error) {
       console.error('Error updating camera orientation:', error);
     }
   }
-  
+
   /**
    * Updates the point's own orientation based on the orientation mode
    * This is used by subclasses like Satellite that need to orient the entire object
@@ -252,7 +252,7 @@ export class OrientedPoint extends Point {
 
     const camera = new THREE.PerspectiveCamera(config.fov, 1, 400, 500000);
     camera.name = '_camera';
-    
+
     // Initial camera orientation
     const camera_orientation_in_body_frame = new THREE.Quaternion(
       config.orientation[0],
@@ -260,7 +260,7 @@ export class OrientedPoint extends Point {
       config.orientation[2],
       config.orientation[3],
     );
-    
+
     const camera_to_z_quaternion = new THREE.Quaternion();
     camera_to_z_quaternion.setFromAxisAngle(
       new THREE.Vector3(1, 0, 0),
@@ -269,7 +269,7 @@ export class OrientedPoint extends Point {
     camera.setRotationFromQuaternion(
       camera_orientation_in_body_frame.multiply(camera_to_z_quaternion),
     );
-    
+
     // Layer 1 belongs to things that should be visible from the global view
     // but not from the satellite, e.g. the trail
     camera.layers.disable(1);

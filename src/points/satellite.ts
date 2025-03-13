@@ -132,10 +132,10 @@ export class Satellite extends OrientedPoint {
     );
 
     this.position = [position_.x, position_.y, position_.z];
-    
+
     // For satellites, we want to update the point's orientation
     this.updatePointOrientation(state, velocity_);
-    
+
     // Also update the camera orientation if it exists
     if (this.camera) {
       this.updateOrientation(state, velocity_);
