@@ -352,35 +352,11 @@ export function _addPoint(
   state: State,
   name: string,
   coordinates: Array3,
-  quaternion: [number, number, number, number],
-  relativeTo?: Point | 'Moon',
-  color?: string,
-  pointOrientationMode?: OrientationMode,
-  cameraOrientationMode?: OrientationMode,
-): Result<OrientedPoint, string>;
-
-export function _addPoint(
-  scene: THREE.Scene,
-  state: State,
-  name: string,
-  coordinates: Array3,
-  quaternion: null,
-  relativeTo?: Point | 'Moon',
-  color?: string,
-  pointOrientationMode?: OrientationMode,
-  cameraOrientationMode?: OrientationMode,
-): Result<Point, string>;
-
-export function _addPoint(
-  scene: THREE.Scene,
-  state: State,
-  name: string,
-  coordinates: Array3,
-  quaternion: [number, number, number, number] | null = null,
   relativeTo?: Point | 'Moon',
   color: string = '#ffffff',
   pointOrientationMode?: OrientationMode,
   cameraOrientationMode?: OrientationMode,
+  initialQuaternion?: [number, number, number, number],
 ): Result<Point | OrientedPoint, string> {
   if (!utils.validateName(name, state)) {
     return Err('Invalid point name or name already exists');
@@ -393,14 +369,12 @@ export function _addPoint(
   }
 
   let new_point: Point | OrientedPoint;
-  // AI! Now that we have a pointOrientationMode that should be what determines if we have
-  // a Point or an OrientedPoint. We should probably call _setTime to the current time
-  // to make sure that everything gets updated.
-  if (quaternion !== null) {
-    if (quaternion.length !== 4) {
-      return Err('Invalid quaternion: must have exactly 4 components');
-    }
-
+  
+  // Determine if we need an OrientedPoint based on orientation mode
+  const needsOrientedPoint = pointOrientationMode !== undefined || cameraOrientationMode !== undefined;
+  
+  if (needsOrientedPoint) {
+    // Create an OrientedPoint
     const new_point_: Point = createFloatingPoint(color);
     new_point_.geometry.position.set(
       coordinates[0],
@@ -409,19 +383,24 @@ export function _addPoint(
     );
     new_point = addFrame(new_point_);
 
-    // Set initial orientation from quaternion
-    const q = new THREE.Quaternion(...quaternion); // xyzw
-    new_point.geometry.setRotationFromQuaternion(q);
+    // Set initial orientation from quaternion if provided
+    if (initialQuaternion) {
+      if (initialQuaternion.length !== 4) {
+        return Err('Invalid quaternion: must have exactly 4 components');
+      }
+      const q = new THREE.Quaternion(...initialQuaternion); // xyzw
+      new_point.geometry.setRotationFromQuaternion(q);
+    }
 
-    // Set orientation modes if provided
+    // Set orientation modes
     if (pointOrientationMode) {
       (new_point as OrientedPoint).pointOrientationMode = pointOrientationMode;
     }
     if (cameraOrientationMode) {
-      (new_point as OrientedPoint).cameraOrientationMode =
-        cameraOrientationMode;
+      (new_point as OrientedPoint).cameraOrientationMode = cameraOrientationMode;
     }
   } else {
+    // Create a regular Point
     new_point = createFloatingPoint(color);
     new_point.geometry.position.set(...coordinates);
   }

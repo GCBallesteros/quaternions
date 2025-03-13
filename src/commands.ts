@@ -77,37 +77,25 @@ export function buildCommandClosures(
   function addPoint(
     name: string,
     coordinates: Array3 | Vector3,
-    quaternion = null,
     relativeTo?: Point,
     color = '#ffffff',
     pointOrientationMode?: OrientationMode,
     cameraOrientationMode?: OrientationMode,
+    initialQuaternion?: [number, number, number, number],
   ): Point | OrientedPoint {
     const normalized_coordinates = normalizeCoordinates(coordinates);
 
-    // Handle the quaternion parameter correctly based on its value
-    const result =
-      quaternion !== null
-        ? _addPoint(
-            scene,
-            state,
-            name,
-            normalized_coordinates,
-            quaternion as [number, number, number, number],
-            relativeTo,
-            color,
-            pointOrientationMode,
-            cameraOrientationMode,
-          )
-        : _addPoint(
-            scene,
-            state,
-            name,
-            normalized_coordinates,
-            null,
-            relativeTo,
-            color,
-          );
+    const result = _addPoint(
+      scene,
+      state,
+      name,
+      normalized_coordinates,
+      relativeTo,
+      color,
+      pointOrientationMode,
+      cameraOrientationMode,
+      initialQuaternion,
+    );
     if (result.ok) {
       return result.val;
     } else {
