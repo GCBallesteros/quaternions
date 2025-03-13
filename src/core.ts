@@ -413,7 +413,8 @@ export function _addPoint(
       (new_point as OrientedPoint).pointOrientationMode = pointOrientationMode;
     }
     if (cameraOrientationMode) {
-      (new_point as OrientedPoint).cameraOrientationMode = cameraOrientationMode;
+      (new_point as OrientedPoint).cameraOrientationMode =
+        cameraOrientationMode;
     }
   } else {
     new_point = createFloatingPoint(color);
@@ -597,7 +598,7 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
   // Update all oriented points
   for (const point_name in state.points) {
     const point = state.points[point_name];
-    
+
     // Update satellites (position and orientation)
     if (point instanceof Satellite) {
       point.update(state.currentTime, state);
@@ -608,7 +609,7 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
       if (point.pointOrientationMode) {
         point.updatePointOrientation(state);
       }
-      
+
       // Update camera orientation if it has a camera orientation mode
       if (point.cameraOrientationMode) {
         point.updateOrientation(state);

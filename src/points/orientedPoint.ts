@@ -170,10 +170,7 @@ export class OrientedPoint extends Point {
     }
 
     // Apply additional rotation if specified in dynamic mode
-    if (
-      orientationMode.type === 'dynamic' &&
-      orientationMode.offset
-    ) {
+    if (orientationMode.type === 'dynamic' && orientationMode.offset) {
       const q = new THREE.Quaternion(...new_orientation);
       const offsetQ = new THREE.Quaternion(...orientationMode.offset);
       q.multiply(offsetQ);
@@ -198,7 +195,11 @@ export class OrientedPoint extends Point {
     }
 
     try {
-      const new_orientation = this.calculateOrientation(state, this._cameraOrientationMode, velocity_);
+      const new_orientation = this.calculateOrientation(
+        state,
+        this._cameraOrientationMode,
+        velocity_,
+      );
 
       // Get the camera
       const camera = this.camera as THREE.Camera;
@@ -235,7 +236,11 @@ export class OrientedPoint extends Point {
     }
 
     try {
-      const new_orientation = this.calculateOrientation(state, this._pointOrientationMode, velocity_);
+      const new_orientation = this.calculateOrientation(
+        state,
+        this._pointOrientationMode,
+        velocity_,
+      );
       const q = new THREE.Quaternion(...new_orientation); // xyzw
       this.geometry.setRotationFromQuaternion(q);
     } catch (error) {

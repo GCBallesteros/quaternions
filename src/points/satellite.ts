@@ -48,10 +48,10 @@ export class Satellite extends OrientedPoint {
     cameraOrientationMode?: OrientationMode,
   ) {
     super(
-      geometry, 
-      cameraConfig, 
-      orientationMode, 
-      cameraOrientationMode || orientationMode
+      geometry,
+      cameraConfig,
+      orientationMode,
+      cameraOrientationMode || orientationMode,
     );
     this.tle = tle;
 
@@ -91,7 +91,14 @@ export class Satellite extends OrientedPoint {
     } else {
       throw new Error(result.val);
     }
-    return new Satellite(scene, geometry, tle, orientationMode, cameraConfig, cameraOrientationMode);
+    return new Satellite(
+      scene,
+      geometry,
+      tle,
+      orientationMode,
+      cameraConfig,
+      cameraOrientationMode,
+    );
   }
 
   set offset(offset: [number, number, number, number]) {
