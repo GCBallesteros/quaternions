@@ -592,13 +592,14 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
   // Update all oriented points
   for (const point_name in state.points) {
     const point = state.points[point_name];
-
+    
     // Update satellites (position and orientation)
     if (point instanceof Satellite) {
       point.update(state.currentTime, state);
     }
-    // Update orientation for other oriented points
+    // Update camera orientation for other oriented points
     else if (point instanceof OrientedPoint && point.orientationMode) {
+      // Only update camera orientation, not the point itself
       point.updateOrientation(state);
     }
   }

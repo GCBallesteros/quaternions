@@ -87,12 +87,18 @@ export class OrientedPoint extends Point {
     }
   }
 
-  updateOrientation(
+  /**
+   * Calculates the orientation quaternion based on the orientation mode
+   * @param state Application state
+   * @param velocity_ Optional velocity vector (needed for Velocity target)
+   * @returns Quaternion as Vector4 [x, y, z, w]
+   */
+  protected calculateOrientation(
     state: State,
     velocity_: THREE.Vector3 | null = null,
-  ): void {
+  ): Vector4 {
     if (!this._orientationMode) {
-      return;
+      throw new Error('No orientation mode defined');
     }
 
     // Get world position instead of local position
@@ -145,18 +151,78 @@ export class OrientedPoint extends Point {
       }
     }
 
-    let q = new THREE.Quaternion(...new_orientation); // xyzw
-
     // Apply additional rotation if specified in dynamic mode
     if (
       this._orientationMode.type === 'dynamic' &&
       this._orientationMode.offset
     ) {
+      const q = new THREE.Quaternion(...new_orientation);
       const offsetQ = new THREE.Quaternion(...this._orientationMode.offset);
-      q = q.multiply(offsetQ);
+      q.multiply(offsetQ);
+      new_orientation = [q.x, q.y, q.z, q.w];
     }
 
-    this.geometry.setRotationFromQuaternion(q);
+    return new_orientation;
+  }
+
+  /**
+   * Updates the camera orientation based on the orientation mode
+   * For OrientedPoint, this updates the camera if one exists, but not the point itself
+   * @param state Application state
+   * @param velocity_ Optional velocity vector (needed for Velocity target)
+   */
+  updateOrientation(
+    state: State,
+    velocity_: THREE.Vector3 | null = null,
+  ): void {
+    if (!this._orientationMode || !this.camera) {
+      return;
+    }
+
+    try {
+      const new_orientation = this.calculateOrientation(state, velocity_);
+      
+      // Get the camera
+      const camera = this.camera as THREE.Camera;
+      
+      // Create quaternion from the calculated orientation
+      const q = new THREE.Quaternion(...new_orientation); // xyzw
+      
+      // Apply camera-specific rotation (to align with camera's coordinate system)
+      const camera_to_z_quaternion = new THREE.Quaternion();
+      camera_to_z_quaternion.setFromAxisAngle(
+        new THREE.Vector3(1, 0, 0),
+        Math.PI,
+      );
+      
+      // Set the camera's rotation
+      camera.setRotationFromQuaternion(q.multiply(camera_to_z_quaternion));
+    } catch (error) {
+      console.error('Error updating camera orientation:', error);
+    }
+  }
+  
+  /**
+   * Updates the point's own orientation based on the orientation mode
+   * This is used by subclasses like Satellite that need to orient the entire object
+   * @param state Application state
+   * @param velocity_ Optional velocity vector (needed for Velocity target)
+   */
+  updatePointOrientation(
+    state: State,
+    velocity_: THREE.Vector3 | null = null,
+  ): void {
+    if (!this._orientationMode) {
+      return;
+    }
+
+    try {
+      const new_orientation = this.calculateOrientation(state, velocity_);
+      const q = new THREE.Quaternion(...new_orientation); // xyzw
+      this.geometry.setRotationFromQuaternion(q);
+    } catch (error) {
+      console.error('Error updating point orientation:', error);
+    }
   }
 
   /**
@@ -184,15 +250,17 @@ export class OrientedPoint extends Point {
     }
     this.camera_orientation = config.orientation;
 
+    const camera = new THREE.PerspectiveCamera(config.fov, 1, 400, 500000);
+    camera.name = '_camera';
+    
+    // Initial camera orientation
     const camera_orientation_in_body_frame = new THREE.Quaternion(
       config.orientation[0],
       config.orientation[1],
       config.orientation[2],
       config.orientation[3],
     );
-
-    const camera = new THREE.PerspectiveCamera(config.fov, 1, 400, 500000);
-    camera.name = '_camera';
+    
     const camera_to_z_quaternion = new THREE.Quaternion();
     camera_to_z_quaternion.setFromAxisAngle(
       new THREE.Vector3(1, 0, 0),
@@ -201,6 +269,7 @@ export class OrientedPoint extends Point {
     camera.setRotationFromQuaternion(
       camera_orientation_in_body_frame.multiply(camera_to_z_quaternion),
     );
+    
     // Layer 1 belongs to things that should be visible from the global view
     // but not from the satellite, e.g. the trail
     camera.layers.disable(1);
