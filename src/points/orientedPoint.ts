@@ -51,15 +51,6 @@ export class OrientedPoint extends Point {
     this._cameraOrientationMode = mode;
   }
 
-  // For backward compatibility
-  get orientationMode(): OrientationMode | undefined {
-    return this._pointOrientationMode;
-  }
-
-  set orientationMode(mode: OrientationMode | undefined) {
-    this._pointOrientationMode = mode;
-  }
-
   protected isNamedTarget(value: any): value is NamedTargets {
     return typeof value === 'object' && value !== null && 'type' in value;
   }

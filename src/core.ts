@@ -441,7 +441,6 @@ export async function _addSatellite(
   tleSource: TleSource,
   orientationMode: OrientationMode,
   cameraConfig?: CameraConfig,
-  cameraOrientationMode?: OrientationMode,
 ): Promise<Result<Satellite, string>> {
   // Satellites don't get passed coordinates because their location is determined
   // by their TLE and the simulation time
@@ -470,7 +469,6 @@ export async function _addSatellite(
         tleSource.tle,
         orientationMode,
         cameraConfig,
-        cameraOrientationMode,
       );
       break;
 
@@ -481,7 +479,6 @@ export async function _addSatellite(
         tleSource.noradId,
         orientationMode,
         cameraConfig,
-        cameraOrientationMode,
       );
       break;
   }

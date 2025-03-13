@@ -45,13 +45,12 @@ export class Satellite extends OrientedPoint {
       secondaryTargetVector: { type: 'Velocity' },
     },
     cameraConfig?: CameraConfig,
-    cameraOrientationMode?: OrientationMode,
   ) {
     super(
       geometry,
       cameraConfig,
       orientationMode,
-      cameraOrientationMode || orientationMode,
+      null,
     );
     this.tle = tle;
 
@@ -81,7 +80,6 @@ export class Satellite extends OrientedPoint {
       secondaryTargetVector: { type: 'Velocity' },
     },
     cameraConfig?: CameraConfig,
-    cameraOrientationMode?: OrientationMode,
   ): Promise<Satellite> {
     const result = await _fetchTLE(noradId);
     let tle: string;
@@ -97,7 +95,6 @@ export class Satellite extends OrientedPoint {
       tle,
       orientationMode,
       cameraConfig,
-      cameraOrientationMode,
     );
   }
 

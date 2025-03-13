@@ -123,7 +123,6 @@ export function buildCommandClosures(
       orientation: [number, number, number, number];
       fov: number;
     },
-    cameraOrientationMode?: OrientationMode,
   ): Promise<Satellite> {
     const result = await _addSatellite(
       scene,
@@ -132,7 +131,6 @@ export function buildCommandClosures(
       tleSource,
       orientationMode,
       cameraConfig,
-      cameraOrientationMode,
     );
     if (result.ok) {
       return result.val;
