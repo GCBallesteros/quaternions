@@ -100,7 +100,7 @@ export function createFloatingPoint(
   radius: number = 50,
   widthSegments: number = 16,
   heightSegments: number = 16,
-): Point {
+): THREE.Group {
   const pointGroup = new THREE.Group();
   const geometry = new THREE.SphereGeometry(
     radius,
@@ -113,7 +113,7 @@ export function createFloatingPoint(
   const floatingPoint = new THREE.Mesh(geometry, material);
   floatingPoint.name = 'point-sphere'; // Give the sphere mesh a specific name
   pointGroup.add(floatingPoint);
-  return new Point(pointGroup);
+  return pointGroup;
 }
 
 export function createLineGeometry(

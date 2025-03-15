@@ -6,14 +6,15 @@ import { addWebMercatorTile } from './addMercatorTiles.js';
 import { getMoonPosition } from './astronomy/moon.js';
 import { updateSunLight } from './astronomy/sun.js';
 import { CircularBuffer } from './circularBuffer.js';
-import { createFloatingPoint } from './components.js';
 import { setupTimeControls } from './components/timeControls.js';
-import { _createLine, _mov, _setTime, addFrame } from './core.js';
+import { _createLine, _mov, _setTime } from './core.js';
 import { makeEarth } from './earth.js';
 import { findMercatorTilesInPOV } from './findMercatorTiles.js';
 import { makeMoon } from './moon.js';
 import { updatePlots } from './plots.js';
+import { Point } from './points/point.js';
 import { State, TileCoordinate } from './types.js';
+import { OrientedPoint } from './points/orientedPoint.js';
 
 /**
  * Determines if a camera other than the main camera is currently rendering the scene
@@ -93,7 +94,7 @@ export function initializeCanvas(
 }
 
 export function addInitGeometries(state: State, scene: THREE.Scene): void {
-  state.points['sat'] = addFrame(createFloatingPoint());
+  state.points['sat'] = new OrientedPoint([0, 0, 0, 1]);
   scene.add(state.points['sat'].geometry);
   _mov(state, 'sat', [39, 0, 500], true);
   _createLine(scene, state, 'nadir', [0, 0, 0], 'sat');

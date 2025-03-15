@@ -2,12 +2,13 @@ import * as THREE from 'three';
 
 import { Array3 } from '../types.js';
 import { disposeObject } from '../utils.js';
+import { createFloatingPoint } from '../components.js';
 
 export class Point {
   public geometry: THREE.Group;
 
-  constructor(geometry: THREE.Group) {
-    this.geometry = geometry;
+  constructor(color: string = '#ffffff') {
+    this.geometry = createFloatingPoint(color);
   }
 
   dispose(scene: THREE.Scene): void {

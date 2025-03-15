@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 
 import {
+  _addObservatory,
   _addPoint,
   _addSatellite,
   _angle,
@@ -27,12 +28,16 @@ import {
 } from './core.js';
 import { findMercatorTilesInPOV } from './findMercatorTiles.js';
 import { log } from './logger.js';
+import { Observatory } from './points/observatory.js';
 import { OrientedPoint } from './points/orientedPoint.js';
 import { Point } from './points/point.js';
 import { Satellite } from './points/satellite.js';
-import { NamedTargets, OrientationMode } from './types/orientation.js';
 import { updateTrailSwitch } from './trail.js';
 import { Array3, CommandFunction, State, TleSource, Vector4 } from './types.js';
+import {
+  ObservatoryOrientationMode,
+  OrientationMode,
+} from './types/orientation.js';
 import {
   geo2xyz,
   normalizeCoordinates,
@@ -77,10 +82,9 @@ export function buildCommandClosures(
   function addPoint(
     name: string,
     coordinates: Array3 | Vector3,
+    orientation: Vector4,
     relativeTo: Point | 'Moon' | undefined,
     color = '#ffffff',
-    pointOrientationMode?: OrientationMode,
-    cameraOrientationMode?: OrientationMode,
   ): Point | OrientedPoint {
     const normalized_coordinates = normalizeCoordinates(coordinates);
 
@@ -89,10 +93,36 @@ export function buildCommandClosures(
       state,
       name,
       normalized_coordinates,
+      orientation,
       relativeTo,
       color,
-      pointOrientationMode,
-      cameraOrientationMode,
+    );
+    if (result.ok) {
+      return result.val;
+    } else {
+      throw new Error(result.val);
+    }
+  }
+
+  function addObservatory(
+    name: string,
+    coordinates: Array3 | Vector3,
+    orientation: Vector4,
+    fov: number,
+    observatoryOrientationMode: ObservatoryOrientationMode,
+    relativeTo?: Point | 'Moon',
+  ): Observatory {
+    const normalized_coordinates = normalizeCoordinates(coordinates);
+
+    const result = _addObservatory(
+      scene,
+      state,
+      name,
+      normalized_coordinates,
+      orientation,
+      fov,
+      observatoryOrientationMode,
+      relativeTo,
     );
     if (result.ok) {
       return result.val;
@@ -410,6 +440,7 @@ export function buildCommandClosures(
     mov,
     rot,
     addPoint,
+    addObservatory,
     deletePoint,
     addSatellite,
     createLine,

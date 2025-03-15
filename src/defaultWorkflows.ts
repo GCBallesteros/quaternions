@@ -65,30 +65,54 @@ const flyMeToTheMoon = `reset(true);
 let date = utcDate(2025, 3, 14, 8, 25, 0);
 setTime(date);
 
+let sat = await addSatellite(
+  'hf1a', {
+    type: 'noradId',
+    noradId: '60562', // NORAD ID for the satellite
+  }, {
+    type: 'dynamic',
+    primaryBodyVector: 'z',
+    secondaryBodyVector: 'y',
+    primaryTargetVector: NamedTargets.Moon,
+    secondaryTargetVector: NamedTargets.Velocity,
+  }, {
+    orientation: [0, 0, 0, 1],
+    fov: 1,
+  }
+);
+
 const moonRadius = 1738.0;
+let moonBasePos = new Vector3(0, 0, -moonRadius);
 
-let moonPos = new Vector3(
-  state.bodies.moon.position.x,
-  state.bodies.moon.position.y,
-  state.bodies.moon.position.z,
-);
+let moonBase = addObservatory(
+  "MoonBase",
+  moonBasePos,
+  [Math.sin(Math.PI/2), 0,0,Math.cos(Math.PI/2)],
+  3,
+  {
+    type: 'dynamic',
+    primaryTargetVector: NamedTargets.Nadir,
+    secondaryTargetVector: [0,0,1],
+  },
+  "Moon",
+)
 
-let moonBasePos = new Vector3(-moonRadius, -moonRadius, -moonRadius);
-
-let earthPointingQuat = findBestQuaternion(
-  "z",
-  "y",
-  moonPos.scale(-1).toArray(),
-  [0, 0, 1]
-);
-
-let moonBase = addPoint("MoonBase", moonBasePos, earthPointingQuat, "Moon","#ff0000");
-moonBase.addCamera({
-  fov: 6,
-  orientation: [0, 0, 0, 1]
-});
+let kuvaSpaceHQ = addObservatory(
+  "KS-HQ",
+  geo2xyz([60.186, 24.828, 0]),
+  [0, 0, 0, 1],
+  8,
+  {
+    type: 'dynamic',
+    primaryTargetVector: NamedTargets.Moon,
+    secondaryTargetVector: [0,0,1],
+  },
+)
 
 switchCamera(moonBase.camera);
+// %%
+switchCamera(camera("KS-HQ"));
+
 `;
 
 export const defaultWorkflows: Record<string, WorkflowExample> = {

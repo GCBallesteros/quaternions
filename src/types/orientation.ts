@@ -12,6 +12,14 @@ export type OrientationMode =
       offset?: Vector4;
     };
 
+export type ObservatoryOrientationMode =
+  | { type: 'fixed'; ecef_quaternion: Vector4 }
+  | {
+      type: 'dynamic';
+      primaryTargetVector: Array3 | NamedTargets | Vector3;
+      secondaryTargetVector: Array3 | NamedTargets | Vector3;
+    };
+
 export type NamedTargets =
   | { type: 'Moon' }
   | { type: 'Sun' }

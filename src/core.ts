@@ -4,20 +4,20 @@ import { Err, Ok, Result, Some } from 'ts-results';
 
 import { getMoonPosition } from './astronomy/moon.js';
 import { updateSunLight } from './astronomy/sun.js';
-import {
-  createFloatingPoint,
-  createFrame,
-  createLineGeometry,
-} from './components.js';
+import { createLineGeometry } from './components.js';
 import { addInitGeometries } from './init.js';
 import { log } from './logger.js';
 import { cleanupAllPlots, cleanupPlot } from './plots.js';
+import { Observatory } from './points/observatory.js';
 import { CameraConfig, OrientedPoint } from './points/orientedPoint.js';
 import { Point } from './points/point.js';
 import { Satellite } from './points/satellite.js';
-import { OrientationMode } from './types/orientation.js';
 import { Trail } from './trail.js';
-import { Array3, State, TleSource } from './types.js';
+import { Array3, State, TleSource, Vector4 } from './types.js';
+import {
+  ObservatoryOrientationMode,
+  OrientationMode,
+} from './types/orientation.js';
 import { removePointFromUI } from './ui/bodies.js';
 import * as utils from './utils.js';
 
@@ -339,12 +339,55 @@ export function _createLine(
   return Ok(null);
 }
 
-export function addFrame(point: Point): OrientedPoint {
-  const coordinate_frame = createFrame({ x: 0, y: 0, z: 0 }, 350);
-  const point_geo = point.geometry.clone();
-  point_geo.add(coordinate_frame);
+//export function addFrame(point: Point, orientation: Vector4): OrientedPoint {
+//  const coordinate_frame = createFrame({ x: 0, y: 0, z: 0 }, 350);
+//  const point_geo = point.geometry.clone();
+//  point_geo.add(coordinate_frame);
+//
+//  return new OrientedPoint(point_geo, o);
+//}
 
-  return new OrientedPoint(point_geo);
+export function _addObservatory(
+  scene: THREE.Scene,
+  state: State,
+  name: string,
+  coordinates: Array3,
+  orientation: Vector4,
+  fov: number,
+  observatoryOrientationMode: ObservatoryOrientationMode,
+  relativeTo?: Point | 'Moon',
+): Result<Observatory, string> {
+  if (!utils.validateName(name, state)) {
+    return Err('Invalid point name or name already exists');
+  }
+
+  if (coordinates.length !== 3) {
+    return Err(
+      "'name' must be a string and 'coordinates' must be an array of 3 numbers",
+    );
+  }
+  // Create an OrientedPoint
+  const newObservatory = new Observatory(
+    orientation,
+    fov,
+    observatoryOrientationMode,
+  );
+  newObservatory.geometry.position.set(...coordinates);
+  newObservatory.geometry.setRotationFromQuaternion(
+    new THREE.Quaternion(...orientation),
+  );
+
+  state.points[name] = newObservatory;
+  if (relativeTo) {
+    if (relativeTo === 'Moon') {
+      state.bodies.moon.add(newObservatory.geometry);
+    } else {
+      relativeTo.geometry.add(newObservatory.geometry);
+    }
+  } else {
+    scene.add(newObservatory.geometry);
+  }
+  return Ok(newObservatory);
 }
 
 export function _addPoint(
@@ -352,10 +395,9 @@ export function _addPoint(
   state: State,
   name: string,
   coordinates: Array3,
+  orientation?: Vector4,
   relativeTo: Point | 'Moon' | undefined = undefined,
   color: string = '#ffffff',
-  pointOrientationMode?: OrientationMode,
-  cameraOrientationMode?: OrientationMode,
 ): Result<Point | OrientedPoint, string> {
   if (!utils.validateName(name, state)) {
     return Err('Invalid point name or name already exists');
@@ -369,39 +411,16 @@ export function _addPoint(
 
   let new_point: Point | OrientedPoint;
 
-  // Determine if we need an OrientedPoint based on orientation mode
-  if (
-    cameraOrientationMode !== undefined &&
-    pointOrientationMode === undefined
-  ) {
-    return Err(
-      'Cannot specify cameraOrientationMode without pointOrientationMode',
-    );
-  }
-
-  const needsOrientedPoint = pointOrientationMode !== undefined;
-
-  if (needsOrientedPoint) {
+  if (orientation) {
     // Create an OrientedPoint
-    const new_point_: Point = createFloatingPoint(color);
-    new_point_.geometry.position.set(
-      coordinates[0],
-      coordinates[1],
-      coordinates[2],
+    new_point = new OrientedPoint(orientation);
+    new_point.geometry.position.set(...coordinates);
+    new_point.geometry.setRotationFromQuaternion(
+      new THREE.Quaternion(...orientation),
     );
-    new_point = addFrame(new_point_);
-
-    // Set orientation modes
-    if (pointOrientationMode) {
-      (new_point as OrientedPoint).pointOrientationMode = pointOrientationMode;
-    }
-    if (cameraOrientationMode) {
-      (new_point as OrientedPoint).cameraOrientationMode =
-        cameraOrientationMode;
-    }
   } else {
     // Create a regular Point
-    new_point = createFloatingPoint(color);
+    new_point = new Point(color);
     new_point.geometry.position.set(...coordinates);
   }
 
@@ -418,6 +437,7 @@ export function _addPoint(
   return Ok(new_point);
 }
 
+// TODO: Fix addSatellite
 export async function _addSatellite(
   scene: THREE.Scene,
   state: State,
@@ -432,24 +452,11 @@ export async function _addSatellite(
     return Err('Invalid point name or name already exists');
   }
 
-  const new_point_: Point = createFloatingPoint();
-  const coordinate_frame = createFrame(
-    {
-      x: new_point_.position[0],
-      y: new_point_.position[1],
-      z: new_point_.position[2],
-    },
-    350,
-  );
-  const point_geo = new_point_.geometry.clone();
-  point_geo.add(coordinate_frame);
-
   let newSatellite: Satellite;
   switch (tleSource.type) {
     case 'tle':
       newSatellite = new Satellite(
         scene,
-        point_geo,
         tleSource.tle,
         orientationMode,
         cameraConfig,
@@ -459,7 +466,6 @@ export async function _addSatellite(
     case 'noradId':
       newSatellite = await Satellite.fromNoradId(
         scene,
-        point_geo,
         tleSource.noradId,
         orientationMode,
         cameraConfig,
@@ -576,25 +582,15 @@ export function _setTime(state: State, newTime: Date): Result<null, string> {
     new THREE.Quaternion(...moonData.orientation),
   );
 
-  // Update all oriented points
   for (const point_name in state.points) {
     const point = state.points[point_name];
 
-    // Update satellites (position and orientation)
     if (point instanceof Satellite) {
       point.update(state.currentTime, state);
     }
-    // Update camera orientation for other oriented points
-    else if (point instanceof OrientedPoint) {
-      // Update point orientation if it has a point orientation mode
-      if (point.pointOrientationMode) {
-        point.updatePointOrientation(state);
-      }
 
-      // Update camera orientation if it has a camera orientation mode
-      if (point.cameraOrientationMode) {
-        point.updateOrientation(state);
-      }
+    if (point instanceof Observatory) {
+      point.update(state);
     }
   }
 

@@ -4,8 +4,9 @@ import * as THREE from 'three';
 import { _fetchTLE } from '../core.js';
 import { log } from '../logger.js';
 import { Trail } from '../trail.js';
-import { State } from '../types.js';
+import { State, Vector4 } from '../types.js';
 import { OrientationMode } from '../types/orientation.js';
+import { calculateOrientation } from './orientationUtils.js';
 
 import { CameraConfig, OrientedPoint } from './orientedPoint.js';
 
@@ -13,6 +14,7 @@ export class Satellite extends OrientedPoint {
   private tle: string;
   public trail: Trail | null = null;
   public hasTrail: boolean = false;
+  private orientationMode: OrientationMode;
 
   public enableTrail(): void {
     if (!this.hasTrail && this.camera) {
@@ -35,7 +37,6 @@ export class Satellite extends OrientedPoint {
 
   constructor(
     scene: THREE.Scene,
-    geometry: THREE.Group,
     tle: string,
     orientationMode: OrientationMode = {
       type: 'dynamic',
@@ -46,13 +47,14 @@ export class Satellite extends OrientedPoint {
     },
     cameraConfig?: CameraConfig,
   ) {
-    super(geometry, cameraConfig, orientationMode, undefined);
+    super([0, 0, 0, 1], cameraConfig);
     this.tle = tle;
+    this.orientationMode = orientationMode;
 
     // Initialize trail state if we have a camera
     if (cameraConfig) {
       this.hasTrail = true;
-      this.trail = new Trail(geometry, geometry.position, scene);
+      this.trail = new Trail(this.geometry, this.geometry.position, scene);
     }
   }
 
@@ -65,7 +67,6 @@ export class Satellite extends OrientedPoint {
 
   static async fromNoradId(
     scene: THREE.Scene,
-    geometry: THREE.Group,
     noradId: string,
     orientationMode: OrientationMode = {
       type: 'dynamic',
@@ -84,14 +85,42 @@ export class Satellite extends OrientedPoint {
     } else {
       throw new Error(result.val);
     }
-    return new Satellite(scene, geometry, tle, orientationMode, cameraConfig);
+    return new Satellite(scene, tle, orientationMode, cameraConfig);
   }
 
-  set offset(offset: [number, number, number, number]) {
-    if (this._pointOrientationMode?.type === 'dynamic') {
-      this._pointOrientationMode.offset = offset;
+  set offset(offset: Vector4) {
+    if (this.orientationMode?.type === 'dynamic') {
+      this.orientationMode.offset = offset;
     } else {
       log('Trying to set orientation offset on non-dynamic mode.');
+    }
+  }
+
+  /**
+   * Updates the point's own orientation based on the point orientation mode
+   * This is used by subclasses like Satellite that need to orient the entire object
+   * @param state Application state
+   * @param velocity_ Optional velocity vector (needed for Velocity target)
+   */
+  updatePointOrientation(
+    state: State,
+    velocity_: THREE.Vector3 | null = null,
+  ): void {
+    if (!this.orientationMode) {
+      return;
+    }
+
+    try {
+      const new_orientation = calculateOrientation(
+        state,
+        this.orientationMode,
+        this.geometry,
+        velocity_,
+      );
+      const q = new THREE.Quaternion(...new_orientation); // xyzw
+      this.geometry.setRotationFromQuaternion(q);
+    } catch (error) {
+      console.error('Error updating point orientation:', error);
     }
   }
 
@@ -135,11 +164,6 @@ export class Satellite extends OrientedPoint {
 
     // For satellites, we want to update the point's orientation
     this.updatePointOrientation(state, velocity_);
-
-    // Also update the camera orientation if it exists
-    if (this.camera) {
-      this.updateOrientation(state, velocity_);
-    }
 
     // Update trail if it exists
     if (this.trail) {
