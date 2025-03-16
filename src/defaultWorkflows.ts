@@ -99,7 +99,7 @@ let moonBase = addObservatory(
 
 let kuvaSpaceHQ = addObservatory(
   "KS-HQ",
-  geo2xyz([60.186, 24.828, 0]),
+  geo2xyz([60.186, 24.828, 50]),
   [0, 0, 0, 1],
   8,
   {
