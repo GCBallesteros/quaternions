@@ -356,6 +356,7 @@ export function _addObservatory(
   fov: number,
   observatoryOrientationMode: ObservatoryOrientationMode,
   relativeTo?: Point | 'Moon',
+  color: string = "#ffffff",
 ): Result<Observatory, string> {
   if (!utils.validateName(name, state)) {
     return Err('Invalid point name or name already exists');
@@ -371,6 +372,7 @@ export function _addObservatory(
     orientation,
     fov,
     observatoryOrientationMode,
+    color,
   );
   newObservatory.geometry.position.set(...coordinates);
   newObservatory.geometry.setRotationFromQuaternion(
@@ -413,7 +415,7 @@ export function _addPoint(
 
   if (orientation) {
     // Create an OrientedPoint
-    new_point = new OrientedPoint(orientation);
+    new_point = new OrientedPoint(orientation, undefined, color);
     new_point.geometry.position.set(...coordinates);
     new_point.geometry.setRotationFromQuaternion(
       new THREE.Quaternion(...orientation),

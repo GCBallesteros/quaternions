@@ -23,6 +23,7 @@ function createArrow(
   );
   const shaftMaterial = new THREE.MeshBasicMaterial({
     color,
+    side: THREE.FrontSide,
   });
   const shaft = new THREE.Mesh(shaftGeometry, shaftMaterial);
   shaft.position.copy(
@@ -43,6 +44,7 @@ function createArrow(
   const headGeometry = new THREE.ConeGeometry(length / 40, length / 8, 16);
   const headMaterial = new THREE.MeshBasicMaterial({
     color,
+    side: THREE.FrontSide,
   });
   const head = new THREE.Mesh(headGeometry, headMaterial);
   head.position.copy(
@@ -109,6 +111,7 @@ export function createFloatingPoint(
   );
   const material = new THREE.MeshBasicMaterial({
     color: color,
+    side: THREE.FrontSide,
   });
   const floatingPoint = new THREE.Mesh(geometry, material);
   floatingPoint.name = 'point-sphere'; // Give the sphere mesh a specific name

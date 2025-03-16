@@ -15,8 +15,9 @@ export class OrientedPoint extends Point {
   constructor(
     orientation: Vector4,
     cameraConfig?: CameraConfig,
+    color: string = '#ffffff',
   ) {
-    super();
+    super(color);
     const coordinate_frame = createFrame({ x: 0, y: 0, z: 0 }, 350);
     this.geometry.add(coordinate_frame);
     this.orientation = orientation;
@@ -50,7 +51,7 @@ export class OrientedPoint extends Point {
       throw new Error('A camera named "_camera" already exists in this group!');
     }
 
-    const camera = new THREE.PerspectiveCamera(config.fov, 1, 400, 500000);
+    const camera = new THREE.PerspectiveCamera(config.fov, 1, 10, 500000);
     camera.name = '_camera';
 
     const camera_to_z_quaternion = new THREE.Quaternion();

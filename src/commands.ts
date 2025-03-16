@@ -111,6 +111,7 @@ export function buildCommandClosures(
     fov: number,
     observatoryOrientationMode: ObservatoryOrientationMode,
     relativeTo?: Point | 'Moon',
+    color = '#ff0000',
   ): Observatory {
     const normalized_coordinates = normalizeCoordinates(coordinates);
 
@@ -123,6 +124,7 @@ export function buildCommandClosures(
       fov,
       observatoryOrientationMode,
       relativeTo,
+      color,
     );
     if (result.ok) {
       return result.val;

@@ -88,6 +88,7 @@ export function initializeCanvas(
   const renderer = new THREE.WebGLRenderer({
     canvas,
     antialias: true,
+    //logarithmicDepthBuffer: true,
   });
   renderer.setSize(canvas.clientWidth, canvas.clientHeight);
   return renderer;

@@ -16,8 +16,9 @@ export class Observatory extends OrientedPoint {
     orientation: Vector4,
     fov: number,
     observatoryOrientationMode: ObservatoryOrientationMode,
+    color: string,
   ) {
-    super(orientation, { fov: fov, orientation: [0, 0, 0, 1] });
+    super(orientation, { fov: fov, orientation: [0, 0, 0, 1] }, color);
 
     if (observatoryOrientationMode.type === 'dynamic') {
       this._observatoryOrientationMode = {
@@ -72,7 +73,7 @@ export class Observatory extends OrientedPoint {
 
       // Set the camera's rotation
       camera.setRotationFromQuaternion(
-        observatoryWorldQuaternion.multiply(q.multiply(camera_to_z_quaternion)),
+        observatoryWorldQuaternion.invert().multiply(q.multiply(camera_to_z_quaternion)),
       );
     } catch (error) {
       console.error('Error updating camera orientation:', error);

@@ -62,46 +62,52 @@ const hotInHerre = `reset(true);
 
 const flyMeToTheMoon = `reset(true);
 
-let date = utcDate(2025, 3, 14, 8, 25, 0);
+let date = utcDate(2025, 3, 23, 22, 30, 0);
 setTime(date);
 
-let sat = await addSatellite(
-  'hf1a', {
-    type: 'noradId',
-    noradId: '60562', // NORAD ID for the satellite
-  }, {
-    type: 'dynamic',
-    primaryBodyVector: 'z',
-    secondaryBodyVector: 'y',
-    primaryTargetVector: NamedTargets.Moon,
-    secondaryTargetVector: NamedTargets.Velocity,
-  }, {
-    orientation: [0, 0, 0, 1],
-    fov: 1,
-  }
-);
+//let sat = await addSatellite(
+//  'hf1a', {
+//    type: 'noradId',
+//    noradId: '60562', // NORAD ID for the satellite
+//  }, {
+//    type: 'dynamic',
+//    primaryBodyVector: 'z',
+//    secondaryBodyVector: 'y',
+//    primaryTargetVector: NamedTargets.Moon,
+//    secondaryTargetVector: NamedTargets.Velocity,
+//  }, {
+//    orientation: [0, 0, 0, 1],
+//    fov: 1,
+//  }
+//);
 
 const moonRadius = 1738.0;
-let moonBasePos = new Vector3(0, 0, -moonRadius);
+let inMoonCoords = sph2xyz([0,89,moonRadius*1.0005]);
+let moonBasePos = new Vector3(
+  inMoonCoords[0],
+  inMoonCoords[1],
+  inMoonCoords[2]
+);
 
 let moonBase = addObservatory(
   "MoonBase",
   moonBasePos,
-  [Math.sin(Math.PI/2), 0,0,Math.cos(Math.PI/2)],
-  3,
+  [0, 0, 0, 1],
+  10,
   {
     type: 'dynamic',
     primaryTargetVector: NamedTargets.Nadir,
-    secondaryTargetVector: [0,0,1],
+    secondaryTargetVector: [-1, 0, 0],
   },
   "Moon",
+  "#00ff00",
 )
 
 let kuvaSpaceHQ = addObservatory(
   "KS-HQ",
   geo2xyz([60.186, 24.828, 50]),
   [0, 0, 0, 1],
-  8,
+  2,
   {
     type: 'dynamic',
     primaryTargetVector: NamedTargets.Moon,
@@ -109,10 +115,9 @@ let kuvaSpaceHQ = addObservatory(
   },
 )
 
-switchCamera(moonBase.camera);
+switchCamera(camera("MoonBase"));
 // %%
-switchCamera(camera("KS-HQ"));
-
+//switchCamera(camera("KS-HQ"));
 `;
 
 export const defaultWorkflows: Record<string, WorkflowExample> = {

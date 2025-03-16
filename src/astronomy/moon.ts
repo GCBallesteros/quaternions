@@ -126,14 +126,14 @@ export function getMoonPosition(date: Date): {
   // We define a point on the Moon's surface (in its body frame) that should always face Earth
   // NOTE: Point is chosen arbitrarily to sort of look like picture of the Moon
   // no particular rigor there
-  const moonFacePoint: [number, number, number] = sph2xyz([45, 0, 0]);
+  const moonFacePoint: [number, number, number] = sph2xyz([45, 0, 1738]);
 
   // The Earth-to-Moon vector (normalized)
   const earthToMoon: [number, number, number] = [
     position[0],
     position[1],
     position[2],
-  ].map((x) => x / moonDistance) as [number, number, number];
+  ];
 
   // Find quaternion to align Moon's face with Earth
   const moonOrientation = find_best_quaternion_for_desired_attitude(
