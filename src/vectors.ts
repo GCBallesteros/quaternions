@@ -1,16 +1,40 @@
 export class Vector3 {
+  public x: number;
+  public y: number;
+  public z: number;
+  constructor(x: number, y: number, z: number);
+  constructor(obj: { x: number; y: number; z: number });
   constructor(
-    public x: number,
-    public y: number,
-    public z: number,
+    xOrObj: number | { x: number; y: number; z: number },
+    y?: number,
+    z?: number,
   ) {
+    if (typeof xOrObj === 'object' && xOrObj !== null) {
+      // Object input case
+      ({ x: this.x, y: this.y, z: this.z } = xOrObj);
+    } else if (
+      typeof xOrObj === 'number' &&
+      typeof y === 'number' &&
+      typeof z === 'number'
+    ) {
+      // Separate number arguments case
+      this.x = xOrObj;
+      this.y = y;
+      this.z = z;
+    } else {
+      throw new Error(
+        'Vector3 constructor requires either (x, y, z) as numbers or an object with { x, y, z }.',
+      );
+    }
+
+    // Ensure values are numbers
     if (
-      typeof x !== 'number' ||
-      typeof y !== 'number' ||
-      typeof z !== 'number' ||
-      isNaN(x) ||
-      isNaN(y) ||
-      isNaN(z)
+      typeof this.x !== 'number' ||
+      isNaN(this.x) ||
+      typeof this.y !== 'number' ||
+      isNaN(this.y) ||
+      typeof this.z !== 'number' ||
+      isNaN(this.z)
     ) {
       throw new Error('Vector3 requires valid numeric x, y, and z values.');
     }
