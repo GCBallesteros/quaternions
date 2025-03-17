@@ -17,6 +17,23 @@ import { State, TileCoordinate } from './types.js';
 import { OrientedPoint } from './points/orientedPoint.js';
 
 /**
+ * Recursively sets the visibility of all meshes in a group.
+ *
+ * @param {THREE.Object3D} object - The parent object to traverse.
+ * @param {boolean} visible - Whether to show or hide the meshes.
+ */
+function setGroupVisibility(object: THREE.Object3D, visible: boolean): void {
+  object.children.forEach((child) => {
+    // This casting to it is ugly but the typing of threeJS is complicated
+    if ((child as THREE.Mesh).isMesh) {
+      (child as THREE.Mesh).visible = visible;
+    } else if (child instanceof THREE.Group) {
+      setGroupVisibility(child, visible); // Recursively handle nested groups
+    }
+  });
+}
+
+/**
  * Determines if a camera other than the main camera is currently rendering the scene
  * @param state The current application state
  * @returns True if a non-main camera is active in either main or secondary view, false otherwise
@@ -239,6 +256,18 @@ export function createAnimator(
     // Update aspect ratio to match canvas
     newCamera.aspect = canvas.clientWidth / canvas.clientHeight;
     newCamera.updateProjectionMatrix();
+
+    // Switch off the geometry associated with the camera
+    if (newCamera.parent && newCamera.parent instanceof THREE.Group) {
+      setGroupVisibility(newCamera.parent, false);
+    }
+    // Switch on any geometry that might have been turned off previously
+    if (
+      state.activeCamera.parent &&
+      state.activeCamera.parent instanceof THREE.Group
+    ) {
+      setGroupVisibility(state.activeCamera.parent, true);
+    }
 
     state.activeCamera = newCamera;
   };
