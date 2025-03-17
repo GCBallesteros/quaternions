@@ -26,7 +26,7 @@ function setGroupVisibility(object: THREE.Object3D, visible: boolean): void {
   object.children.forEach((child) => {
     // This casting to it is ugly but the typing of threeJS is complicated
     if ((child as THREE.Mesh).isMesh) {
-      (child as THREE.Mesh).visible = visible;
+      child.visible = visible;
     } else if (child instanceof THREE.Group) {
       setGroupVisibility(child, visible); // Recursively handle nested groups
     }
