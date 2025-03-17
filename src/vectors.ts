@@ -1,9 +1,20 @@
 export class Vector3 {
   constructor(
-    public x: number = 0,
-    public y: number = 0,
-    public z: number = 0,
-  ) {}
+    public x: number,
+    public y: number,
+    public z: number,
+  ) {
+    if (
+      typeof x !== 'number' ||
+      typeof y !== 'number' ||
+      typeof z !== 'number' ||
+      isNaN(x) ||
+      isNaN(y) ||
+      isNaN(z)
+    ) {
+      throw new Error('Vector3 requires valid numeric x, y, and z values.');
+    }
+  }
 
   add(v: Vector3): Vector3 {
     return new Vector3(this.x + v.x, this.y + v.y, this.z + v.z);
