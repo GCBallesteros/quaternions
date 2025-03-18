@@ -1,19 +1,19 @@
 import * as THREE from 'three';
 
-import { Array3, Vector4 } from '../types.js';
+import { Array3, Array4 } from '../types.js';
 import { Point } from './point.js';
 import { createFrame } from '../components.js';
 
 export interface CameraConfig {
-  orientation: Vector4;
+  orientation: Array4;
   fov: number;
 }
 
 export class OrientedPoint extends Point {
-  public orientation: Vector4;
+  public orientation: Array4;
 
   constructor(
-    orientation: Vector4,
+    orientation: Array4,
     cameraConfig?: CameraConfig,
     color: string = '#ffffff',
   ) {

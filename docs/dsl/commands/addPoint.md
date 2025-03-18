@@ -12,7 +12,7 @@ Points created with this function can be referenced by name in other commands, s
 addPoint(
   name: string,
   coordinates: Array3 | Vector3,
-  quaternion: Vector4 | null = null,
+  quaternion: Array4 | null = null,
   color: string = '#ffffff'
 ): Point | OrientedPoint
 ```

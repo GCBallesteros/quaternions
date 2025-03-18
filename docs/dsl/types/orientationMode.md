@@ -10,14 +10,14 @@ This type is used internally by the application when creating satellites. Users 
 
 ```typescript
 type OrientationMode =
-  | { type: 'fixed'; ecef_quaternion: Vector4 }
+  | { type: 'fixed'; ecef_quaternion: Array4 }
   | {
       type: 'dynamic';
       primaryBodyVector: Vector3 | string;
       secondaryBodyVector: Vector3 | string;
       primaryTargetVector: Vector3 | NamedTargets;
       secondaryTargetVector: Vector3 | NamedTargets;
-      offset?: Vector4; // Optional quaternion offset
+      offset?: Array4; // Optional quaternion offset
     };
 ```
 
@@ -28,7 +28,7 @@ The `OrientationMode` type is a union type that can be either:
 ```typescript
 { 
   type: 'fixed';
-  ecef_quaternion: Vector4 
+  ecef_quaternion: Array4 
 }
 ```
 
@@ -37,7 +37,7 @@ Maintains a constant orientation in Earth-Centered Earth-Fixed (ECEF) coordinate
 | Property         | Type      | Description                                                    |
 |------------------|-----------|----------------------------------------------------------------|
 | `type`           | `'fixed'` | Identifies this as a fixed orientation mode                    |
-| `ecef_quaternion`| `Vector4` | Quaternion `[x, y, z, w]` defining the fixed orientation       |
+| `ecef_quaternion`| `Array4` | Quaternion `[x, y, z, w]` defining the fixed orientation       |
 
 ### Dynamic Orientation
 
@@ -48,7 +48,7 @@ Maintains a constant orientation in Earth-Centered Earth-Fixed (ECEF) coordinate
   secondaryBodyVector: Vector3 | string;
   primaryTargetVector: Vector3 | NamedTargets;
   secondaryTargetVector: Vector3 | NamedTargets;
-  offset?: Vector4; // Optional quaternion offset
+  offset?: Array4; // Optional quaternion offset
 }
 ```
 
@@ -61,7 +61,7 @@ Continuously updates orientation to align body vectors with target vectors.
 | `secondaryBodyVector`  | `Vector3 \| string`        | Secondary body frame vector for full attitude determination     |
 | `primaryTargetVector`  | `Vector3 \| NamedTargets`  | Target direction for primary alignment                          |
 | `secondaryTargetVector`| `Vector3 \| NamedTargets`  | Target direction for secondary alignment                        |
-| `offset`               | `Vector4`                  | (Optional) Additional quaternion offset to apply after alignment|
+| `offset`               | `Array4`                  | (Optional) Additional quaternion offset to apply after alignment|
 
 ## Usage
 

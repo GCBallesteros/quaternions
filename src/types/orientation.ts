@@ -1,19 +1,19 @@
-import { Array3, Vector4 } from '../types.js';
+import { Array3, Array4 } from '../types.js';
 import { Vector3 } from '../vectors.js';
 
 export type OrientationMode =
-  | { type: 'fixed'; ecef_quaternion: Vector4 }
+  | { type: 'fixed'; ecef_quaternion: Array4 }
   | {
       type: 'dynamic';
       primaryBodyVector: Array3 | string;
       secondaryBodyVector: Array3 | string;
       primaryTargetVector: Array3 | NamedTargets | Vector3;
       secondaryTargetVector: Array3 | NamedTargets | Vector3;
-      offset?: Vector4;
+      offset?: Array4;
     };
 
 export type ObservatoryOrientationMode =
-  | { type: 'fixed'; ecef_quaternion: Vector4 }
+  | { type: 'fixed'; ecef_quaternion: Array4 }
   | {
       type: 'dynamic';
       primaryTargetVector: Array3 | NamedTargets | Vector3;

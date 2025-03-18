@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { _fetchTLE } from '../core.js';
 import { log } from '../logger.js';
 import { Trail } from '../trail.js';
-import { State, Vector4 } from '../types.js';
+import { State, Array4 } from '../types.js';
 import { OrientationMode } from '../types/orientation.js';
 import { calculateOrientation } from './orientationUtils.js';
 
@@ -88,7 +88,7 @@ export class Satellite extends OrientedPoint {
     return new Satellite(scene, tle, orientationMode, cameraConfig);
   }
 
-  set offset(offset: Vector4) {
+  set offset(offset: Array4) {
     if (this.orientationMode?.type === 'dynamic') {
       this.orientationMode.offset = offset;
     } else {

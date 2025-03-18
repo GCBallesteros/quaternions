@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 import { _findBestQuaternion } from '../core.js';
-import { Array3, State, Vector4 } from '../types.js';
+import { Array3, State, Array4 } from '../types.js';
 import { NamedTargets, OrientationMode } from '../types/orientation.js';
 import { normalizeCoordinates } from '../utils.js';
 
@@ -57,19 +57,19 @@ export function getTargetVector(
  * @param state Application state
  * @param orientationMode The orientation mode to use for calculation
  * @param velocity_ Optional velocity vector (needed for Velocity target)
- * @returns Quaternion as Vector4 [x, y, z, w]
+ * @returns Quaternion as Array4 [x, y, z, w]
  */
 export function calculateOrientation(
   state: State,
   orientationMode: OrientationMode,
   geometry: THREE.Group,
   velocity_: THREE.Vector3 | null = null,
-): Vector4 {
+): Array4 {
   // Get world position instead of local position
   const worldPosition = new THREE.Vector3();
   geometry.getWorldPosition(worldPosition);
   const position_ = worldPosition;
-  let new_orientation: Vector4;
+  let new_orientation: Array4;
 
   switch (orientationMode.type) {
     case 'dynamic': {

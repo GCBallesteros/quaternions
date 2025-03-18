@@ -10,7 +10,7 @@ This interface is used internally by the application when adding cameras to poin
 
 ```typescript
 interface CameraConfig {
-  orientation: Vector4;
+  orientation: Array4;
   fov: number;           // in degrees
 }
 ```

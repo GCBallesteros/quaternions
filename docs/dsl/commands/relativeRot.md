@@ -12,7 +12,7 @@ point's orientation rather than setting it to a specific absolute orientation.
 ## Syntax
 
 ```typescript
-relativeRot(point_name: string, quaternion: Vector4)
+relativeRot(point_name: string, quaternion: Array4)
 ```
 
 ## Parameters

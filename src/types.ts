@@ -6,7 +6,7 @@ import { OrientedPoint } from './points/orientedPoint.js';
 import { Point } from './points/point.js';
 
 export type Array3 = [number, number, number];
-export type Vector4 = [number, number, number, number];
+export type Array4 = [number, number, number, number];
 export type TileCoordinate = [number, number];
 
 export interface Plot {

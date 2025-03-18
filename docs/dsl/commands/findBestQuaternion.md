@@ -20,7 +20,7 @@ findBestQuaternion(
   secondaryBodyVector: string | Array3 | Vector3,
   primaryTargetVector: string | Array3 | Vector3,
   secondaryTargetVector: string | Array3 | Vector3,
-): Vector4
+): Array4
 ```
 
 ## Parameters
@@ -42,7 +42,7 @@ The following are allowed forms for the parameters:
 
 ## Returns
 
-`Vector4`
+`Array4`
 
 A quaternion `[x, y, z, w]` representing the optimal orientation.
 

@@ -3,7 +3,7 @@ import { Err, Ok, Result } from 'ts-results';
 
 import { RADIUS_EARTH } from './constants.js';
 import { log } from './logger.js';
-import { Array3, State, Vector4 } from './types.js';
+import { Array3, State, Array4 } from './types.js';
 import { Vector3 } from './vectors.js';
 
 export function getPositionOfPoint(
@@ -277,12 +277,12 @@ type EulerAngles = { yaw: number; pitch: number; roll: number };
  * Converts ZYX Tait-Bryan angles (yaw, pitch, roll) into a quaternion.
  * @param {EulerAngles} angles - The Euler angles in yaw, pitch, and roll.
  * @param {boolean} [degrees=true] - Whether the input angles are in degrees. If true, they are converted to radians.
- * @returns {Vector4} The resulting quaternion [x, y, z, w].
+ * @returns {Array4} The resulting quaternion [x, y, z, w].
  */
 export function zyxToQuaternion(
   { yaw, pitch, roll }: EulerAngles,
   degrees: boolean = true,
-): Vector4 {
+): Array4 {
   if (degrees) {
     yaw = (yaw * Math.PI) / 180;
     pitch = (pitch * Math.PI) / 180;

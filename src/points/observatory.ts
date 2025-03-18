@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-import { State, Vector4 } from '../types.js';
+import { State, Array4 } from '../types.js';
 import {
   ObservatoryOrientationMode,
   OrientationMode,
@@ -13,7 +13,7 @@ export class Observatory extends OrientedPoint {
   protected _observatoryOrientationMode: OrientationMode;
 
   constructor(
-    orientation: Vector4,
+    orientation: Array4,
     fov: number,
     observatoryOrientationMode: ObservatoryOrientationMode,
     color: string,

@@ -13,7 +13,7 @@ oriented points in the scene.
 ## Syntax
 
 ```javascript
-rot(point_name: string, quaternion: Vector4)
+rot(point_name: string, quaternion: Array4)
 ```
 
 ## Parameters

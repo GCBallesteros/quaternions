@@ -33,7 +33,7 @@ import { OrientedPoint } from './points/orientedPoint.js';
 import { Point } from './points/point.js';
 import { Satellite } from './points/satellite.js';
 import { updateTrailSwitch } from './trail.js';
-import { Array3, CommandFunction, State, TleSource, Vector4 } from './types.js';
+import { Array3, CommandFunction, State, TleSource, Array4 } from './types.js';
 import {
   ObservatoryOrientationMode,
   OrientationMode,
@@ -70,7 +70,7 @@ export function buildCommandClosures(
     }
   }
 
-  function rot(point_name: string, q: Vector4): void {
+  function rot(point_name: string, q: Array4): void {
     const result = _rot(state, point_name, q);
     if (result.ok) {
       return;
@@ -82,7 +82,7 @@ export function buildCommandClosures(
   function addPoint(
     name: string,
     coordinates: Array3 | Vector3,
-    orientation: Vector4,
+    orientation: Array4,
     relativeTo: Point | 'Moon' | undefined,
     color = '#ffffff',
   ): Point | OrientedPoint {
@@ -107,7 +107,7 @@ export function buildCommandClosures(
   function addObservatory(
     name: string,
     coordinates: Array3 | Vector3,
-    orientation: Vector4,
+    orientation: Array4,
     fov: number,
     observatoryOrientationMode: ObservatoryOrientationMode,
     relativeTo?: Point | 'Moon',
@@ -287,7 +287,7 @@ export function buildCommandClosures(
     return null;
   }
 
-  function relativeRot(point_name: string, q: Vector4): void {
+  function relativeRot(point_name: string, q: Array4): void {
     const result = _relativeRot(state, point_name, q);
     if (result.ok) {
       return;

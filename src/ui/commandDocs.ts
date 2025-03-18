@@ -64,7 +64,7 @@ export const commandDocs: Record<string, CommandDoc> = {
       {
         name: 'q',
         description: 'Quaternion as [x, y, z, w] array',
-        type: 'Vector4',
+        type: 'Array4',
         optional: false,
       },
     ],
@@ -90,7 +90,7 @@ export const commandDocs: Record<string, CommandDoc> = {
       {
         name: 'quaternion',
         description: 'Optional orientation as [x, y, z, w] array',
-        type: 'Vector4 | null',
+        type: 'Array4 | null',
         optional: true,
         defaultValue: 'null',
       },
@@ -345,7 +345,7 @@ export const commandDocs: Record<string, CommandDoc> = {
       {
         name: 'q',
         description: 'Quaternion as [x, y, z, w] array',
-        type: 'Vector4',
+        type: 'Array4',
         optional: false,
       },
     ],
@@ -555,7 +555,7 @@ export const commandDocs: Record<string, CommandDoc> = {
       },
     ],
     returns: {
-      type: 'Vector4',
+      type: 'Array4',
       description: 'Quaternion as [x, y, z, w]',
     },
     example:

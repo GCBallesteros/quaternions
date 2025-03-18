@@ -13,7 +13,7 @@ import { CameraConfig, OrientedPoint } from './points/orientedPoint.js';
 import { Point } from './points/point.js';
 import { Satellite } from './points/satellite.js';
 import { Trail } from './trail.js';
-import { Array3, State, TleSource, Vector4 } from './types.js';
+import { Array3, State, TleSource, Array4 } from './types.js';
 import {
   ObservatoryOrientationMode,
   OrientationMode,
@@ -339,7 +339,7 @@ export function _createLine(
   return Ok(null);
 }
 
-//export function addFrame(point: Point, orientation: Vector4): OrientedPoint {
+//export function addFrame(point: Point, orientation: Array4): OrientedPoint {
 //  const coordinate_frame = createFrame({ x: 0, y: 0, z: 0 }, 350);
 //  const point_geo = point.geometry.clone();
 //  point_geo.add(coordinate_frame);
@@ -352,7 +352,7 @@ export function _addObservatory(
   state: State,
   name: string,
   coordinates: Array3,
-  orientation: Vector4,
+  orientation: Array4,
   fov: number,
   observatoryOrientationMode: ObservatoryOrientationMode,
   relativeTo?: Point | 'Moon',
@@ -397,7 +397,7 @@ export function _addPoint(
   state: State,
   name: string,
   coordinates: Array3,
-  orientation?: Vector4,
+  orientation?: Array4,
   relativeTo: Point | 'Moon' | undefined = undefined,
   color: string = '#ffffff',
 ): Result<Point | OrientedPoint, string> {
