@@ -11,45 +11,53 @@ export function isNamedTarget(value: any): value is NamedTargets {
 
 export function getTargetVector(
   namedTarget: NamedTargets,
-  position_: THREE.Vector3,
-  velocity_: THREE.Vector3 | null,
+  position: THREE.Vector3,
+  velocity: THREE.Vector3 | null,
   state: State,
 ): Array3 {
+  let result: Array3;
+
   switch (namedTarget.type) {
     case 'Moon':
-      return state.bodies.moon.position
+      result = state.bodies.moon.position
         .clone()
-        .sub(position_)
+        .sub(position)
         .normalize()
         .toArray();
+      break;
     case 'Sun':
       // Sun light position is already the direction vector
-      return state.lights.sun.position.toArray();
+      result = state.lights.sun.position.toArray();
+      break;
     case 'Velocity':
-      if (!velocity_) {
+      if (!velocity) {
         throw new Error(
           'Velocity target is only valid for objects with velocity data',
         );
       }
-      return velocity_.clone().normalize().toArray();
+      result = velocity.clone().normalize().toArray();
+      break;
     case 'Nadir':
-      const pos = position_.clone().normalize().negate().toArray();
-      return pos;
-    case 'TargetPointing':
-      if (typeof namedTarget.target === 'string') {
-        return new THREE.Vector3(...state.points[namedTarget.target].position)
-          .clone()
-          .sub(position_)
-          .normalize()
-          .toArray();
-      } else {
-        return new THREE.Vector3(...normalizeCoordinates(namedTarget.target))
-          .clone()
-          .sub(position_)
-          .normalize()
-          .toArray();
-      }
+      result = position.clone().normalize().negate().toArray();
+      break;
+    case 'TargetPointing': {
+      const targetPos =
+        typeof namedTarget.target === 'string'
+          ? state.points[namedTarget.target].position
+          : normalizeCoordinates(namedTarget.target);
+
+      result = new THREE.Vector3(...targetPos)
+        .clone()
+        .sub(position)
+        .normalize()
+        .toArray();
+      break;
+    }
+    default:
+      const _exhaustiveCheck: never = namedTarget;
+      throw new Error(`Unhandled target type: ${(namedTarget as any).type}`);
   }
+  return result;
 }
 
 /**
