@@ -32,7 +32,7 @@ export function getTargetVector(
       break;
     case 'Velocity':
       if (!velocity) {
-        throw new Error(
+        return Err(
           'Velocity target is only valid for objects with velocity data',
         );
       }
