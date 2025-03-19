@@ -4,6 +4,7 @@ import { _findBestQuaternion } from '../core.js';
 import { Array3, State, Array4 } from '../types.js';
 import { NamedTargets, OrientationMode } from '../types/orientation.js';
 import { normalizeCoordinates } from '../utils.js';
+import { Err, Ok, Result } from 'ts-results';
 
 export function isNamedTarget(value: any): value is NamedTargets {
   return typeof value === 'object' && value !== null && 'type' in value;
@@ -14,7 +15,7 @@ export function getTargetVector(
   position: THREE.Vector3,
   velocity: THREE.Vector3 | null,
   state: State,
-): Array3 {
+): Result<Array3, string> {
   let result: Array3;
 
   switch (namedTarget.type) {
@@ -55,9 +56,9 @@ export function getTargetVector(
     }
     default:
       const _exhaustiveCheck: never = namedTarget;
-      throw new Error(`Unhandled target type: ${(namedTarget as any).type}`);
+      return Err(`Unhandled target type: ${(namedTarget as any).type}`);
   }
-  return result;
+  return Ok(result);
 }
 
 /**
@@ -90,7 +91,7 @@ export function calculateOrientation(
             velocity_,
             state,
           )
-        : normalizeCoordinates(orientationMode.primaryTargetVector);
+        : Ok(normalizeCoordinates(orientationMode.primaryTargetVector));
 
       const secondaryTargetVector = isNamedTarget(
         orientationMode.secondaryTargetVector,
@@ -101,15 +102,21 @@ export function calculateOrientation(
             velocity_,
             state,
           )
-        : normalizeCoordinates(orientationMode.secondaryTargetVector);
+        : Ok(normalizeCoordinates(orientationMode.secondaryTargetVector));
 
-      const new_orientation_result = _findBestQuaternion(
-        state,
-        orientationMode.primaryBodyVector,
-        orientationMode.secondaryBodyVector,
-        primaryTargetVector,
-        secondaryTargetVector,
-      );
+      let new_orientation_result: Result<Array4, string>;
+      if (primaryTargetVector.ok && secondaryTargetVector.ok) {
+        new_orientation_result = _findBestQuaternion(
+          state,
+          orientationMode.primaryBodyVector,
+          orientationMode.secondaryBodyVector,
+          primaryTargetVector.val,
+          secondaryTargetVector.val,
+        );
+      } else {
+        new_orientation_result = Err('Bad inputs to _findBestQuaternion');
+      }
+
       if (new_orientation_result.ok) {
         new_orientation = new_orientation_result.val;
       } else {
