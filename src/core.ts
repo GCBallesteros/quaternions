@@ -13,7 +13,7 @@ import { CameraConfig, OrientedPoint } from './points/orientedPoint.js';
 import { Point } from './points/point.js';
 import { Satellite } from './points/satellite.js';
 import { Trail } from './trail.js';
-import { Array3, State, TleSource, Array4 } from './types.js';
+import { Array3, Array4, State, TleSource } from './types.js';
 import {
   ObservatoryOrientationMode,
   OrientationMode,
@@ -339,14 +339,6 @@ export function _createLine(
   return Ok(null);
 }
 
-//export function addFrame(point: Point, orientation: Array4): OrientedPoint {
-//  const coordinate_frame = createFrame({ x: 0, y: 0, z: 0 }, 350);
-//  const point_geo = point.geometry.clone();
-//  point_geo.add(coordinate_frame);
-//
-//  return new OrientedPoint(point_geo, o);
-//}
-
 export function _addObservatory(
   scene: THREE.Scene,
   state: State,
@@ -356,7 +348,7 @@ export function _addObservatory(
   fov: number,
   observatoryOrientationMode: ObservatoryOrientationMode,
   relativeTo?: Point | 'Moon',
-  color: string = "#ffffff",
+  color: string = '#ffffff',
 ): Result<Observatory, string> {
   if (!utils.validateName(name, state)) {
     return Err('Invalid point name or name already exists');
