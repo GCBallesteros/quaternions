@@ -28,6 +28,39 @@ function fixangle(a: number): number {
   return a - 360.0 * Math.floor(a / 360.0);
 }
 
+// Solve Kepler's equation (returns E in radians)
+function kepler(m: number, ecc: number): number {
+    const EPSILON = 1e-6;
+    let e = toRad(m);  // initial guess
+    let delta: number;
+
+    do {
+        delta = e - ecc * Math.sin(e) - toRad(m);
+        e = e - delta / (1 - ecc * Math.cos(e));
+    } while (Math.abs(delta) > EPSILON);
+
+    return e;
+}
+
+const ECCENT = 0.016718 // Eccentricity of Earth's orbit
+const ELONGP = 282.596403  // Ecliptic longitude of the Sun at perigee
+const ELONGE = 278.833540 //* Ecliptic longitude of the Sun at epoch 1980.0
+
+// Compute Lambdasun
+function computeLambdasun(M: number, eccent: number, elongp: number): number {
+    // Solve Kepler's equation (E is in radians)
+    const E = kepler(M, eccent);
+
+    // True anomaly
+    let Ec = Math.sqrt((1 + eccent) / (1 - eccent)) * Math.tan(E / 2);
+    Ec = 2 * (Math.atan(Ec))*(180/Math.PI);
+
+    // Sun's geocentric ecliptic longitude
+    const Lambdasun = fixangle(Ec + ELONGP);
+
+    return Lambdasun;
+}
+
 /**
  * Calculate Moon's position and phase
  * @param date - JavaScript Date object (UTC)
@@ -47,27 +80,28 @@ export function getMoonPosition(date: Date): {
   const daysSince1980 = jd - EPOCH_1980;
 
   // Calculation of the Sun's position
-  const L = fixangle(SUN_ECLIPTIC_LONGITUDE_EPOCH + 0.9856474 * daysSince1980);
-  const M = fixangle(L - SUN_ECLIPTIC_LONGITUDE_PERIGEE + 0.033);
+  const N = fixangle((360 / 365.2422) * daysSince1980);   /* Mean anomaly of the Sun */
+  const M = fixangle(N + ELONGE - ELONGP);
+  const lambdasun = computeLambdasun(M, ECCENT, ELONGP)
 
   // Calculation of the Moon's position
-  const ml = fixangle(13.1763966 * daysSince1980 + MOON_MEAN_LONGITUDE_EPOCH);
+  const ml = fixangle(13.1763966 * daysSince1980 + MOON_MEAN_LONGITUDE_EPOCH); //ok
   const MM = fixangle(
     ml - 0.1114041 * daysSince1980 - MOON_MEAN_LONGITUDE_PERIGEE,
-  );
-  const MN = fixangle(MOON_MEAN_LONGITUDE_NODE - 0.0529539 * daysSince1980);
+  ); // ok
+  const MN = fixangle(MOON_MEAN_LONGITUDE_NODE - 0.0529539 * daysSince1980);  //ok
 
   // Evection
-  const Ev = 1.2739 * Math.sin(toRad(2 * (ml - L) - MM));
+  const Ev = 1.2739 * Math.sin(toRad(2 * (ml - lambdasun) - MM)); // ok
 
   // Annual equation
-  const Ae = 0.1858 * Math.sin(toRad(M));
+  const Ae = 0.1858 * Math.sin(toRad(M)); // ok
 
   // Correction term
-  const A3 = 0.37 * Math.sin(toRad(M));
+  const A3 = 0.37 * Math.sin(toRad(M)); // ok
 
   // Corrected anomaly
-  const MmP = MM + Ev - Ae - A3;
+  const MmP = MM + Ev - Ae - A3;  // ok
 
   // Correction for the equation of the centre
   const mEc = 6.2886 * Math.sin(toRad(MmP));
@@ -79,23 +113,24 @@ export function getMoonPosition(date: Date): {
   const lP = ml + Ev + mEc - Ae + A4;
 
   // Variation
-  const V = 0.6583 * Math.sin(toRad(2 * (lP - L)));
+  const V = 0.6583 * Math.sin(toRad(2 * (lP - lambdasun)));
 
   // True longitude
   const lPP = lP + V;
 
   // Corrected longitude of the node
-  const NP = MN - 0.16 * Math.sin(toRad(M));
+  const NP = MN - 0.16 * Math.sin(toRad(M));  // ok
 
   // Calculate the Moon's position in ecliptic coordinates
   const y = Math.sin(toRad(lPP - NP)) * Math.cos(toRad(MOON_INCLINATION));
   const x = Math.cos(toRad(lPP - NP));
 
-  const moonLong = fixangle((Math.atan2(y, x) * 180) / Math.PI + NP);
+  const moonLong = (Math.atan2(y, x) * 180) / Math.PI + NP;
   const moonLat =
     (Math.asin(Math.sin(toRad(lPP - NP)) * Math.sin(toRad(MOON_INCLINATION))) *
       180) /
     Math.PI;
+
 
   // Calculate the Moon's distance
   const moonDistance =
@@ -107,8 +142,9 @@ export function getMoonPosition(date: Date): {
     moonDistance * Math.cos(toRad(moonLong)) * Math.cos(toRad(moonLat));
   const yECI =
     moonDistance * Math.sin(toRad(moonLong)) * Math.cos(toRad(moonLat));
-  const zECI = moonDistance * Math.sin(toRad(moonLat));
+  const zECI = moonDistance * Math.sin(toRad(moonLong));
 
+  //console.log([xECI, yECI, zECI])
   const position = eci2ecef([xECI, yECI, zECI], jd);
 
   // Calculate Moon's angular diameter
@@ -116,7 +152,7 @@ export function getMoonPosition(date: Date): {
   const angularDiameter = MOON_ANGULAR_SIZE / moonDFrac;
 
   // Calculate Moon's age and phase
-  const moonAge = lPP - L;
+  const moonAge = lPP - lambdasun;
   //const phase = (1 - Math.cos(toRad(moonAge))) / 2;
 
   // Convert moonAge + 180 to range [-180, 180]
